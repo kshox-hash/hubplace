@@ -22,26 +22,28 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
         <a
           class="module-card"
           href="${url}"
-          style="--delay: ${index * 85}ms;"
+          style="--delay: ${index * 90}ms;"
           data-loading-link="true"
           data-loading-title="Abriendo ${title}"
           data-loading-text="Estamos preparando la pantalla..."
         >
-          <div class="module-accent"></div>
-
-          <div class="module-icon-wrap">
+          <div class="module-left">
             <div class="module-icon">${icon}</div>
           </div>
 
-          <div class="module-content">
-            <div class="module-kicker">Disponible</div>
+          <div class="module-main">
+            <div class="module-topline">
+              <span class="module-status">Activo</span>
+              <span class="module-code">Módulo ${String(index + 1).padStart(2, "0")}</span>
+            </div>
+
             <div class="module-title">${title}</div>
             <div class="module-description">${description}</div>
           </div>
 
           <div class="module-action">
-            <span>Entrar</span>
-            <div class="module-arrow">›</div>
+            <span>Ingresar</span>
+            <div class="module-arrow">→</div>
           </div>
         </a>
       `;
@@ -57,31 +59,31 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
   <style>
     :root {
-      --bg: #0b1120;
-      --bg-soft: #111827;
-      --panel: rgba(17, 24, 39, 0.78);
-      --card: rgba(255, 255, 255, 0.075);
-      --card-hover: rgba(255, 255, 255, 0.115);
+      --bg: #070b12;
+      --bg-soft: #0d1422;
+      --panel: rgba(13, 20, 34, 0.78);
+      --panel-strong: rgba(15, 23, 42, 0.94);
+      --card: rgba(255, 255, 255, 0.055);
+      --card-hover: rgba(255, 255, 255, 0.095);
 
       --text: #f8fafc;
-      --muted: #a7b4c8;
-      --muted-soft: #7f8da3;
+      --muted: #9caac0;
+      --muted-soft: #6f7d93;
 
-      --border: rgba(255, 255, 255, 0.11);
-      --border-hover: rgba(96, 165, 250, 0.38);
+      --border: rgba(255, 255, 255, 0.105);
+      --border-strong: rgba(96, 165, 250, 0.36);
 
-      --accent: #3b82f6;
-      --accent-soft: rgba(59, 130, 246, 0.15);
-      --accent-strong: #60a5fa;
-
+      --blue: #3b82f6;
       --cyan: #22d3ee;
       --green: #22c55e;
+      --orange: #f59e0b;
 
-      --shadow: 0 26px 72px rgba(0, 0, 0, 0.34);
-      --shadow-card: 0 16px 36px rgba(0, 0, 0, 0.22);
+      --shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+      --shadow-card: 0 18px 42px rgba(0, 0, 0, 0.24);
 
-      --radius-xl: 28px;
-      --radius-lg: 20px;
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
     }
 
     * {
@@ -100,9 +102,10 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       font-family: Inter, Arial, Helvetica, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at 20% 0%, rgba(59, 130, 246, 0.24), transparent 30%),
-        radial-gradient(circle at 95% 12%, rgba(34, 211, 238, 0.16), transparent 32%),
-        linear-gradient(180deg, #0b1120 0%, #111827 55%, #0b1120 100%);
+        radial-gradient(circle at 14% 8%, rgba(59, 130, 246, 0.22), transparent 28%),
+        radial-gradient(circle at 88% 0%, rgba(34, 211, 238, 0.14), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.08), transparent 38%),
+        linear-gradient(180deg, #070b12 0%, #0d1422 48%, #070b12 100%);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
@@ -113,10 +116,10 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       inset: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-      background-size: 38px 38px;
-      mask-image: linear-gradient(to bottom, black, transparent 76%);
+        linear-gradient(rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(to bottom, black, transparent 72%);
     }
 
     .app-loader {
@@ -127,8 +130,8 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       align-items: center;
       justify-content: center;
       background:
-        radial-gradient(circle at 20% 0%, rgba(59, 130, 246, 0.24), transparent 30%),
-        linear-gradient(180deg, #0b1120 0%, #111827 100%);
+        radial-gradient(circle at 14% 8%, rgba(59, 130, 246, 0.22), transparent 28%),
+        linear-gradient(180deg, #070b12 0%, #0d1422 100%);
       transition: opacity 180ms ease, visibility 180ms ease;
     }
 
@@ -142,7 +145,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       width: min(300px, calc(100vw - 48px));
       padding: 24px 22px;
       border-radius: 24px;
-      background: rgba(17, 24, 39, 0.82);
+      background: rgba(15, 23, 42, 0.84);
       border: 1px solid rgba(96, 165, 250, 0.22);
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
@@ -156,7 +159,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       margin: 0 auto 15px;
       border-radius: 50%;
       border: 3px solid rgba(96, 165, 250, 0.18);
-      border-top-color: var(--accent-strong);
+      border-top-color: var(--cyan);
       animation: spin 760ms linear infinite;
     }
 
@@ -177,72 +180,136 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       position: relative;
       z-index: 1;
       min-height: 100vh;
-      padding: 30px 14px 42px;
+      padding: 22px 14px 40px;
     }
 
     .shell {
-      max-width: 620px;
+      max-width: 780px;
       margin: 0 auto;
       animation: pageIn 480ms ease both;
     }
 
-    .hero {
-      text-align: center;
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       margin-bottom: 22px;
-      padding-top: 4px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.56);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.20);
+      animation: fadeUp 440ms ease both;
     }
 
-    .brand-pill {
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.42), transparent 28%),
+        linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 12px 24px rgba(59, 130, 246, 0.24);
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-name {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
+    .brand-sub {
+      margin-top: 1px;
+      font-size: 11px;
+      color: var(--muted-soft);
+      font-weight: 700;
+    }
+
+    .system-pill {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      padding: 8px 14px;
-      border: 1px solid rgba(96, 165, 250, 0.22);
+      gap: 7px;
+      padding: 7px 10px;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.68);
-      backdrop-filter: blur(16px);
-      color: #dbeafe;
-      font-size: 13px;
-      font-weight: 800;
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
-      animation: fadeUp 480ms ease both;
-    }
-
-    .brand-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--green);
-      box-shadow:
-        0 0 0 5px rgba(34, 197, 94, 0.12),
-        0 0 18px rgba(34, 197, 94, 0.65);
-    }
-
-    .headline-badge {
-      margin: 14px auto 0;
-      width: max-content;
-      max-width: 100%;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(59, 130, 246, 0.13);
-      border: 1px solid rgba(96, 165, 250, 0.18);
-      color: #bfdbfe;
+      border: 1px solid rgba(34, 197, 94, 0.18);
+      background: rgba(34, 197, 94, 0.09);
+      color: #bbf7d0;
       font-size: 11px;
       font-weight: 850;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .system-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.78);
+    }
+
+    .hero {
+      margin-bottom: 18px;
+      padding: 22px 4px 2px;
       animation: fadeUp 520ms ease both;
-      animation-delay: 40ms;
+      animation-delay: 70ms;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 164px;
+      gap: 18px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: max-content;
+      max-width: 100%;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(96, 165, 250, 0.18);
+      background: rgba(59, 130, 246, 0.11);
+      color: #bfdbfe;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.035em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-line {
+      width: 20px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
     }
 
     h1 {
-      margin: 16px 0 0;
-      font-size: 40px;
-      line-height: 1.02;
-      letter-spacing: -0.055em;
+      margin: 14px 0 0;
+      max-width: 560px;
+      font-size: 46px;
+      line-height: 0.98;
+      letter-spacing: -0.062em;
       color: var(--text);
-      animation: fadeUp 560ms ease both;
-      animation-delay: 80ms;
+      text-wrap: balance;
     }
 
     .title-gradient {
@@ -253,38 +320,86 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     }
 
     .subtitle {
-      margin: 12px auto 0;
-      max-width: 470px;
+      margin: 14px 0 0;
+      max-width: 540px;
       color: var(--muted);
       font-size: 15px;
-      line-height: 1.52;
-      animation: fadeUp 600ms ease both;
-      animation-delay: 120ms;
+      line-height: 1.55;
+      text-wrap: balance;
+    }
+
+    .hero-metric {
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top right, rgba(34, 211, 238, 0.12), transparent 50%),
+        rgba(255, 255, 255, 0.055);
+      padding: 14px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--muted-soft);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .metric-value {
+      margin-top: 7px;
+      font-size: 34px;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .metric-caption {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
     }
 
     .panel {
       position: relative;
-      margin-top: 20px;
-      padding: 13px;
-      border: 1px solid rgba(255, 255, 255, 0.10);
+      margin-top: 22px;
+      padding: 14px;
+      border: 1px solid var(--border);
       border-radius: var(--radius-xl);
-      background: var(--panel);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04)),
+        var(--panel);
       backdrop-filter: blur(18px);
       box-shadow: var(--shadow);
       overflow: hidden;
-      animation: fadeUp 640ms ease both;
-      animation-delay: 165ms;
+      animation: fadeUp 560ms ease both;
+      animation-delay: 140ms;
     }
 
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      border-radius: inherit;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.10), transparent 42%),
-        radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 40%);
+    .panel-header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 4px 4px 14px;
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #dbeafe;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .panel-helper {
+      font-size: 12px;
+      color: var(--muted-soft);
+      text-align: right;
     }
 
     .modules {
@@ -297,15 +412,15 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     .module-card {
       position: relative;
       display: grid;
-      grid-template-columns: 58px minmax(0, 1fr);
+      grid-template-columns: 58px minmax(0, 1fr) auto;
       gap: 14px;
       align-items: center;
-      min-height: 112px;
+      min-height: 106px;
       padding: 15px;
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.095), rgba(255,255,255,0.052));
+        linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.045));
       color: inherit;
       text-decoration: none;
       box-shadow: var(--shadow-card);
@@ -321,39 +436,36 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
         background 180ms ease;
     }
 
-    .module-card:hover {
-      transform: translateY(-3px) scale(1.004);
-      border-color: var(--border-hover);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.075));
-      box-shadow:
-        0 22px 46px rgba(0, 0, 0, 0.30),
-        0 0 0 1px rgba(96, 165, 250, 0.08);
-    }
-
-    .module-card:active {
-      transform: translateY(-1px) scale(0.996);
-    }
-
-    .module-accent {
+    .module-card::before {
+      content: "";
       position: absolute;
       inset: 0 auto 0 0;
       width: 3px;
-      background: linear-gradient(180deg, var(--accent), var(--cyan));
-      opacity: 0.75;
+      background: linear-gradient(180deg, var(--blue), var(--cyan));
+      opacity: 0.85;
     }
 
     .module-card::after {
       content: "";
       position: absolute;
-      top: -48px;
-      right: -50px;
-      width: 130px;
-      height: 130px;
+      top: -54px;
+      right: -54px;
+      width: 136px;
+      height: 136px;
       border-radius: 999px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.22), transparent 66%);
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.20), transparent 66%);
       opacity: 0.45;
       transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .module-card:hover {
+      transform: translateY(-3px) scale(1.004);
+      border-color: var(--border-strong);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.125), rgba(255,255,255,0.065));
+      box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.32),
+        0 0 0 1px rgba(96, 165, 250, 0.08);
     }
 
     .module-card:hover::after {
@@ -361,51 +473,80 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       transform: scale(1.08);
     }
 
-    .module-icon-wrap {
+    .module-card:active {
+      transform: translateY(-1px) scale(0.996);
+    }
+
+    .module-left {
       position: relative;
+      z-index: 1;
+    }
+
+    .module-icon {
       width: 58px;
       height: 58px;
       border-radius: 18px;
       background:
-        linear-gradient(145deg, rgba(59,130,246,0.20), rgba(34,211,238,0.10));
+        linear-gradient(145deg, rgba(59,130,246,0.22), rgba(34,211,238,0.11));
       border: 1px solid rgba(96, 165, 250, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 27px;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.12),
         0 12px 26px rgba(0, 0, 0, 0.20);
     }
 
-    .module-icon {
-      font-size: 28px;
-      transform: translateY(1px);
-      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.24));
-    }
-
-    .module-content {
+    .module-main {
+      position: relative;
+      z-index: 1;
       min-width: 0;
-      padding-right: 72px;
     }
 
-    .module-kicker {
+    .module-topline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+      flex-wrap: wrap;
+    }
+
+    .module-status {
       display: inline-flex;
-      margin-bottom: 6px;
+      align-items: center;
+      gap: 5px;
       padding: 3px 8px;
       border-radius: 999px;
-      background: rgba(59, 130, 246, 0.13);
-      color: #bfdbfe;
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.15);
+      color: #bbf7d0;
       font-size: 10px;
       font-weight: 900;
-      letter-spacing: 0.025em;
       text-transform: uppercase;
-      border: 1px solid rgba(96, 165, 250, 0.14);
+      letter-spacing: 0.03em;
+    }
+
+    .module-status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .module-code {
+      color: var(--muted-soft);
+      font-size: 10px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .module-title {
       font-size: 17px;
-      font-weight: 900;
-      letter-spacing: -0.025em;
+      font-weight: 950;
+      letter-spacing: -0.03em;
       margin-bottom: 5px;
       color: var(--text);
     }
@@ -417,32 +558,29 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     }
 
     .module-action {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
+      position: relative;
+      z-index: 2;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 9px;
       color: #bfdbfe;
       font-size: 12px;
-      font-weight: 850;
-      z-index: 2;
+      font-weight: 900;
+      white-space: nowrap;
     }
 
     .module-arrow {
-      width: 30px;
-      height: 30px;
+      width: 34px;
+      height: 34px;
       border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), var(--cyan));
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
       color: #06111f;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 27px;
-      line-height: 1;
-      padding-bottom: 3px;
-      box-shadow: 0 12px 26px rgba(59, 130, 246, 0.25);
+      font-size: 16px;
+      font-weight: 950;
+      box-shadow: 0 12px 26px rgba(59, 130, 246, 0.26);
       transition: transform 180ms ease;
     }
 
@@ -523,9 +661,54 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       }
     }
 
+    @media (max-width: 680px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-metric {
+        display: none;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .module-card {
+        grid-template-columns: 54px minmax(0, 1fr);
+      }
+
+      .module-action {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .module-action span {
+        display: none;
+      }
+
+      .module-main {
+        padding-right: 48px;
+      }
+    }
+
     @media (max-width: 520px) {
       .page {
-        padding: 22px 8px 30px;
+        padding: 18px 8px 30px;
+      }
+
+      .topbar {
+        border-radius: 17px;
+      }
+
+      .brand-name {
+        max-width: 180px;
+      }
+
+      .system-pill {
+        display: none;
       }
 
       h1 {
@@ -541,34 +724,26 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
         border-radius: 24px;
       }
 
+      .panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .panel-helper {
+        text-align: left;
+      }
+
       .module-card {
-        grid-template-columns: 54px minmax(0, 1fr);
-        min-height: 108px;
+        min-height: 112px;
         padding: 14px;
         gap: 12px;
       }
 
-      .module-icon-wrap {
+      .module-icon {
         width: 54px;
         height: 54px;
         border-radius: 17px;
-      }
-
-      .module-icon {
-        font-size: 26px;
-      }
-
-      .module-content {
-        padding-right: 48px;
-      }
-
-      .module-action span {
-        display: none;
-      }
-
-      .module-arrow {
-        width: 29px;
-        height: 29px;
+        font-size: 25px;
       }
 
       .module-title {
@@ -577,6 +752,11 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
       .module-description {
         font-size: 12.5px;
+      }
+
+      .module-arrow {
+        width: 30px;
+        height: 30px;
       }
     }
   </style>
@@ -593,19 +773,47 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
   <main class="page">
     <div class="shell">
-      <section class="hero">
-        <div class="brand-pill">
-          <span class="brand-dot"></span>
-          <span>${safeBrand}</span>
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark"></div>
+          <div class="brand-text">
+            <div class="brand-name">${safeBrand}</div>
+            <div class="brand-sub">Portal operativo</div>
+          </div>
         </div>
 
-        <div class="headline-badge">Portal digital</div>
+        <div class="system-pill">
+          <span class="system-dot"></span>
+          <span>Online</span>
+        </div>
+      </header>
 
-        <h1><span class="title-gradient">${safeTitle}</span></h1>
-        <p class="subtitle">${safeSubtitle}</p>
+      <section class="hero">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">
+              <span>Centro digital</span>
+              <span class="eyebrow-line"></span>
+            </div>
+
+            <h1><span class="title-gradient">${safeTitle}</span></h1>
+            <p class="subtitle">${safeSubtitle}</p>
+          </div>
+
+          <aside class="hero-metric">
+            <div class="metric-label">Módulos activos</div>
+            <div class="metric-value">${modules.filter((m) => m.enabled).length}</div>
+            <div class="metric-caption">Herramientas disponibles para esta atención.</div>
+          </aside>
+        </div>
       </section>
 
       <section class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Selecciona una acción</div>
+          <div class="panel-helper">Acceso rápido a módulos configurados</div>
+        </div>
+
         <div class="modules">
           ${
             cardsHtml ||
