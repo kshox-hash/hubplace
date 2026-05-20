@@ -22,7 +22,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
         <a
           class="module-card"
           href="${url}"
-          style="--delay: ${index * 70}ms;"
+          style="--delay: ${index * 78}ms;"
           data-loading-link="true"
         >
           <div class="module-icon">${icon}</div>
@@ -72,6 +72,9 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
       --shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
       --shadow-card: 0 18px 46px rgba(0, 0, 0, 0.24);
+
+      --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     * {
@@ -96,6 +99,18 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       overflow-x: hidden;
     }
 
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.045), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(96, 165, 250, 0.07), transparent 38%);
+      opacity: 0;
+      animation: ambientIn 1400ms var(--ease-soft) forwards;
+    }
+
     .app-loader {
       position: fixed;
       inset: 0;
@@ -105,7 +120,9 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       justify-content: center;
       background: rgba(2, 6, 23, 0.76);
       backdrop-filter: blur(10px);
-      transition: opacity 160ms ease, visibility 160ms ease;
+      transition:
+        opacity 220ms var(--ease-premium),
+        visibility 220ms var(--ease-premium);
     }
 
     .app-loader.hidden {
@@ -124,6 +141,8 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     }
 
     .page {
+      position: relative;
+      z-index: 1;
       min-height: 100vh;
       padding: 24px 14px 36px;
     }
@@ -132,7 +151,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       width: 100%;
       max-width: 720px;
       margin: 0 auto;
-      animation: pageIn 420ms ease both;
+      animation: pageIn 720ms var(--ease-soft) both;
     }
 
     .topbar {
@@ -141,6 +160,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       justify-content: space-between;
       gap: 12px;
       margin-bottom: 54px;
+      animation: topbarIn 780ms var(--ease-soft) both;
     }
 
     .brand-lockup {
@@ -159,6 +179,17 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
         linear-gradient(135deg, #60a5fa, #2563eb);
       box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
       flex-shrink: 0;
+      animation: markFloat 5200ms var(--ease-premium) infinite;
+      transition:
+        transform 420ms var(--ease-premium),
+        box-shadow 420ms var(--ease-premium);
+    }
+
+    .brand-lockup:hover .brand-mark {
+      transform: translateY(-1px) scale(1.045);
+      box-shadow:
+        0 14px 34px rgba(37, 99, 235, 0.30),
+        0 0 32px rgba(96, 165, 250, 0.18);
     }
 
     .brand-name {
@@ -188,6 +219,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       border-radius: 999px;
       background: var(--green);
       box-shadow: 0 0 12px rgba(34, 197, 94, 0.75);
+      animation: onlinePulse 2200ms ease-in-out infinite;
     }
 
     .system-pill {
@@ -202,6 +234,16 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       font-weight: 800;
       background: rgba(34, 197, 94, 0.07);
       white-space: nowrap;
+      transition:
+        transform 280ms var(--ease-premium),
+        background 280ms var(--ease-premium),
+        border-color 280ms var(--ease-premium);
+    }
+
+    .system-pill:hover {
+      transform: translateY(-1px);
+      background: rgba(34, 197, 94, 0.10);
+      border-color: rgba(34, 197, 94, 0.22);
     }
 
     .system-dot {
@@ -210,10 +252,13 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       border-radius: 999px;
       background: var(--green);
       box-shadow: 0 0 14px rgba(34, 197, 94, 0.72);
+      animation: onlinePulse 2200ms ease-in-out infinite;
     }
 
     .hero {
       margin-bottom: 28px;
+      animation: heroIn 860ms var(--ease-soft) both;
+      animation-delay: 80ms;
     }
 
     .eyebrow {
@@ -227,6 +272,9 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       font-weight: 850;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      opacity: 0;
+      animation: fadeSlideIn 760ms var(--ease-soft) both;
+      animation-delay: 160ms;
     }
 
     h1 {
@@ -237,6 +285,9 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       letter-spacing: -0.065em;
       color: var(--text);
       text-wrap: balance;
+      opacity: 0;
+      animation: titleIn 900ms var(--ease-soft) both;
+      animation-delay: 220ms;
     }
 
     .subtitle {
@@ -246,6 +297,9 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       font-size: 15px;
       line-height: 1.55;
       text-wrap: balance;
+      opacity: 0;
+      animation: fadeSlideIn 760ms var(--ease-soft) both;
+      animation-delay: 340ms;
     }
 
     .panel {
@@ -255,7 +309,9 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       backdrop-filter: blur(18px);
       box-shadow: var(--shadow);
       padding: 10px;
-      animation: fadeUp 480ms ease both;
+      animation: panelIn 820ms var(--ease-soft) both;
+      animation-delay: 420ms;
+      transform-origin: center top;
     }
 
     .panel-header {
@@ -299,20 +355,56 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       color: inherit;
       text-decoration: none;
       box-shadow: var(--shadow-card);
+      overflow: hidden;
       opacity: 0;
-      transform: translateY(10px);
-      animation: cardIn 420ms ease both;
-      animation-delay: var(--delay);
+      transform: translateY(16px) scale(0.985);
+      animation: cardIn 720ms var(--ease-soft) both;
+      animation-delay: calc(520ms + var(--delay));
       transition:
-        transform 160ms ease,
-        border-color 160ms ease,
-        background 160ms ease;
+        transform 360ms var(--ease-premium),
+        border-color 360ms var(--ease-premium),
+        background 360ms var(--ease-premium),
+        box-shadow 360ms var(--ease-premium);
+      will-change: transform;
+    }
+
+    .module-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          115deg,
+          transparent 0%,
+          rgba(255,255,255,0.035) 34%,
+          rgba(147,197,253,0.08) 50%,
+          transparent 68%
+        );
+      opacity: 0;
+      transform: translateX(-28%);
+      transition:
+        opacity 420ms var(--ease-premium),
+        transform 720ms var(--ease-premium);
+      pointer-events: none;
     }
 
     .module-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px) scale(1.006);
       border-color: var(--border-hover);
       background: var(--surface-hover);
+      box-shadow:
+        0 22px 58px rgba(0, 0, 0, 0.30),
+        0 0 0 1px rgba(96, 165, 250, 0.055);
+    }
+
+    .module-card:hover::before {
+      opacity: 1;
+      transform: translateX(28%);
+    }
+
+    .module-card:active {
+      transform: translateY(-1px) scale(0.995);
+      transition-duration: 120ms;
     }
 
     .module-icon {
@@ -325,6 +417,16 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       font-size: 23px;
       background: rgba(96, 165, 250, 0.10);
       border: 1px solid rgba(96, 165, 250, 0.16);
+      transition:
+        transform 360ms var(--ease-premium),
+        background 360ms var(--ease-premium),
+        border-color 360ms var(--ease-premium);
+    }
+
+    .module-card:hover .module-icon {
+      transform: scale(1.045);
+      background: rgba(96, 165, 250, 0.14);
+      border-color: rgba(147, 197, 253, 0.24);
     }
 
     .module-main {
@@ -361,6 +463,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       border-radius: 999px;
       background: var(--green);
       box-shadow: 0 0 10px rgba(34, 197, 94, 0.70);
+      animation: onlinePulse 2200ms ease-in-out infinite;
     }
 
     .module-code {
@@ -377,6 +480,11 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       letter-spacing: -0.025em;
       color: var(--text);
       margin-bottom: 5px;
+      transition: color 280ms var(--ease-premium);
+    }
+
+    .module-card:hover .module-title {
+      color: #ffffff;
     }
 
     .module-description {
@@ -397,11 +505,18 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       font-weight: 900;
       background: rgba(96, 165, 250, 0.09);
       border: 1px solid rgba(96, 165, 250, 0.14);
-      transition: transform 160ms ease;
+      transition:
+        transform 360ms var(--ease-premium),
+        background 360ms var(--ease-premium),
+        border-color 360ms var(--ease-premium),
+        color 360ms var(--ease-premium);
     }
 
     .module-card:hover .module-arrow {
-      transform: translateX(2px);
+      transform: translateX(3px) scale(1.045);
+      background: rgba(96, 165, 250, 0.14);
+      border-color: rgba(147, 197, 253, 0.24);
+      color: #ffffff;
     }
 
     .empty {
@@ -417,7 +532,8 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       text-align: center;
       font-size: 12px;
       color: var(--muted-soft);
-      animation: fadeUp 620ms ease both;
+      animation: footerIn 880ms var(--ease-soft) both;
+      animation-delay: 740ms;
     }
 
     .secure-row {
@@ -429,6 +545,16 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.035);
+      transition:
+        transform 320ms var(--ease-premium),
+        background 320ms var(--ease-premium),
+        border-color 320ms var(--ease-premium);
+    }
+
+    .secure-row:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.055);
+      border-color: rgba(147, 197, 253, 0.16);
     }
 
     .secure-lock {
@@ -451,30 +577,132 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       to { transform: rotate(360deg); }
     }
 
-    @keyframes pageIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeUp {
+    @keyframes ambientIn {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: scale(1.04);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pageIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
       }
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @keyframes topbarIn {
+      from {
+        opacity: 0;
+        transform: translateY(-14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes heroIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes titleIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+        filter: blur(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes panelIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.975);
+        filter: blur(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
       }
     }
 
     @keyframes cardIn {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(16px) scale(0.985);
+        filter: blur(5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes footerIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
       }
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @keyframes markFloat {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-1.5px) scale(1.018);
+      }
+    }
+
+    @keyframes onlinePulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 12px rgba(34, 197, 94, 0.68);
+      }
+      50% {
+        opacity: 0.72;
+        transform: scale(0.88);
+        box-shadow: 0 0 5px rgba(34, 197, 94, 0.36);
       }
     }
 
@@ -549,6 +777,17 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       .module-arrow {
         width: 30px;
         height: 30px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
       }
     }
   </style>
