@@ -22,19 +22,30 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
   <style>
     :root {
-      --bg: #eef2f7;
-      --panel: rgba(255, 255, 255, 0.84);
-      --text: #0f172a;
-      --muted: #64748b;
-      --muted-soft: #94a3b8;
-      --border: rgba(148, 163, 184, 0.30);
-      --accent: #2563eb;
-      --accent-dark: #1e40af;
-      --accent-soft: #dbeafe;
-      --shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
-      --shadow-card: 0 16px 34px rgba(15, 23, 42, 0.08);
+      --bg: #030712;
+      --surface: rgba(255, 255, 255, 0.055);
+      --surface-hover: rgba(255, 255, 255, 0.085);
+      --border: rgba(255, 255, 255, 0.10);
+      --border-hover: rgba(147, 197, 253, 0.34);
+
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --muted-soft: #64748b;
+
+      --blue: #60a5fa;
+      --blue-dark: #2563eb;
+      --blue-soft: #bfdbfe;
+      --cyan: #67e8f9;
+      --green: #22c55e;
+      --accent: #60a5fa;
+      --accent-dark: #2563eb;
+      --accent-soft: rgba(96, 165, 250, 0.12);
+
       --radius-xl: 28px;
-      --radius-lg: 22px;
+      --radius-lg: 18px;
+
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+      --shadow-card: 0 18px 46px rgba(0, 0, 0, 0.24);
     }
 
     * {
@@ -50,27 +61,15 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     body {
       min-height: 100vh;
       font-family: Inter, Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.20), transparent 34%),
-        radial-gradient(circle at top right, rgba(14, 165, 233, 0.16), transparent 32%),
-        linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
       color: var(--text);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(96, 165, 250, 0.16), transparent 34%),
+        linear-gradient(180deg, #030712 0%, #06101d 48%, #020617 100%);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
-      background-size: 34px 34px;
-      mask-image: linear-gradient(to bottom, black, transparent 78%);
-    }
-
+    /* ── Loader ── */
     .page-loader {
       position: fixed;
       inset: 0;
@@ -78,10 +77,9 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       display: flex;
       align-items: center;
       justify-content: center;
-      background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 34%),
-        linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
-      transition: opacity 220ms ease, visibility 220ms ease;
+      background: rgba(2, 6, 23, 0.76);
+      backdrop-filter: blur(10px);
+      transition: opacity 200ms ease, visibility 200ms ease;
     }
 
     .page-loader.hidden {
@@ -94,8 +92,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       width: min(280px, calc(100vw - 48px));
       padding: 22px 20px;
       border-radius: 24px;
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid var(--border);
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
       text-align: center;
@@ -107,8 +105,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       height: 34px;
       margin: 0 auto 14px;
       border-radius: 50%;
-      border: 3px solid rgba(37, 99, 235, 0.14);
-      border-top-color: #2563eb;
+      border: 3px solid rgba(96, 165, 250, 0.14);
+      border-top-color: var(--blue);
       animation: spin 800ms linear infinite;
     }
 
@@ -125,108 +123,154 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       line-height: 1.4;
     }
 
+    /* ── Layout ── */
     .page {
-      position: relative;
       min-height: 100vh;
-      padding: 30px 14px 42px;
+      padding: 24px 14px 36px;
     }
 
     .shell {
+      width: 100%;
       max-width: 720px;
       margin: 0 auto;
-      animation: pageIn 520ms ease both;
+      animation: pageIn 420ms ease both;
     }
 
+    /* ── Topbar ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 44px;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 32% 26%, rgba(255,255,255,0.75), transparent 24%),
+        linear-gradient(135deg, #60a5fa, #2563eb);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 14px;
+      font-weight: 850;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
+    .brand-sub {
+      margin-top: 3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted-soft);
+      font-weight: 750;
+    }
+
+    .brand-sub::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.75);
+    }
+
+    .system-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 197, 94, 0.16);
+      color: #bbf7d0;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(34, 197, 94, 0.07);
+      white-space: nowrap;
+    }
+
+    .system-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.72);
+    }
+
+    /* ── Hero ── */
     .hero {
-      text-align: center;
-      margin-bottom: 20px;
-      padding-top: 6px;
+      margin-bottom: 24px;
     }
 
-    .brand-pill {
+    .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 13px;
-      border: 1px solid rgba(148, 163, 184, 0.28);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.66);
-      backdrop-filter: blur(14px);
-      color: #475569;
-      font-size: 13px;
-      font-weight: 800;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-      animation: fadeUp 520ms ease both;
-    }
-
-    .brand-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 99px;
-      background: var(--accent);
-      box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.12);
+      margin-bottom: 14px;
+      color: var(--blue-soft);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     h1 {
-      margin: 16px 0 0;
-      font-size: 42px;
-      line-height: 1;
-      letter-spacing: -0.055em;
+      margin: 0;
+      font-size: 44px;
+      line-height: 0.96;
+      letter-spacing: -0.06em;
       color: var(--text);
-      animation: fadeUp 580ms ease both;
-      animation-delay: 60ms;
     }
 
     .subtitle {
-      margin: 12px auto 0;
+      margin: 14px 0 0;
       max-width: 520px;
       color: var(--muted);
       font-size: 15px;
       line-height: 1.52;
-      animation: fadeUp 620ms ease both;
-      animation-delay: 120ms;
     }
 
+    /* ── Main panel ── */
     .panel {
-      position: relative;
-      margin-top: 20px;
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border);
       border-radius: var(--radius-xl);
-      background: var(--panel);
+      background: rgba(255, 255, 255, 0.045);
       backdrop-filter: blur(18px);
       box-shadow: var(--shadow);
-      overflow: hidden;
-      animation: fadeUp 660ms ease both;
-      animation-delay: 170ms;
-    }
-
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      border-radius: inherit;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.72), transparent 42%),
-        radial-gradient(circle at top left, rgba(37,99,235,0.10), transparent 38%);
+      padding: 10px;
+      animation: fadeUp 480ms ease both;
     }
 
     .content-flow {
-      position: relative;
-      z-index: 1;
       display: grid;
-      gap: 13px;
+      gap: 9px;
     }
 
+    /* ── Sections (cards) ── */
     .section {
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.90));
+      background: var(--surface);
       box-shadow: var(--shadow-card);
       overflow: hidden;
-      animation: cardIn 520ms cubic-bezier(.2,.8,.2,1) both;
+      animation: cardIn 420ms ease both;
     }
 
     .section-inner {
@@ -241,56 +285,97 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     .section-icon {
-      width: 42px;
-      height: 42px;
+      width: 46px;
+      height: 46px;
       border-radius: 14px;
-      background: linear-gradient(145deg, #eaf1ff, #ffffff);
+      background: rgba(96, 165, 250, 0.10);
+      border: 1px solid rgba(96, 165, 250, 0.16);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 21px;
+      font-size: 22px;
       flex-shrink: 0;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.9),
-        0 10px 22px rgba(37, 99, 235, 0.13);
     }
 
     .section-title {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
+      font-size: 16px;
+      font-weight: 850;
+      letter-spacing: -0.025em;
       color: var(--text);
       margin-bottom: 4px;
     }
 
     .section-subtitle {
       font-size: 13px;
-      line-height: 1.42;
+      line-height: 1.4;
       color: var(--muted);
+    }
+
+    /* ── Products list with scroll ── */
+    .products-scroll-wrap {
+      position: relative;
     }
 
     .products-list {
       display: grid;
-      gap: 10px;
+      gap: 8px;
+      max-height: 340px;
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(96, 165, 250, 0.28) transparent;
     }
 
+    .products-list::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .products-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .products-list::-webkit-scrollbar-thumb {
+      background: rgba(96, 165, 250, 0.28);
+      border-radius: 99px;
+    }
+
+    /* fade hint at the bottom when scrollable */
+    .products-scroll-wrap::after {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 36px;
+      background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.55));
+      pointer-events: none;
+      border-radius: 0 0 12px 12px;
+      opacity: 0;
+      transition: opacity 200ms;
+    }
+
+    .products-scroll-wrap.overflows::after {
+      opacity: 1;
+    }
+
+    /* ── Product card ── */
     .product-card {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 12px;
       align-items: center;
-      padding: 14px;
-      border: 1px solid rgba(148, 163, 184, 0.28);
-      border-radius: 18px;
-      background: rgba(255,255,255,0.86);
-      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
     }
 
     .product-card:hover {
       transform: translateY(-2px);
-      border-color: rgba(37, 99, 235, 0.34);
-      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.10);
-      background: #ffffff;
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
     }
 
     .product-main {
@@ -302,81 +387,82 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       align-items: flex-start;
       justify-content: space-between;
       gap: 10px;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .product-name {
       margin: 0;
-      font-size: 15px;
-      font-weight: 900;
+      font-size: 14px;
+      font-weight: 850;
       letter-spacing: -0.02em;
       color: var(--text);
       line-height: 1.2;
     }
 
     .product-price {
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 850;
+      color: var(--blue-soft);
       white-space: nowrap;
     }
 
     .product-description {
       margin: 0;
-      font-size: 12.5px;
+      font-size: 12px;
       line-height: 1.38;
       color: var(--muted);
     }
 
+    /* ── Quantity control ── */
     .qty-box {
       display: grid;
-      grid-template-columns: 34px 42px 34px;
-      border: 1px solid rgba(148, 163, 184, 0.42);
+      grid-template-columns: 32px 40px 32px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 12px;
       overflow: hidden;
-      background: #fff;
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
+      background: rgba(255,255,255,0.05);
     }
 
     .qty-btn {
       appearance: none;
       border: none;
-      background: #fff;
+      background: transparent;
       color: var(--text);
-      font-size: 19px;
-      height: 36px;
+      font-size: 18px;
+      height: 34px;
       cursor: pointer;
+      transition: background 120ms;
     }
 
     .qty-btn:hover {
-      background: var(--accent-soft);
-      color: var(--accent-dark);
+      background: rgba(96, 165, 250, 0.14);
+      color: var(--blue-soft);
     }
 
     .qty-value {
-      border-left: 1px solid rgba(148, 163, 184, 0.36);
-      border-right: 1px solid rgba(148, 163, 184, 0.36);
+      border-left: 1px solid rgba(255,255,255,0.10);
+      border-right: 1px solid rgba(255,255,255,0.10);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 900;
       color: var(--text);
-      background: #fff;
     }
 
     .qty-hidden {
       display: none;
     }
 
+    /* ── Total card ── */
     .total-card {
       margin-top: 12px;
       padding: 14px;
-      border: 1px solid rgba(37, 99, 235, 0.18);
-      border-radius: 18px;
+      border: 1px solid rgba(96, 165, 250, 0.18);
+      border-radius: 16px;
       background:
-        radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 46%),
-        linear-gradient(180deg, #ffffff, #f8fafc);
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.10), transparent 46%),
+        rgba(255,255,255,0.04);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -393,8 +479,9 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     .total-icon {
       width: 42px;
       height: 42px;
-      border-radius: 14px;
-      background: var(--accent-soft);
+      border-radius: 13px;
+      background: rgba(96, 165, 250, 0.10);
+      border: 1px solid rgba(96, 165, 250, 0.16);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -404,7 +491,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
     .total-title {
       font-size: 14px;
-      font-weight: 900;
+      font-weight: 850;
       color: var(--text);
       margin-bottom: 2px;
     }
@@ -416,13 +503,14 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     .total-value {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 950;
       letter-spacing: -0.04em;
-      color: var(--text);
+      color: var(--blue-soft);
       white-space: nowrap;
     }
 
+    /* ── Form ── */
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -443,34 +531,41 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     .label {
       font-size: 13px;
       font-weight: 850;
-      color: var(--text);
+      color: var(--muted);
     }
 
     input,
     textarea {
       width: 100%;
-      border: 1px solid rgba(148, 163, 184, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 14px;
       padding: 12px 13px;
       font-size: 14px;
       color: var(--text);
-      background: rgba(255,255,255,0.92);
+      background: rgba(255, 255, 255, 0.06);
       outline: none;
       font-family: inherit;
+      transition: border-color 160ms, box-shadow 160ms;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--muted-soft);
     }
 
     input:focus,
     textarea:focus {
-      border-color: rgba(37, 99, 235, 0.62);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-      background: #fff;
+      border-color: rgba(96, 165, 250, 0.50);
+      box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.10);
+      background: rgba(255,255,255,0.08);
     }
 
     textarea {
-      min-height: 96px;
+      min-height: 90px;
       resize: vertical;
     }
 
+    /* ── Submit ── */
     .submit-wrap {
       display: grid;
       gap: 8px;
@@ -479,84 +574,86 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     .submit-btn {
       width: 100%;
       border: none;
-      border-radius: 18px;
+      border-radius: 16px;
       background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.26), transparent 30%),
-        linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+        radial-gradient(circle at top left, rgba(255,255,255,0.20), transparent 30%),
+        linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
       color: #fff;
       padding: 15px 18px;
       font-size: 15px;
       font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 16px 32px rgba(37, 99, 235, 0.28);
+      box-shadow: 0 16px 32px rgba(37, 99, 235, 0.30);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 9px;
+      transition: transform 160ms ease, box-shadow 160ms ease;
     }
 
     .submit-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 22px 42px rgba(37, 99, 235, 0.34);
+      box-shadow: 0 22px 42px rgba(37, 99, 235, 0.38);
     }
 
     .submit-btn:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
       transform: none;
     }
 
     .submit-hint {
       text-align: center;
-      color: var(--muted);
+      color: var(--muted-soft);
       font-size: 12px;
       line-height: 1.4;
     }
 
+    /* ── Messages ── */
     .message {
       display: none;
       padding: 13px 14px;
-      border-radius: 16px;
+      border-radius: 14px;
       font-size: 14px;
       line-height: 1.42;
       white-space: pre-wrap;
       word-break: break-word;
+      margin-top: 8px;
       animation: fadeUp 260ms ease both;
     }
 
     .message.success {
       display: block;
-      background: #ecfdf3;
-      color: #166534;
-      border: 1px solid #bbf7d0;
+      background: rgba(34, 197, 94, 0.08);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.18);
     }
 
     .message.error {
       display: block;
-      background: #fef2f2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
+      background: rgba(239, 68, 68, 0.08);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.18);
     }
 
+    /* ── Footer ── */
     .footer {
-      margin-top: 15px;
+      margin-top: 16px;
       text-align: center;
       font-size: 12px;
-      line-height: 1.45;
-      color: var(--muted);
+      color: var(--muted-soft);
+      animation: fadeUp 620ms ease both;
     }
 
     .secure-row {
-      margin-top: 14px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 7px;
       padding: 7px 10px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.62);
-      border: 1px solid rgba(148, 163, 184, 0.24);
-      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.035);
     }
 
     .expires {
@@ -573,19 +670,21 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       font-size: 14px;
     }
 
+    /* ── Text section ── */
+    .text-section-inner {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.52;
+    }
+
+    /* ── Animations ── */
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
     @keyframes loaderIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     @keyframes pageIn {
@@ -594,39 +693,28 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes cardIn {
-      from {
-        opacity: 0;
-        transform: translateY(16px) scale(0.985);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(14px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    /* ── Responsive ── */
     @media (max-width: 640px) {
       .page {
-        padding: 22px 8px 30px;
+        padding: 20px 10px 30px;
       }
 
       h1 {
-        font-size: 32px;
+        font-size: 33px;
       }
 
       .panel {
-        padding: 11px;
-        border-radius: 22px;
+        padding: 8px;
+        border-radius: 23px;
       }
 
       .section-inner {
@@ -655,6 +743,18 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
         flex-direction: column;
         align-items: flex-start;
       }
+
+      .brand-name {
+        max-width: 180px;
+      }
+
+      .system-pill {
+        display: none;
+      }
+
+      .products-list {
+        max-height: 260px;
+      }
     }
   </style>
 </head>
@@ -670,16 +770,30 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
   <main class="page">
     <div class="shell">
-      <section class="hero">
-        <div class="brand-pill">
-          <span class="brand-dot"></span>
-          <span>${safeBrand}</span>
-        </div>
 
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark"></div>
+          <div class="brand-text">
+            <div class="brand-name">${safeBrand}</div>
+            <div class="brand-sub">Portal de cotización</div>
+          </div>
+        </div>
+        <div class="system-pill">
+          <span class="system-dot"></span>
+          <span>Online</span>
+        </div>
+      </header>
+
+      <!-- Hero -->
+      <section class="hero">
+        <div class="eyebrow">Cotización inteligente</div>
         <h1>${safeTitle}</h1>
         <p class="subtitle">${safeSubtitle}</p>
       </section>
 
+      <!-- Main panel -->
       <section class="panel">
         <div id="content" class="content-flow"></div>
         <div id="message" class="message"></div>
@@ -775,13 +889,11 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     function updateTotal() {
       const inputs = document.querySelectorAll('[data-kind="product-quantity"]');
       let total = 0;
-
       inputs.forEach((input) => {
         const quantity = Number(input.value || 0);
         const price = Number(input.dataset.productPrice || 0);
         total += quantity * price;
       });
-
       const totalValue = document.getElementById("totalValue");
       if (totalValue) totalValue.textContent = formatCurrency(total);
     }
@@ -790,7 +902,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       const box = document.createElement("section");
       box.className = "section";
       const inner = document.createElement("div");
-      inner.className = "section-inner";
+      inner.className = "section-inner text-section-inner";
       inner.textContent = component.value || "";
       box.appendChild(inner);
       return box;
@@ -803,9 +915,6 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
         "Agrega cantidades y revisa el total estimado antes de enviar."
       );
 
-      const list = document.createElement("div");
-      list.className = "products-list";
-
       if (!Array.isArray(component.items) || component.items.length === 0) {
         const empty = document.createElement("div");
         empty.className = "empty";
@@ -813,6 +922,13 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
         inner.appendChild(empty);
         return section;
       }
+
+      // Scroll wrapper
+      const scrollWrap = document.createElement("div");
+      scrollWrap.className = "products-scroll-wrap";
+
+      const list = document.createElement("div");
+      list.className = "products-list";
 
       component.items.forEach((item) => {
         const card = document.createElement("div");
@@ -889,8 +1005,21 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
         list.appendChild(card);
       });
 
-      inner.appendChild(list);
+      scrollWrap.appendChild(list);
+      inner.appendChild(scrollWrap);
 
+      // Detect if list is overflowing to show fade hint
+      requestAnimationFrame(() => {
+        if (list.scrollHeight > list.clientHeight) {
+          scrollWrap.classList.add("overflows");
+        }
+        list.addEventListener("scroll", () => {
+          const atBottom = list.scrollTop + list.clientHeight >= list.scrollHeight - 4;
+          scrollWrap.classList.toggle("overflows", !atBottom);
+        });
+      });
+
+      // Total row (outside the scroll, always visible)
       const totalCard = document.createElement("div");
       totalCard.className = "total-card";
 
@@ -1011,7 +1140,6 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       quantityInputs.forEach((input) => {
         const quantity = Number(input.value || 0);
         const productId = input.dataset.productId;
-
         if (quantity > 0 && productId) {
           selectedItems.push({ productId, quantity });
         }
@@ -1027,12 +1155,10 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
       for (const field of formFields) {
         const value = String(field.value || "").trim();
-
         if (field.required && !value) {
           showMessage("error", "Completa los campos obligatorios.");
           return;
         }
-
         customer[field.name] = value;
       }
 
@@ -1046,9 +1172,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
           body: JSON.stringify({
             customer,
             items: selectedItems,
-            raw: {
-              submittedAtClient: new Date().toISOString()
-            }
+            raw: { submittedAtClient: new Date().toISOString() }
           })
         });
 
