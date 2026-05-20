@@ -57,20 +57,28 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
   <style>
     :root {
-      --bg: #030712;
-      --bg-deep: #020617;
-      --panel: rgba(8, 13, 27, 0.74);
-      --text: #f8fafc;
-      --muted: #a9b4c7;
-      --muted-soft: #738197;
+      --bg: #02020a;
+      --bg-deep: #000000;
+      --panel: rgba(6, 8, 22, 0.68);
+      --text: #f8fbff;
+      --muted: #b9c5d6;
+      --muted-soft: #75839a;
+
       --border: rgba(255, 255, 255, 0.105);
-      --border-strong: rgba(125, 211, 252, 0.38);
+      --border-strong: rgba(238, 174, 255, 0.34);
+
+      --pink: #f0a3ff;
+      --magenta: #d946ef;
+      --violet: #7c3aed;
+      --deep-violet: #1e0b66;
       --blue: #60a5fa;
-      --cyan: #22d3ee;
-      --violet: #8b5cf6;
+      --ice: #dff7ff;
+      --cyan: #67e8f9;
       --green: #22c55e;
-      --shadow: 0 34px 100px rgba(0, 0, 0, 0.48);
-      --shadow-card: 0 20px 48px rgba(0, 0, 0, 0.28);
+
+      --shadow: 0 38px 120px rgba(0, 0, 0, 0.58);
+      --shadow-card: 0 24px 58px rgba(0, 0, 0, 0.32);
+
       --radius-xl: 30px;
       --radius-lg: 22px;
     }
@@ -90,11 +98,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       min-height: 100vh;
       font-family: Inter, Arial, Helvetica, sans-serif;
       color: var(--text);
-      background:
-        radial-gradient(circle at 20% 5%, rgba(96, 165, 250, 0.24), transparent 26%),
-        radial-gradient(circle at 86% 10%, rgba(139, 92, 246, 0.22), transparent 28%),
-        radial-gradient(circle at 50% 100%, rgba(34, 211, 238, 0.11), transparent 36%),
-        linear-gradient(180deg, #020617 0%, #07111f 46%, #020617 100%);
+      background: #000;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
@@ -103,25 +107,42 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       content: "";
       position: fixed;
       inset: 0;
+      z-index: 0;
       pointer-events: none;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,0.50) 0 1px, transparent 1.2px),
-        radial-gradient(circle, rgba(125,211,252,0.34) 0 1px, transparent 1.4px);
-      background-size: 90px 90px, 140px 140px;
-      background-position: 0 0, 30px 50px;
-      opacity: 0.28;
-      mask-image: linear-gradient(to bottom, black, transparent 78%);
+      background:
+        radial-gradient(
+          ellipse 96% 48% at 50% -5%,
+          rgba(255, 184, 245, 0.96) 0%,
+          rgba(220, 90, 238, 0.86) 19%,
+          rgba(130, 45, 226, 0.72) 38%,
+          rgba(31, 18, 108, 0.72) 56%,
+          rgba(1, 2, 13, 0.96) 78%,
+          rgba(0, 0, 0, 1) 100%
+        ),
+        radial-gradient(
+          ellipse 88% 38% at 50% 102%,
+          rgba(234, 250, 255, 0.96) 0%,
+          rgba(150, 211, 244, 0.72) 22%,
+          rgba(51, 105, 180, 0.46) 42%,
+          rgba(6, 12, 35, 0.88) 72%,
+          rgba(0, 0, 0, 1) 100%
+        ),
+        linear-gradient(180deg, #03020a 0%, #000000 50%, #02030a 100%);
     }
 
     body::after {
       content: "";
       position: fixed;
       inset: 0;
+      z-index: 0;
       pointer-events: none;
       background:
-        linear-gradient(115deg, transparent 0%, rgba(125, 211, 252, 0.045) 44%, transparent 72%),
-        radial-gradient(circle at 50% 18%, rgba(255,255,255,0.055), transparent 34%);
-      opacity: 0.9;
+        radial-gradient(ellipse 84% 20% at 50% 49%, transparent 52%, rgba(247, 151, 255, 0.78) 58%, transparent 62%),
+        radial-gradient(ellipse 76% 22% at 50% 51%, transparent 54%, rgba(199, 225, 255, 0.70) 60%, transparent 64%),
+        radial-gradient(circle at 50% 22%, rgba(255,255,255,0.06), transparent 26%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), transparent 18%, transparent 78%, rgba(255,255,255,0.08));
+      opacity: 0.72;
+      mix-blend-mode: screen;
     }
 
     .app-loader {
@@ -131,8 +152,8 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(2, 6, 23, 0.82);
-      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(12px);
       transition: opacity 160ms ease, visibility 160ms ease;
     }
 
@@ -146,10 +167,12 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       width: 42px;
       height: 42px;
       border-radius: 50%;
-      border: 3px solid rgba(125, 211, 252, 0.18);
-      border-top-color: var(--cyan);
+      border: 3px solid rgba(240, 163, 255, 0.18);
+      border-top-color: var(--pink);
       animation: spin 760ms linear infinite;
-      box-shadow: 0 0 26px rgba(34, 211, 238, 0.25);
+      box-shadow:
+        0 0 28px rgba(217, 70, 239, 0.38),
+        0 0 52px rgba(96, 165, 250, 0.22);
     }
 
     .page {
@@ -172,13 +195,15 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       gap: 12px;
       margin-bottom: 22px;
       padding: 10px 12px;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 20px;
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035)),
-        rgba(8, 13, 27, 0.62);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.26);
+        linear-gradient(180deg, rgba(255,255,255,0.115), rgba(255,255,255,0.045)),
+        rgba(5, 5, 16, 0.46);
+      backdrop-filter: blur(22px);
+      box-shadow:
+        0 18px 46px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255,255,255,0.08);
       animation: fadeUp 440ms ease both;
     }
 
@@ -194,11 +219,12 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       height: 36px;
       border-radius: 12px;
       background:
-        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.55), transparent 28%),
-        linear-gradient(135deg, var(--blue), var(--violet) 52%, var(--cyan));
+        radial-gradient(circle at 34% 24%, rgba(255,255,255,0.78), transparent 24%),
+        radial-gradient(circle at 74% 82%, rgba(103,232,249,0.72), transparent 28%),
+        linear-gradient(145deg, #f0a3ff 0%, #d946ef 35%, #5b21b6 68%, #1d4ed8 100%);
       box-shadow:
-        0 12px 24px rgba(96, 165, 250, 0.22),
-        0 0 28px rgba(139, 92, 246, 0.22);
+        0 14px 30px rgba(217, 70, 239, 0.24),
+        0 0 34px rgba(240, 163, 255, 0.30);
       flex-shrink: 0;
     }
 
@@ -215,7 +241,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     .brand-sub {
       margin-top: 1px;
       font-size: 11px;
-      color: var(--muted-soft);
+      color: rgba(223, 247, 255, 0.62);
       font-weight: 700;
     }
 
@@ -225,7 +251,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       gap: 7px;
       padding: 7px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(34, 197, 94, 0.20);
       background: rgba(34, 197, 94, 0.09);
       color: #bbf7d0;
       font-size: 11px;
@@ -263,19 +289,20 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       gap: 8px;
       padding: 7px 11px;
       border-radius: 999px;
-      border: 1px solid rgba(125, 211, 252, 0.20);
-      background: rgba(96, 165, 250, 0.10);
-      color: #bfdbfe;
+      border: 1px solid rgba(240, 163, 255, 0.24);
+      background: rgba(217, 70, 239, 0.12);
+      color: #f5d0fe;
       font-size: 11px;
       font-weight: 900;
       letter-spacing: 0.035em;
       text-transform: uppercase;
+      box-shadow: 0 0 28px rgba(217, 70, 239, 0.12);
     }
 
     .eyebrow-line {
       width: 20px;
       height: 1px;
-      background: linear-gradient(90deg, var(--cyan), transparent);
+      background: linear-gradient(90deg, var(--pink), transparent);
     }
 
     h1 {
@@ -289,35 +316,37 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     }
 
     .title-gradient {
-      background: linear-gradient(90deg, #ffffff 0%, #bfdbfe 42%, #c4b5fd 68%, #67e8f9 100%);
+      background: linear-gradient(90deg, #ffffff 0%, #ffe4ff 30%, #f0a3ff 54%, #c4b5fd 75%, #dff7ff 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      text-shadow: 0 18px 58px rgba(217, 70, 239, 0.18);
     }
 
     .subtitle {
       margin: 14px 0 0;
       max-width: 540px;
-      color: var(--muted);
+      color: rgba(237, 245, 255, 0.78);
       font-size: 15px;
       line-height: 1.55;
       text-wrap: balance;
     }
 
     .hero-metric {
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 22px;
       background:
-        radial-gradient(circle at top right, rgba(139, 92, 246, 0.17), transparent 48%),
-        radial-gradient(circle at bottom left, rgba(34, 211, 238, 0.12), transparent 44%),
-        rgba(255, 255, 255, 0.055);
+        radial-gradient(circle at top right, rgba(240, 163, 255, 0.22), transparent 48%),
+        radial-gradient(circle at bottom left, rgba(96, 165, 250, 0.18), transparent 44%),
+        rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(18px);
       padding: 14px;
       box-shadow: var(--shadow-card);
     }
 
     .metric-label {
       font-size: 11px;
-      color: var(--muted-soft);
+      color: rgba(223, 247, 255, 0.56);
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -335,7 +364,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     .metric-caption {
       margin-top: 6px;
       font-size: 12px;
-      color: var(--muted);
+      color: rgba(237, 245, 255, 0.70);
       line-height: 1.35;
     }
 
@@ -343,16 +372,29 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       position: relative;
       margin-top: 22px;
       padding: 14px;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: var(--radius-xl);
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035)),
-        var(--panel);
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow);
+        linear-gradient(180deg, rgba(255,255,255,0.105), rgba(255,255,255,0.045)),
+        rgba(4, 5, 18, 0.54);
+      backdrop-filter: blur(24px);
+      box-shadow:
+        var(--shadow),
+        inset 0 1px 0 rgba(255,255,255,0.07);
       overflow: hidden;
       animation: fadeUp 560ms ease both;
       animation-delay: 140ms;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% -16%, rgba(240, 163, 255, 0.28), transparent 34%),
+        radial-gradient(circle at 50% 116%, rgba(223, 247, 255, 0.18), transparent 36%);
+      opacity: 0.82;
     }
 
     .panel-header {
@@ -368,14 +410,14 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     .panel-title {
       font-size: 13px;
       font-weight: 900;
-      color: #dbeafe;
+      color: #f5d0fe;
       letter-spacing: 0.02em;
       text-transform: uppercase;
     }
 
     .panel-helper {
       font-size: 12px;
-      color: var(--muted-soft);
+      color: rgba(223, 247, 255, 0.56);
       text-align: right;
     }
 
@@ -395,9 +437,11 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       min-height: 106px;
       padding: 15px;
       border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.125);
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.042));
+        radial-gradient(circle at 0% 0%, rgba(240, 163, 255, 0.115), transparent 38%),
+        radial-gradient(circle at 100% 100%, rgba(96, 165, 250, 0.105), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.095), rgba(255,255,255,0.042));
       color: inherit;
       text-decoration: none;
       box-shadow: var(--shadow-card);
@@ -418,20 +462,22 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       position: absolute;
       inset: 0 auto 0 0;
       width: 3px;
-      background: linear-gradient(180deg, var(--blue), var(--violet), var(--cyan));
+      background: linear-gradient(180deg, #f0a3ff, #d946ef, #7c3aed, #dff7ff);
       opacity: 0.95;
     }
 
     .module-card::after {
       content: "";
       position: absolute;
-      top: -54px;
-      right: -54px;
-      width: 136px;
-      height: 136px;
+      top: -58px;
+      right: -58px;
+      width: 148px;
+      height: 148px;
       border-radius: 999px;
-      background: radial-gradient(circle, rgba(125, 211, 252, 0.18), transparent 66%);
-      opacity: 0.45;
+      background:
+        radial-gradient(circle, rgba(240, 163, 255, 0.22), transparent 62%),
+        radial-gradient(circle, rgba(103, 232, 249, 0.12), transparent 70%);
+      opacity: 0.48;
       transition: opacity 180ms ease, transform 180ms ease;
     }
 
@@ -439,14 +485,17 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       transform: translateY(-3px) scale(1.004);
       border-color: var(--border-strong);
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.125), rgba(255,255,255,0.065));
+        radial-gradient(circle at 0% 0%, rgba(240, 163, 255, 0.16), transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(223, 247, 255, 0.12), transparent 44%),
+        linear-gradient(180deg, rgba(255,255,255,0.135), rgba(255,255,255,0.064));
       box-shadow:
-        0 24px 54px rgba(0, 0, 0, 0.34),
-        0 0 0 1px rgba(125, 211, 252, 0.08);
+        0 26px 64px rgba(0, 0, 0, 0.42),
+        0 0 0 1px rgba(240, 163, 255, 0.08),
+        0 0 46px rgba(217, 70, 239, 0.10);
     }
 
     .module-card:hover::after {
-      opacity: 0.9;
+      opacity: 0.92;
       transform: scale(1.08);
     }
 
@@ -462,16 +511,17 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       height: 58px;
       border-radius: 18px;
       background:
-        radial-gradient(circle at 35% 25%, rgba(255,255,255,0.18), transparent 35%),
-        linear-gradient(145deg, rgba(96,165,250,0.22), rgba(139,92,246,0.13), rgba(34,211,238,0.10));
-      border: 1px solid rgba(125, 211, 252, 0.18);
+        radial-gradient(circle at 35% 25%, rgba(255,255,255,0.22), transparent 35%),
+        linear-gradient(145deg, rgba(240,163,255,0.24), rgba(124,58,237,0.18), rgba(223,247,255,0.10));
+      border: 1px solid rgba(240, 163, 255, 0.20);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 27px;
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.12),
-        0 12px 26px rgba(0, 0, 0, 0.24);
+        inset 0 1px 0 rgba(255,255,255,0.14),
+        0 14px 30px rgba(0, 0, 0, 0.30),
+        0 0 28px rgba(217, 70, 239, 0.10);
     }
 
     .module-main {
@@ -510,7 +560,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     }
 
     .module-code {
-      color: var(--muted-soft);
+      color: rgba(223, 247, 255, 0.50);
       font-size: 10px;
       font-weight: 850;
       text-transform: uppercase;
@@ -528,14 +578,14 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     .module-description {
       font-size: 13px;
       line-height: 1.38;
-      color: var(--muted);
+      color: rgba(237, 245, 255, 0.74);
     }
 
     .module-action {
       display: inline-flex;
       align-items: center;
       gap: 9px;
-      color: #bfdbfe;
+      color: #f5d0fe;
       font-size: 12px;
       font-weight: 900;
       white-space: nowrap;
@@ -545,14 +595,16 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       width: 34px;
       height: 34px;
       border-radius: 999px;
-      background: linear-gradient(135deg, var(--blue), var(--violet), var(--cyan));
-      color: #06111f;
+      background: linear-gradient(135deg, #f0a3ff, #d946ef 44%, #7c3aed 74%, #dff7ff 100%);
+      color: #070314;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 16px;
       font-weight: 950;
-      box-shadow: 0 12px 26px rgba(96, 165, 250, 0.25);
+      box-shadow:
+        0 14px 30px rgba(217, 70, 239, 0.24),
+        0 0 28px rgba(240, 163, 255, 0.16);
       transition: transform 180ms ease;
     }
 
@@ -563,7 +615,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     .empty {
       padding: 30px 18px;
       text-align: center;
-      color: var(--muted);
+      color: rgba(237, 245, 255, 0.72);
       font-size: 14px;
       line-height: 1.45;
     }
@@ -573,7 +625,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       text-align: center;
       font-size: 12px;
       line-height: 1.45;
-      color: var(--muted-soft);
+      color: rgba(223, 247, 255, 0.54);
       animation: fadeUp 700ms ease both;
       animation-delay: 260ms;
     }
@@ -586,8 +638,8 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       gap: 7px;
       padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(8, 13, 27, 0.56);
-      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(5, 5, 16, 0.46);
+      border: 1px solid rgba(255, 255, 255, 0.11);
       backdrop-filter: blur(14px);
     }
 
