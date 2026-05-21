@@ -24,35 +24,38 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
 <style>
 :root {
-  --bg: #f3f4f6;
+  /* VS Code Light Inspired */
+  --bg: #f3f3f3;
   --surface: #ffffff;
-  --surface-2: #f8fafc;
-  --surface-3: #eef2f7;
-  --surface-hover: #e8edf3;
+  --surface-2: #f8f8f8;
+  --surface-3: #e7e7e7;
+  --surface-hover: #eeeeee;
 
-  --text: #0f172a;
-  --text-soft: #334155;
-  --muted: #64748b;
-  --muted-2: #94a3b8;
+  --text: #1e1e1e;
+  --text-soft: #3c3c3c;
+  --muted: #6a6a6a;
+  --muted-2: #8a8a8a;
 
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --accent-soft: #dbeafe;
+  --accent: #007acc;
+  --accent-hover: #006bb3;
+  --accent-soft: #e5f3ff;
 
-  --success-bg: #ecfdf3;
-  --success-text: #166534;
+  --border: #d4d4d4;
 
-  --error-bg: #fef2f2;
-  --error-text: #991b1b;
+  --success-bg: #eaf7ea;
+  --success-text: #107c10;
 
-  --radius-md: 14px;
-  --radius-lg: 18px;
-  --radius-xl: 26px;
+  --error-bg: #fdecea;
+  --error-text: #a1260d;
 
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 20px 48px rgba(15, 23, 42, 0.10);
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
 
-  --page-max: 760px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 18px 42px rgba(0, 0, 0, 0.10);
+
+  --page-max: 780px;
 }
 
 * {
@@ -98,10 +101,10 @@ textarea {
   margin: 0 auto;
 }
 
-/* HERO */
+/* HEADER */
 
 .hero {
-  padding: 12px 4px 24px;
+  padding: 14px 4px 24px;
 }
 
 .hero-kicker {
@@ -117,10 +120,10 @@ h1 {
   margin: 0;
   max-width: 680px;
   color: var(--text);
-  font-size: clamp(38px, 6vw, 58px);
-  line-height: 1.02;
-  letter-spacing: -0.05em;
-  font-weight: 950;
+  font-size: clamp(38px, 6vw, 56px);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  font-weight: 900;
 }
 
 .subtitle {
@@ -128,7 +131,7 @@ h1 {
   max-width: 560px;
   color: var(--muted);
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.55;
 }
 
 /* PANEL */
@@ -138,6 +141,7 @@ h1 {
   border-radius: var(--radius-xl);
   padding: 14px;
   box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
 }
 
 .content-flow {
@@ -187,18 +191,22 @@ h1 {
 .search-input {
   width: 100%;
   height: 48px;
-  border: none;
+  border: 1px solid var(--border);
   outline: none;
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--surface-2);
   color: var(--text);
   padding: 0 16px;
   font-size: 14px;
-  box-shadow: inset 0 0 0 1px #e2e8f0;
 }
 
 .search-input::placeholder {
   color: var(--muted-2);
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.12);
 }
 
 /* PRODUCTS LIST */
@@ -206,11 +214,14 @@ h1 {
 .products-list {
   display: grid;
   gap: 8px;
+
+  /* AQUÍ ESTÁ LA SOLUCIÓN PARA 60 PRODUCTOS */
   max-height: 58vh;
   overflow-y: auto;
-  padding-right: 2px;
+
+  padding-right: 4px;
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: #a6a6a6 transparent;
 }
 
 .products-list::-webkit-scrollbar {
@@ -218,7 +229,7 @@ h1 {
 }
 
 .products-list::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #a6a6a6;
   border-radius: 999px;
 }
 
@@ -233,14 +244,17 @@ h1 {
   padding: 14px;
   border-radius: var(--radius-lg);
   background: var(--surface-2);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
   transition:
     background 140ms ease,
+    border-color 140ms ease,
     transform 140ms ease;
 }
 
 .product-card:hover {
   background: var(--surface-hover);
+  border-color: #bdbdbd;
   transform: translateY(-1px);
 }
 
@@ -292,10 +306,10 @@ h1 {
   display: grid;
   grid-template-columns: 34px 38px 34px;
   height: 36px;
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
-  background: white;
-  box-shadow: inset 0 0 0 1px #e5e7eb;
+  background: #ffffff;
+  border: 1px solid var(--border);
 }
 
 .qty-btn {
@@ -317,6 +331,8 @@ h1 {
   color: var(--text);
   font-size: 13px;
   font-weight: 900;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
 }
 
 .qty-hidden {
@@ -342,7 +358,7 @@ h1 {
 }
 
 .total-title {
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.78);
   font-size: 13px;
   font-weight: 800;
 }
@@ -359,6 +375,7 @@ h1 {
 .form-collapse {
   border-radius: var(--radius-lg);
   background: var(--surface-2);
+  border: 1px solid var(--border);
   overflow: hidden;
 }
 
@@ -384,8 +401,9 @@ h1 {
 .form-icon {
   width: 34px;
   height: 34px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--accent-soft);
+  color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -446,21 +464,19 @@ h1 {
 input,
 textarea {
   width: 100%;
-  border: none;
+  border: 1px solid var(--border);
   outline: none;
-  background: white;
+  background: #ffffff;
   color: var(--text);
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 12px;
   font-size: 14px;
-  box-shadow: inset 0 0 0 1px #e5e7eb;
 }
 
 input:focus,
 textarea:focus {
-  box-shadow:
-    inset 0 0 0 1px var(--accent),
-    0 0 0 3px rgba(37,99,235,0.08);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.12);
 }
 
 textarea {
@@ -490,7 +506,7 @@ textarea {
   font-size: 15px;
   font-weight: 950;
   cursor: pointer;
-  box-shadow: 0 10px 24px rgba(37,99,235,0.22);
+  box-shadow: 0 10px 24px rgba(0, 122, 204, 0.22);
   transition:
     opacity 140ms ease,
     transform 140ms ease;
@@ -675,11 +691,12 @@ function updateTotal() {
 function renderText(component) {
   const box = document.createElement("div");
   box.style.padding = "14px";
-  box.style.borderRadius = "18px";
-  box.style.background = "#f8fafc";
-  box.style.color = "#334155";
+  box.style.borderRadius = "16px";
+  box.style.background = "#f8f8f8";
+  box.style.color = "#3c3c3c";
   box.style.fontSize = "14px";
   box.style.lineHeight = "1.5";
+  box.style.border = "1px solid #d4d4d4";
   box.textContent = component.value || "";
   return box;
 }
@@ -718,7 +735,8 @@ function renderProducts(component) {
   const list = section.querySelector("#productsList");
 
   if (!Array.isArray(component.items) || component.items.length === 0) {
-    list.innerHTML = "<div style='padding:16px;color:#64748b;font-size:13px'>No hay productos disponibles.</div>";
+    list.innerHTML =
+      "<div style='padding:16px;color:#6a6a6a;font-size:13px'>No hay productos disponibles.</div>";
     return section;
   }
 
