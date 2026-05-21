@@ -90,8 +90,8 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       font-family: Inter, Arial, Helvetica, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at 50% 0%, rgba(2, 31, 73, 0.16), transparent 34%),
-        linear-gradient(180deg, #02050c 0%, #03070a 48%, #01040f 100%);
+        radial-gradient(circle at 50% 0%, rgb(11, 43, 28), transparent 34%),
+        linear-gradient(180deg, #010613 0%, #01080e 48%, #01040f 100%);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
