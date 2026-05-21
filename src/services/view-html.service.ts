@@ -32,10 +32,10 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       --accent-dark: #1e40af;
       --accent-soft: #dbeafe;
       --green: #22c55e;
-      --shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
-      --shadow-card: 0 6px 18px rgba(15, 23, 42, 0.07);
-      --radius-xl: 28px;
-      --radius-lg: 18px;
+      --shadow: 0 18px 44px rgba(15, 23, 42, 0.12);
+      --shadow-card: 0 4px 12px rgba(15, 23, 42, 0.055);
+      --radius-xl: 20px;
+      --radius-lg: 14px;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -124,11 +124,11 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     .page {
       position: relative;
       min-height: 100vh;
-      padding: 26px 14px 38px;
+      padding: 16px 10px 26px;
     }
 
     .shell {
-      max-width: 680px;
+      max-width: 760px;
       margin: 0 auto;
       animation: pageIn 520ms ease both;
     }
@@ -136,21 +136,21 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     /* ── Hero ── */
     .hero {
       text-align: center;
-      margin-bottom: 16px;
-      padding-top: 4px;
+      margin-bottom: 10px;
+      padding-top: 2px;
     }
 
     .brand-pill {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 6px 12px;
+      padding: 5px 10px;
       border: 1px solid rgba(148, 163, 184, 0.28);
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.66);
       backdrop-filter: blur(14px);
       color: #475569;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
       animation: fadeUp 520ms ease both;
@@ -165,8 +165,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     h1 {
-      margin: 12px 0 0;
-      font-size: 36px;
+      margin: 8px 0 0;
+      font-size: 28px;
       line-height: 1;
       letter-spacing: -0.055em;
       color: var(--text);
@@ -175,11 +175,11 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     .subtitle {
-      margin: 9px auto 0;
-      max-width: 480px;
+      margin: 6px auto 0;
+      max-width: 520px;
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.52;
+      font-size: 12.5px;
+      line-height: 1.35;
       animation: fadeUp 620ms ease both;
       animation-delay: 100ms;
     }
@@ -187,8 +187,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     /* ── Panel ── */
     .panel {
       position: relative;
-      margin-top: 16px;
-      padding: 12px;
+      margin-top: 10px;
+      padding: 9px;
       border: 1px solid rgba(255, 255, 255, 0.72);
       border-radius: var(--radius-xl);
       background: var(--panel);
@@ -214,7 +214,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       position: relative;
       z-index: 1;
       display: grid;
-      gap: 11px;
+      gap: 8px;
     }
 
     /* ── Section container ── */
@@ -228,25 +228,25 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     .section-inner {
-      padding: 13px;
+      padding: 10px;
     }
 
     .section-head {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 11px;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .section-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
       background: linear-gradient(145deg, #eaf1ff, #ffffff);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 15px;
       flex-shrink: 0;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.9),
@@ -254,7 +254,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     .section-title {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 900;
       letter-spacing: -0.025em;
       color: var(--text);
@@ -262,17 +262,16 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     .section-subtitle {
-      font-size: 11.5px;
-      line-height: 1.4;
+      font-size: 10.5px;
+      line-height: 1.25;
       color: var(--muted);
     }
 
-    /* ── Products list — scrollable when many ── */
+    /* ── Products list — compact rows, scrollable when many ── */
     .products-list {
       display: grid;
-      gap: 8px;
-      /* Show ~4 cards then scroll; each card ~68px + 8px gap */
-      max-height: calc(4 * 68px + 3 * 8px);
+      gap: 6px;
+      max-height: 238px;
       overflow-y: auto;
       overscroll-behavior: contain;
       padding-right: 3px;
@@ -280,23 +279,14 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       scrollbar-color: rgba(148,163,184,0.4) transparent;
     }
 
-    .products-list::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .products-list::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
+    .products-list::-webkit-scrollbar { width: 4px; }
+    .products-list::-webkit-scrollbar-track { background: transparent; }
     .products-list::-webkit-scrollbar-thumb {
       background: rgba(148, 163, 184, 0.38);
       border-radius: 4px;
     }
 
-    /* Fade hint at bottom when scrollable */
-    .products-scroll-wrap {
-      position: relative;
-    }
+    .products-scroll-wrap { position: relative; }
 
     .products-scroll-wrap::after {
       content: "";
@@ -304,61 +294,62 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       bottom: 0;
       left: 0;
       right: 0;
-      height: 32px;
-      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.85));
+      height: 22px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.86));
       pointer-events: none;
-      border-radius: 0 0 12px 12px;
+      border-radius: 0 0 10px 10px;
       transition: opacity 200ms;
     }
 
-    .products-scroll-wrap.at-bottom::after {
-      opacity: 0;
-    }
+    .products-scroll-wrap.at-bottom::after { opacity: 0; }
 
-    /* ── Product card ── */
     .product-card {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
-      padding: 10px 11px;
-      border: 1px solid rgba(148, 163, 184, 0.28);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.86);
-      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+      min-height: 46px;
+      padding: 7px 8px;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 11px;
+      background: rgba(255,255,255,0.88);
+      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
     }
 
     .product-card:hover {
       transform: translateY(-1px);
-      border-color: rgba(37, 99, 235, 0.30);
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.09);
+      border-color: rgba(37, 99, 235, 0.28);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.075);
       background: #ffffff;
     }
 
-    .product-main { min-width: 0; }
+    .product-main {
+      min-width: 0;
+      display: grid;
+      gap: 2px;
+    }
 
     .product-top {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: baseline;
-      justify-content: space-between;
       gap: 8px;
-      margin-bottom: 3px;
     }
 
     .product-name {
       margin: 0;
-      font-size: 13.5px;
+      font-size: 12.5px;
       font-weight: 900;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.018em;
       color: var(--text);
-      line-height: 1.2;
+      line-height: 1.1;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .product-price {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
       color: var(--accent-dark);
       white-space: nowrap;
@@ -367,8 +358,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
     .product-description {
       margin: 0;
-      font-size: 11.5px;
-      line-height: 1.35;
+      font-size: 10.5px;
+      line-height: 1.18;
       color: var(--muted);
       display: -webkit-box;
       -webkit-line-clamp: 1;
@@ -379,12 +370,12 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     /* ── Qty ── */
     .qty-box {
       display: grid;
-      grid-template-columns: 28px 36px 28px;
-      border: 1px solid rgba(148, 163, 184, 0.38);
-      border-radius: 10px;
+      grid-template-columns: 24px 30px 24px;
+      border: 1px solid rgba(148, 163, 184, 0.34);
+      border-radius: 9px;
       overflow: hidden;
       background: #fff;
-      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.045);
       flex-shrink: 0;
     }
 
@@ -393,8 +384,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
       border: none;
       background: #fff;
       color: var(--text);
-      font-size: 16px;
-      height: 30px;
+      font-size: 14px;
+      height: 26px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -408,12 +399,12 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     .qty-value {
-      border-left: 1px solid rgba(148, 163, 184, 0.36);
-      border-right: 1px solid rgba(148, 163, 184, 0.36);
+      border-left: 1px solid rgba(148, 163, 184, 0.32);
+      border-right: 1px solid rgba(148, 163, 184, 0.32);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
       color: var(--text);
       background: #fff;
@@ -423,55 +414,49 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
     /* ── Total ── */
     .total-card {
-      margin-top: 10px;
-      padding: 11px 13px;
+      margin-top: 7px;
+      padding: 7px 9px;
       border: 1px solid rgba(37, 99, 235, 0.18);
-      border-radius: 14px;
-      background:
-        radial-gradient(circle at top right, rgba(37, 99, 235, 0.10), transparent 46%),
-        linear-gradient(180deg, #ffffff, #f8fafc);
+      border-radius: 11px;
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
 
     .total-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 7px;
       min-width: 0;
     }
 
     .total-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
       background: var(--accent-soft);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 17px;
+      font-size: 13px;
       flex-shrink: 0;
     }
 
     .total-title {
-      font-size: 13px;
+      font-size: 11.5px;
       font-weight: 900;
       color: var(--text);
-      margin-bottom: 1px;
+      margin-bottom: 0;
     }
 
-    .total-subtitle {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.35;
-    }
+    .total-subtitle { display: none; }
 
     .total-value {
-      font-size: 21px;
+      font-size: 16px;
       font-weight: 950;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.035em;
       color: var(--text);
       white-space: nowrap;
     }
@@ -479,31 +464,31 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     /* ── Form ── */
     .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
     }
 
     .field {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 3px;
       min-width: 0;
     }
 
     .field.full { grid-column: 1 / -1; }
 
     .label {
-      font-size: 12px;
+      font-size: 10.8px;
       font-weight: 850;
       color: var(--text);
     }
 
     input, textarea {
       width: 100%;
-      border: 1px solid rgba(148, 163, 184, 0.38);
-      border-radius: 12px;
-      padding: 9px 11px;
-      font-size: 13px;
+      border: 1px solid rgba(148, 163, 184, 0.34);
+      border-radius: 10px;
+      padding: 7px 9px;
+      font-size: 12px;
       color: var(--text);
       background: rgba(255,255,255,0.92);
       outline: none;
@@ -518,7 +503,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     }
 
     textarea {
-      min-height: 80px;
+      min-height: 54px;
       resize: vertical;
     }
 
@@ -528,13 +513,13 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     .submit-btn {
       width: 100%;
       border: none;
-      border-radius: 15px;
+      border-radius: 12px;
       background:
         radial-gradient(circle at top left, rgba(255,255,255,0.26), transparent 30%),
         linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
       color: #fff;
-      padding: 13px 16px;
-      font-size: 14px;
+      padding: 10px 14px;
+      font-size: 13px;
       font-weight: 900;
       cursor: pointer;
       box-shadow: 0 14px 28px rgba(37, 99, 235, 0.26);
@@ -559,8 +544,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     .submit-hint {
       text-align: center;
       color: var(--muted);
-      font-size: 11.5px;
-      line-height: 1.4;
+      font-size: 10.5px;
+      line-height: 1.25;
     }
 
     /* ── Messages ── */
@@ -593,10 +578,10 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
     /* ── Footer ── */
     .footer {
-      margin-top: 13px;
+      margin-top: 9px;
       text-align: center;
-      font-size: 12px;
-      line-height: 1.45;
+      font-size: 10.5px;
+      line-height: 1.3;
       color: var(--muted);
     }
 
@@ -651,28 +636,35 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
     /* ── Responsive ── */
     @media (max-width: 640px) {
-      .page { padding: 18px 8px 28px; }
-
-      h1 { font-size: 28px; }
-
-      .panel { padding: 10px; border-radius: 22px; }
-
-      .section-inner { padding: 11px; }
-
-      .product-card { grid-template-columns: 1fr; }
-
-      .product-top { flex-direction: column; gap: 2px; }
-
-      .qty-box { width: 100%; grid-template-columns: 1fr 42px 1fr; }
-
-      .form-grid { grid-template-columns: 1fr; }
-
-      .total-card { flex-direction: column; align-items: flex-start; }
-
-      .products-list {
-        /* On mobile show ~3 cards */
-        max-height: calc(3 * 90px + 2 * 8px);
+      .page { padding: 12px 7px 22px; }
+      .shell { max-width: 100%; }
+      h1 { font-size: 24px; }
+      .subtitle { font-size: 11.8px; }
+      .panel { padding: 7px; border-radius: 18px; }
+      .section-inner { padding: 8px; }
+      .section-head { margin-bottom: 7px; }
+      .products-list { max-height: 226px; }
+      .product-card {
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding: 7px;
+        gap: 7px;
       }
+      .product-top { grid-template-columns: minmax(0, 1fr) auto; }
+      .product-name { font-size: 12px; }
+      .product-price { font-size: 11.5px; }
+      .product-description { font-size: 10px; }
+      .qty-box { grid-template-columns: 24px 28px 24px; }
+      .qty-btn { height: 25px; }
+      .form-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+      .field.full { grid-column: 1 / -1; }
+      .total-card { flex-direction: row; align-items: center; }
+      .total-value { font-size: 15px; }
+    }
+
+    @media (max-width: 390px) {
+      .product-card { grid-template-columns: 1fr; }
+      .qty-box { width: 100%; grid-template-columns: 1fr 32px 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -810,8 +802,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     function renderProducts(component) {
       const { section, inner } = createSection(
         "🧾",
-        "Selecciona productos",
-        "Agrega cantidades y revisa el total estimado."
+        "Productos",
+        "Cantidad, precio y total en vista compacta."
       );
 
       if (!Array.isArray(component.items) || component.items.length === 0) {
@@ -933,11 +925,11 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
       const totalTitle = document.createElement("div");
       totalTitle.className = "total-title";
-      totalTitle.textContent = "Total estimado";
+      totalTitle.textContent = "Total";
 
       const totalSubtitle = document.createElement("div");
       totalSubtitle.className = "total-subtitle";
-      totalSubtitle.textContent = "Puedes ajustar cantidades antes de enviar.";
+      totalSubtitle.textContent = "";
 
       totalText.appendChild(totalTitle);
       totalText.appendChild(totalSubtitle);
@@ -959,8 +951,8 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     function renderForm(component) {
       const { section, inner } = createSection(
         "👤",
-        "Tus datos",
-        "Completa esta información para contactarte."
+        "Mis datos",
+        "Información mínima para contactarte."
       );
 
       const grid = document.createElement("div");
@@ -1007,7 +999,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
       const hint = document.createElement("div");
       hint.className = "submit-hint";
-      hint.textContent = "Revisaremos tu solicitud y te contactaremos por WhatsApp.";
+      hint.textContent = "Te contactaremos por WhatsApp.";
 
       wrap.appendChild(btn);
       wrap.appendChild(hint);
