@@ -61,7 +61,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   --radius-lg: 22px;
   --radius-xl: 28px;
 
-  --page-max: 760px;
+  --page-max: 920px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -105,7 +105,7 @@ button {
 
 .page {
   min-height: 100vh;
-  padding: 14px 10px 32px;
+  padding: 10px 8px 30px;
 }
 
 .shell {
@@ -123,7 +123,7 @@ button {
 }
 
 .module-head {
-  padding: 18px 4px 12px;
+  padding: 16px 2px 10px;
   border-bottom: none;
 }
 
@@ -152,7 +152,7 @@ button {
 }
 
 .module-subtitle {
-  max-width: 520px;
+  max-width: 680px;
   margin-top: 7px;
   color: var(--muted-soft);
   font-size: 13px;
@@ -173,12 +173,12 @@ button {
 .module-body {
   display: grid;
   gap: 14px;
-  padding: 14px 12px 16px;
+  padding: 12px 0 16px;
 }
 
 .content-flow {
   display: grid;
-  gap: 14px;
+  gap: 13px;
 }
 
 /* SECTION BASE */
@@ -272,7 +272,7 @@ button {
 }
 
 .products-scroll.is-scrollable {
-  max-height: min(66vh, 680px);
+  max-height: min(56vh, 640px);
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
@@ -437,10 +437,10 @@ button {
 /* FORM */
 
 .form-collapse {
-  border-radius: 0;
-  background: transparent;
-  border: none;
-  overflow: visible;
+  border-radius: 20px;
+  background: var(--section-soft);
+  border: 1px solid var(--line);
+  overflow: hidden;
 }
 
 .form-toggle {
@@ -448,7 +448,7 @@ button {
   min-height: 62px;
   border: none;
   background: transparent;
-  padding: 13px 2px;
+  padding: 13px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -499,7 +499,7 @@ button {
 
 .form-content {
   display: none;
-  padding: 0 2px 14px;
+  padding: 0 14px 14px;
 }
 
 .form-collapse.open .form-content {
@@ -633,15 +633,15 @@ textarea {
 
 @media (min-width: 640px) {
   .page {
-    padding: 20px 16px 42px;
+    padding: 18px 14px 42px;
   }
 
   .module-head {
-    padding: 24px 4px 16px;
+    padding: 22px 2px 16px;
   }
 
   .module-body {
-    padding: 18px 0 24px;
+    padding: 16px 0 24px;
   }
 
   .content-flow {
@@ -673,7 +673,7 @@ textarea {
   }
 
   .products-scroll.is-scrollable {
-    max-height: 58vh;
+    max-height: 54vh;
   }
 
   .form-grid {
@@ -683,28 +683,37 @@ textarea {
 
 @media (max-width: 390px) {
   .page {
-    padding: 10px 8px 28px;
+    padding: 8px 6px 28px;
+  }
+
+  .module-head {
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .module-body {
-    padding: 12px 0 14px;
+    padding: 10px 0 14px;
   }
 
   .section-header {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
   }
 
   .badge-count {
-    width: max-content;
+    padding: 6px 8px;
+    font-size: 11px;
   }
 
   .product-card {
-    grid-template-columns: 1fr;
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 9px 8px 9px 10px;
   }
 
   .qty-box {
-    justify-self: start;
+    grid-template-columns: 26px 28px 26px;
+    height: 30px;
   }
 
   .product-top {
@@ -722,6 +731,17 @@ textarea {
     gap: 5px;
   }
 }
+@media (max-width: 330px) {
+  .product-card {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .qty-box {
+    justify-self: start;
+  }
+}
+
 </style>
 </head>
 
