@@ -118,7 +118,6 @@ button {
 
 .module-shell {
   min-height: calc(100vh - 46px);
-  border-radius: 0;
   background: transparent;
   overflow: visible;
 }
@@ -174,7 +173,7 @@ button {
 .module-body {
   display: grid;
   gap: 14px;
-  padding: 14px 0 16px;
+  padding: 14px 12px 16px;
 }
 
 .content-flow {
@@ -185,14 +184,12 @@ button {
 /* SECTION BASE */
 
 .section-wrap {
-  border-radius: var(--radius-xl);
-  background: var(--section-soft);
-  border: 1px solid var(--line);
-  overflow: hidden;
+  border-radius: 0;
+  background: transparent;
 }
 
 .section-header {
-  padding: 16px 15px 12px;
+  padding: 3px 2px 12px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
@@ -226,7 +223,7 @@ button {
 /* SEARCH */
 
 .search-wrap {
-  padding: 0 15px 12px;
+  padding: 0 0 10px;
 }
 
 .search-shell {
@@ -265,13 +262,12 @@ button {
   font-size: 15px;
 }
 
-/* PRODUCTS */
+/* PRODUCTS: only this real list area is visually wrapped */
 
 .products-scroll {
-  margin: 0 15px 15px;
   padding: 7px;
   border-radius: 20px;
-  background: #0c0e14;
+  background: var(--section-soft);
   border: 1px solid var(--line);
 }
 
@@ -403,7 +399,7 @@ button {
 /* TOTAL */
 
 .total-row {
-  margin: 0 15px 15px;
+  margin-top: 10px;
   padding: 14px;
   border-radius: 20px;
   background: var(--accent-bg);
@@ -414,13 +410,13 @@ button {
 }
 
 .total-title {
-  color: var(--accent);
+  color: #d6dbff;
   font-size: 12.5px;
   font-weight: 500;
 }
 
 .total-value {
-  color: var(--accent-strong);
+  color: #f2f4ff;
   font-size: clamp(22px, 7vw, 30px);
   font-weight: 650;
   letter-spacing: -0.055em;
@@ -429,7 +425,7 @@ button {
 /* TEXT */
 
 .text-block {
-  padding: 2px 4px;
+  padding: 2px 2px;
   border-radius: 0;
   background: transparent;
   border: none;
@@ -452,7 +448,7 @@ button {
   min-height: 62px;
   border: none;
   background: transparent;
-  padding: 13px 4px;
+  padding: 13px 2px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -503,7 +499,7 @@ button {
 
 .form-content {
   display: none;
-  padding: 0 4px 14px;
+  padding: 0 2px 14px;
 }
 
 .form-collapse.open .form-content {
@@ -581,12 +577,11 @@ textarea {
   border-radius: 999px;
   background: #40518e;
   color: #f0f3ff;
-  box-shadow: none;
   font-size: 15px;
   font-weight: 650;
   cursor: pointer;
   transition:
-    filter 130ms ease,
+    background 130ms ease,
     transform 130ms ease,
     opacity 130ms ease;
 }
