@@ -2,10 +2,6 @@ import { RuntimeLinkRecord } from "../types/runtime";
 import { escapeHtml } from "../utils/html";
 
 export function renderViewHtml(record: RuntimeLinkRecord): string {
-  const safeTitle = escapeHtml(record.config.title || "Cotización Inteligente");
-  const safeSubtitle = escapeHtml(
-    record.config.subtitle || "Selecciona productos y envía tu solicitud."
-  );
   const safeSuccessMessage = escapeHtml(
     record.config.successMessage || "Solicitud enviada correctamente."
   );
@@ -17,7 +13,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>${safeTitle}</title>
+<title>Cotizador online</title>
 
 <style>
 :root {
@@ -61,7 +57,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   --radius-lg: 22px;
   --radius-xl: 28px;
 
-  --page-max: 920px;
+  --page-max: 860px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -105,7 +101,7 @@ button {
 
 .page {
   min-height: 100vh;
-  padding: 10px 8px 30px;
+  padding: 12px 8px 32px;
 }
 
 .shell {
@@ -114,74 +110,47 @@ button {
   margin: 0 auto;
 }
 
-/* APP BACKGROUND MODULE */
-
 .module-shell {
-  min-height: calc(100vh - 46px);
-  background: transparent;
-  overflow: visible;
+  min-height: calc(100vh - 44px);
+  background: var(--bg);
 }
 
 .module-head {
-  padding: 16px 2px 10px;
-  border-bottom: none;
+  padding: 8px 2px 14px;
 }
 
 .module-title-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-start;
 }
 
 .module-kicker {
   color: var(--accent);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 650;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 7px;
 }
 
-.module-title {
-  color: var(--text-strong);
-  font-size: clamp(22px, 6vw, 30px);
-  line-height: 1.04;
-  font-weight: 620;
-  letter-spacing: -0.055em;
-}
-
-.module-subtitle {
-  max-width: 680px;
-  margin-top: 7px;
-  color: var(--muted-soft);
-  font-size: 13px;
-  line-height: 1.38;
-}
-
+.module-title,
+.module-subtitle,
 .module-pill {
-  align-self: start;
-  padding: 8px 11px;
-  border-radius: 999px;
-  background: var(--accent-bg);
-  color: var(--accent-strong);
-  font-size: 11.5px;
-  font-weight: 600;
-  white-space: nowrap;
+  display: none;
 }
 
 .module-body {
   display: grid;
   gap: 14px;
-  padding: 12px 0 16px;
+  padding: 0;
 }
 
 .content-flow {
   display: grid;
-  gap: 13px;
+  gap: 14px;
 }
 
-/* SECTION BASE */
+/* PRODUCT SECTION */
 
 .section-wrap {
   border-radius: 0;
@@ -189,7 +158,7 @@ button {
 }
 
 .section-header {
-  padding: 3px 2px 12px;
+  padding: 0 2px 12px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
@@ -198,8 +167,8 @@ button {
 
 .section-title {
   color: var(--text-strong);
-  font-size: 17px;
-  font-weight: 620;
+  font-size: 18px;
+  font-weight: 650;
   letter-spacing: -0.035em;
   line-height: 1.1;
 }
@@ -216,7 +185,7 @@ button {
   background: var(--accent-bg);
   color: var(--accent);
   font-size: 11.5px;
-  font-weight: 600;
+  font-weight: 650;
   white-space: nowrap;
 }
 
@@ -262,7 +231,7 @@ button {
   font-size: 15px;
 }
 
-/* PRODUCTS: only this real list area is visually wrapped */
+/* ONLY REAL PRODUCT ITEMS ARE INSIDE THIS CARD */
 
 .products-scroll {
   padding: 7px;
@@ -272,7 +241,7 @@ button {
 }
 
 .products-scroll.is-scrollable {
-  max-height: min(56vh, 640px);
+  max-height: min(58vh, 640px);
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
@@ -400,41 +369,47 @@ button {
 
 .total-row {
   margin-top: 10px;
-  padding: 14px;
+  padding: 14px 15px;
   border-radius: 20px;
-  background: var(--accent-bg);
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-bg-2));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
 }
 
 .total-title {
   color: #d6dbff;
   font-size: 12.5px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .total-value {
   color: #f2f4ff;
   font-size: clamp(22px, 7vw, 30px);
   font-weight: 650;
-  letter-spacing: -0.055em;
+  letter-spacing: 0.035em;
+  line-height: 1.05;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  overflow-wrap: anywhere;
 }
 
 /* TEXT */
 
 .text-block {
-  padding: 2px 2px;
-  border-radius: 0;
-  background: transparent;
-  border: none;
+  padding: 14px 15px;
+  border-radius: 20px;
+  background: var(--section-soft);
+  border: 1px solid var(--line);
   color: var(--muted);
   font-size: 13.5px;
   line-height: 1.5;
 }
 
-/* FORM */
+/* FORM CARD */
 
 .form-collapse {
   border-radius: 20px;
@@ -445,21 +420,19 @@ button {
 
 .form-toggle {
   width: 100%;
-  min-height: 62px;
+  min-height: 64px;
   border: none;
   background: transparent;
   padding: 13px 14px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   cursor: pointer;
 }
 
 .form-toggle-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
+  display: contents;
 }
 
 .form-icon {
@@ -474,10 +447,15 @@ button {
   justify-content: center;
 }
 
+.form-copy {
+  min-width: 0;
+  text-align: center;
+}
+
 .form-title {
   color: var(--text-strong);
   font-size: 14.5px;
-  font-weight: 620;
+  font-weight: 650;
   letter-spacing: -0.02em;
 }
 
@@ -488,13 +466,30 @@ button {
 }
 
 .form-arrow {
-  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--muted);
-  transition: transform 160ms ease;
+  background: rgba(255,255,255,0.035);
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.form-arrow svg {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 .form-collapse.open .form-arrow {
   transform: rotate(180deg);
+  background: var(--accent-bg);
+  color: var(--accent);
 }
 
 .form-content {
@@ -575,19 +570,20 @@ textarea {
   min-height: 54px;
   border: none;
   border-radius: 999px;
-  background: #40518e;
+  background: linear-gradient(135deg, #40518e, #5568b3);
   color: #f0f3ff;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.32);
   font-size: 15px;
   font-weight: 650;
   cursor: pointer;
   transition:
-    background 130ms ease,
+    filter 130ms ease,
     transform 130ms ease,
     opacity 130ms ease;
 }
 
 .submit-btn:hover {
-  background: #485b9d;
+  filter: brightness(1.06);
 }
 
 .submit-btn:active {
@@ -608,6 +604,7 @@ textarea {
   font-size: 13px;
   line-height: 1.5;
   white-space: pre-wrap;
+  text-align: center;
 }
 
 .message.success {
@@ -633,15 +630,11 @@ textarea {
 
 @media (min-width: 640px) {
   .page {
-    padding: 18px 14px 42px;
+    padding: 16px 14px 42px;
   }
 
   .module-head {
-    padding: 22px 2px 16px;
-  }
-
-  .module-body {
-    padding: 16px 0 24px;
+    padding: 10px 2px 16px;
   }
 
   .content-flow {
@@ -663,17 +656,8 @@ textarea {
 }
 
 @media (max-width: 520px) {
-  .module-title-row {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .module-pill {
-    width: max-content;
-  }
-
   .products-scroll.is-scrollable {
-    max-height: 54vh;
+    max-height: 56vh;
   }
 
   .form-grid {
@@ -683,37 +667,24 @@ textarea {
 
 @media (max-width: 390px) {
   .page {
-    padding: 8px 6px 28px;
-  }
-
-  .module-head {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .module-body {
-    padding: 10px 0 14px;
+    padding: 10px 8px 28px;
   }
 
   .section-header {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
+    grid-template-columns: 1fr;
   }
 
   .badge-count {
-    padding: 6px 8px;
-    font-size: 11px;
+    width: max-content;
   }
 
   .product-card {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-    padding: 9px 8px 9px 10px;
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 
   .qty-box {
-    grid-template-columns: 26px 28px 26px;
-    height: 30px;
+    justify-self: start;
   }
 
   .product-top {
@@ -728,20 +699,14 @@ textarea {
   .total-row {
     align-items: flex-start;
     flex-direction: column;
-    gap: 5px;
-  }
-}
-@media (max-width: 330px) {
-  .product-card {
-    grid-template-columns: 1fr;
-    align-items: start;
+    gap: 7px;
   }
 
-  .qty-box {
-    justify-self: start;
+  .total-value {
+    text-align: left;
+    font-size: 24px;
   }
 }
-
 </style>
 </head>
 
@@ -752,13 +717,7 @@ textarea {
     <section class="module-shell">
       <header class="module-head">
         <div class="module-title-row">
-          <div>
-            <div class="module-kicker">Cotizador online</div>
-            <h1 class="module-title">${safeTitle}</h1>
-            <p class="module-subtitle">${safeSubtitle}</p>
-          </div>
-
-          <div class="module-pill">Solicitud rápida</div>
+          <div class="module-kicker">Cotizador online</div>
         </div>
       </header>
 
@@ -874,7 +833,7 @@ function renderProducts(component) {
   list.id = "productsList";
 
   if (!Array.isArray(component.items) || component.items.length === 0) {
-    list.innerHTML = "<div style='padding:16px;color:var(--muted);font-size:13px'>No hay productos disponibles.</div>";
+    list.innerHTML = "<div style='padding:16px;color:var(--muted);font-size:13px;text-align:center'>No hay productos disponibles.</div>";
     scrollBox.appendChild(list);
     wrap.appendChild(scrollBox);
     return wrap;
@@ -990,15 +949,19 @@ function renderForm(component) {
   wrap.className = "form-collapse";
 
   wrap.innerHTML = \`
-    <button class="form-toggle" type="button">
+    <button class="form-toggle" type="button" aria-expanded="false">
       <div class="form-toggle-left">
-        <div class="form-icon">👤</div>
-        <div>
+        <div class="form-icon" aria-hidden="true">👤</div>
+        <div class="form-copy">
           <div class="form-title">Mis datos</div>
           <div class="form-sub">Completa tu información</div>
         </div>
       </div>
-      <div class="form-arrow">⌄</div>
+      <div class="form-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
     </button>
 
     <div class="form-content">
@@ -1007,8 +970,11 @@ function renderForm(component) {
     </div>
   \`;
 
-  wrap.querySelector(".form-toggle").addEventListener("click", () => {
+  const toggle = wrap.querySelector(".form-toggle");
+
+  toggle.addEventListener("click", () => {
     wrap.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", wrap.classList.contains("open") ? "true" : "false");
   });
 
   const grid = wrap.querySelector(".form-grid");
@@ -1109,6 +1075,7 @@ async function onSubmit(btn, originalLabel) {
 
     if (field.required && !value) {
       document.querySelector(".form-collapse")?.classList.add("open");
+      document.querySelector(".form-toggle")?.setAttribute("aria-expanded", "true");
       showMessage("error", "Completa los campos obligatorios.");
       return;
     }
