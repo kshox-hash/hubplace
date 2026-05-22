@@ -3,11 +3,9 @@ import { escapeHtml } from "../utils/html";
 
 export function renderViewHtml(record: RuntimeLinkRecord): string {
   const safeTitle = escapeHtml(record.config.title || "Cotización Inteligente");
-
   const safeSubtitle = escapeHtml(
     record.config.subtitle || "Selecciona productos y envía tu solicitud."
   );
-
   const safeSuccessMessage = escapeHtml(
     record.config.successMessage || "Solicitud enviada correctamente."
   );
@@ -26,9 +24,12 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   --bg: #202124;
 
   --surface: #0b0c10;
-  --surface-2: #101116;
-  --surface-3: #171922;
-  --surface-hover: #1b1d27;
+  --surface-2: #14161f;
+  --surface-3: #1a1d28;
+  --surface-hover: #202331;
+  --surface-list: #090a0e;
+  --surface-item: #171923;
+  --surface-item-hover: #202331;
 
   --text: #d8dbe2;
   --text-strong: #e8eaed;
@@ -218,9 +219,9 @@ h1 {
 }
 
 .search-shell {
-  height: 54px;
+  height: 52px;
   display: grid;
-  grid-template-columns: 1fr 42px;
+  grid-template-columns: 1fr 40px;
   align-items: center;
   border-radius: 999px;
   background: #05060a;
@@ -241,41 +242,67 @@ h1 {
 }
 
 .search-icon {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--surface-3);
   color: var(--muted);
-  font-size: 17px;
+  font-size: 16px;
 }
 
 /* PRODUCTS */
 
+.products-scroll {
+  margin: 0 20px 18px;
+  padding: 8px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-list);
+}
+
+.products-scroll.is-scrollable {
+  max-height: 680px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #383d50 transparent;
+}
+
+.products-scroll.is-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.products-scroll.is-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.products-scroll.is-scrollable::-webkit-scrollbar-thumb {
+  background: #383d50;
+  border-radius: 999px;
+}
+
 .products-list {
   display: grid;
-  gap: 10px;
-  padding: 0 20px 18px;
+  gap: 7px;
 }
 
 .product-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 14px;
-  min-height: 78px;
-  padding: 15px 16px;
-  border-radius: 20px;
-  background: var(--surface-2);
+  gap: 12px;
+  min-height: 54px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--surface-item);
   transition:
     background 140ms ease,
     transform 140ms ease;
 }
 
 .product-card:hover {
-  background: var(--surface-3);
+  background: var(--surface-item-hover);
   transform: translateY(-1px);
 }
 
@@ -287,16 +314,16 @@ h1 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
-  gap: 12px;
-  margin-bottom: 5px;
+  gap: 10px;
+  margin-bottom: 3px;
 }
 
 .product-name {
   color: var(--text-strong);
-  font-size: 14.5px;
-  line-height: 1.24;
+  font-size: 13.5px;
+  line-height: 1.22;
   font-weight: 500;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -304,15 +331,15 @@ h1 {
 
 .product-price {
   color: var(--link);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .product-description {
   color: var(--muted-soft);
-  font-size: 12px;
-  line-height: 1.35;
+  font-size: 11.5px;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -323,8 +350,8 @@ h1 {
 
 .qty-box {
   display: grid;
-  grid-template-columns: 32px 36px 32px;
-  height: 36px;
+  grid-template-columns: 28px 32px 28px;
+  height: 32px;
   border-radius: 999px;
   overflow: hidden;
   background: #05060a;
@@ -334,7 +361,7 @@ h1 {
   border: none;
   background: transparent;
   color: var(--text-soft);
-  font-size: 17px;
+  font-size: 15px;
   cursor: pointer;
 }
 
@@ -347,7 +374,7 @@ h1 {
   align-items: center;
   justify-content: center;
   color: var(--text-strong);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 500;
 }
 
@@ -606,8 +633,26 @@ textarea {
     padding: 0 18px 14px;
   }
 
-  .products-list {
-    padding: 0 18px 18px;
+  .products-scroll {
+    margin: 0 18px 18px;
+    padding: 8px;
+  }
+
+  .products-scroll.is-scrollable {
+    max-height: 620px;
+  }
+
+  .product-card {
+    min-height: 52px;
+    padding: 9px 11px;
+  }
+
+  .product-name {
+    font-size: 13.5px;
+  }
+
+  .product-description {
+    font-size: 11px;
   }
 
   .total-row {
@@ -756,14 +801,22 @@ function renderProducts(component) {
   \`;
   wrap.appendChild(searchWrap);
 
+  const scrollBox = document.createElement("div");
+  scrollBox.className = "products-scroll";
+
   const list = document.createElement("div");
   list.className = "products-list";
   list.id = "productsList";
 
   if (!Array.isArray(component.items) || component.items.length === 0) {
     list.innerHTML = "<div style='padding:16px;color:var(--muted);font-size:13px'>No hay productos disponibles.</div>";
-    wrap.appendChild(list);
+    scrollBox.appendChild(list);
+    wrap.appendChild(scrollBox);
     return wrap;
+  }
+
+  if (component.items.length > 20) {
+    scrollBox.classList.add("is-scrollable");
   }
 
   component.items.forEach((item) => {
@@ -841,7 +894,8 @@ function renderProducts(component) {
     list.appendChild(card);
   });
 
-  wrap.appendChild(list);
+  scrollBox.appendChild(list);
+  wrap.appendChild(scrollBox);
 
   const totalRow = document.createElement("div");
   totalRow.className = "total-row";
