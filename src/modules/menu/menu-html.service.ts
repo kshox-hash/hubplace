@@ -25,15 +25,15 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
           style="--delay: ${index * 55}ms;"
           data-loading-link="true"
         >
-          <div class="module-icon">${icon}</div>
+          <div class="module-top">
+            <div class="module-icon">${icon}</div>
+            <div class="module-arrow">→</div>
+          </div>
 
           <div class="module-content">
-            <div class="module-kicker">Módulo ${String(index + 1).padStart(2, "0")}</div>
             <div class="module-title">${title}</div>
             <div class="module-description">${description}</div>
           </div>
-
-          <div class="module-arrow">→</div>
         </a>
       `;
     })
@@ -49,28 +49,25 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
   <style>
     :root {
       --bg: #202124;
-      --bg-soft: #292a2d;
+      --header: #202124;
       --surface: #0f1117;
-      --surface-2: #15171d;
-      --surface-3: #1d1f27;
+      --surface-hover: #15171d;
 
       --text: #f1f3f4;
       --muted: #c9cdd3;
-      --muted-2: #8f949d;
+      --muted-soft: #8f949d;
 
       --primary: #c7d2ff;
-      --primary-2: #9fb0ff;
+      --primary-soft: rgba(199, 210, 255, 0.10);
       --blue: #8ab4f8;
-      --green: #81c995;
 
       --border: rgba(255, 255, 255, 0.08);
-      --border-strong: rgba(199, 210, 255, 0.22);
+      --border-hover: rgba(199, 210, 255, 0.22);
 
       --radius-xl: 32px;
       --radius-lg: 24px;
-      --radius-md: 18px;
 
-      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      --shadow-card: 0 20px 48px rgba(0, 0, 0, 0.26);
     }
 
     * {
@@ -122,52 +119,40 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
     .page {
       min-height: 100vh;
-      padding: 20px 14px 30px;
+      padding: 18px 14px 32px;
     }
 
     .shell {
       width: 100%;
       max-width: 620px;
       margin: 0 auto;
-      animation: pageIn 380ms ease both;
+      animation: pageIn 360ms ease both;
     }
 
-    .top-card {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      margin: 0 auto 30px;
-      padding: 18px 18px;
-      border-radius: 0 0 28px 28px;
-      background: #191a1f;
-      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.18);
-    }
-
-    .topbar {
-      display: flex;
+    .google-header {
+      height: 74px;
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
       align-items: center;
-      justify-content: space-between;
-      gap: 14px;
+      margin-bottom: 28px;
     }
 
-    .menu-dot {
-      width: 34px;
-      height: 34px;
+    .menu-button {
+      width: 48px;
+      height: 48px;
       border: 0;
-      border-radius: 999px;
-      color: var(--text);
       background: transparent;
-      font-size: 24px;
+      color: var(--text);
+      font-size: 26px;
       line-height: 1;
       cursor: default;
     }
 
-    .brand-name {
+    .google-title {
       min-width: 0;
-      flex: 1;
       text-align: center;
-      font-size: 24px;
-      font-weight: 750;
+      font-size: 25px;
+      font-weight: 760;
       letter-spacing: -0.04em;
       color: var(--text);
       white-space: nowrap;
@@ -175,13 +160,11 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       text-overflow: ellipsis;
     }
 
-    .avatar {
-      width: 38px;
-      height: 38px;
+    .google-avatar {
+      width: 40px;
+      height: 40px;
       border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      justify-self: end;
       background:
         radial-gradient(circle at 32% 24%, #fbbc04 0 18%, transparent 19%),
         radial-gradient(circle at 68% 30%, #34a853 0 18%, transparent 19%),
@@ -189,31 +172,16 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
         radial-gradient(circle at 72% 74%, #ea4335 0 18%, transparent 19%),
         #303134;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.20);
     }
 
     .hero {
       text-align: center;
-      padding: 0 10px 26px;
-    }
-
-    .hero-pill {
-      width: max-content;
-      max-width: 100%;
-      margin: 0 auto 18px;
-      padding: 8px 13px;
-      border-radius: 999px;
-      color: var(--primary);
-      background: rgba(199, 210, 255, 0.09);
-      border: 1px solid rgba(199, 210, 255, 0.14);
-      font-size: 12px;
-      font-weight: 760;
-      letter-spacing: 0.01em;
+      padding: 12px 10px 34px;
     }
 
     h1 {
       margin: 0 auto;
-      max-width: 500px;
+      max-width: 520px;
       font-size: 38px;
       line-height: 1.08;
       letter-spacing: -0.06em;
@@ -231,54 +199,8 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       text-wrap: balance;
     }
 
-    .summary-card {
-      margin: 0 0 18px;
-      padding: 20px;
-      border-radius: var(--radius-xl);
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-    }
-
-    .summary-title {
-      font-size: 15px;
-      font-weight: 760;
-      color: var(--text);
-      margin-bottom: 16px;
-    }
-
-    .summary-number {
-      font-size: 48px;
-      line-height: 1;
-      letter-spacing: -0.06em;
-      font-weight: 760;
-      color: var(--primary);
-    }
-
-    .summary-label {
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--muted-2);
-    }
-
-    .progress {
-      width: 100%;
-      height: 8px;
-      margin-top: 18px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.13);
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      width: 42%;
-      height: 100%;
-      border-radius: inherit;
-      background: var(--primary);
-    }
-
     .section-title {
-      margin: 28px 4px 14px;
+      margin: 0 4px 14px;
       font-size: 24px;
       line-height: 1.1;
       letter-spacing: -0.045em;
@@ -302,7 +224,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       border-radius: var(--radius-lg);
       background: var(--surface);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-card);
       color: inherit;
       text-decoration: none;
       opacity: 0;
@@ -317,30 +239,47 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
     .module-card:hover {
       transform: translateY(-2px);
-      border-color: var(--border-strong);
-      background: var(--surface-2);
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
+    }
+
+    .module-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
     .module-icon {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 24px;
-      background: rgba(199, 210, 255, 0.10);
+      background: var(--primary-soft);
       border: 1px solid rgba(199, 210, 255, 0.14);
-      margin-bottom: 18px;
     }
 
-    .module-kicker {
-      margin-bottom: 7px;
+    .module-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: var(--primary);
-      font-size: 11px;
-      font-weight: 780;
-      letter-spacing: 0.035em;
-      text-transform: uppercase;
+      font-size: 20px;
+      font-weight: 700;
+      background: rgba(199, 210, 255, 0.08);
+      border: 1px solid rgba(199, 210, 255, 0.12);
+      transition: transform 160ms ease;
+    }
+
+    .module-card:hover .module-arrow {
+      transform: translateX(2px);
     }
 
     .module-title {
@@ -362,23 +301,6 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       overflow: hidden;
     }
 
-    .module-arrow {
-      position: absolute;
-      right: 16px;
-      bottom: 16px;
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--primary);
-      font-size: 20px;
-      font-weight: 700;
-      background: rgba(199, 210, 255, 0.08);
-      border: 1px solid rgba(199, 210, 255, 0.12);
-    }
-
     .empty {
       grid-column: 1 / -1;
       padding: 28px 18px;
@@ -395,7 +317,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       margin-top: 18px;
       padding: 18px;
       border-radius: var(--radius-lg);
-      background: var(--surface-3);
+      background: #1d1f27;
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -426,14 +348,14 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     .notice-text {
       font-size: 13px;
       line-height: 1.35;
-      color: var(--muted-2);
+      color: var(--muted-soft);
     }
 
     .footer {
       margin-top: 24px;
       padding-bottom: 12px;
       text-align: center;
-      color: var(--muted-2);
+      color: var(--muted-soft);
       font-size: 12px;
     }
 
@@ -464,23 +386,20 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
     @media (max-width: 560px) {
       .page {
-        padding: 0 12px 26px;
+        padding: 12px 12px 28px;
       }
 
-      .top-card {
-        margin-left: -12px;
-        margin-right: -12px;
-        margin-bottom: 28px;
-        padding: 18px 18px 20px;
+      .google-header {
+        height: 70px;
+        margin-bottom: 20px;
       }
 
-      .brand-name {
-        font-size: 23px;
+      .google-title {
+        font-size: 24px;
       }
 
       .hero {
-        padding-left: 4px;
-        padding-right: 4px;
+        padding: 12px 4px 32px;
       }
 
       h1 {
@@ -489,10 +408,6 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
       .subtitle {
         font-size: 15px;
-      }
-
-      .summary-card {
-        padding: 19px;
       }
 
       .modules {
@@ -536,27 +451,15 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
   <main class="page">
     <div class="shell">
-      <header class="top-card">
-        <div class="topbar">
-          <button class="menu-dot" type="button">≡</button>
-          <div class="brand-name">${safeBrand}</div>
-          <div class="avatar"></div>
-        </div>
+      <header class="google-header">
+        <button class="menu-button" type="button">☰</button>
+        <div class="google-title">${safeBrand}</div>
+        <div class="google-avatar"></div>
       </header>
 
       <section class="hero">
-        <div class="hero-pill">Centro digital</div>
         <h1>${safeTitle}</h1>
         <p class="subtitle">${safeSubtitle}</p>
-      </section>
-
-      <section class="summary-card">
-        <div class="summary-title">Módulos disponibles</div>
-        <div class="summary-number">${activeModules.length}</div>
-        <div class="summary-label">${activeModules.length === 1 ? "servicio activo" : "servicios activos"} para usar ahora</div>
-        <div class="progress">
-          <div class="progress-bar"></div>
-        </div>
       </section>
 
       <h2 class="section-title">Elige un servicio</h2>
