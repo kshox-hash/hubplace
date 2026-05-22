@@ -122,28 +122,42 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
   />
 
   <style>
-    :root {
-      --bg: #191b22;
+   :root {
 
-      --surface: #0d0e11;
-      --surface-hover: #17181f;
+  /* FONDO PRINCIPAL */
+  --bg: #1d1f27;
 
-      --text: #e8eaed;
-      --text-strong: #f1f3f4;
+  /* CARDS */
+  --surface: #0c0d12;
+  --surface-hover: #12141b;
 
-      --muted: #4f576d;
-      --muted-soft: #8b8f97;
+  /* TEXTOS */
+  --text: #e8eaed;
+  --text-strong: #f1f3f4;
 
-      --link: #c7d2ff;
-      --link-soft: rgba(199, 210, 255, 0.10);
+  /* SECUNDARIOS */
+  --muted: #a8adb9;
+  --muted-soft: #7d8391;
 
-      --green: #81c995;
-      --green-soft: rgba(129, 201, 149, 0.10);
+  /* LAVANDA GOOGLE */
+  --link: #bcc5ff;
+  --link-soft: #23263a;
 
-      --red: #f28b82;
-      --red-soft: rgba(242, 139, 130, 0.10);
+  /* ESTADOS */
+  --green: #81c995;
+  --green-soft: #1c2f28;
 
-      --border: #0d0e11;
+  --red: #f28b82;
+  --red-soft: #32201f;
+
+  /* SIN CONTORNOS VISIBLES */
+  --border: transparent;
+  --border-hover: transparent;
+
+  /* RADIOS */
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+}
 
       --border-hover: rgba(
         199,
