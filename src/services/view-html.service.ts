@@ -30,14 +30,15 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   --surface-3: #191b25;
   --surface-hover: #171a22;
 
-  --text: #e8eaed;
-  --text-strong: #f1f3f4;
+  --text: #d7d9e2;
+  --text-strong: #e7e9f1;
+  --text-soft: #c4c8d4;
 
-  --muted: #a8adb9;
-  --muted-soft: #7d8391;
-  --muted-2: #656b7a;
+  --muted: #9ca1af;
+  --muted-soft: #747a8a;
+  --muted-2: #626878;
 
-  --link: #bcc5ff;
+  --link: #b6c0f5;
   --link-soft: #23263a;
 
   --green: #81c995;
@@ -68,7 +69,14 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family: "Google Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    "Google Sans",
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -106,8 +114,8 @@ button {
 .brand {
   color: var(--text-strong);
   font-size: 22px;
-  font-weight: 650;
-  letter-spacing: -0.045em;
+  font-weight: 500;
+  letter-spacing: -0.04em;
 }
 
 .hero {
@@ -124,7 +132,7 @@ button {
   background: var(--link-soft);
   color: var(--link);
   font-size: 12px;
-  font-weight: 750;
+  font-weight: 500;
   letter-spacing: 0.01em;
 }
 
@@ -133,9 +141,9 @@ h1 {
   max-width: 620px;
   color: var(--text-strong);
   font-size: clamp(34px, 6vw, 52px);
-  line-height: 1.05;
-  letter-spacing: -0.06em;
-  font-weight: 750;
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+  font-weight: 520;
   text-wrap: balance;
 }
 
@@ -144,6 +152,7 @@ h1 {
   max-width: 520px;
   color: var(--muted);
   font-size: 15px;
+  font-weight: 400;
   line-height: 1.55;
   text-wrap: balance;
 }
@@ -177,14 +186,15 @@ h1 {
   color: var(--text-strong);
   font-size: 22px;
   line-height: 1.1;
-  font-weight: 750;
-  letter-spacing: -0.045em;
+  font-weight: 520;
+  letter-spacing: -0.04em;
 }
 
 .products-subtitle {
   margin-top: 6px;
   color: var(--muted-soft);
   font-size: 13px;
+  font-weight: 400;
 }
 
 .products-selected {
@@ -194,7 +204,7 @@ h1 {
   background: var(--link-soft);
   color: var(--link);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 /* BUSCADOR */
@@ -218,6 +228,7 @@ h1 {
   color: var(--text);
   padding: 0;
   font-size: 15px;
+  font-weight: 400;
 }
 
 .search-input::placeholder {
@@ -296,7 +307,7 @@ h1 {
   color: var(--text-strong);
   font-size: 15px;
   line-height: 1.25;
-  font-weight: 700;
+  font-weight: 520;
   letter-spacing: -0.025em;
   white-space: nowrap;
   overflow: hidden;
@@ -306,7 +317,7 @@ h1 {
 .product-price {
   color: var(--link);
   font-size: 14px;
-  font-weight: 750;
+  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -315,6 +326,7 @@ h1 {
   color: var(--muted);
   font-size: 12px;
   line-height: 1.35;
+  font-weight: 400;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -336,8 +348,9 @@ h1 {
 .qty-btn {
   border: none;
   background: transparent;
-  color: var(--text);
+  color: var(--text-soft);
   font-size: 17px;
+  font-weight: 400;
   cursor: pointer;
 }
 
@@ -351,7 +364,7 @@ h1 {
   justify-content: center;
   color: var(--text-strong);
   font-size: 13px;
-  font-weight: 750;
+  font-weight: 500;
 }
 
 .qty-hidden {
@@ -374,13 +387,13 @@ h1 {
 .total-title {
   color: var(--muted);
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 400;
 }
 
 .total-value {
   color: var(--link);
   font-size: clamp(25px, 4vw, 32px);
-  font-weight: 800;
+  font-weight: 560;
   letter-spacing: -0.05em;
 }
 
@@ -426,18 +439,20 @@ h1 {
 .form-title {
   color: var(--text-strong);
   font-size: 15px;
-  font-weight: 750;
+  font-weight: 520;
 }
 
 .form-subtitle {
   margin-top: 4px;
   color: var(--muted-soft);
   font-size: 12px;
+  font-weight: 400;
 }
 
 .form-arrow {
   font-size: 22px;
   color: var(--muted);
+  font-weight: 400;
   transition: transform 160ms ease;
 }
 
@@ -473,7 +488,7 @@ h1 {
 .label {
   color: var(--muted);
   font-size: 12px;
-  font-weight: 650;
+  font-weight: 400;
 }
 
 input,
@@ -486,6 +501,7 @@ textarea {
   border-radius: 14px;
   padding: 13px;
   font-size: 14px;
+  font-weight: 400;
 }
 
 input::placeholder,
@@ -516,9 +532,9 @@ textarea {
   border: none;
   border-radius: 22px;
   background: #3f5192;
-  color: var(--text-strong);
+  color: #edf0ff;
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 520;
   cursor: pointer;
   transition:
     opacity 140ms ease,
@@ -586,7 +602,7 @@ textarea {
 
   h1 {
     font-size: 36px;
-    line-height: 1.06;
+    line-height: 1.08;
   }
 
   .subtitle {
@@ -714,7 +730,7 @@ function renderText(component) {
   box.style.padding = "14px";
   box.style.borderRadius = "18px";
   box.style.background = "#0c0d12";
-  box.style.color = "#a8adb9";
+  box.style.color = "#9ca1af";
   box.style.fontSize = "14px";
   box.style.lineHeight = "1.5";
   box.textContent = component.value || "";
@@ -763,7 +779,7 @@ function renderProducts(component) {
 
   if (!Array.isArray(component.items) || component.items.length === 0) {
     list.innerHTML =
-      "<div style='padding:16px;color:#a8adb9;font-size:13px'>No hay productos disponibles.</div>";
+      "<div style='padding:16px;color:#9ca1af;font-size:13px'>No hay productos disponibles.</div>";
     return section;
   }
 
