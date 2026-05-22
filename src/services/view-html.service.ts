@@ -16,30 +16,37 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>${safeTitle}</title>
 
 <style>
 :root {
   --bg: #202124;
 
-  --surface: #0b0c10;
-  --surface-2: #14161f;
-  --surface-3: #1a1d28;
-  --surface-hover: #202331;
-  --surface-list: #090a0e;
-  --surface-item: #171923;
-  --surface-item-hover: #202331;
+  --app: #0f1117;
+  --app-2: #12141b;
+  --app-3: #171a23;
+  --app-4: #1d2130;
+
+  --section: #151821;
+  --section-soft: #11131a;
+  --field: #1a1d27;
+  --field-focus: #202536;
+
+  --item: #1b1f2b;
+  --item-hover: #232838;
 
   --text: #d8dbe2;
-  --text-strong: #e8eaed;
+  --text-strong: #f1f3f4;
   --text-soft: #c4c8d4;
 
   --muted: #a6abb7;
-  --muted-soft: #808693;
+  --muted-soft: #7e8491;
 
-  --link: #bfc7ff;
-  --link-soft: #22263a;
+  --accent: #bfc7ff;
+  --accent-strong: #d8ddff;
+  --accent-bg: #252b45;
+  --accent-bg-2: #30395c;
 
   --green: #81c995;
   --green-soft: #1d3428;
@@ -47,11 +54,15 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   --red: #f28b82;
   --red-soft: #34201f;
 
-  --radius-md: 14px;
-  --radius-lg: 22px;
-  --radius-xl: 30px;
+  --line: rgba(255,255,255,0.055);
 
-  --page-max: 720px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+
+  --page-max: 760px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
@@ -88,9 +99,13 @@ textarea {
   color: inherit;
 }
 
+button {
+  touch-action: manipulation;
+}
+
 .page {
   min-height: 100vh;
-  padding: 18px 12px 36px;
+  padding: 14px 10px 32px;
 }
 
 .shell {
@@ -99,86 +114,95 @@ textarea {
   margin: 0 auto;
 }
 
-/* MODULE HEADER */
+/* APP BACKGROUND MODULE */
 
 .module-shell {
+  min-height: calc(100vh - 46px);
   border-radius: var(--radius-xl);
-  background: var(--surface);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(191,199,255,0.10), transparent 34%),
+    linear-gradient(180deg, var(--app-2), var(--app));
   overflow: hidden;
 }
 
 .module-head {
-  padding: 18px 20px 16px;
-  display: grid;
-  gap: 14px;
-}
-
-.module-brand {
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  padding: 18px 16px 12px;
+  border-bottom: 1px solid var(--line);
 }
 
 .module-title-row {
   display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.module-kicker {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
 }
 
 .module-title {
   color: var(--text-strong);
-  font-size: 24px;
-  line-height: 1.08;
-  font-weight: 500;
-  letter-spacing: -0.045em;
+  font-size: clamp(22px, 6vw, 30px);
+  line-height: 1.04;
+  font-weight: 620;
+  letter-spacing: -0.055em;
 }
 
 .module-subtitle {
-  margin-top: 5px;
+  max-width: 520px;
+  margin-top: 7px;
   color: var(--muted-soft);
   font-size: 13px;
-  line-height: 1.35;
+  line-height: 1.38;
 }
 
 .module-pill {
-  padding: 8px 12px;
+  align-self: start;
+  padding: 8px 11px;
   border-radius: 999px;
-  background: var(--link-soft);
-  color: var(--link);
-  font-size: 12px;
-  font-weight: 500;
+  background: var(--accent-bg);
+  color: var(--accent-strong);
+  font-size: 11.5px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .module-body {
   display: grid;
-  gap: 18px;
-  padding: 0 20px 20px;
+  gap: 14px;
+  padding: 14px 12px 16px;
 }
 
-/* PRODUCT SECTION */
+.content-flow {
+  display: grid;
+  gap: 14px;
+}
+
+/* SECTION BASE */
 
 .section-wrap {
-  border-radius: var(--radius-lg);
-  background: #101116;
-  overflow: hidden;
+  border-radius: 0;
+  background: transparent;
 }
 
 .section-header {
-  padding: 16px 16px 0;
+  padding: 3px 2px 12px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: 12px;
-  margin-bottom: 14px;
 }
 
 .section-title {
   color: var(--text-strong);
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 620;
   letter-spacing: -0.035em;
   line-height: 1.1;
 }
@@ -190,32 +214,34 @@ textarea {
 }
 
 .badge-count {
-  padding: 7px 11px;
+  padding: 7px 10px;
   border-radius: 999px;
-  background: var(--link-soft);
-  color: var(--link);
-  font-size: 12px;
-  font-weight: 500;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 11.5px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 /* SEARCH */
 
 .search-wrap {
-  padding: 0 16px 14px;
+  padding: 0 0 10px;
 }
 
 .search-shell {
-  height: 48px;
+  height: 46px;
   display: grid;
-  grid-template-columns: 1fr 38px;
+  grid-template-columns: 1fr 36px;
   align-items: center;
   border-radius: 999px;
-  background: #05060a;
-  padding: 0 6px 0 16px;
+  background: var(--section-soft);
+  border: 1px solid var(--line);
+  padding: 0 5px 0 15px;
 }
 
 .search-input {
+  min-width: 0;
   border: none;
   outline: none;
   background: transparent;
@@ -228,13 +254,13 @@ textarea {
 }
 
 .search-icon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-3);
+  background: var(--app-4);
   color: var(--muted);
   font-size: 15px;
 }
@@ -242,17 +268,18 @@ textarea {
 /* PRODUCTS */
 
 .products-scroll {
-  margin: 0 16px 16px;
-  padding: 8px;
-  border-radius: 18px;
-  background: var(--surface-list);
+  padding: 7px;
+  border-radius: 20px;
+  background: var(--section-soft);
+  border: 1px solid var(--line);
 }
 
 .products-scroll.is-scrollable {
-  max-height: 680px;
+  max-height: min(66vh, 680px);
   overflow-y: auto;
+  overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: #383d50 transparent;
+  scrollbar-color: #3a4054 transparent;
 }
 
 .products-scroll.is-scrollable::-webkit-scrollbar {
@@ -264,7 +291,7 @@ textarea {
 }
 
 .products-scroll.is-scrollable::-webkit-scrollbar-thumb {
-  background: #383d50;
+  background: #3a4054;
   border-radius: 999px;
 }
 
@@ -277,18 +304,21 @@ textarea {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
-  min-height: 54px;
-  padding: 10px 12px;
-  border-radius: 16px;
-  background: var(--surface-item);
+  gap: 10px;
+  min-height: 52px;
+  padding: 10px 10px 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--item);
+  border: 1px solid rgba(255,255,255,0.035);
   transition:
     background 140ms ease,
+    border-color 140ms ease,
     transform 140ms ease;
 }
 
 .product-card:hover {
-  background: var(--surface-item-hover);
+  background: var(--item-hover);
+  border-color: rgba(191,199,255,0.16);
   transform: translateY(-1px);
 }
 
@@ -300,7 +330,7 @@ textarea {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
-  gap: 10px;
+  gap: 9px;
   margin-bottom: 3px;
 }
 
@@ -308,7 +338,7 @@ textarea {
   color: var(--text-strong);
   font-size: 13.5px;
   line-height: 1.22;
-  font-weight: 500;
+  font-weight: 560;
   letter-spacing: -0.02em;
   white-space: nowrap;
   overflow: hidden;
@@ -316,9 +346,9 @@ textarea {
 }
 
 .product-price {
-  color: var(--link);
-  font-size: 13px;
-  font-weight: 500;
+  color: var(--accent);
+  font-size: 12.7px;
+  font-weight: 620;
   white-space: nowrap;
 }
 
@@ -336,11 +366,12 @@ textarea {
 
 .qty-box {
   display: grid;
-  grid-template-columns: 28px 32px 28px;
+  grid-template-columns: 28px 30px 28px;
   height: 32px;
   border-radius: 999px;
   overflow: hidden;
-  background: #05060a;
+  background: #0c0e14;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 .qty-btn {
@@ -352,7 +383,7 @@ textarea {
 }
 
 .qty-btn:hover {
-  background: var(--surface-3);
+  background: var(--app-4);
 }
 
 .qty-value {
@@ -361,7 +392,7 @@ textarea {
   justify-content: center;
   color: var(--text-strong);
   font-size: 12.5px;
-  font-weight: 500;
+  font-weight: 620;
 }
 
 .qty-hidden {
@@ -371,10 +402,10 @@ textarea {
 /* TOTAL */
 
 .total-row {
-  margin: 0 16px 16px;
-  padding: 16px;
-  border-radius: 18px;
-  background: var(--link-soft);
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-bg-2));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -382,42 +413,45 @@ textarea {
 }
 
 .total-title {
-  color: var(--muted);
-  font-size: 13px;
+  color: #d6dbff;
+  font-size: 12.5px;
+  font-weight: 500;
 }
 
 .total-value {
-  color: var(--link);
-  font-size: 28px;
-  font-weight: 520;
-  letter-spacing: -0.05em;
+  color: #f2f4ff;
+  font-size: clamp(22px, 7vw, 30px);
+  font-weight: 650;
+  letter-spacing: -0.055em;
 }
 
 /* TEXT */
 
 .text-block {
-  padding: 16px;
-  border-radius: var(--radius-lg);
-  background: var(--surface);
+  padding: 14px 15px;
+  border-radius: 20px;
+  background: var(--section-soft);
+  border: 1px solid var(--line);
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 13.5px;
+  line-height: 1.5;
 }
 
 /* FORM */
 
 .form-collapse {
-  border-radius: var(--radius-lg);
-  background: #101116;
+  border-radius: 20px;
+  background: var(--section-soft);
+  border: 1px solid var(--line);
   overflow: hidden;
 }
 
 .form-toggle {
   width: 100%;
-  min-height: 68px;
+  min-height: 62px;
   border: none;
   background: transparent;
-  padding: 15px 16px;
+  padding: 13px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -427,16 +461,17 @@ textarea {
 .form-toggle-left {
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 12px;
+  min-width: 0;
 }
 
 .form-icon {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
-  border-radius: 15px;
-  background: var(--link-soft);
-  color: var(--link);
+  border-radius: 14px;
+  background: var(--accent-bg);
+  color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -444,15 +479,15 @@ textarea {
 
 .form-title {
   color: var(--text-strong);
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14.5px;
+  font-weight: 620;
   letter-spacing: -0.02em;
 }
 
 .form-sub {
   color: var(--muted-soft);
   font-size: 12px;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .form-arrow {
@@ -467,7 +502,7 @@ textarea {
 
 .form-content {
   display: none;
-  padding: 0 16px 16px;
+  padding: 0 14px 14px;
 }
 
 .form-collapse.open .form-content {
@@ -476,14 +511,14 @@ textarea {
 
 .form-divider {
   height: 1px;
-  background: rgba(255,255,255,0.04);
-  margin-bottom: 16px;
+  background: var(--line);
+  margin-bottom: 14px;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 11px;
 }
 
 .field {
@@ -498,18 +533,18 @@ textarea {
 
 .label {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11.8px;
 }
 
 input,
 textarea {
   width: 100%;
-  border: none;
+  border: 1px solid transparent;
   outline: none;
-  background: var(--surface-2);
+  background: var(--field);
   color: var(--text);
   border-radius: var(--radius-md);
-  padding: 13px 14px;
+  padding: 12px 13px;
   font-size: 14px;
 }
 
@@ -520,11 +555,12 @@ textarea::placeholder {
 
 input:focus,
 textarea:focus {
-  background: var(--surface-3);
+  background: var(--field-focus);
+  border-color: rgba(191,199,255,0.22);
 }
 
 textarea {
-  min-height: 90px;
+  min-height: 86px;
   resize: vertical;
 }
 
@@ -532,25 +568,30 @@ textarea {
 
 .submit-wrap {
   display: grid;
+  position: sticky;
+  bottom: calc(10px + var(--safe-bottom));
+  z-index: 5;
 }
 
 .submit-btn {
   width: 100%;
-  min-height: 56px;
+  min-height: 54px;
   border: none;
-  border-radius: var(--radius-xl);
-  background: #40518e;
-  color: #e7eaff;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #40518e, #5568b3);
+  color: #f0f3ff;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.32);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 650;
   cursor: pointer;
   transition:
-    background 130ms ease,
-    transform 130ms ease;
+    filter 130ms ease,
+    transform 130ms ease,
+    opacity 130ms ease;
 }
 
 .submit-btn:hover {
-  background: #485b9d;
+  filter: brightness(1.06);
 }
 
 .submit-btn:active {
@@ -558,7 +599,7 @@ textarea {
 }
 
 .submit-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.48;
   cursor: not-allowed;
 }
 
@@ -566,8 +607,8 @@ textarea {
 
 .message {
   display: none;
-  padding: 14px 18px;
-  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  border-radius: 18px;
   font-size: 13px;
   line-height: 1.5;
   white-space: pre-wrap;
@@ -586,27 +627,46 @@ textarea {
 }
 
 .expires {
-  margin-top: 18px;
+  margin-top: 14px;
   text-align: center;
   color: var(--muted-soft);
   font-size: 11px;
 }
 
-/* MOBILE */
+/* RESPONSIVE */
 
-@media (max-width: 580px) {
+@media (min-width: 640px) {
   .page {
-    padding: 14px 10px 32px;
+    padding: 20px 16px 42px;
   }
 
   .module-head {
-    padding: 16px 16px 14px;
+    padding: 24px 24px 16px;
   }
 
   .module-body {
-    padding: 0 16px 16px;
+    padding: 18px 24px 24px;
   }
 
+  .content-flow {
+    gap: 16px;
+  }
+
+  .product-card {
+    min-height: 56px;
+    padding: 11px 12px 11px 14px;
+  }
+
+  .product-name {
+    font-size: 14px;
+  }
+
+  .product-description {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 520px) {
   .module-title-row {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -616,28 +676,8 @@ textarea {
     width: max-content;
   }
 
-  .module-title {
-    font-size: 22px;
-  }
-
-  .section-header {
-    padding: 16px 16px 0;
-  }
-
-  .search-wrap {
-    padding: 0 16px 14px;
-  }
-
-  .products-scroll {
-    margin: 0 16px 16px;
-  }
-
   .products-scroll.is-scrollable {
-    max-height: 620px;
-  }
-
-  .total-row {
-    margin: 0 16px 16px;
+    max-height: 58vh;
   }
 
   .form-grid {
@@ -645,7 +685,15 @@ textarea {
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 390px) {
+  .page {
+    padding: 10px 8px 28px;
+  }
+
+  .module-body {
+    padding: 12px 10px 14px;
+  }
+
   .section-header {
     grid-template-columns: 1fr;
   }
@@ -656,10 +704,26 @@ textarea {
 
   .product-card {
     grid-template-columns: 1fr;
+    align-items: start;
   }
 
   .qty-box {
     justify-self: start;
+  }
+
+  .product-top {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .product-price {
+    justify-self: start;
+  }
+
+  .total-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
   }
 }
 </style>
@@ -671,15 +735,14 @@ textarea {
 
     <section class="module-shell">
       <header class="module-head">
-        <div class="module-brand">Amaru Electric</div>
-
         <div class="module-title-row">
           <div>
+            <div class="module-kicker">Cotizador online</div>
             <h1 class="module-title">${safeTitle}</h1>
             <p class="module-subtitle">${safeSubtitle}</p>
           </div>
 
-          <div class="module-pill">Cotizador online</div>
+          <div class="module-pill">Solicitud rápida</div>
         </div>
       </header>
 
@@ -721,6 +784,7 @@ function showMessage(type, text) {
   messageEl.className = "message " + type;
   messageEl.textContent = text;
   messageEl.style.display = "block";
+  messageEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function updateSelectedCount() {
@@ -780,7 +844,7 @@ function renderProducts(component) {
   searchWrap.className = "search-wrap";
   searchWrap.innerHTML = \`
     <div class="search-shell">
-      <input class="search-input" id="productsSearch" type="text" placeholder="Buscar productos" />
+      <input class="search-input" id="productsSearch" type="text" placeholder="Buscar productos" autocomplete="off" />
       <div class="search-icon">⌕</div>
     </div>
   \`;
@@ -839,6 +903,7 @@ function renderProducts(component) {
     const minusBtn = document.createElement("button");
     minusBtn.className = "qty-btn";
     minusBtn.type = "button";
+    minusBtn.setAttribute("aria-label", "Disminuir cantidad");
     minusBtn.textContent = "−";
 
     const valueEl = document.createElement("div");
@@ -848,6 +913,7 @@ function renderProducts(component) {
     const plusBtn = document.createElement("button");
     plusBtn.className = "qty-btn";
     plusBtn.type = "button";
+    plusBtn.setAttribute("aria-label", "Aumentar cantidad");
     plusBtn.textContent = "+";
 
     const hiddenInput = document.createElement("input");
