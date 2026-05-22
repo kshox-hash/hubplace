@@ -22,17 +22,13 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
         <a
           class="module-card"
           href="${url}"
-          style="--delay: ${index * 70}ms;"
+          style="--delay: ${index * 55}ms;"
           data-loading-link="true"
         >
           <div class="module-icon">${icon}</div>
 
-          <div class="module-main">
-            <div class="module-topline">
-              <span class="module-status">Activo</span>
-              <span class="module-code">Módulo ${String(index + 1).padStart(2, "0")}</span>
-            </div>
-
+          <div class="module-content">
+            <div class="module-kicker">Módulo ${String(index + 1).padStart(2, "0")}</div>
             <div class="module-title">${title}</div>
             <div class="module-description">${description}</div>
           </div>
@@ -52,26 +48,29 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
   <style>
     :root {
-      --bg: #010205;
-      --surface: rgba(255, 255, 255, 0.055);
-      --surface-hover: rgba(255, 255, 255, 0.085);
-      --border: rgba(255, 255, 255, 0.10);
-      --border-hover: rgba(147, 197, 253, 0.34);
+      --bg: #202124;
+      --bg-soft: #292a2d;
+      --surface: #0f1117;
+      --surface-2: #15171d;
+      --surface-3: #1d1f27;
 
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --muted-soft: #64748b;
+      --text: #f1f3f4;
+      --muted: #c9cdd3;
+      --muted-2: #8f949d;
 
-      --blue: #60a5fa;
-      --blue-soft: #bfdbfe;
-      --cyan: #67e8f9;
-      --green: #22c55e;
+      --primary: #c7d2ff;
+      --primary-2: #9fb0ff;
+      --blue: #8ab4f8;
+      --green: #81c995;
 
-      --radius-xl: 28px;
-      --radius-lg: 18px;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(199, 210, 255, 0.22);
 
-      --shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
-      --shadow-card: 0 18px 46px rgba(0, 0, 0, 0.24);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
     }
 
     * {
@@ -89,9 +88,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       min-height: 100vh;
       font-family: Inter, Arial, Helvetica, sans-serif;
       color: var(--text);
-      background:
-        radial-gradient(circle at 100% 0%, rgb(0, 0, 0), transparent 34%),
-        linear-gradient(180deg, #0c0c0c 100%, #0c0c0c 100%, #0c0c0c 100%);
+      background: var(--bg);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
@@ -103,7 +100,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(2, 6, 23, 0.76);
+      background: rgba(32, 33, 36, 0.78);
       backdrop-filter: blur(10px);
       transition: opacity 160ms ease, visibility 160ms ease;
     }
@@ -115,193 +112,202 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     }
 
     .app-spinner {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      border: 3px solid rgba(96, 165, 250, 0.16);
-      border-top-color: var(--blue);
+      border: 3px solid rgba(199, 210, 255, 0.18);
+      border-top-color: var(--primary);
       animation: spin 760ms linear infinite;
     }
 
     .page {
       min-height: 100vh;
-      padding: 24px 14px 36px;
+      padding: 20px 14px 30px;
     }
 
     .shell {
       width: 100%;
-      max-width: 720px;
+      max-width: 620px;
       margin: 0 auto;
-      animation: pageIn 420ms ease both;
+      animation: pageIn 380ms ease both;
+    }
+
+    .top-card {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin: 0 auto 30px;
+      padding: 18px 18px;
+      border-radius: 0 0 28px 28px;
+      background: #191a1f;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.18);
     }
 
     .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 54px;
+      gap: 14px;
     }
 
-    .brand-lockup {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .brand-mark {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background:
-        radial-gradient(circle at 32% 26%, rgba(255,255,255,0.75), transparent 24%),
-        linear-gradient(135deg, #60a5fa, #2563eb);
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
-      flex-shrink: 0;
+    .menu-dot {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      color: var(--text);
+      background: transparent;
+      font-size: 24px;
+      line-height: 1;
+      cursor: default;
     }
 
     .brand-name {
-      font-size: 14px;
-      font-weight: 850;
+      min-width: 0;
+      flex: 1;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 750;
+      letter-spacing: -0.04em;
       color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 280px;
     }
 
-    .brand-sub {
-      margin-top: 3px;
-      display: inline-flex;
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--muted-soft);
-      font-weight: 750;
-    }
-
-    .brand-sub::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--green);
-      box-shadow: 0 0 12px rgba(34, 197, 94, 0.75);
-    }
-
-    .system-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(34, 197, 94, 0.16);
-      color: #bbf7d0;
-      font-size: 11px;
-      font-weight: 800;
-      background: rgba(34, 197, 94, 0.07);
-      white-space: nowrap;
-    }
-
-    .system-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--green);
-      box-shadow: 0 0 14px rgba(34, 197, 94, 0.72);
+      justify-content: center;
+      background:
+        radial-gradient(circle at 32% 24%, #fbbc04 0 18%, transparent 19%),
+        radial-gradient(circle at 68% 30%, #34a853 0 18%, transparent 19%),
+        radial-gradient(circle at 34% 72%, #4285f4 0 18%, transparent 19%),
+        radial-gradient(circle at 72% 74%, #ea4335 0 18%, transparent 19%),
+        #303134;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.20);
     }
 
     .hero {
-      margin-bottom: 28px;
+      text-align: center;
+      padding: 0 10px 26px;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
+    .hero-pill {
       width: max-content;
       max-width: 100%;
-      margin-bottom: 14px;
-      color: var(--blue-soft);
-      font-size: 11px;
-      font-weight: 850;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      margin: 0 auto 18px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: rgba(199, 210, 255, 0.09);
+      border: 1px solid rgba(199, 210, 255, 0.14);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: 0.01em;
     }
 
     h1 {
-      margin: 0;
-      max-width: 600px;
-      font-size: 48px;
-      line-height: 0.96;
-      letter-spacing: -0.065em;
+      margin: 0 auto;
+      max-width: 500px;
+      font-size: 38px;
+      line-height: 1.08;
+      letter-spacing: -0.06em;
+      font-weight: 780;
       color: var(--text);
       text-wrap: balance;
     }
 
     .subtitle {
-      margin: 16px 0 0;
-      max-width: 520px;
+      margin: 16px auto 0;
+      max-width: 500px;
       color: var(--muted);
-      font-size: 15px;
-      line-height: 1.55;
+      font-size: 16px;
+      line-height: 1.45;
       text-wrap: balance;
     }
 
-    .panel {
-      border: 1px solid var(--border);
+    .summary-card {
+      margin: 0 0 18px;
+      padding: 20px;
       border-radius: var(--radius-xl);
-      background: rgba(255, 255, 255, 0.045);
-      backdrop-filter: blur(18px);
+      background: var(--surface);
       box-shadow: var(--shadow);
-      padding: 10px;
-      animation: fadeUp 480ms ease both;
+      border: 1px solid var(--border);
     }
 
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 8px 10px 14px;
+    .summary-title {
+      font-size: 15px;
+      font-weight: 760;
+      color: var(--text);
+      margin-bottom: 16px;
     }
 
-    .panel-title {
-      font-size: 12px;
-      font-weight: 850;
-      color: var(--blue-soft);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+    .summary-number {
+      font-size: 48px;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      font-weight: 760;
+      color: var(--primary);
     }
 
-    .panel-helper {
-      font-size: 12px;
-      color: var(--muted-soft);
-      text-align: right;
+    .summary-label {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted-2);
+    }
+
+    .progress {
+      width: 100%;
+      height: 8px;
+      margin-top: 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.13);
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 42%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--primary);
+    }
+
+    .section-title {
+      margin: 28px 4px 14px;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+      font-weight: 760;
+      color: var(--text);
     }
 
     .modules {
       display: grid;
-      gap: 9px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
     }
 
     .module-card {
       position: relative;
-      display: grid;
-      grid-template-columns: 48px minmax(0, 1fr) 34px;
-      gap: 13px;
-      align-items: center;
-      min-height: 92px;
-      padding: 13px;
+      min-height: 164px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px;
       border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
       background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
       color: inherit;
       text-decoration: none;
-      box-shadow: var(--shadow-card);
       opacity: 0;
       transform: translateY(10px);
-      animation: cardIn 420ms ease both;
+      animation: cardIn 380ms ease both;
       animation-delay: var(--delay);
       transition:
         transform 160ms ease,
@@ -311,140 +317,129 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
     .module-card:hover {
       transform: translateY(-2px);
-      border-color: var(--border-hover);
-      background: var(--surface-hover);
+      border-color: var(--border-strong);
+      background: var(--surface-2);
     }
 
     .module-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 15px;
+      width: 46px;
+      height: 46px;
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 23px;
-      background: rgba(96, 165, 250, 0.10);
-      border: 1px solid rgba(96, 165, 250, 0.16);
+      font-size: 24px;
+      background: rgba(199, 210, 255, 0.10);
+      border: 1px solid rgba(199, 210, 255, 0.14);
+      margin-bottom: 18px;
     }
 
-    .module-main {
-      min-width: 0;
-    }
-
-    .module-topline {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-    }
-
-    .module-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: rgba(34, 197, 94, 0.09);
-      border: 1px solid rgba(34, 197, 94, 0.14);
-      color: #bbf7d0;
-      font-size: 9.5px;
-      font-weight: 850;
+    .module-kicker {
+      margin-bottom: 7px;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 780;
+      letter-spacing: 0.035em;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .module-status::before {
-      content: "";
-      width: 5px;
-      height: 5px;
-      border-radius: 999px;
-      background: var(--green);
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.70);
-    }
-
-    .module-code {
-      color: var(--muted-soft);
-      font-size: 9.5px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
     }
 
     .module-title {
-      font-size: 16px;
-      font-weight: 850;
-      letter-spacing: -0.025em;
+      font-size: 18px;
+      line-height: 1.12;
+      font-weight: 760;
+      letter-spacing: -0.04em;
       color: var(--text);
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
 
     .module-description {
       font-size: 13px;
-      line-height: 1.38;
+      line-height: 1.35;
       color: var(--muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .module-arrow {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
       width: 32px;
       height: 32px;
       border-radius: 999px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--blue-soft);
-      font-size: 17px;
-      font-weight: 900;
-      background: rgba(96, 165, 250, 0.09);
-      border: 1px solid rgba(96, 165, 250, 0.14);
-      transition: transform 160ms ease;
-    }
-
-    .module-card:hover .module-arrow {
-      transform: translateX(2px);
+      color: var(--primary);
+      font-size: 20px;
+      font-weight: 700;
+      background: rgba(199, 210, 255, 0.08);
+      border: 1px solid rgba(199, 210, 255, 0.12);
     }
 
     .empty {
+      grid-column: 1 / -1;
       padding: 28px 18px;
       text-align: center;
       color: var(--muted);
       font-size: 14px;
       line-height: 1.45;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .notice-card {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .notice-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      background: rgba(199, 210, 255, 0.10);
+      border: 1px solid rgba(199, 210, 255, 0.12);
+      font-size: 20px;
+    }
+
+    .notice-title {
+      font-size: 14px;
+      font-weight: 760;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .notice-text {
+      font-size: 13px;
+      line-height: 1.35;
+      color: var(--muted-2);
     }
 
     .footer {
-      margin-top: 18px;
+      margin-top: 24px;
+      padding-bottom: 12px;
       text-align: center;
+      color: var(--muted-2);
       font-size: 12px;
-      color: var(--muted-soft);
-      animation: fadeUp 620ms ease both;
     }
 
-    .secure-row {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.035);
-    }
-
-    .secure-lock {
-      font-size: 12px;
-      line-height: 1;
-    }
-
-    .powered-by {
-      margin-top: 10px;
-      font-size: 11px;
-      color: rgba(148, 163, 184, 0.78);
-    }
-
-    .powered-by strong {
-      color: var(--blue-soft);
-      font-weight: 850;
+    .footer strong {
+      color: var(--primary);
+      font-weight: 760;
     }
 
     @keyframes spin {
@@ -454,17 +449,6 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
     @keyframes pageIn {
       from { opacity: 0; }
       to { opacity: 1; }
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     @keyframes cardIn {
@@ -478,77 +462,68 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
       }
     }
 
-    @media (max-width: 680px) {
-      .topbar {
-        margin-bottom: 42px;
-      }
-
-      h1 {
-        font-size: 38px;
-      }
-    }
-
-    @media (max-width: 520px) {
+    @media (max-width: 560px) {
       .page {
-        padding: 20px 10px 30px;
+        padding: 0 12px 26px;
+      }
+
+      .top-card {
+        margin-left: -12px;
+        margin-right: -12px;
+        margin-bottom: 28px;
+        padding: 18px 18px 20px;
       }
 
       .brand-name {
-        max-width: 180px;
+        font-size: 23px;
       }
 
-      .system-pill {
-        display: none;
+      .hero {
+        padding-left: 4px;
+        padding-right: 4px;
       }
 
       h1 {
-        font-size: 33px;
+        font-size: 36px;
       }
 
       .subtitle {
-        font-size: 14px;
+        font-size: 15px;
       }
 
-      .panel {
-        border-radius: 23px;
-        padding: 8px;
+      .summary-card {
+        padding: 19px;
       }
 
-      .panel-header {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 8px 8px 13px;
-      }
-
-      .panel-helper {
-        text-align: left;
-      }
-
-      .module-card {
-        grid-template-columns: 46px minmax(0, 1fr) 30px;
-        min-height: 94px;
-        padding: 12px;
+      .modules {
         gap: 12px;
       }
 
-      .module-icon {
-        width: 46px;
-        height: 46px;
-        border-radius: 14px;
-        font-size: 22px;
+      .module-card {
+        min-height: 158px;
+        padding: 16px;
       }
 
       .module-title {
-        font-size: 15.5px;
+        font-size: 17px;
       }
 
       .module-description {
         font-size: 12.5px;
       }
+    }
 
-      .module-arrow {
-        width: 30px;
-        height: 30px;
+    @media (max-width: 390px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .modules {
+        grid-template-columns: 1fr;
+      }
+
+      .module-card {
+        min-height: 132px;
       }
     }
   </style>
@@ -561,51 +536,49 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
   <main class="page">
     <div class="shell">
-      <header class="topbar">
-        <div class="brand-lockup">
-          <div class="brand-mark"></div>
-          <div class="brand-text">
-            <div class="brand-name">${safeBrand}</div>
-            <div class="brand-sub">Portal operativo</div>
-          </div>
-        </div>
-
-        <div class="system-pill">
-          <span class="system-dot"></span>
-          <span>Online</span>
+      <header class="top-card">
+        <div class="topbar">
+          <button class="menu-dot" type="button">≡</button>
+          <div class="brand-name">${safeBrand}</div>
+          <div class="avatar"></div>
         </div>
       </header>
 
       <section class="hero">
-        <div class="eyebrow">Centro digital</div>
+        <div class="hero-pill">Centro digital</div>
         <h1>${safeTitle}</h1>
         <p class="subtitle">${safeSubtitle}</p>
       </section>
 
-      <section class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Módulos disponibles</div>
-          <div class="panel-helper">${activeModules.length} activos</div>
-        </div>
-
-        <div class="modules">
-          ${
-            cardsHtml ||
-            `<div class="empty">No hay módulos disponibles por el momento.</div>`
-          }
+      <section class="summary-card">
+        <div class="summary-title">Módulos disponibles</div>
+        <div class="summary-number">${activeModules.length}</div>
+        <div class="summary-label">${activeModules.length === 1 ? "servicio activo" : "servicios activos"} para usar ahora</div>
+        <div class="progress">
+          <div class="progress-bar"></div>
         </div>
       </section>
 
-      <div class="footer">
-        <div class="secure-row">
-          <span class="secure-lock">🔒</span>
-          <span>Acceso seguro generado para tu atención</span>
-        </div>
+      <h2 class="section-title">Elige un servicio</h2>
 
-        <div class="powered-by">
-          Desarrollado por <strong>Automatiza Fácil</strong>
+      <section class="modules">
+        ${
+          cardsHtml ||
+          `<div class="empty">No hay módulos disponibles por el momento.</div>`
+        }
+      </section>
+
+      <section class="notice-card">
+        <div class="notice-icon">🔒</div>
+        <div>
+          <div class="notice-title">Acceso seguro</div>
+          <div class="notice-text">Este enlace fue generado para acceder rápidamente a los servicios disponibles.</div>
         </div>
-      </div>
+      </section>
+
+      <footer class="footer">
+        Desarrollado por <strong>Automatiza Fácil</strong>
+      </footer>
     </div>
   </main>
 
