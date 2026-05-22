@@ -19,7 +19,6 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 <title>${safeTitle}</title>
 
 <style>
@@ -29,18 +28,16 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   --surface: #0c0d12;
   --surface-2: #12141b;
   --surface-3: #191b25;
-  --surface-hover: #12141b;
+  --surface-hover: #171a22;
 
   --text: #e8eaed;
   --text-strong: #f1f3f4;
-  --text-soft: #c6cad6;
 
   --muted: #a8adb9;
   --muted-soft: #7d8391;
-  --muted-2: #6f7584;
+  --muted-2: #656b7a;
 
   --link: #bcc5ff;
-  --link-hover: #aeb8f8;
   --link-soft: #23263a;
 
   --green: #81c995;
@@ -49,14 +46,11 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   --red: #f28b82;
   --red-soft: #32201f;
 
-  --border: transparent;
-  --border-soft: #20232e;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
 
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 28px;
-
-  --page-max: 780px;
+  --page-max: 760px;
 }
 
 * {
@@ -74,14 +68,7 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family:
-    "Google Sans",
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family: "Google Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -92,9 +79,13 @@ textarea {
   font: inherit;
 }
 
+button {
+  color: inherit;
+}
+
 .page {
   min-height: 100vh;
-  padding: 24px 12px 28px;
+  padding: 20px 12px 28px;
   background: var(--bg);
 }
 
@@ -104,58 +95,75 @@ textarea {
   margin: 0 auto;
 }
 
-/* HEADER */
+.topbar {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.brand {
+  color: var(--text-strong);
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.045em;
+}
 
 .hero {
-  padding: 14px 4px 24px;
+  text-align: center;
+  padding: 8px 10px 28px;
 }
 
 .hero-kicker {
-  margin-bottom: 12px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto 16px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: var(--link-soft);
   color: var(--link);
   font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 750;
+  letter-spacing: 0.01em;
 }
 
 h1 {
-  margin: 0;
-  max-width: 680px;
+  margin: 0 auto;
+  max-width: 620px;
   color: var(--text-strong);
-  font-size: clamp(38px, 6vw, 56px);
-  line-height: 1.04;
-  letter-spacing: -0.055em;
+  font-size: clamp(34px, 6vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.06em;
   font-weight: 750;
+  text-wrap: balance;
 }
 
 .subtitle {
-  margin-top: 14px;
-  max-width: 560px;
+  margin: 16px auto 0;
+  max-width: 520px;
   color: var(--muted);
   font-size: 15px;
   line-height: 1.55;
+  text-wrap: balance;
 }
 
-/* PANEL */
-
 .panel {
-  background: var(--surface);
+  background: transparent;
   border-radius: var(--radius-xl);
-  padding: 14px;
-  border: none;
+  padding: 0;
 }
 
 .content-flow {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
-/* PRODUCTS */
+/* PRODUCTOS */
 
 .products-section {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .products-top {
@@ -167,15 +175,16 @@ h1 {
 
 .products-title {
   color: var(--text-strong);
-  font-size: 16px;
+  font-size: 22px;
+  line-height: 1.1;
   font-weight: 750;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.045em;
 }
 
 .products-subtitle {
-  margin-top: 4px;
+  margin-top: 6px;
   color: var(--muted-soft);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .products-selected {
@@ -185,37 +194,54 @@ h1 {
   background: var(--link-soft);
   color: var(--link);
   font-size: 12px;
-  font-weight: 750;
+  font-weight: 700;
 }
 
-/* SEARCH */
+/* BUSCADOR */
+
+.search-shell {
+  height: 56px;
+  display: grid;
+  grid-template-columns: 1fr 48px;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--surface);
+  padding: 0 6px 0 18px;
+}
 
 .search-input {
   width: 100%;
-  height: 48px;
+  height: 100%;
   border: none;
   outline: none;
-  border-radius: 16px;
-  background: var(--surface-2);
+  background: transparent;
   color: var(--text);
-  padding: 0 16px;
-  font-size: 14px;
+  padding: 0;
+  font-size: 15px;
 }
 
 .search-input::placeholder {
   color: var(--muted-soft);
 }
 
-.search-input:focus {
+.search-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--surface-3);
+  color: var(--muted);
+  font-size: 18px;
 }
 
-/* PRODUCTS LIST */
+/* LISTADO */
 
 .products-list {
   display: grid;
-  gap: 8px;
-  max-height: 58vh;
+  gap: 10px;
+  max-height: 54vh;
   overflow-y: auto;
   padding-right: 4px;
   scrollbar-width: thin;
@@ -231,17 +257,17 @@ h1 {
   border-radius: 999px;
 }
 
-/* PRODUCT CARD */
+/* CARD PRODUCTO */
 
 .product-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  min-height: 78px;
-  padding: 14px;
+  min-height: 82px;
+  padding: 15px;
   border-radius: var(--radius-lg);
-  background: var(--surface-2);
+  background: var(--surface);
   border: none;
   transition:
     background 140ms ease,
@@ -262,7 +288,7 @@ h1 {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
   gap: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .product-name {
@@ -270,15 +296,15 @@ h1 {
   color: var(--text-strong);
   font-size: 15px;
   line-height: 1.25;
-  font-weight: 750;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .product-price {
-  color: var(--text-soft);
+  color: var(--link);
   font-size: 14px;
   font-weight: 750;
   white-space: nowrap;
@@ -295,15 +321,15 @@ h1 {
   overflow: hidden;
 }
 
-/* QTY */
+/* CANTIDAD */
 
 .qty-box {
   display: grid;
   grid-template-columns: 34px 38px 34px;
   height: 36px;
-  border-radius: 12px;
+  border-radius: 999px;
   overflow: hidden;
-  background: var(--surface);
+  background: var(--surface-2);
   border: none;
 }
 
@@ -311,7 +337,7 @@ h1 {
   border: none;
   background: transparent;
   color: var(--text);
-  font-size: 16px;
+  font-size: 17px;
   cursor: pointer;
 }
 
@@ -326,8 +352,6 @@ h1 {
   color: var(--text-strong);
   font-size: 13px;
   font-weight: 750;
-  border-left: 1px solid var(--border-soft);
-  border-right: 1px solid var(--border-soft);
 }
 
 .qty-hidden {
@@ -337,8 +361,8 @@ h1 {
 /* TOTAL */
 
 .total-card {
-  min-height: 70px;
-  padding: 16px;
+  min-height: 76px;
+  padding: 18px;
   border-radius: var(--radius-lg);
   background: var(--link-soft);
   display: flex;
@@ -350,32 +374,32 @@ h1 {
 .total-title {
   color: var(--muted);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 650;
 }
 
 .total-value {
   color: var(--link);
-  font-size: clamp(24px, 4vw, 30px);
+  font-size: clamp(25px, 4vw, 32px);
   font-weight: 800;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.05em;
 }
 
-/* FORM */
+/* FORMULARIO */
 
 .form-collapse {
   border-radius: var(--radius-lg);
-  background: var(--surface-2);
+  background: var(--surface);
   border: none;
   overflow: hidden;
 }
 
 .form-toggle {
   width: 100%;
-  min-height: 68px;
+  min-height: 72px;
   border: none;
   background: transparent;
   color: var(--text);
-  padding: 14px 16px;
+  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -385,13 +409,13 @@ h1 {
 .form-toggle-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
 }
 
 .form-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 16px;
   background: var(--link-soft);
   color: var(--link);
   display: flex;
@@ -457,10 +481,10 @@ textarea {
   width: 100%;
   border: none;
   outline: none;
-  background: var(--surface);
+  background: var(--surface-2);
   color: var(--text);
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 14px;
+  padding: 13px;
   font-size: 14px;
 }
 
@@ -475,11 +499,11 @@ textarea:focus {
 }
 
 textarea {
-  min-height: 86px;
+  min-height: 90px;
   resize: vertical;
 }
 
-/* BUTTON */
+/* BOTÓN */
 
 .submit-wrap {
   display: grid;
@@ -488,9 +512,9 @@ textarea {
 
 .submit-btn {
   width: 100%;
-  min-height: 56px;
+  min-height: 58px;
   border: none;
-  border-radius: var(--radius-lg);
+  border-radius: 22px;
   background: #3f5192;
   color: var(--text-strong);
   font-size: 15px;
@@ -515,7 +539,7 @@ textarea {
   cursor: not-allowed;
 }
 
-/* MESSAGE */
+/* MENSAJES */
 
 .message {
   display: none;
@@ -539,7 +563,7 @@ textarea {
 }
 
 .expires {
-  margin-top: 10px;
+  margin-top: 12px;
   text-align: center;
   color: var(--muted-soft);
   font-size: 10px;
@@ -549,34 +573,37 @@ textarea {
 
 @media (max-width: 640px) {
   .page {
-    padding: 16px 8px 18px;
+    padding: 14px 10px 18px;
+  }
+
+  .topbar {
+    margin-bottom: 16px;
   }
 
   .hero {
-    padding: 8px 4px 18px;
+    padding: 4px 4px 22px;
   }
 
   h1 {
-    font-size: 40px;
-    line-height: 1.04;
+    font-size: 36px;
+    line-height: 1.06;
   }
 
   .subtitle {
-    font-size: 13px;
+    font-size: 14px;
   }
 
-  .panel {
-    padding: 10px;
-    border-radius: 22px;
+  .products-title {
+    font-size: 21px;
   }
 
   .products-list {
-    max-height: 54vh;
+    max-height: 52vh;
   }
 
   .product-card {
-    min-height: 72px;
-    padding: 12px;
+    min-height: 76px;
+    padding: 13px;
   }
 
   .product-name {
@@ -584,7 +611,7 @@ textarea {
   }
 
   .product-description {
-    font-size: 11px;
+    font-size: 11.5px;
   }
 
   .form-grid {
@@ -592,7 +619,7 @@ textarea {
   }
 
   .submit-btn {
-    min-height: 52px;
+    min-height: 54px;
   }
 }
 </style>
@@ -601,6 +628,10 @@ textarea {
 <body>
 <main class="page">
   <div class="shell">
+
+    <header class="topbar">
+      <div class="brand">Amaru Electric</div>
+    </header>
 
     <section class="hero">
       <div class="hero-kicker">Cotizador online</div>
@@ -681,12 +712,11 @@ function updateTotal() {
 function renderText(component) {
   const box = document.createElement("div");
   box.style.padding = "14px";
-  box.style.borderRadius = "16px";
-  box.style.background = "#12141b";
+  box.style.borderRadius = "18px";
+  box.style.background = "#0c0d12";
   box.style.color = "#a8adb9";
   box.style.fontSize = "14px";
   box.style.lineHeight = "1.5";
-  box.style.border = "none";
   box.textContent = component.value || "";
   return box;
 }
@@ -707,17 +737,24 @@ function renderProducts(component) {
       </div>
     </div>
 
-    <input
-      class="search-input"
-      id="productsSearch"
-      type="text"
-      placeholder="Buscar productos..."
-    />
+    <div class="search-shell">
+      <input
+        class="search-input"
+        id="productsSearch"
+        type="text"
+        placeholder="Buscar productos"
+      />
+
+      <div class="search-icon">⌕</div>
+    </div>
 
     <div class="products-list" id="productsList"></div>
 
     <div class="total-card">
-      <div class="total-title">Total estimado</div>
+      <div>
+        <div class="total-title">Total estimado</div>
+      </div>
+
       <div class="total-value" id="totalValue">\${formatCurrency(0)}</div>
     </div>
   \`;
