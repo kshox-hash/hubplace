@@ -17,32 +17,32 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
 <style>
 :root {
-  --bg: #202124;
-  --surface: #0b0c10;
-  --surface-hover: #101116;
-  --surface-soft: #11131a;
-  --field: #1a1d27;
-  --field-focus: #202536;
-  --item: #1b1f2b;
-  --item-hover: #232838;
+--bg: #16181f;          /* página: el más oscuro */
+--surface: #1c1f2b;     /* panel principal */
+--surface-hover: #222638; /* hover sobre surface */
+--surface-soft: #20232f; /* variante suave entre bg y surface */
+--field: #13151e;       /* inputs: más hundido que surface */
+--field-focus: #1a1d2a; /* focus del input */
+--item: #232738;        /* product card */
+--item-hover: #2b3045;  /* hover de card */
 
-  --text: #d8dbe2;
-  --text-strong: #f1f3f4;
-  --text-soft: #c4c8d4;
-  --muted: #a6abb7;
-  --muted-soft: #7e8491;
+--text: #c8ccd8;        /* cuerpo */
+--text-strong: #eceef5; /* títulos y valores */
+--text-soft: #a8adbf;   /* texto secundario */
+--muted: #787d90;       /* labels, placeholders */
+--muted-soft: #565b6e;  /* hints, fechas, expiración */
 
-  --accent: #bfc7ff;
-  --accent-strong: #d8ddff;
-  --accent-bg: #252b45;
-  --accent-btn: #40518e;
+--accent: #a8b4ff;      /* links, precios */
+--accent-strong: #cad1ff; /* hover de accent / totales */
+--accent-bg: #1e2340;   /* badge, pill background */
+--accent-btn: #3a4d85;  /* botón primario */
 
-  --green: #81c995;
-  --green-soft: #1d3428;
-  --red: #f28b82;
-  --red-soft: #34201f;
+--green: #6fcf97;
+--green-soft: #132a20;
+--red: #e88a81;
+--red-soft: #2a1818;
 
-  --line: rgba(255,255,255,0.055);
+--line: rgba(255,255,255,0.06);
 
   --radius-md: 16px;
   --radius-lg: 20px;
