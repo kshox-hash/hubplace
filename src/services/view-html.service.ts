@@ -17,30 +17,101 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
 <style>
 :root {
+/* =========================
+   BASE / APP BACKGROUND
+========================= */
+
+/* Fondo general app */
 --bg: #202124;
---surface: #0b0c10;
---surface-hover: #222638;
---surface-soft: #20232f;
---field: #13151e;
---field-focus: #1a1d2a;
---item: #382335;
---item-hover: #2b3045;
 
---text: #c8ccd8;
---text-strong: #eceef5;
---text-soft: #a8adbf;
---muted: #787d90;
---muted-soft: #565b6e;
+/* Cards generales */
+--surface: #111318;
 
---accent: #a8b4ff;
---accent-strong: #cad1ff;
---accent-bg: #1e2340;
---accent-btn: #3a4d85;
+/* Hover cards */
+--surface-hover: #181b22;
 
---green: #6fcf97;
---green-soft: #132a20;
---red: #e88a81;
---red-soft: #2a1818;
+/* Superficie secundaria */
+--surface-soft: #1a1e28;
+
+
+/* =========================
+   INPUTS / FORM
+========================= */
+
+/* Fondo inputs */
+--field: #151821;
+
+/* Focus inputs */
+--field-focus: #1c2130;
+
+
+/* =========================
+   PRODUCTOS
+========================= */
+
+/* Card producto */
+--item: #322536;
+
+/* Hover producto */
+--item-hover: #3c2c42;
+
+
+/* =========================
+   TEXTOS
+========================= */
+
+/* Texto normal */
+--text: #cfd3df;
+
+/* Títulos */
+--text-strong: #f3f5fb;
+
+/* Texto suave */
+--text-soft: #aeb4c6;
+
+/* Texto muted */
+--muted: #7f8698;
+
+/* Texto muted suave */
+--muted-soft: #616779;
+
+
+/* =========================
+   ACCENTS / AZULES
+========================= */
+
+/* Azul principal */
+--accent: #aebcff;
+
+/* Azul brillante */
+--accent-strong: #d8deff;
+
+/* Fondo badges/cards azules */
+--accent-bg: #252d4a;
+
+/* Botón principal */
+--accent-btn: #4a5fa3;
+
+
+/* =========================
+   SUCCESS / ERROR
+========================= */
+
+/* Success */
+--green: #74d39b;
+--green-soft: #173123;
+
+/* Error */
+--red: #ee8d86;
+--red-soft: #341c1c;
+
+
+/* =========================
+   LÍNEAS
+========================= */
+
+/* Bordes suaves */
+--line: rgba(255,255,255,0.045);
 
 --line: transparent;
 
