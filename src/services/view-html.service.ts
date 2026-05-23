@@ -17,100 +17,42 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
 <style>
 :root {
-/* =========================
-   BASE / APP BACKGROUND
-========================= */
-
-/* Fondo general app */
+/* Fondo general */
 --bg: #202124;
 
-/* Cards generales */
---surface: #111318;
+/* Superficies */
+--surface: #0f1418;
+--surface-hover: #151c22;
+--surface-soft: #182027;
 
-/* Hover cards */
---surface-hover: #181b22;
+/* Inputs */
+--field: #111820;
+--field-focus: #182231;
 
-/* Superficie secundaria */
---surface-soft: #1a1e28;
+/* Productos */
+--item: #171f2a;
+--item-hover: #202b3a;
 
+/* Textos */
+--text: #cdd3dd;
+--text-strong: #f2f5f8;
+--text-soft: #aeb7c6;
+--muted: #7f8997;
+--muted-soft: #5f6875;
 
-/* =========================
-   INPUTS / FORM
-========================= */
+/* Acento principal */
+--accent: #9fb8ff;
+--accent-strong: #d5e0ff;
+--accent-bg: #1e2a3f;
+--accent-btn: #3f5f9f;
 
-/* Fondo inputs */
---field: #151821;
-
-/* Focus inputs */
---field-focus: #1c2130;
-
-
-/* =========================
-   PRODUCTOS
-========================= */
-
-/* Card producto */
---item: #322536;
-
-/* Hover producto */
---item-hover: #3c2c42;
-
-
-/* =========================
-   TEXTOS
-========================= */
-
-/* Texto normal */
---text: #cfd3df;
-
-/* Títulos */
---text-strong: #f3f5fb;
-
-/* Texto suave */
---text-soft: #aeb4c6;
-
-/* Texto muted */
---muted: #7f8698;
-
-/* Texto muted suave */
---muted-soft: #616779;
-
-
-/* =========================
-   ACCENTS / AZULES
-========================= */
-
-/* Azul principal */
---accent: #aebcff;
-
-/* Azul brillante */
---accent-strong: #d8deff;
-
-/* Fondo badges/cards azules */
---accent-bg: #252d4a;
-
-/* Botón principal */
---accent-btn: #4a5fa3;
-
-
-/* =========================
-   SUCCESS / ERROR
-========================= */
-
-/* Success */
+/* Estados */
 --green: #74d39b;
---green-soft: #173123;
-
-/* Error */
+--green-soft: #153123;
 --red: #ee8d86;
 --red-soft: #341c1c;
 
-
-/* =========================
-   LÍNEAS
-========================= */
-
-/* Bordes suaves */
+/* Bordes */
 --line: rgba(255,255,255,0.045);
 
 --line: transparent;
