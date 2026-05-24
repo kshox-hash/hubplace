@@ -1,5 +1,5 @@
-import { RuntimeLinkRecord } from "../types/runtime";
-import { escapeHtml } from "../utils/html";
+import { RuntimeLinkRecord } from "../../types/runtime";
+import { escapeHtml } from "../../utils/html";
 
 /**
  * renderBookingHtml

@@ -5,7 +5,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
   const safeTitle = escapeHtml(record.config.title || "Menú de servicios");
 
   const safeBrand = escapeHtml(
-    record.config.brand || "amaru electric"
+    record.config.brand || ""
   );
 
   const safeSubtitle = escapeHtml(
