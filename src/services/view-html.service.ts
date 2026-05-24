@@ -6,6 +6,12 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
     record.config.successMessage || "Solicitud enviada correctamente."
   );
   const safeTitle = escapeHtml(record.config.title || "Cotizador online");
+  const safeBrand = escapeHtml(record.config.brand || "Amaru Electric");
+  const safeHeroSubtitle = escapeHtml(
+    record.config.subtitle ||
+      "Ingresa tus datos y selecciona los productos para recibir un presupuesto personalizado."
+  );
+
   const configJson = JSON.stringify(record.config);
 
   return `<!doctype html>
@@ -14,85 +20,97 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>${safeTitle}</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Google+Sans+Display:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
 <style>
 :root {
-  /* Paleta igual al menú principal */
-  --bg:           #0f1011;
+  --bg: #0a0b0d;
 
-  --surface-1:    #20242d;
-  --surface-2:    #20242d;
-  --surface-3:    #22263a;
+  --surface-1: #16191f;
+  --surface-2: #21262e;
+  --surface-3: #2a303c;
 
-  --on-bg:        #d8dbe2;
-  --on-surface:   #e8eaed;
-  --on-surface-v: #b0b4be;
+  --on-bg: #f3f4f6;
+  --on-surface: #ffffff;
+  --on-surface-v: #9ca3af;
 
-  --primary:      #bfc7ff;
-  --primary-c:    #111827;
-  --primary-bg:   #22263a;
-  --primary-bg-2: #2b314a;
+  --primary: #6366f1;
+  --primary-bg: #1e2148;
+  --primary-bg-2: #2d327d;
 
-  --secondary:    #bfc7ff;
-  --secondary-bg: #22263a;
+  --muted: #9ca3af;
+  --muted-2: #6b7280;
 
-  --muted:        #b0b4be;
-  --muted-2:      #858a96;
+  --green: #10b981;
+  --green-bg: #064e3b;
 
-  --green:        #81c995;
-  --green-bg:     #1d3428;
-  --red:          #f28b82;
-  --red-bg:       #34201f;
+  --red: #ef4444;
+  --red-bg: #451a1a;
 
-  --radius-s:  12px;
-  --radius-m:  16px;
-  --radius-l:  20px;
-  --radius-xl: 28px;
+  --radius-m: 16px;
+  --radius-l: 20px;
+  --radius-xl: 24px;
 
-  --page-max: 840px;
+  --page-max: 600px;
   --safe-b: env(safe-area-inset-bottom, 0px);
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-html, body { min-height: 100vh; }
+html,
+body {
+  min-height: 100vh;
+}
 
 body {
   background: var(--bg);
   color: var(--on-bg);
-  font-family: "Google Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+  font-family: "Inter", "Google Sans", system-ui, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  padding-bottom: calc(40px + var(--safe-b));
 }
 
-button, input, textarea { font: inherit; color: inherit; }
-button { touch-action: manipulation; cursor: pointer; }
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
 
-/* ─── ENTRANCE ANIMATION ─── */
+button {
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+/* ENTRANCE ANIMATION */
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate {
   opacity: 0;
-  animation: fadeUp 320ms cubic-bezier(.2,.6,.4,1) forwards;
+  animation: fadeUp 400ms cubic-bezier(.2, .6, .4, 1) forwards;
 }
 
-/* ─── PAGE ─── */
-
-.page {
-  min-height: 100vh;
-  padding: 0 0 calc(40px + var(--safe-b));
-}
+/* PAGE */
 
 .shell {
   width: 100%;
@@ -101,300 +119,308 @@ button { touch-action: manipulation; cursor: pointer; }
   padding: 0 16px;
 }
 
-/* ─── TOPBAR ─── */
+/* TOPBAR */
 
 .topbar {
-  height: 64px;
+  height: 72px;
   display: flex;
   align-items: center;
   gap: 12px;
-  animation: fadeUp 280ms cubic-bezier(.2,.6,.4,1) forwards;
 }
 
-.topbar-logo {
-  width: 42px;
-  height: 42px;
-  border-radius: 16px;
-  background: var(--primary-bg);
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--primary);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #ffffff;
   flex-shrink: 0;
 }
 
-.topbar-logo svg {
-  width: 22px;
-  height: 22px;
-  fill: var(--primary);
+.logo-icon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
-.topbar-name {
-  font-size: 15px;
-  font-weight: 500;
+.brand-name {
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--on-surface);
-  letter-spacing: -0.03em;
-  text-transform: lowercase;
 }
 
-.topbar-chip {
-  margin-left: auto;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: var(--primary-bg);
-  color: var(--primary);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-/* ─── HERO ─── */
+/* HERO */
 
 .hero {
-  padding: 20px 0 36px;
-  animation: fadeUp 300ms 60ms cubic-bezier(.2,.6,.4,1) both;
-}
-
-.hero-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--primary);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
+  padding: 24px 0 32px;
 }
 
 .hero-title {
-  font-family: "Google Sans Display", "Google Sans", sans-serif;
-  font-size: clamp(28px, 6vw, 40px);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.12;
+  font-family: "Google Sans Display", "Google Sans", "Inter", sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 12px;
   color: var(--on-surface);
-  max-width: 560px;
+  letter-spacing: -0.03em;
 }
 
 .hero-sub {
-  margin-top: 12px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--muted);
-  line-height: 1.6;
-  max-width: 460px;
+  line-height: 1.5;
 }
 
-/* ─── CONTENT ─── */
+/* CONTENT */
 
 .content-flow {
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
 
-/* ─── CARD ─── */
+/* CARDS */
 
 .card {
   background: var(--surface-1);
   border-radius: var(--radius-xl);
+  margin-bottom: 0;
   overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-/* ─── SECTION HEADER ─── */
+/* FORM */
 
-.section-header {
-  padding: 20px 20px 14px;
+.form-header {
+  padding: 24px 20px 16px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--on-surface);
+  letter-spacing: -0.02em;
+}
+
+.section-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.form-body {
+  padding: 0 20px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+input,
+textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 14px;
+  color: var(--on-surface);
+  font-size: 15px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-2);
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--primary);
+  background: var(--surface-3);
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+/* PRODUCTS */
+
+.products-header {
+  padding: 24px 20px 16px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
 }
 
-.section-heading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-
-.section-icon {
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-  border-radius: 16px;
-  background: var(--primary-bg);
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.section-icon svg {
-  width: 21px;
-  height: 21px;
-  display: block;
-}
-
-.section-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--primary);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-
-.section-title {
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--on-surface);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.badge {
+.products-badge {
   flex-shrink: 0;
   padding: 6px 12px;
   border-radius: 999px;
   background: var(--primary-bg);
   color: var(--primary);
   font-size: 11.5px;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
-  margin-top: 2px;
-  transition: background 200ms ease;
 }
 
-.badge.has-selection {
+.products-badge.has-selection {
   background: var(--primary-bg-2);
+  color: #ffffff;
 }
 
-/* ─── SEARCH ─── */
-
-.search-wrap {
-  padding: 0 12px 12px;
+.search-box {
+  padding: 0 20px 16px;
 }
 
-.search-inner {
-  height: 48px;
-  display: flex;
-  align-items: center;
-  border-radius: 999px;
+.search-shell {
+  width: 100%;
+  min-height: 46px;
   background: var(--surface-2);
-  padding: 0 6px 0 16px;
-  transition: background 150ms ease;
+  border-radius: 999px;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s ease;
 }
 
-.search-inner:focus-within {
+.search-shell:focus-within {
   background: var(--surface-3);
 }
 
-.search-icon {
-  width: 20px;
-  flex-shrink: 0;
+.search-shell svg {
+  width: 18px;
+  height: 18px;
   color: var(--muted);
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
 }
 
-.search-icon svg { width: 18px; height: 18px; display: block; }
-
 .search-input {
-  flex: 1;
   min-width: 0;
-  border: none;
-  outline: none;
+  width: 100%;
   background: transparent;
-  color: var(--on-surface);
+  border: none;
+  border-radius: 0;
+  padding: 0;
   font-size: 14px;
 }
 
-.search-input::placeholder { color: var(--muted-2); }
+/* SCROLL CONTAINER */
 
-/* ─── PRODUCT LIST ─── */
-
-.products-body {
-  padding: 0 12px 12px;
-}
-
-.products-body.scrollable {
-  max-height: min(52vh, 560px);
+.scroll-container {
+  max-height: 52vh;
   overflow-y: auto;
   overscroll-behavior: contain;
+  padding: 0 12px 12px;
   scrollbar-width: thin;
   scrollbar-color: var(--surface-3) transparent;
 }
 
-.products-body.scrollable::-webkit-scrollbar { width: 4px; }
-.products-body.scrollable::-webkit-scrollbar-track { background: transparent; }
-.products-body.scrollable::-webkit-scrollbar-thumb {
-  background: var(--surface-3);
-  border-radius: 999px;
+.scroll-container::-webkit-scrollbar {
+  width: 4px;
 }
 
-.product-list { display: grid; gap: 8px; }
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-/* ─── PRODUCT ITEM ─── */
+.scroll-container::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 10px;
+}
+
+.product-list {
+  display: grid;
+  gap: 6px;
+}
+
+/* PRODUCT ITEM */
 
 .product-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 18px 16px;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
   border-radius: var(--radius-m);
-  transition: background 120ms ease;
+  transition: background 0.2s ease;
 }
 
-.product-item:hover { background: var(--surface-3); }
+.product-item:hover {
+  background: var(--surface-2);
+}
 
-/* selected state */
 .product-item.is-selected {
   background: var(--primary-bg);
 }
 
-.product-item.is-selected:hover {
-  background: var(--primary-bg-2);
+.product-info {
+  flex: 1;
+  margin-right: 0;
+  min-width: 0;
 }
 
-.product-name {
-  font-size: 14px;
+.p-name {
   font-weight: 500;
+  font-size: 15px;
   color: var(--on-surface);
-  letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.3;
-  margin-bottom: 5px;
 }
 
-.product-desc {
+.p-desc {
   font-size: 12px;
   color: var(--muted);
-  line-height: 1.45;
+  margin: 4px 0;
+  line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.product-price {
-  font-size: 12.5px;
-  font-weight: 500;
+.p-price {
+  font-size: 14px;
+  font-weight: 600;
   color: var(--primary);
-  white-space: nowrap;
-  margin-top: 4px;
 }
 
-/* ─── STEPPER ─── */
+/* STEPPER */
 
 .stepper {
   display: flex;
   align-items: center;
-  height: 36px;
-  border-radius: 999px;
-  background: var(--surface-3);
-  overflow: hidden;
-  transition: background 200ms ease;
+  background: var(--surface-2);
+  border-radius: 99px;
+  padding: 4px;
+  flex-shrink: 0;
 }
 
 .stepper.has-qty {
@@ -402,16 +428,15 @@ button { touch-action: manipulation; cursor: pointer; }
 }
 
 .step-btn {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   border: none;
   background: transparent;
-  color: var(--on-surface-v);
+  color: var(--on-surface);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  transition: background 100ms ease, color 100ms ease;
 }
 
 .step-btn svg {
@@ -420,347 +445,208 @@ button { touch-action: manipulation; cursor: pointer; }
   display: block;
 }
 
-.stepper.has-qty .step-btn {
-  color: var(--primary);
+.step-btn:active {
+  background: var(--surface-3);
 }
-
-.step-btn:hover { background: rgba(255,255,255,0.07); color: var(--on-surface); }
-.step-btn:active { background: rgba(255,255,255,0.12); }
 
 .step-val {
-  width: 32px;
+  width: 28px;
   text-align: center;
-  font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 14px;
   color: var(--on-surface);
   user-select: none;
-  transition: color 200ms ease;
 }
 
-.stepper.has-qty .step-val {
-  color: var(--primary);
-}
-
-@keyframes valBounce {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.25); }
-  100% { transform: scale(1); }
-}
-
-.step-val.bump {
-  animation: valBounce 180ms cubic-bezier(.3,1.4,.5,1);
-}
-
-.qty-hidden { display: none; }
-
-/* ─── EMPTY SEARCH STATE ─── */
-
-.search-empty {
+.qty-hidden {
   display: none;
-  padding: 28px 16px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.5;
 }
 
-.search-empty-icon {
-  font-size: 28px;
-  margin-bottom: 8px;
-  opacity: 0.5;
-}
-
-/* ─── TOTAL ─── */
+/* TOTAL */
 
 .total-bar {
-  margin: 8px 8px 8px;
-  padding: 16px 18px;
-  border-radius: var(--radius-l);
   background: var(--primary-bg);
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .total-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--primary);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-.total-label svg {
-  width: 17px;
-  height: 17px;
+.total-val {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Google Sans Display", "Google Sans", "Inter", sans-serif;
+  color: var(--on-surface);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.total-val.nonzero {
+  color: #ffffff;
+}
+
+/* SUBMIT */
+
+.btn-submit {
+  width: 100%;
+  padding: 18px;
+  border-radius: 99px;
+  background: var(--primary);
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-submit svg {
+  width: 20px;
+  height: 20px;
   display: block;
 }
 
-@keyframes totalBump {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.05); }
-  100% { transform: scale(1); }
+.btn-submit:active {
+  transform: scale(0.98);
+  opacity: 0.9;
 }
 
-.total-amount {
-  font-family: "Google Sans Display", "Google Sans", sans-serif;
-  font-size: clamp(22px, 6vw, 28px);
-  font-weight: 400;
-  color: var(--on-surface);
-  letter-spacing: -0.02em;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-  transition: color 200ms ease;
-  transform-origin: right center;
+.btn-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.total-amount.bump {
-  animation: totalBump 220ms cubic-bezier(.3,1.4,.5,1);
-}
-
-.total-amount.nonzero {
-  color: var(--primary);
-}
-
-/* ─── TEXT BLOCK ─── */
-
-.text-block {
-  background: var(--surface-1);
-  border-radius: var(--radius-xl);
-  padding: 18px 20px;
-  color: var(--muted);
-  font-size: 13.5px;
-  line-height: 1.6;
-}
-
-/* ─── FORM CARD ─── */
-
-.form-card {
-  background: var(--surface-1);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-}
-
-.form-head {
-  padding: 20px 20px 18px;
-  display: grid;
-  grid-template-columns: 44px 1fr;
-  gap: 14px;
-  align-items: center;
-}
-
-.form-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 16px;
-  background: var(--secondary-bg);
-  color: var(--secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.form-avatar svg { width: 22px; height: 22px; }
-
-.form-head-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--on-surface);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.form-head-sub {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 2px;
-}
-
-.form-divider {
-  height: 1px;
-  background: rgba(255,255,255,0.07);
-  margin: 0 20px 20px;
-}
-
-.form-body {
-  padding: 0 20px 20px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.field.full { grid-column: 1 / -1; }
-
-.label {
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-input, textarea {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: var(--surface-2);
-  color: var(--on-surface);
-  border-radius: var(--radius-m);
-  padding: 14px 15px;
-  font-size: 14px;
-  transition: background 150ms ease;
-}
-
-input::placeholder, textarea::placeholder { color: var(--muted-2); }
-
-input:focus, textarea:focus {
-  background: var(--surface-3);
-}
-
-textarea {
-  min-height: 92px;
-  resize: vertical;
-}
-
-/* ─── SUBMIT ─── */
-
-.submit-wrap {
-  margin-top: 12px;
-}
-
-/* Ripple */
-.submit-btn {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  min-height: 56px;
-  border: none;
-  border-radius: 999px;
-  background: var(--primary-bg);
-  color: var(--primary);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: filter 120ms ease, transform 80ms ease;
-}
-
-.submit-btn:hover {
-  filter: brightness(1.06);
-}
-
-.submit-btn:active { transform: scale(0.985); filter: brightness(0.95); }
-.submit-btn:disabled { opacity: 0.38; cursor: not-allowed; filter: none; transform: none; }
-
-.submit-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-.ripple-el {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(0,46,106,0.25);
-  transform: scale(0);
-  animation: ripple 500ms linear;
-  pointer-events: none;
-}
-
-@keyframes ripple {
-  to { transform: scale(4); opacity: 0; }
-}
-
-/* ─── MESSAGE ─── */
+/* MESSAGE */
 
 .message {
   display: none;
-  padding: 16px 18px;
-  border-radius: var(--radius-l);
-  font-size: 13px;
-  line-height: 1.5;
+  padding: 16px;
+  border-radius: 12px;
   text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
-.message.success { display: block; background: var(--green-bg); color: var(--green); }
-.message.error   { display: block; background: var(--red-bg);   color: var(--red); }
+.message.success {
+  display: block;
+  background: var(--green-bg);
+  color: var(--green);
+}
 
-/* ─── EXPIRES ─── */
+.message.error {
+  display: block;
+  background: var(--red-bg);
+  color: var(--red);
+}
 
 .expires {
   margin-top: 20px;
   text-align: center;
   color: var(--muted-2);
   font-size: 11px;
+  line-height: 1.4;
 }
 
-/* ─── RESPONSIVE ─── */
-
-@media (min-width: 640px) {
-  .shell { padding: 0 24px; }
-  .topbar { height: 72px; }
-  .hero { padding: 24px 0 44px; }
-  .content-flow { gap: 14px; }
+.search-empty {
+  display: none;
+  padding: 28px 16px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
 }
+
+/* MICRO FEEDBACK */
+
+@keyframes bump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.bump {
+  animation: bump 0.2s ease-out;
+}
+
+/* RESPONSIVE */
 
 @media (max-width: 520px) {
-  .form-grid { grid-template-columns: 1fr; }
-  .products-body.scrollable { max-height: 48vh; }
+  .shell {
+    padding: 0 14px;
+  }
+
+  .form-body {
+    grid-template-columns: 1fr;
+  }
+
+  .scroll-container {
+    max-height: 48vh;
+  }
+
+  .hero-title {
+    font-size: 30px;
+  }
 }
 
 @media (max-width: 380px) {
-  .hero-title { font-size: 26px; }
-  .section-header { flex-direction: column; }
-  .product-item { grid-template-columns: 1fr; gap: 12px; padding: 18px 16px; }
-  .stepper { align-self: start; }
-  .total-bar { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .total-amount { font-size: 24px; }
-  .form-head { grid-template-columns: 1fr; }
-  .form-avatar { display: none; }
+  .product-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .stepper {
+    align-self: flex-start;
+  }
+
+  .total-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .total-val {
+    text-align: left;
+    font-size: 22px;
+  }
 }
 </style>
 </head>
 
 <body>
-<main class="page">
-  <div class="shell">
+<main class="shell">
+  <header class="topbar animate">
+    <div class="logo-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+    </div>
+    <span class="brand-name">${safeBrand}</span>
+  </header>
 
-    <header class="topbar">
-      <div class="topbar-logo">
-        <svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.28L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95M11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05Z"/></svg>
-      </div>
-      <span class="topbar-name">Amaru Electric</span>
-      <span class="topbar-chip">Cotizador</span>
-    </header>
+  <section class="hero animate" style="animation-delay: 0.1s">
+    <p class="hero-sub">${safeHeroSubtitle}</p>
+  </section>
 
-    <section class="hero">
-      <div class="hero-label">Cotizador online</div>
-      <h1 class="hero-title">Solicita tu cotización</h1>
-      <p class="hero-sub">Selecciona los productos que necesitas y envía tu solicitud en segundos.</p>
-    </section>
+  <div id="content" class="content-flow"></div>
+  <div id="message" class="message"></div>
 
-    <div id="content" class="content-flow"></div>
-    <div id="message" class="message" style="margin-top:12px"></div>
-
-    <p class="expires">
-      Este enlace expira el <span id="expiresAt"></span>
-    </p>
-
-  </div>
+  <p class="expires">
+    Este enlace expira el <span id="expiresAt"></span>
+  </p>
 </main>
 
 <script>
@@ -800,10 +686,17 @@ function bump(el) {
 function updateSelectedCount() {
   const inputs = document.querySelectorAll('[data-kind="product-quantity"]');
   let selected = 0;
-  inputs.forEach((inp) => { if (Number(inp.value || 0) > 0) selected++; });
+
+  inputs.forEach((input) => {
+    if (Number(input.value || 0) > 0) selected++;
+  });
+
   const badge = document.getElementById("productsSelected");
+
   if (badge) {
-    badge.textContent = selected === 1 ? "1 seleccionado" : selected + " seleccionados";
+    badge.textContent =
+      selected === 1 ? "1 seleccionado" : selected + " seleccionados";
+
     badge.classList.toggle("has-selection", selected > 0);
   }
 }
@@ -811,292 +704,312 @@ function updateSelectedCount() {
 function updateTotal() {
   const inputs = document.querySelectorAll('[data-kind="product-quantity"]');
   let total = 0;
-  inputs.forEach((inp) => { total += Number(inp.value || 0) * Number(inp.dataset.productPrice || 0); });
-  const el = document.getElementById("totalValue");
-  if (el) {
-    el.textContent = formatCurrency(total);
-    el.classList.toggle("nonzero", total > 0);
-    bump(el);
+
+  inputs.forEach((input) => {
+    total += Number(input.value || 0) * Number(input.dataset.productPrice || 0);
+  });
+
+  const totalValue = document.getElementById("totalValue");
+
+  if (totalValue) {
+    totalValue.textContent = formatCurrency(total);
+    totalValue.classList.toggle("nonzero", total > 0);
+    bump(totalValue);
   }
+
   updateSelectedCount();
 }
 
-/* ── TEXT ── */
-function renderText(c) {
-  const d = document.createElement("div");
-  d.className = "text-block animate";
-  d.textContent = c.value || "";
-  return d;
+function renderText(component) {
+  const box = document.createElement("div");
+  box.className = "card animate";
+  box.style.padding = "18px 20px";
+  box.style.color = "var(--muted)";
+  box.style.fontSize = "13.5px";
+  box.style.lineHeight = "1.6";
+  box.textContent = component.value || "";
+  return box;
 }
 
-/* ── PRODUCTS ── */
-function renderProducts(c) {
-  const wrap = document.createElement("div");
-  wrap.className = "card animate";
+function renderForm(component) {
+  const card = document.createElement("div");
+  card.className = "card animate";
 
-  /* header */
-  const hdr = document.createElement("div");
-  hdr.className = "section-header";
-  hdr.innerHTML = \`
-    <div class="section-heading">
-      <div class="section-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2ZM7.2 14.5h7.45c.75 0 1.41-.41 1.75-1.03L20 6.96 18.25 6l-3.6 6.5H7.63L3.85 4H1v2h1.55l3.6 8.12L4.8 16.5C4.3 17.39 4.94 18.5 5.96 18.5H19v-2H6.42l.78-2Z"/>
-        </svg>
-      </div>
-      <div>
-        <div class="section-label">Catálogo</div>
-        <div class="section-title">Productos</div>
-      </div>
-    </div>
-    <div class="badge" id="productsSelected">0 seleccionados</div>
+  const header = document.createElement("div");
+  header.className = "form-header";
+  header.innerHTML = \`
+    <div class="section-title">Mis datos</div>
+    <div class="section-sub">Completa la información para contactarte.</div>
   \`;
-  wrap.appendChild(hdr);
+  card.appendChild(header);
 
-  /* search */
-  const sw = document.createElement("div");
-  sw.className = "search-wrap";
-  sw.innerHTML = \`
-    <div class="search-inner">
-      <div class="search-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-      </div>
-      <input class="search-input" id="productsSearch" type="text" placeholder="Buscar productos" autocomplete="off" />
-    </div>
-  \`;
-  wrap.appendChild(sw);
-
-  /* body */
   const body = document.createElement("div");
-  const isScrollable = Array.isArray(c.items) && c.items.length >= 12;
-  body.className = "products-body" + (isScrollable ? " scrollable" : "");
+  body.className = "form-body";
+
+  component.fields.forEach((field) => {
+    const fieldWrap = document.createElement("div");
+    fieldWrap.className = "field";
+
+    if (field.inputType === "textarea") {
+      fieldWrap.classList.add("full");
+    }
+
+    const label = document.createElement("label");
+    label.className = "label";
+    label.textContent = field.label + (field.required ? " *" : "");
+
+    const input =
+      field.inputType === "textarea"
+        ? document.createElement("textarea")
+        : document.createElement("input");
+
+    if (field.inputType !== "textarea") {
+      input.type = field.inputType || "text";
+    }
+
+    input.name = field.name;
+    input.dataset.kind = "form-field";
+    input.placeholder = field.placeholder || "";
+
+    if (field.required) {
+      input.required = true;
+    }
+
+    fieldWrap.appendChild(label);
+    fieldWrap.appendChild(input);
+    body.appendChild(fieldWrap);
+  });
+
+  card.appendChild(body);
+  return card;
+}
+
+function renderProducts(component) {
+  const card = document.createElement("div");
+  card.className = "card animate";
+
+  const header = document.createElement("div");
+  header.className = "products-header";
+  header.innerHTML = \`
+    <div>
+      <div class="section-title">Catálogo</div>
+      <div class="section-sub">Busca y selecciona productos.</div>
+    </div>
+    <div class="products-badge" id="productsSelected">0 seleccionados</div>
+  \`;
+  card.appendChild(header);
+
+  const searchWrap = document.createElement("div");
+  searchWrap.className = "search-box";
+  searchWrap.innerHTML = \`
+    <div class="search-shell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input type="text" class="search-input" placeholder="Buscar componentes..." id="productsSearch" autocomplete="off" />
+    </div>
+  \`;
+  card.appendChild(searchWrap);
+
+  const scrollContainer = document.createElement("div");
+  scrollContainer.className = "scroll-container";
 
   const list = document.createElement("div");
   list.className = "product-list";
   list.id = "productsList";
 
-  /* empty state for search */
   const emptySearch = document.createElement("div");
   emptySearch.className = "search-empty";
-  emptySearch.innerHTML = \`<div class="search-empty-icon">🔍</div>Sin resultados para tu búsqueda\`;
+  emptySearch.textContent = "Sin resultados para tu búsqueda.";
 
-  if (!Array.isArray(c.items) || c.items.length === 0) {
-    list.innerHTML = "<div style='padding:24px 16px;color:var(--muted);font-size:13px;text-align:center'>No hay productos disponibles.</div>";
-    body.appendChild(list);
-    wrap.appendChild(body);
-    return wrap;
+  if (!Array.isArray(component.items) || component.items.length === 0) {
+    list.innerHTML =
+      "<div style='padding:24px 16px;color:var(--muted);font-size:13px;text-align:center'>No hay productos disponibles.</div>";
+
+    scrollContainer.appendChild(list);
+    card.appendChild(scrollContainer);
+    return card;
   }
 
-  c.items.forEach((item) => {
+  component.items.forEach((item) => {
     const row = document.createElement("div");
     row.className = "product-item";
     row.dataset.search = String((item.name || "") + " " + (item.description || "")).toLowerCase();
 
     const info = document.createElement("div");
-    info.innerHTML = \`
-      <div class="product-name">\${item.name || "Producto"}</div>
-      \${item.description ? \`<div class="product-desc">\${item.description}</div>\` : ""}
-      <div class="product-price">\${formatCurrency(item.price || 0)}</div>
-    \`;
+    info.className = "product-info";
+
+    const name = document.createElement("div");
+    name.className = "p-name";
+    name.textContent = item.name || "Producto";
+
+    const desc = document.createElement("div");
+    desc.className = "p-desc";
+    desc.textContent = item.description || "";
+
+    const price = document.createElement("div");
+    price.className = "p-price";
+    price.textContent = formatCurrency(item.price || 0);
+
+    info.appendChild(name);
+    if (item.description) info.appendChild(desc);
+    info.appendChild(price);
 
     const stepper = document.createElement("div");
     stepper.className = "stepper";
 
-    const minus = document.createElement("button");
-    minus.className = "step-btn";
-    minus.type = "button";
-    minus.setAttribute("aria-label", "Disminuir cantidad");
-    minus.innerHTML = "<svg viewBox='0 0 24 24' fill='none'><path d='M5 12h14' stroke='currentColor' stroke-width='2' stroke-linecap='round'/></svg>";
+    const minusBtn = document.createElement("button");
+    minusBtn.className = "step-btn";
+    minusBtn.type = "button";
+    minusBtn.setAttribute("aria-label", "Disminuir cantidad");
+    minusBtn.innerHTML =
+      "<svg viewBox='0 0 24 24' fill='none'><path d='M5 12h14' stroke='currentColor' stroke-width='2' stroke-linecap='round'/></svg>";
 
-    const valEl = document.createElement("div");
-    valEl.className = "step-val";
-    valEl.textContent = "0";
+    const valueEl = document.createElement("div");
+    valueEl.className = "step-val";
+    valueEl.textContent = "0";
 
-    const plus = document.createElement("button");
-    plus.className = "step-btn";
-    plus.type = "button";
-    plus.setAttribute("aria-label", "Aumentar cantidad");
-    plus.innerHTML = "<svg viewBox='0 0 24 24' fill='none'><path d='M12 5v14M5 12h14' stroke='currentColor' stroke-width='2' stroke-linecap='round'/></svg>";
+    const plusBtn = document.createElement("button");
+    plusBtn.className = "step-btn";
+    plusBtn.type = "button";
+    plusBtn.setAttribute("aria-label", "Aumentar cantidad");
+    plusBtn.innerHTML =
+      "<svg viewBox='0 0 24 24' fill='none'><path d='M12 5v14M5 12h14' stroke='currentColor' stroke-width='2' stroke-linecap='round'/></svg>";
 
-    const hidden = document.createElement("input");
-    hidden.type = "number";
-    hidden.min = "0";
-    hidden.value = "0";
-    hidden.className = "qty-hidden";
-    hidden.dataset.productId = item.id;
-    hidden.dataset.productPrice = String(item.price || 0);
-    hidden.dataset.kind = "product-quantity";
+    const hiddenInput = document.createElement("input");
+    hiddenInput.type = "number";
+    hiddenInput.min = "0";
+    hiddenInput.value = "0";
+    hiddenInput.className = "qty-hidden";
+    hiddenInput.dataset.productId = item.id;
+    hiddenInput.dataset.productPrice = String(item.price || 0);
+    hiddenInput.dataset.kind = "product-quantity";
 
-    function sync(v) {
-      const s = Math.max(0, Number(v) || 0);
-      hidden.value = String(s);
-      valEl.textContent = String(s);
-      bump(valEl);
+    function syncQty(value) {
+      const safe = Math.max(0, Number(value) || 0);
 
-      const active = s > 0;
-      stepper.classList.toggle("has-qty", active);
+      hiddenInput.value = String(safe);
+      valueEl.textContent = String(safe);
+
+      bump(valueEl);
+
+      const active = safe > 0;
       row.classList.toggle("is-selected", active);
+      stepper.classList.toggle("has-qty", active);
+
       updateTotal();
     }
 
-    minus.addEventListener("click", () => sync(Number(hidden.value) - 1));
-    plus.addEventListener("click", () => sync(Number(hidden.value) + 1));
+    minusBtn.addEventListener("click", () => syncQty(Number(hiddenInput.value) - 1));
+    plusBtn.addEventListener("click", () => syncQty(Number(hiddenInput.value) + 1));
 
-    stepper.appendChild(minus);
-    stepper.appendChild(valEl);
-    stepper.appendChild(plus);
-    stepper.appendChild(hidden);
+    stepper.appendChild(minusBtn);
+    stepper.appendChild(valueEl);
+    stepper.appendChild(plusBtn);
+    stepper.appendChild(hiddenInput);
 
     row.appendChild(info);
     row.appendChild(stepper);
     list.appendChild(row);
   });
 
-  body.appendChild(list);
-  body.appendChild(emptySearch);
-  wrap.appendChild(body);
+  scrollContainer.appendChild(list);
+  scrollContainer.appendChild(emptySearch);
+  card.appendChild(scrollContainer);
 
-  /* total */
-  const totalRow = document.createElement("div");
-  totalRow.className = "total-bar";
-  totalRow.innerHTML = \`
-    <div class="total-label">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M4 4h16v16H4V4Zm2 2v12h12V6H6Zm2 2h8v2H8V8Zm0 4h8v2H8v-2Z"/>
-      </svg>
-      <span>Total estimado</span>
-    </div>
-    <div class="total-amount" id="totalValue">\${formatCurrency(0)}</div>
+  const total = document.createElement("div");
+  total.className = "total-bar";
+  total.innerHTML = \`
+    <div class="total-label">Total estimado</div>
+    <div class="total-val" id="totalValue">\${formatCurrency(0)}</div>
   \`;
-  wrap.appendChild(totalRow);
+  card.appendChild(total);
 
-  /* search filter */
-  sw.querySelector("#productsSearch").addEventListener("input", (e) => {
-    const q = e.target.value.toLowerCase().trim();
+  const searchInput = searchWrap.querySelector("#productsSearch");
+
+  searchInput.addEventListener("input", (event) => {
+    const value = event.target.value.toLowerCase().trim();
     let visible = 0;
-    list.querySelectorAll(".product-item").forEach((el) => {
-      const match = el.dataset.search.includes(q);
-      el.style.display = match ? "grid" : "none";
+
+    list.querySelectorAll(".product-item").forEach((product) => {
+      const match = product.dataset.search.includes(value);
+      product.style.display = match ? "flex" : "none";
       if (match) visible++;
     });
+
     emptySearch.style.display = visible === 0 ? "block" : "none";
   });
 
-  return wrap;
+  return card;
 }
 
-/* ── FORM ── */
-function renderForm(c) {
-  const wrap = document.createElement("div");
-  wrap.className = "form-card animate";
-
-  const head = document.createElement("div");
-  head.className = "form-head";
-  head.innerHTML = \`
-    <div class="form-avatar">
-      <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v1h20v-1c0-3.3-6.7-5-10-5Z"/>
-      </svg>
-    </div>
-    <div>
-      <div class="form-head-title">Mis datos</div>
-      <div class="form-head-sub">Completa tu información de contacto</div>
-    </div>
-  \`;
-  wrap.appendChild(head);
-
-  const divider = document.createElement("div");
-  divider.className = "form-divider";
-  wrap.appendChild(divider);
-
-  const body = document.createElement("div");
-  body.className = "form-body";
-  const grid = document.createElement("div");
-  grid.className = "form-grid";
-
-  c.fields.forEach((field) => {
-    const fw = document.createElement("div");
-    fw.className = "field" + (field.inputType === "textarea" ? " full" : "");
-
-    const lbl = document.createElement("label");
-    lbl.className = "label";
-    lbl.textContent = field.label + (field.required ? " *" : "");
-
-    const inp = field.inputType === "textarea"
-      ? document.createElement("textarea")
-      : document.createElement("input");
-
-    if (field.inputType !== "textarea") inp.type = field.inputType || "text";
-    inp.name = field.name;
-    inp.dataset.kind = "form-field";
-    inp.placeholder = field.placeholder || "";
-    if (field.required) inp.required = true;
-
-    fw.appendChild(lbl);
-    fw.appendChild(inp);
-    grid.appendChild(fw);
-  });
-
-  body.appendChild(grid);
-  wrap.appendChild(body);
-  return wrap;
-}
-
-/* ── BUTTON ── */
-function renderButton(c) {
-  const wrap = document.createElement("div");
-  wrap.className = "submit-wrap animate";
-
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = "submit-btn";
-  btn.innerHTML = \`
+function renderButton(component) {
+  const button = document.createElement("button");
+  button.className = "btn-submit animate";
+  button.type = "button";
+  button.innerHTML = \`
+    <span>\${component.label || "Enviar cotización"}</span>
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/>
+      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
     </svg>
-    <span>\${c.label || "Enviar cotización"}</span>
   \`;
 
-  /* ripple */
-  btn.addEventListener("click", function(e) {
-    const rect = btn.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = e.clientX - rect.left - size / 2;
-    const y = e.clientY - rect.top - size / 2;
-    const ripple = document.createElement("span");
-    ripple.className = "ripple-el";
-    ripple.style.cssText = \`width:\${size}px;height:\${size}px;left:\${x}px;top:\${y}px\`;
-    btn.appendChild(ripple);
-    ripple.addEventListener("animationend", () => ripple.remove());
-    onSubmit(btn, c.label || "Enviar cotización");
+  button.addEventListener("click", () => {
+    onSubmit(button, component.label || "Enviar cotización");
   });
 
-  wrap.appendChild(btn);
-  return wrap;
+  return button;
 }
 
-function renderComponent(c) {
-  switch (c.type) {
-    case "text":     return renderText(c);
-    case "products": return renderProducts(c);
-    case "form":     return renderForm(c);
-    case "button":   return renderButton(c);
-    default:         return document.createElement("div");
+function renderComponent(component) {
+  switch (component.type) {
+    case "form":
+      return renderForm(component);
+
+    case "products":
+      return renderProducts(component);
+
+    case "text":
+      return renderText(component);
+
+    case "button":
+      return renderButton(component);
+
+    default:
+      return document.createElement("div");
   }
 }
 
-function getPriority(c) {
-  return { form: 1, products: 2, text: 3, button: 4 }[c.type] ?? 9;
+function getComponentPriority(component) {
+  switch (component.type) {
+    case "form":
+      return 1;
+
+    case "products":
+      return 2;
+
+    case "text":
+      return 3;
+
+    case "button":
+      return 4;
+
+    default:
+      return 9;
+  }
 }
 
-/* ── SUBMIT ── */
-async function onSubmit(btn, originalLabel) {
+async function onSubmit(button, originalLabel) {
   const selectedItems = [];
-  document.querySelectorAll('[data-kind="product-quantity"]').forEach((inp) => {
-    const qty = Number(inp.value || 0);
-    if (qty > 0 && inp.dataset.productId) selectedItems.push({ productId: inp.dataset.productId, quantity: qty });
+
+  document.querySelectorAll('[data-kind="product-quantity"]').forEach((input) => {
+    const quantity = Number(input.value || 0);
+    const productId = input.dataset.productId;
+
+    if (quantity > 0 && productId) {
+      selectedItems.push({ productId, quantity });
+    }
   });
 
   if (selectedItems.length === 0) {
@@ -1105,67 +1018,77 @@ async function onSubmit(btn, originalLabel) {
   }
 
   const customer = {};
-  for (const field of document.querySelectorAll('[data-kind="form-field"]')) {
-    const val = String(field.value || "").trim();
-    if (field.required && !val) {
+  const formFields = document.querySelectorAll('[data-kind="form-field"]');
+
+  for (const field of formFields) {
+    const value = String(field.value || "").trim();
+
+    if (field.required && !value) {
       field.focus();
       showMessage("error", "Completa los campos obligatorios.");
       return;
     }
-    customer[field.name] = val;
+
+    customer[field.name] = value;
   }
 
   try {
-    btn.disabled = true;
-    btn.innerHTML = \`
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .8s linear infinite;width:18px;height:18px">
-        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-      </svg>
-      <span>Enviando…</span>
-    \`;
+    button.disabled = true;
+    button.textContent = "Enviando...";
 
-    const res = await fetch("/api/runtime-links/" + token + "/submit", {
+    const response = await fetch("/api/runtime-links/" + token + "/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ customer, items: selectedItems, raw: { submittedAtClient: new Date().toISOString() } })
+      body: JSON.stringify({
+        customer,
+        items: selectedItems,
+        raw: {
+          submittedAtClient: new Date().toISOString()
+        }
+      })
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
-    if (!res.ok) {
+    if (!response.ok) {
       showMessage("error", data.message || "No se pudo enviar la solicitud.");
-      btn.disabled = false;
-      btn.innerHTML = \`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg><span>\${originalLabel}</span>\`;
+      button.disabled = false;
+      button.innerHTML = \`
+        <span>\${originalLabel}</span>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+        </svg>
+      \`;
       return;
     }
 
     showMessage("success", data.message || successMessage);
   } catch (_) {
     showMessage("error", "Ocurrió un error al enviar la solicitud.");
-    btn.disabled = false;
-    btn.innerHTML = \`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg><span>\${originalLabel}</span>\`;
+    button.disabled = false;
+    button.innerHTML = \`
+      <span>\${originalLabel}</span>
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+      </svg>
+    \`;
   }
 }
 
-/* spin keyframe for loading state */
-const style = document.createElement("style");
-style.textContent = "@keyframes spin { to { transform: rotate(360deg); } }";
-document.head.appendChild(style);
-
 [...config.components]
-  .sort((a, b) => getPriority(a) - getPriority(b))
-  .forEach((c, i) => {
-    const el = renderComponent(c);
-    /* stagger delay per element */
-    if (el.classList.contains("animate")) {
-      el.style.animationDelay = (80 + i * 60) + "ms";
+  .sort((a, b) => getComponentPriority(a) - getComponentPriority(b))
+  .forEach((component, index) => {
+    const element = renderComponent(component);
+
+    if (element.classList.contains("animate")) {
+      element.style.animationDelay = 0.2 + index * 0.1 + "s";
     }
-    contentEl.appendChild(el);
+
+    contentEl.appendChild(element);
   });
 
 updateTotal();
 </script>
-
 </body>
 </html>`;
 }
