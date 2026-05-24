@@ -27,7 +27,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
 <style>
 :root {
-  --bg: #0a0b0d;
+  --bg: #0f1011;
 
   --surface-1: #16191f;
   --surface-2: #21262e;
@@ -188,7 +188,7 @@ button {
   border-radius: var(--radius-xl);
   margin-bottom: 0;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.05);
+
 }
 
 /* FORM */
@@ -240,14 +240,12 @@ input,
 textarea {
   width: 100%;
   background: var(--surface-2);
-  border: 1px solid transparent;
   border-radius: 12px;
   padding: 14px;
   color: var(--on-surface);
   font-size: 15px;
   outline: none;
   transition:
-    border-color 0.2s ease,
     background 0.2s ease;
 }
 
@@ -258,7 +256,6 @@ textarea::placeholder {
 
 input:focus,
 textarea:focus {
-  border-color: var(--primary);
   background: var(--surface-3);
 }
 
@@ -471,7 +468,7 @@ textarea {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+
 }
 
 .total-label {
