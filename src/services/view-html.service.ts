@@ -20,30 +20,30 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
 <style>
 :root {
-  --bg:           #1a1c1e;
-  --surface-1:    #21242a;
-  --surface-2:    #272b32;
-  --surface-3:    #2d3139;
+  --bg:           #1b1d20;
+  --surface-1:    #23272f;
+  --surface-2:    #2a2f38;
+  --surface-3:    #333845;
 
-  --on-bg:        #e2e2e6;
-  --on-surface:   #e2e2e6;
-  --on-surface-v: #c5c6cb;
+  --on-bg:        #e7e9ee;
+  --on-surface:   #eef1f7;
+  --on-surface-v: #c8ced8;
 
-  --primary:      #aac7ff;
-  --primary-c:    #002e6a;
-  --primary-bg:   #1b2d45;
-  --primary-bg-2: #22375a;
+  --primary:      #9fc2ff;
+  --primary-c:    #06224d;
+  --primary-bg:   #1f3150;
+  --primary-bg-2: #29406a;
 
-  --secondary:    #bfc8db;
-  --secondary-bg: #232c3b;
+  --secondary:    #c2cad9;
+  --secondary-bg: #2a3242;
 
-  --muted:        #8d9199;
-  --muted-2:      #5f6368;
+  --muted:        #9096a3;
+  --muted-2:      #676d79;
 
-  --green:        #6dd58c;
-  --green-bg:     #0a3818;
-  --red:          #ffb4ab;
-  --red-bg:       #690005;
+  --green:        #79d59d;
+  --green-bg:     #143122;
+  --red:          #ffb1aa;
+  --red-bg:       #4a1717;
 
   --radius-s:  12px;
   --radius-m:  16px;
@@ -284,7 +284,7 @@ button { touch-action: manipulation; cursor: pointer; }
 /* ─── PRODUCT LIST ─── */
 
 .products-body {
-  padding: 0 10px 10px;
+  padding: 0 12px 12px;
 }
 
 .products-body.scrollable {
@@ -302,7 +302,7 @@ button { touch-action: manipulation; cursor: pointer; }
   border-radius: 999px;
 }
 
-.product-list { display: grid; gap: 6px; }
+.product-list { display: grid; gap: 8px; }
 
 /* ─── PRODUCT ITEM ─── */
 
@@ -311,7 +311,7 @@ button { touch-action: manipulation; cursor: pointer; }
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 18px;
-  padding: 17px 14px 17px 16px;
+  padding: 18px 16px;
   border-radius: var(--radius-m);
   transition: background 120ms ease;
 }
@@ -387,8 +387,8 @@ button { touch-action: manipulation; cursor: pointer; }
 }
 
 .step-btn svg {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
   display: block;
 }
 
