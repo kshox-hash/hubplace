@@ -31,7 +31,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 
   --surface-1: #16191f;
   --surface-2: #1b1f25;
-  --surface-3: #2a303c;
+  --surface-3: #1a1d24;
 
   --on-bg: #f3f4f6;
   --on-surface: #ffffff;
