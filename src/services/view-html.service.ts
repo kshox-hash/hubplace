@@ -5,7 +5,7 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   const safeSuccessMessage = escapeHtml(
     record.config.successMessage || "Solicitud enviada correctamente."
   );
-
+  const safeTitle = escapeHtml(record.config.title || "Cotizador online");
   const configJson = JSON.stringify(record.config);
 
   return `<!doctype html>
@@ -13,98 +13,87 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Cotizador online</title>
-
+<title>${safeTitle}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&family=Google+Sans+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Google+Sans+Display:wght@400;500&display=swap" rel="stylesheet" />
 
 <style>
 :root {
-  --bg: #1a1c1e;
-  --surface-1: #23262d;
-  --surface-2: #2b3038;
-  --surface-3: #353b45;
-  --surface-hover: #303641;
+  --bg:           #1a1c1e;
+  --surface-1:    #21242a;
+  --surface-2:    #272b32;
+  --surface-3:    #2d3139;
 
-  --product-bg: #2c323c;
-  --product-hover: #37404c;
+  --on-bg:        #e2e2e6;
+  --on-surface:   #e2e2e6;
+  --on-surface-v: #c5c6cb;
 
-  --input-bg: #2b3038;
-  --input-focus: #363f4d;
+  --primary:      #aac7ff;
+  --primary-c:    #002e6a;
+  --primary-bg:   #1b2d45;
+  --primary-bg-2: #22375a;
 
-  --on-bg: #f0f2f6;
-  --on-surface: #f4f6fb;
-  --on-surface-v: #d4d8e0;
+  --secondary:    #bfc8db;
+  --secondary-bg: #232c3b;
 
-  --muted: #b3b8c2;
-  --muted-2: #969ca8;
+  --muted:        #8d9199;
+  --muted-2:      #5f6368;
 
-  --outline: rgba(255,255,255,0.12);
-  --outline-soft: rgba(255,255,255,0.075);
+  --green:        #6dd58c;
+  --green-bg:     #0a3818;
+  --red:          #ffb4ab;
+  --red-bg:       #690005;
 
-  --primary: #b8ccff;
-  --primary-strong: #dce6ff;
-  --primary-container: #253957;
-  --primary-on: #071b36;
-
-  --success: #86dea4;
-  --success-bg: #153923;
-
-  --error: #ffb4ab;
-  --error-bg: #4b1718;
-
-  --radius-m: 16px;
-  --radius-l: 22px;
+  --radius-s:  12px;
+  --radius-m:  16px;
+  --radius-l:  20px;
   --radius-xl: 28px;
 
-  --page-max: 880px;
+  --page-max: 840px;
   --safe-b: env(safe-area-inset-bottom, 0px);
+
+  --elev-1: 0 1px 2px rgba(0,0,0,.3), 0 1px 3px 1px rgba(0,0,0,.15);
+  --elev-2: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15);
+  --elev-3: 0 4px 8px 3px rgba(0,0,0,.15), 0 1px 3px rgba(0,0,0,.3);
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
-  margin: 0;
-  padding: 0;
+  margin: 0; padding: 0;
 }
 
-html,
-body {
-  min-height: 100vh;
-}
+html, body { min-height: 100vh; }
 
 body {
   background: var(--bg);
   color: var(--on-bg);
-  font-family:
-    "Google Sans",
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family: "Google Sans", system-ui, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  text-rendering: geometricPrecision;
 }
 
-button,
-input,
-textarea {
-  font: inherit;
-  color: inherit;
+button, input, textarea { font: inherit; color: inherit; }
+button { touch-action: manipulation; cursor: pointer; }
+
+/* ─── ENTRANCE ANIMATION ─── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-button {
-  touch-action: manipulation;
-  cursor: pointer;
+.animate {
+  opacity: 0;
+  animation: fadeUp 320ms cubic-bezier(.2,.6,.4,1) forwards;
 }
+
+/* ─── PAGE ─── */
 
 .page {
   min-height: 100vh;
-  padding: 0 0 calc(34px + var(--safe-b));
+  padding: 0 0 calc(40px + var(--safe-b));
 }
 
 .shell {
@@ -114,21 +103,21 @@ button {
   padding: 0 16px;
 }
 
-/* TOPBAR */
+/* ─── TOPBAR ─── */
 
 .topbar {
-  min-height: 66px;
+  height: 64px;
   display: flex;
   align-items: center;
   gap: 12px;
+  animation: fadeUp 280ms cubic-bezier(.2,.6,.4,1) forwards;
 }
 
 .topbar-logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  background: var(--primary-container);
-  color: var(--primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,638 +125,580 @@ button {
 }
 
 .topbar-logo svg {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
+  width: 18px;
+  height: 18px;
+  fill: var(--primary);
 }
 
 .topbar-name {
-  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--on-surface-v);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  letter-spacing: 0.01em;
 }
 
 .topbar-chip {
   margin-left: auto;
-  padding: 7px 12px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background: var(--primary-container);
+  background: var(--primary-bg);
   color: var(--primary);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.055em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  white-space: nowrap;
 }
 
-/* HERO */
+/* ─── HERO ─── */
 
 .hero {
-  padding: 22px 0 30px;
+  padding: 20px 0 36px;
+  animation: fadeUp 300ms 60ms cubic-bezier(.2,.6,.4,1) both;
 }
 
 .hero-label {
-  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--primary);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.075em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  margin-bottom: 10px;
 }
 
 .hero-title {
-  max-width: 600px;
+  font-family: "Google Sans Display", "Google Sans", sans-serif;
+  font-size: clamp(28px, 6vw, 40px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
   color: var(--on-surface);
-  font-family:
-    "Google Sans Display",
-    "Google Sans",
-    system-ui,
-    sans-serif;
-  font-size: clamp(31px, 7vw, 44px);
-  line-height: 1.08;
-  font-weight: 600;
-  letter-spacing: -0.045em;
+  max-width: 560px;
 }
 
 .hero-sub {
-  max-width: 560px;
-  margin-top: 13px;
+  margin-top: 12px;
+  font-size: 14px;
   color: var(--muted);
-  font-size: 16px;
-  line-height: 1.55;
+  line-height: 1.6;
+  max-width: 460px;
 }
 
-/* CONTENT */
+/* ─── CONTENT ─── */
 
 .content-flow {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 
-/* SIN SOMBRAS */
+/* ─── CARD ─── */
 
-.card,
-.form-card,
-.text-block {
+.card {
   background: var(--surface-1);
   border-radius: var(--radius-xl);
+  box-shadow: var(--elev-1);
   overflow: hidden;
-  border: 1px solid var(--outline-soft);
 }
 
-/* SECTION HEADER */
+/* ─── SECTION HEADER ─── */
 
 .section-header {
-  padding: 22px 22px 16px;
+  padding: 20px 20px 14px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
 }
 
 .section-label {
-  margin-bottom: 5px;
+  font-size: 11px;
+  font-weight: 500;
   color: var(--primary);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.075em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
 .section-title {
+  font-size: 17px;
+  font-weight: 500;
   color: var(--on-surface);
-  font-size: 20px;
-  line-height: 1.18;
-  font-weight: 650;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .badge {
   flex-shrink: 0;
-  margin-top: 1px;
-  padding: 8px 13px;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: var(--primary-container);
+  background: var(--primary-bg);
   color: var(--primary);
-  font-size: 13px;
-  font-weight: 650;
+  font-size: 11.5px;
+  font-weight: 500;
   white-space: nowrap;
+  margin-top: 2px;
+  transition: background 200ms ease;
 }
 
-/* SEARCH */
+.badge.has-selection {
+  background: var(--primary-bg-2);
+}
+
+/* ─── SEARCH ─── */
 
 .search-wrap {
-  padding: 0 14px 14px;
+  padding: 0 12px 12px;
 }
 
 .search-inner {
-  min-height: 54px;
+  height: 48px;
   display: flex;
   align-items: center;
   border-radius: 999px;
-  background: var(--input-bg);
-  border: 1px solid var(--outline-soft);
-  padding: 0 8px 0 17px;
+  background: var(--surface-2);
+  padding: 0 6px 0 16px;
+  transition: background 150ms ease;
+}
+
+.search-inner:focus-within {
+  background: var(--surface-3);
 }
 
 .search-icon {
-  width: 22px;
-  margin-right: 11px;
+  width: 20px;
+  flex-shrink: 0;
   color: var(--muted);
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  margin-right: 10px;
 }
 
-.search-icon svg {
-  width: 20px;
-  height: 20px;
-  display: block;
-}
+.search-icon svg { width: 18px; height: 18px; display: block; }
 
 .search-input {
   flex: 1;
   min-width: 0;
-  height: 52px;
   border: none;
   outline: none;
   background: transparent;
   color: var(--on-surface);
-  font-size: 16px;
+  font-size: 14px;
 }
 
-.search-input::placeholder {
-  color: var(--muted-2);
-}
+.search-input::placeholder { color: var(--muted-2); }
 
-/* PRODUCTS */
+/* ─── PRODUCT LIST ─── */
 
 .products-body {
-  padding: 0 10px 10px;
+  padding: 0 8px 8px;
 }
 
 .products-body.scrollable {
-  max-height: min(56vh, 660px);
+  max-height: min(52vh, 560px);
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--surface-3) transparent;
 }
 
-.products-body.scrollable::-webkit-scrollbar {
-  width: 6px;
-}
-
-.products-body.scrollable::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+.products-body.scrollable::-webkit-scrollbar { width: 4px; }
+.products-body.scrollable::-webkit-scrollbar-track { background: transparent; }
 .products-body.scrollable::-webkit-scrollbar-thumb {
   background: var(--surface-3);
   border-radius: 999px;
 }
 
-.product-list {
-  display: grid;
-  gap: 8px;
-}
+.product-list { display: grid; gap: 2px; }
+
+/* ─── PRODUCT ITEM ─── */
 
 .product-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
-  min-height: 78px;
-  padding: 15px 14px 15px 16px;
-  border-radius: var(--radius-l);
-  background: var(--product-bg);
-  border: 1px solid var(--outline);
+  padding: 12px 12px 12px 14px;
+  border-radius: var(--radius-m);
   transition: background 120ms ease;
 }
 
-.product-item:hover {
-  background: var(--product-hover);
+.product-item:hover { background: var(--surface-2); }
+
+/* selected state */
+.product-item.is-selected {
+  background: var(--primary-bg);
+}
+
+.product-item.is-selected:hover {
+  background: var(--primary-bg-2);
 }
 
 .product-name {
-  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--on-surface);
-  font-size: 17px;
-  line-height: 1.25;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  overflow-wrap: anywhere;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  margin-bottom: 2px;
 }
 
 .product-desc {
+  font-size: 12px;
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.38;
+  line-height: 1.35;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .product-price {
-  margin-top: 7px;
-  color: var(--primary-strong);
-  font-size: 15px;
-  line-height: 1.15;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--primary);
   white-space: nowrap;
+  margin-top: 4px;
 }
 
-/* STEPPER */
+/* ─── STEPPER ─── */
 
 .stepper {
-  min-width: 132px;
-  height: 48px;
-  display: grid;
-  grid-template-columns: 44px 44px 44px;
+  display: flex;
   align-items: center;
+  height: 36px;
   border-radius: 999px;
-  overflow: hidden;
   background: var(--surface-3);
-  border: 1px solid var(--outline);
+  overflow: hidden;
+  transition: background 200ms ease;
+}
+
+.stepper.has-qty {
+  background: var(--primary-bg-2);
 }
 
 .step-btn {
-  width: 44px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: transparent;
   color: var(--on-surface-v);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   transition: background 100ms ease, color 100ms ease;
 }
 
-.step-btn svg {
-  width: 20px;
-  height: 20px;
+.stepper.has-qty .step-btn {
+  color: var(--primary);
 }
 
-.step-btn:hover {
-  background: rgba(255,255,255,0.07);
-  color: var(--on-surface);
-}
-
-.step-btn:active {
-  background: rgba(255,255,255,0.11);
-}
+.step-btn:hover { background: rgba(255,255,255,0.07); color: var(--on-surface); }
+.step-btn:active { background: rgba(255,255,255,0.12); }
 
 .step-val {
-  width: 44px;
+  width: 32px;
   text-align: center;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--on-surface);
-  font-size: 16px;
-  line-height: 1;
-  font-weight: 700;
   user-select: none;
+  transition: color 200ms ease;
 }
 
-.qty-hidden {
+.stepper.has-qty .step-val {
+  color: var(--primary);
+}
+
+@keyframes valBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.step-val.bump {
+  animation: valBounce 180ms cubic-bezier(.3,1.4,.5,1);
+}
+
+.qty-hidden { display: none; }
+
+/* ─── EMPTY SEARCH STATE ─── */
+
+.search-empty {
   display: none;
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-/* TOTAL */
+.search-empty-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+/* ─── TOTAL ─── */
 
 .total-bar {
-  margin: 12px 10px 10px;
-  padding: 18px 20px;
+  margin: 8px 8px 8px;
+  padding: 16px 18px;
   border-radius: var(--radius-l);
-  background: var(--primary-container);
-  border: 1px solid rgba(184,204,255,0.13);
+  background: var(--primary-bg);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
 }
 
 .total-label {
+  font-size: 12px;
+  font-weight: 500;
   color: var(--primary);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.055em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  white-space: nowrap;
+}
+
+@keyframes totalBump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 .total-amount {
+  font-family: "Google Sans Display", "Google Sans", sans-serif;
+  font-size: clamp(22px, 6vw, 28px);
+  font-weight: 400;
   color: var(--on-surface);
-  font-family:
-    "Google Sans Display",
-    "Google Sans",
-    system-ui,
-    sans-serif;
-  font-size: clamp(26px, 6vw, 34px);
+  letter-spacing: -0.02em;
   line-height: 1;
-  font-weight: 600;
-  letter-spacing: 0.035em;
   font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum" 1;
   text-align: right;
-  overflow-wrap: anywhere;
+  transition: color 200ms ease;
+  transform-origin: right center;
 }
 
-/* FORM */
+.total-amount.bump {
+  animation: totalBump 220ms cubic-bezier(.3,1.4,.5,1);
+}
+
+.total-amount.nonzero {
+  color: var(--primary);
+}
+
+/* ─── TEXT BLOCK ─── */
+
+.text-block {
+  background: var(--surface-1);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+  box-shadow: var(--elev-1);
+}
+
+/* ─── FORM CARD ─── */
+
+.form-card {
+  background: var(--surface-1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elev-1);
+  overflow: hidden;
+}
 
 .form-head {
-  padding: 22px;
+  padding: 20px 20px 18px;
   display: grid;
-  grid-template-columns: 48px 1fr;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
   align-items: center;
-  gap: 15px;
 }
 
 .form-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 999px;
-  background: var(--primary-container);
-  color: var(--primary);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--secondary-bg);
+  color: var(--secondary);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-.form-avatar svg {
-  width: 24px;
-  height: 24px;
-}
+.form-avatar svg { width: 22px; height: 22px; }
 
 .form-head-title {
+  font-size: 16px;
+  font-weight: 500;
   color: var(--on-surface);
-  font-size: 19px;
+  letter-spacing: -0.02em;
   line-height: 1.2;
-  font-weight: 650;
-  letter-spacing: -0.03em;
 }
 
 .form-head-sub {
-  margin-top: 4px;
+  font-size: 12px;
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.35;
+  margin-top: 2px;
 }
 
 .form-divider {
   height: 1px;
-  background: var(--outline-soft);
-  margin: 0 22px 20px;
+  background: rgba(255,255,255,0.07);
+  margin: 0 20px 20px;
 }
 
 .form-body {
-  padding: 0 22px 22px;
+  padding: 0 20px 20px;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 12px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
-.field.full {
-  grid-column: 1 / -1;
-}
+.field.full { grid-column: 1 / -1; }
 
 .label {
+  font-size: 11.5px;
+  font-weight: 500;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.2;
-  font-weight: 700;
-  letter-spacing: 0.045em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
-input,
-textarea {
+input, textarea {
   width: 100%;
-  min-height: 52px;
-  border: 1px solid var(--outline-soft);
+  border: none;
   outline: none;
-  background: var(--input-bg);
+  background: var(--surface-2);
   color: var(--on-surface);
   border-radius: var(--radius-m);
-  padding: 15px 16px;
-  font-size: 16px;
-  line-height: 1.3;
-  transition: background 120ms ease, border-color 120ms ease;
+  padding: 14px 15px;
+  font-size: 14px;
+  transition: background 150ms ease;
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: var(--muted-2);
-}
+input::placeholder, textarea::placeholder { color: var(--muted-2); }
 
-input:focus,
-textarea:focus {
-  background: var(--input-focus);
-  border-color: rgba(184,204,255,0.32);
+input:focus, textarea:focus {
+  background: var(--surface-3);
 }
 
 textarea {
-  min-height: 106px;
+  min-height: 92px;
   resize: vertical;
 }
 
-/* TEXT BLOCK */
-
-.text-block {
-  padding: 20px 22px;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.65;
-}
-
-/* SUBMIT */
+/* ─── SUBMIT ─── */
 
 .submit-wrap {
-  display: grid;
+  position: sticky;
+  bottom: calc(12px + var(--safe-b));
+  z-index: 10;
 }
 
+/* Ripple */
 .submit-btn {
+  position: relative;
+  overflow: hidden;
   width: 100%;
-  min-height: 58px;
+  min-height: 56px;
   border: none;
   border-radius: 999px;
   background: var(--primary);
-  color: var(--primary-on);
-  font-size: 16px;
-  line-height: 1;
-  font-weight: 700;
+  color: var(--primary-c);
+  font-size: 15px;
+  font-weight: 500;
   letter-spacing: 0.01em;
-  transition: filter 120ms ease, transform 80ms ease;
+  box-shadow: var(--elev-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: filter 120ms ease, transform 80ms ease, box-shadow 120ms ease;
 }
 
 .submit-btn:hover {
-  filter: brightness(1.04);
+  filter: brightness(1.06);
+  box-shadow: var(--elev-3), 0 0 0 8px rgba(170,199,255,0.08);
 }
 
-.submit-btn:active {
-  transform: scale(0.99);
-  filter: brightness(0.96);
+.submit-btn:active { transform: scale(0.985); filter: brightness(0.95); }
+.submit-btn:disabled { opacity: 0.38; cursor: not-allowed; filter: none; transform: none; box-shadow: none; }
+
+.submit-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.ripple-el {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0,46,106,0.25);
+  transform: scale(0);
+  animation: ripple 500ms linear;
+  pointer-events: none;
 }
 
-.submit-btn:disabled {
-  opacity: 0.42;
-  cursor: not-allowed;
-  filter: none;
-  transform: none;
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
 }
 
-/* MESSAGE */
+/* ─── MESSAGE ─── */
 
 .message {
   display: none;
-  margin-top: 14px;
-  padding: 17px 19px;
+  padding: 16px 18px;
   border-radius: var(--radius-l);
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.5;
   text-align: center;
-  border: 1px solid transparent;
 }
 
-.message.success {
-  display: block;
-  background: var(--success-bg);
-  color: var(--success);
-  border-color: rgba(134,222,164,0.2);
-}
+.message.success { display: block; background: var(--green-bg); color: var(--green); }
+.message.error   { display: block; background: var(--red-bg);   color: var(--red); }
 
-.message.error {
-  display: block;
-  background: var(--error-bg);
-  color: var(--error);
-  border-color: rgba(255,180,171,0.22);
-}
-
-/* EXPIRES */
+/* ─── EXPIRES ─── */
 
 .expires {
   margin-top: 20px;
   text-align: center;
   color: var(--muted-2);
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 11px;
 }
 
-/* RESPONSIVE */
+/* ─── RESPONSIVE ─── */
 
 @media (min-width: 640px) {
-  .shell {
-    padding: 0 24px;
-  }
-
-  .topbar {
-    min-height: 74px;
-  }
-
-  .hero {
-    padding: 28px 0 42px;
-  }
-
-  .content-flow {
-    gap: 18px;
-  }
+  .shell { padding: 0 24px; }
+  .topbar { height: 72px; }
+  .hero { padding: 24px 0 44px; }
+  .content-flow { gap: 14px; }
 }
 
-@media (max-width: 560px) {
-  .shell {
-    padding: 0 12px;
-  }
-
-  .hero {
-    padding: 18px 0 26px;
-  }
-
-  .hero-title {
-    font-size: 32px;
-  }
-
-  .hero-sub {
-    font-size: 15px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .products-body.scrollable {
-    max-height: 50vh;
-  }
-
-  .section-header,
-  .form-head,
-  .form-body {
-    padding-left: 18px;
-    padding-right: 18px;
-  }
-
-  .form-divider {
-    margin-left: 18px;
-    margin-right: 18px;
-  }
+@media (max-width: 520px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .products-body.scrollable { max-height: 48vh; }
 }
 
-@media (max-width: 420px) {
-  .topbar-chip {
-    display: none;
-  }
-
-  .section-header {
-    flex-direction: column;
-  }
-
-  .badge {
-    width: max-content;
-  }
-
-  .product-item {
-    grid-template-columns: 1fr;
-    align-items: start;
-    min-height: auto;
-  }
-
-  .stepper {
-    justify-self: start;
-  }
-
-  .total-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .total-amount {
-    text-align: left;
-    font-size: 27px;
-  }
-
-  .form-head {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .form-avatar {
-    display: none;
-  }
+@media (max-width: 380px) {
+  .hero-title { font-size: 26px; }
+  .section-header { flex-direction: column; }
+  .product-item { grid-template-columns: 1fr; gap: 10px; }
+  .stepper { align-self: start; }
+  .total-bar { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .total-amount { font-size: 24px; }
+  .form-head { grid-template-columns: 1fr; }
+  .form-avatar { display: none; }
 }
 </style>
 </head>
@@ -778,9 +709,7 @@ textarea {
 
     <header class="topbar">
       <div class="topbar-logo">
-        <svg viewBox="0 0 24 24">
-          <path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.28L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95M11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05Z"/>
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.28L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95M11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05Z"/></svg>
       </div>
       <span class="topbar-name">Amaru Electric</span>
       <span class="topbar-chip">Cotizador</span>
@@ -789,11 +718,11 @@ textarea {
     <section class="hero">
       <div class="hero-label">Cotizador online</div>
       <h1 class="hero-title">Solicita tu cotización</h1>
-      <p class="hero-sub">Completa tus datos, selecciona los productos que necesitas y envía tu solicitud.</p>
+      <p class="hero-sub">Selecciona los productos que necesitas y envía tu solicitud en segundos.</p>
     </section>
 
     <div id="content" class="content-flow"></div>
-    <div id="message" class="message"></div>
+    <div id="message" class="message" style="margin-top:12px"></div>
 
     <p class="expires">
       Este enlace expira el <span id="expiresAt"></span>
@@ -830,182 +759,167 @@ function showMessage(type, text) {
   messageEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
+function bump(el) {
+  el.classList.remove("bump");
+  void el.offsetWidth;
+  el.classList.add("bump");
+}
+
 function updateSelectedCount() {
   const inputs = document.querySelectorAll('[data-kind="product-quantity"]');
   let selected = 0;
-
-  inputs.forEach((input) => {
-    if (Number(input.value || 0) > 0) selected++;
-  });
-
+  inputs.forEach((inp) => { if (Number(inp.value || 0) > 0) selected++; });
   const badge = document.getElementById("productsSelected");
-
   if (badge) {
-    badge.textContent =
-      selected === 1 ? "1 seleccionado" : selected + " seleccionados";
+    badge.textContent = selected === 1 ? "1 seleccionado" : selected + " seleccionados";
+    badge.classList.toggle("has-selection", selected > 0);
   }
 }
 
 function updateTotal() {
   const inputs = document.querySelectorAll('[data-kind="product-quantity"]');
   let total = 0;
-
-  inputs.forEach((input) => {
-    total += Number(input.value || 0) * Number(input.dataset.productPrice || 0);
-  });
-
-  const totalValue = document.getElementById("totalValue");
-
-  if (totalValue) {
-    totalValue.textContent = formatCurrency(total);
+  inputs.forEach((inp) => { total += Number(inp.value || 0) * Number(inp.dataset.productPrice || 0); });
+  const el = document.getElementById("totalValue");
+  if (el) {
+    el.textContent = formatCurrency(total);
+    el.classList.toggle("nonzero", total > 0);
+    bump(el);
   }
-
   updateSelectedCount();
 }
 
-function renderText(component) {
-  const box = document.createElement("div");
-  box.className = "text-block";
-  box.textContent = component.value || "";
-  return box;
+/* ── TEXT ── */
+function renderText(c) {
+  const d = document.createElement("div");
+  d.className = "text-block animate";
+  d.textContent = c.value || "";
+  return d;
 }
 
-function renderProducts(component) {
+/* ── PRODUCTS ── */
+function renderProducts(c) {
   const wrap = document.createElement("div");
-  wrap.className = "card";
+  wrap.className = "card animate";
 
-  const header = document.createElement("div");
-  header.className = "section-header";
-  header.innerHTML = \`
+  /* header */
+  const hdr = document.createElement("div");
+  hdr.className = "section-header";
+  hdr.innerHTML = \`
     <div>
       <div class="section-label">Catálogo</div>
       <div class="section-title">Productos</div>
     </div>
     <div class="badge" id="productsSelected">0 seleccionados</div>
   \`;
-  wrap.appendChild(header);
+  wrap.appendChild(hdr);
 
-  const searchWrap = document.createElement("div");
-  searchWrap.className = "search-wrap";
-  searchWrap.innerHTML = \`
+  /* search */
+  const sw = document.createElement("div");
+  sw.className = "search-wrap";
+  sw.innerHTML = \`
     <div class="search-inner">
       <div class="search-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
       </div>
       <input class="search-input" id="productsSearch" type="text" placeholder="Buscar productos" autocomplete="off" />
     </div>
   \`;
-  wrap.appendChild(searchWrap);
+  wrap.appendChild(sw);
 
+  /* body */
   const body = document.createElement("div");
-  body.className =
-    "products-body" +
-    (Array.isArray(component.items) && component.items.length >= 20
-      ? " scrollable"
-      : "");
+  const isScrollable = Array.isArray(c.items) && c.items.length >= 12;
+  body.className = "products-body" + (isScrollable ? " scrollable" : "");
 
   const list = document.createElement("div");
   list.className = "product-list";
   list.id = "productsList";
 
-  if (!Array.isArray(component.items) || component.items.length === 0) {
-    list.innerHTML =
-      "<div style='padding:18px;color:var(--muted);font-size:15px;text-align:center'>No hay productos disponibles.</div>";
+  /* empty state for search */
+  const emptySearch = document.createElement("div");
+  emptySearch.className = "search-empty";
+  emptySearch.innerHTML = \`<div class="search-empty-icon">🔍</div>Sin resultados para tu búsqueda\`;
+
+  if (!Array.isArray(c.items) || c.items.length === 0) {
+    list.innerHTML = "<div style='padding:24px 16px;color:var(--muted);font-size:13px;text-align:center'>No hay productos disponibles.</div>";
     body.appendChild(list);
     wrap.appendChild(body);
     return wrap;
   }
 
-  component.items.forEach((item) => {
-    const product = document.createElement("div");
-    product.className = "product-item";
-    product.dataset.search = String(
-      (item.name || "") + " " + (item.description || "")
-    ).toLowerCase();
+  c.items.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "product-item";
+    row.dataset.search = String((item.name || "") + " " + (item.description || "")).toLowerCase();
 
     const info = document.createElement("div");
-
-    const name = document.createElement("div");
-    name.className = "product-name";
-    name.textContent = item.name || "Producto";
-
-    const desc = document.createElement("div");
-    desc.className = "product-desc";
-    desc.textContent = item.description || "";
-
-    const price = document.createElement("div");
-    price.className = "product-price";
-    price.textContent = formatCurrency(item.price || 0);
-
-    info.appendChild(name);
-
-    if (item.description) {
-      info.appendChild(desc);
-    }
-
-    info.appendChild(price);
+    info.innerHTML = \`
+      <div class="product-name">\${item.name || "Producto"}</div>
+      \${item.description ? \`<div class="product-desc">\${item.description}</div>\` : ""}
+      <div class="product-price">\${formatCurrency(item.price || 0)}</div>
+    \`;
 
     const stepper = document.createElement("div");
     stepper.className = "stepper";
 
-    const minusBtn = document.createElement("button");
-    minusBtn.className = "step-btn";
-    minusBtn.type = "button";
-    minusBtn.setAttribute("aria-label", "Disminuir cantidad");
-    minusBtn.innerHTML =
-      "<svg viewBox='0 0 24 24' fill='none'><path d='M5 12h14' stroke='currentColor' stroke-width='2.4' stroke-linecap='round'/></svg>";
+    const minus = document.createElement("button");
+    minus.className = "step-btn";
+    minus.type = "button";
+    minus.setAttribute("aria-label", "Disminuir cantidad");
+    minus.innerHTML = "<svg viewBox='0 0 24 24' fill='none'><path d='M5 12h14' stroke='currentColor' stroke-width='2.2' stroke-linecap='round'/></svg>";
 
-    const valueEl = document.createElement("div");
-    valueEl.className = "step-val";
-    valueEl.textContent = "0";
+    const valEl = document.createElement("div");
+    valEl.className = "step-val";
+    valEl.textContent = "0";
 
-    const plusBtn = document.createElement("button");
-    plusBtn.className = "step-btn";
-    plusBtn.type = "button";
-    plusBtn.setAttribute("aria-label", "Aumentar cantidad");
-    plusBtn.innerHTML =
-      "<svg viewBox='0 0 24 24' fill='none'><path d='M12 5v14M5 12h14' stroke='currentColor' stroke-width='2.4' stroke-linecap='round'/></svg>";
+    const plus = document.createElement("button");
+    plus.className = "step-btn";
+    plus.type = "button";
+    plus.setAttribute("aria-label", "Aumentar cantidad");
+    plus.innerHTML = "<svg viewBox='0 0 24 24' fill='none'><path d='M12 5v14M5 12h14' stroke='currentColor' stroke-width='2.2' stroke-linecap='round'/></svg>";
 
-    const hiddenInput = document.createElement("input");
-    hiddenInput.type = "number";
-    hiddenInput.min = "0";
-    hiddenInput.value = "0";
-    hiddenInput.className = "qty-hidden";
-    hiddenInput.dataset.productId = item.id;
-    hiddenInput.dataset.productPrice = String(item.price || 0);
-    hiddenInput.dataset.kind = "product-quantity";
+    const hidden = document.createElement("input");
+    hidden.type = "number";
+    hidden.min = "0";
+    hidden.value = "0";
+    hidden.className = "qty-hidden";
+    hidden.dataset.productId = item.id;
+    hidden.dataset.productPrice = String(item.price || 0);
+    hidden.dataset.kind = "product-quantity";
 
-    function syncQty(value) {
-      const safe = Math.max(0, Number(value) || 0);
-      hiddenInput.value = String(safe);
-      valueEl.textContent = String(safe);
+    function sync(v) {
+      const s = Math.max(0, Number(v) || 0);
+      hidden.value = String(s);
+      valEl.textContent = String(s);
+      bump(valEl);
+
+      const active = s > 0;
+      stepper.classList.toggle("has-qty", active);
+      row.classList.toggle("is-selected", active);
       updateTotal();
     }
 
-    minusBtn.addEventListener("click", () =>
-      syncQty(Number(hiddenInput.value) - 1)
-    );
+    minus.addEventListener("click", () => sync(Number(hidden.value) - 1));
+    plus.addEventListener("click", () => sync(Number(hidden.value) + 1));
 
-    plusBtn.addEventListener("click", () =>
-      syncQty(Number(hiddenInput.value) + 1)
-    );
+    stepper.appendChild(minus);
+    stepper.appendChild(valEl);
+    stepper.appendChild(plus);
+    stepper.appendChild(hidden);
 
-    stepper.appendChild(minusBtn);
-    stepper.appendChild(valueEl);
-    stepper.appendChild(plusBtn);
-    stepper.appendChild(hiddenInput);
-
-    product.appendChild(info);
-    product.appendChild(stepper);
-    list.appendChild(product);
+    row.appendChild(info);
+    row.appendChild(stepper);
+    list.appendChild(row);
   });
 
   body.appendChild(list);
+  body.appendChild(emptySearch);
   wrap.appendChild(body);
 
+  /* total */
   const totalRow = document.createElement("div");
   totalRow.className = "total-bar";
   totalRow.innerHTML = \`
@@ -1014,29 +928,32 @@ function renderProducts(component) {
   \`;
   wrap.appendChild(totalRow);
 
-  const searchInput = searchWrap.querySelector("#productsSearch");
-
-  searchInput.addEventListener("input", (event) => {
-    const value = event.target.value.toLowerCase().trim();
-
-    list.querySelectorAll(".product-item").forEach((item) => {
-      item.style.display = item.dataset.search.includes(value) ? "grid" : "none";
+  /* search filter */
+  sw.querySelector("#productsSearch").addEventListener("input", (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    let visible = 0;
+    list.querySelectorAll(".product-item").forEach((el) => {
+      const match = el.dataset.search.includes(q);
+      el.style.display = match ? "grid" : "none";
+      if (match) visible++;
     });
+    emptySearch.style.display = visible === 0 ? "block" : "none";
   });
 
   return wrap;
 }
 
-function renderForm(component) {
+/* ── FORM ── */
+function renderForm(c) {
   const wrap = document.createElement("div");
-  wrap.className = "form-card";
+  wrap.className = "form-card animate";
 
   const head = document.createElement("div");
   head.className = "form-head";
   head.innerHTML = \`
     <div class="form-avatar">
       <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v1h20v-1c0-3.3-6.7-5-10-5Z"></path>
+        <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v1h20v-1c0-3.3-6.7-5-10-5Z"/>
       </svg>
     </div>
     <div>
@@ -1052,116 +969,91 @@ function renderForm(component) {
 
   const body = document.createElement("div");
   body.className = "form-body";
-
   const grid = document.createElement("div");
   grid.className = "form-grid";
 
-  component.fields.forEach((field) => {
-    const fieldWrap = document.createElement("div");
-    fieldWrap.className =
-      "field" + (field.inputType === "textarea" ? " full" : "");
+  c.fields.forEach((field) => {
+    const fw = document.createElement("div");
+    fw.className = "field" + (field.inputType === "textarea" ? " full" : "");
 
-    const label = document.createElement("label");
-    label.className = "label";
-    label.textContent = field.label + (field.required ? " *" : "");
+    const lbl = document.createElement("label");
+    lbl.className = "label";
+    lbl.textContent = field.label + (field.required ? " *" : "");
 
-    const input =
-      field.inputType === "textarea"
-        ? document.createElement("textarea")
-        : document.createElement("input");
+    const inp = field.inputType === "textarea"
+      ? document.createElement("textarea")
+      : document.createElement("input");
 
-    if (field.inputType !== "textarea") {
-      input.type = field.inputType || "text";
-    }
+    if (field.inputType !== "textarea") inp.type = field.inputType || "text";
+    inp.name = field.name;
+    inp.dataset.kind = "form-field";
+    inp.placeholder = field.placeholder || "";
+    if (field.required) inp.required = true;
 
-    input.name = field.name;
-    input.dataset.kind = "form-field";
-    input.placeholder = field.placeholder || "";
-
-    if (field.required) {
-      input.required = true;
-    }
-
-    fieldWrap.appendChild(label);
-    fieldWrap.appendChild(input);
-    grid.appendChild(fieldWrap);
+    fw.appendChild(lbl);
+    fw.appendChild(inp);
+    grid.appendChild(fw);
   });
 
   body.appendChild(grid);
   wrap.appendChild(body);
-
   return wrap;
 }
 
-function renderButton(component) {
+/* ── BUTTON ── */
+function renderButton(c) {
   const wrap = document.createElement("div");
-  wrap.className = "submit-wrap";
+  wrap.className = "submit-wrap animate";
 
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "submit-btn";
-  btn.textContent = component.label || "Enviar cotización";
+  btn.innerHTML = \`
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/>
+    </svg>
+    <span>\${c.label || "Enviar cotización"}</span>
+  \`;
 
-  btn.addEventListener("click", () => {
-    onSubmit(btn, component.label || "Enviar cotización");
+  /* ripple */
+  btn.addEventListener("click", function(e) {
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    const ripple = document.createElement("span");
+    ripple.className = "ripple-el";
+    ripple.style.cssText = \`width:\${size}px;height:\${size}px;left:\${x}px;top:\${y}px\`;
+    btn.appendChild(ripple);
+    ripple.addEventListener("animationend", () => ripple.remove());
+    onSubmit(btn, c.label || "Enviar cotización");
   });
 
   wrap.appendChild(btn);
-
   return wrap;
 }
 
-function renderComponent(component) {
-  switch (component.type) {
-    case "form":
-      return renderForm(component);
-
-    case "products":
-      return renderProducts(component);
-
-    case "text":
-      return renderText(component);
-
-    case "button":
-      return renderButton(component);
-
-    default:
-      return document.createElement("div");
+function renderComponent(c) {
+  switch (c.type) {
+    case "text":     return renderText(c);
+    case "products": return renderProducts(c);
+    case "form":     return renderForm(c);
+    case "button":   return renderButton(c);
+    default:         return document.createElement("div");
   }
 }
 
-function getComponentPriority(component) {
-  switch (component.type) {
-    case "form":
-      return 1;
-
-    case "products":
-      return 2;
-
-    case "text":
-      return 3;
-
-    case "button":
-      return 4;
-
-    default:
-      return 9;
-  }
+function getPriority(c) {
+  return { form: 1, products: 2, text: 3, button: 4 }[c.type] ?? 9;
 }
 
+/* ── SUBMIT ── */
 async function onSubmit(btn, originalLabel) {
   const selectedItems = [];
-
-  document
-    .querySelectorAll('[data-kind="product-quantity"]')
-    .forEach((input) => {
-      const quantity = Number(input.value || 0);
-      const productId = input.dataset.productId;
-
-      if (quantity > 0 && productId) {
-        selectedItems.push({ productId, quantity });
-      }
-    });
+  document.querySelectorAll('[data-kind="product-quantity"]').forEach((inp) => {
+    const qty = Number(inp.value || 0);
+    if (qty > 0 && inp.dataset.productId) selectedItems.push({ productId: inp.dataset.productId, quantity: qty });
+  });
 
   if (selectedItems.length === 0) {
     showMessage("error", "Selecciona al menos un producto.");
@@ -1169,40 +1061,37 @@ async function onSubmit(btn, originalLabel) {
   }
 
   const customer = {};
-  const formFields = document.querySelectorAll('[data-kind="form-field"]');
-
-  for (const field of formFields) {
-    const value = String(field.value || "").trim();
-
-    if (field.required && !value) {
+  for (const field of document.querySelectorAll('[data-kind="form-field"]')) {
+    const val = String(field.value || "").trim();
+    if (field.required && !val) {
       field.focus();
       showMessage("error", "Completa los campos obligatorios.");
       return;
     }
-
-    customer[field.name] = value;
+    customer[field.name] = val;
   }
 
   try {
     btn.disabled = true;
-    btn.textContent = "Enviando...";
+    btn.innerHTML = \`
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .8s linear infinite;width:18px;height:18px">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+      </svg>
+      <span>Enviando…</span>
+    \`;
 
-    const response = await fetch("/api/runtime-links/" + token + "/submit", {
+    const res = await fetch("/api/runtime-links/" + token + "/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        customer,
-        items: selectedItems,
-        raw: { submittedAtClient: new Date().toISOString() }
-      })
+      body: JSON.stringify({ customer, items: selectedItems, raw: { submittedAtClient: new Date().toISOString() } })
     });
 
-    const data = await response.json();
+    const data = await res.json();
 
-    if (!response.ok) {
+    if (!res.ok) {
       showMessage("error", data.message || "No se pudo enviar la solicitud.");
       btn.disabled = false;
-      btn.textContent = originalLabel;
+      btn.innerHTML = \`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg><span>\${originalLabel}</span>\`;
       return;
     }
 
@@ -1210,14 +1099,24 @@ async function onSubmit(btn, originalLabel) {
   } catch (_) {
     showMessage("error", "Ocurrió un error al enviar la solicitud.");
     btn.disabled = false;
-    btn.textContent = originalLabel;
+    btn.innerHTML = \`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg><span>\${originalLabel}</span>\`;
   }
 }
 
+/* spin keyframe for loading state */
+const style = document.createElement("style");
+style.textContent = "@keyframes spin { to { transform: rotate(360deg); } }";
+document.head.appendChild(style);
+
 [...config.components]
-  .sort((a, b) => getComponentPriority(a) - getComponentPriority(b))
-  .forEach((component) => {
-    contentEl.appendChild(renderComponent(component));
+  .sort((a, b) => getPriority(a) - getPriority(b))
+  .forEach((c, i) => {
+    const el = renderComponent(c);
+    /* stagger delay per element */
+    if (el.classList.contains("animate")) {
+      el.style.animationDelay = (80 + i * 60) + "ms";
+    }
+    contentEl.appendChild(el);
   });
 
 updateTotal();
