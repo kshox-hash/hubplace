@@ -16,34 +16,36 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 <title>${safeTitle}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Google+Sans+Display:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Google+Sans+Display:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
 <style>
 :root {
-  --bg:           #1b1d20;
-  --surface-1:    #23272f;
-  --surface-2:    #2a2f38;
-  --surface-3:    #333845;
+  /* Paleta igual al menú principal */
+  --bg:           #0f1011;
 
-  --on-bg:        #e7e9ee;
-  --on-surface:   #eef1f7;
-  --on-surface-v: #c8ced8;
+  --surface-1:    #20242d;
+  --surface-2:    #20242d;
+  --surface-3:    #22263a;
 
-  --primary:      #9fc2ff;
-  --primary-c:    #06224d;
-  --primary-bg:   #1f3150;
-  --primary-bg-2: #29406a;
+  --on-bg:        #d8dbe2;
+  --on-surface:   #e8eaed;
+  --on-surface-v: #b0b4be;
 
-  --secondary:    #c2cad9;
-  --secondary-bg: #2a3242;
+  --primary:      #bfc7ff;
+  --primary-c:    #111827;
+  --primary-bg:   #22263a;
+  --primary-bg-2: #2b314a;
 
-  --muted:        #9096a3;
-  --muted-2:      #676d79;
+  --secondary:    #bfc7ff;
+  --secondary-bg: #22263a;
 
-  --green:        #79d59d;
-  --green-bg:     #143122;
-  --red:          #ffb1aa;
-  --red-bg:       #4a1717;
+  --muted:        #b0b4be;
+  --muted-2:      #858a96;
+
+  --green:        #81c995;
+  --green-bg:     #1d3428;
+  --red:          #f28b82;
+  --red-bg:       #34201f;
 
   --radius-s:  12px;
   --radius-m:  16px;
@@ -65,7 +67,7 @@ html, body { min-height: 100vh; }
 body {
   background: var(--bg);
   color: var(--on-bg);
-  font-family: "Google Sans", system-ui, sans-serif;
+  font-family: "Google Sans", "Inter", "Segoe UI", system-ui, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -110,9 +112,9 @@ button { touch-action: manipulation; cursor: pointer; }
 }
 
 .topbar-logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
   background: var(--primary-bg);
   display: flex;
   align-items: center;
@@ -121,16 +123,17 @@ button { touch-action: manipulation; cursor: pointer; }
 }
 
 .topbar-logo svg {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   fill: var(--primary);
 }
 
 .topbar-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  color: var(--on-surface-v);
-  letter-spacing: 0.01em;
+  color: var(--on-surface);
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
 }
 
 .topbar-chip {
@@ -202,6 +205,31 @@ button { touch-action: manipulation; cursor: pointer; }
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.section-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-icon svg {
+  width: 21px;
+  height: 21px;
+  display: block;
 }
 
 .section-label {
@@ -316,7 +344,7 @@ button { touch-action: manipulation; cursor: pointer; }
   transition: background 120ms ease;
 }
 
-.product-item:hover { background: var(--surface-2); }
+.product-item:hover { background: var(--surface-3); }
 
 /* selected state */
 .product-item.is-selected {
@@ -456,11 +484,20 @@ button { touch-action: manipulation; cursor: pointer; }
 }
 
 .total-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 12px;
   font-weight: 500;
   color: var(--primary);
   letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+
+.total-label svg {
+  width: 17px;
+  height: 17px;
+  display: block;
 }
 
 @keyframes totalBump {
@@ -520,7 +557,7 @@ button { touch-action: manipulation; cursor: pointer; }
 .form-avatar {
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: 16px;
   background: var(--secondary-bg);
   color: var(--secondary);
   display: flex;
@@ -614,8 +651,8 @@ textarea {
   min-height: 56px;
   border: none;
   border-radius: 999px;
-  background: var(--primary);
-  color: var(--primary-c);
+  background: var(--primary-bg);
+  color: var(--primary);
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.01em;
@@ -801,9 +838,16 @@ function renderProducts(c) {
   const hdr = document.createElement("div");
   hdr.className = "section-header";
   hdr.innerHTML = \`
-    <div>
-      <div class="section-label">Catálogo</div>
-      <div class="section-title">Productos</div>
+    <div class="section-heading">
+      <div class="section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2ZM7.2 14.5h7.45c.75 0 1.41-.41 1.75-1.03L20 6.96 18.25 6l-3.6 6.5H7.63L3.85 4H1v2h1.55l3.6 8.12L4.8 16.5C4.3 17.39 4.94 18.5 5.96 18.5H19v-2H6.42l.78-2Z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="section-label">Catálogo</div>
+        <div class="section-title">Productos</div>
+      </div>
     </div>
     <div class="badge" id="productsSelected">0 seleccionados</div>
   \`;
@@ -918,7 +962,12 @@ function renderProducts(c) {
   const totalRow = document.createElement("div");
   totalRow.className = "total-bar";
   totalRow.innerHTML = \`
-    <div class="total-label">Total estimado</div>
+    <div class="total-label">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M4 4h16v16H4V4Zm2 2v12h12V6H6Zm2 2h8v2H8V8Zm0 4h8v2H8v-2Z"/>
+      </svg>
+      <span>Total estimado</span>
+    </div>
     <div class="total-amount" id="totalValue">\${formatCurrency(0)}</div>
   \`;
   wrap.appendChild(totalRow);
