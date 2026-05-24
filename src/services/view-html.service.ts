@@ -5,8 +5,13 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   const safeSuccessMessage = escapeHtml(
     record.config.successMessage || "Solicitud enviada correctamente."
   );
+  const safeTitle = escapeHtml(record.config.title || "Cotizador online");
+  const safeBrand = escapeHtml(record.config.brand || "Amaru Electric");
+  const safeHeroSubtitle = escapeHtml(
+    record.config.subtitle ||
+      "Ingresa tus datos y selecciona los productos para recibir un presupuesto personalizado."
+  );
 
-  const safeTitle = escapeHtml(record.config.title || "Amaru Electric - Cotizador");
   const configJson = JSON.stringify(record.config);
 
   return `<!doctype html>
@@ -15,51 +20,49 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>${safeTitle}</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Google+Sans+Display:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
 <style>
 :root {
-:root {
+  --bg: #0a0b0d;
 
-  --bg: #0f1011;
+  --surface-1: #16191f;
+  --surface-2: #21262e;
+  --surface-3: #2a303c;
 
-  --surface-1: #20242d;
-  --surface-2: #22263a;
-  --surface-3: #1b1c25;
+  --on-bg: #f3f4f6;
+  --on-surface: #ffffff;
+  --on-surface-v: #9ca3af;
 
-  --on-bg: #d8dbe2;
-  --on-surface: #e8eaed;
-  --on-surface-v: #b0b4be;
+  --primary: #6366f1;
+  --primary-bg: #1e2148;
+  --primary-bg-2: #2d327d;
 
-  --primary: #bfc7ff;
+  --muted: #9ca3af;
+  --muted-2: #6b7280;
 
-  --primary-bg: #22263a;
-  --primary-bg-2: #2b3150;
+  --green: #10b981;
+  --green-bg: #064e3b;
 
-  --muted: #b0b4be;
-  --muted-2: #858a96;
-
-  --green: #81c995;
-  --green-bg: #1d3428;
-
-  --red: #f28b82;
-  --red-bg: #34201f;
+  --red: #ef4444;
+  --red-bg: #451a1a;
 
   --radius-m: 16px;
   --radius-l: 20px;
   --radius-xl: 24px;
 
+  --page-max: 600px;
   --safe-b: env(safe-area-inset-bottom, 0px);
-}
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
   margin: 0;
   padding: 0;
-  -webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -70,10 +73,10 @@ body {
 body {
   background: var(--bg);
   color: var(--on-bg);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Inter", "Google Sans", system-ui, sans-serif;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   padding-bottom: calc(40px + var(--safe-b));
-  overflow-x: hidden;
 }
 
 button,
@@ -84,16 +87,11 @@ textarea {
 }
 
 button {
-  cursor: pointer;
   touch-action: manipulation;
+  cursor: pointer;
 }
 
-.shell {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
+/* ENTRANCE ANIMATION */
 
 @keyframes fadeUp {
   from {
@@ -112,6 +110,17 @@ button {
   animation: fadeUp 400ms cubic-bezier(.2, .6, .4, 1) forwards;
 }
 
+/* PAGE */
+
+.shell {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* TOPBAR */
+
 .topbar {
   height: 72px;
   display: flex;
@@ -127,8 +136,14 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #ffffff;
   flex-shrink: 0;
+}
+
+.logo-icon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 .brand-name {
@@ -136,6 +151,8 @@ button {
   letter-spacing: -0.02em;
   color: var(--on-surface);
 }
+
+/* HERO */
 
 .hero {
   padding: 24px 0 32px;
@@ -148,7 +165,7 @@ button {
   line-height: 1.1;
   margin-bottom: 12px;
   color: var(--on-surface);
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
 }
 
 .hero-sub {
@@ -157,16 +174,24 @@ button {
   line-height: 1.5;
 }
 
+/* CONTENT */
+
 .content-flow {
   display: grid;
   gap: 16px;
 }
 
+/* CARDS */
+
 .card {
   background: var(--surface-1);
   border-radius: var(--radius-xl);
+  margin-bottom: 0;
   overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
 }
+
+/* FORM */
 
 .form-header {
   padding: 24px 20px 16px;
@@ -176,24 +201,20 @@ button {
   font-size: 18px;
   font-weight: 600;
   color: var(--on-surface);
+  letter-spacing: -0.02em;
 }
 
 .section-sub {
   font-size: 13px;
   color: var(--muted);
   margin-top: 4px;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .form-body {
   padding: 0 20px 24px;
   display: grid;
-  gap: 16px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
@@ -201,6 +222,10 @@ button {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
 }
 
 .label {
@@ -215,12 +240,15 @@ input,
 textarea {
   width: 100%;
   background: var(--surface-2);
+  border: 1px solid transparent;
   border-radius: 12px;
   padding: 14px;
   color: var(--on-surface);
   font-size: 15px;
   outline: none;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 input::placeholder,
@@ -230,25 +258,79 @@ textarea::placeholder {
 
 input:focus,
 textarea:focus {
+  border-color: var(--primary);
   background: var(--surface-3);
 }
 
 textarea {
-  min-height: 92px;
+  min-height: 96px;
   resize: vertical;
+}
+
+/* PRODUCTS */
+
+.products-header {
+  padding: 24px 20px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.products-badge {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.products-badge.has-selection {
+  background: var(--primary-bg-2);
+  color: #ffffff;
 }
 
 .search-box {
   padding: 0 20px 16px;
 }
 
-.search-input {
+.search-shell {
   width: 100%;
+  min-height: 46px;
   background: var(--surface-2);
-  border-radius: 99px;
-  padding: 12px 20px;
+  border-radius: 999px;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s ease;
+}
+
+.search-shell:focus-within {
+  background: var(--surface-3);
+}
+
+.search-shell svg {
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+}
+
+.search-input {
+  min-width: 0;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   font-size: 14px;
 }
+
+/* SCROLL CONTAINER */
 
 .scroll-container {
   max-height: 52vh;
@@ -274,17 +356,19 @@ textarea {
 
 .product-list {
   display: grid;
-  gap: 4px;
+  gap: 6px;
 }
+
+/* PRODUCT ITEM */
 
 .product-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
   padding: 16px;
   border-radius: var(--radius-m);
-  transition: background 0.2s;
+  transition: background 0.2s ease;
 }
 
 .product-item:hover {
@@ -292,12 +376,12 @@ textarea {
 }
 
 .product-item.is-selected {
-  background: #252b3f;
+  background: var(--primary-bg);
 }
 
 .product-info {
   flex: 1;
-  margin-right: 12px;
+  margin-right: 0;
   min-width: 0;
 }
 
@@ -308,13 +392,14 @@ textarea {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.3;
 }
 
 .p-desc {
   font-size: 12px;
   color: var(--muted);
   margin: 4px 0;
-  line-height: 1.35;
+  line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -326,6 +411,8 @@ textarea {
   font-weight: 600;
   color: var(--primary);
 }
+
+/* STEPPER */
 
 .stepper {
   display: flex;
@@ -352,6 +439,12 @@ textarea {
   justify-content: center;
 }
 
+.step-btn svg {
+  width: 12px;
+  height: 12px;
+  display: block;
+}
+
 .step-btn:active {
   background: var(--surface-3);
 }
@@ -361,6 +454,7 @@ textarea {
   text-align: center;
   font-weight: 600;
   font-size: 14px;
+  color: var(--on-surface);
   user-select: none;
 }
 
@@ -368,18 +462,24 @@ textarea {
   display: none;
 }
 
+/* TOTAL */
+
 .total-bar {
   background: var(--primary-bg);
   padding: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 12px;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .total-label {
+  font-size: 12px;
+  font-weight: 600;
   color: var(--primary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .total-val {
@@ -391,20 +491,32 @@ textarea {
   text-align: right;
 }
 
+.total-val.nonzero {
+  color: #ffffff;
+}
+
+/* SUBMIT */
+
 .btn-submit {
   width: 100%;
   padding: 18px;
   border-radius: 99px;
   background: var(--primary);
   border: none;
-  color: white;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 600;
-  margin-top: 12px;
+  margin-top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+}
+
+.btn-submit svg {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .btn-submit:active {
@@ -417,6 +529,8 @@ textarea {
   cursor: not-allowed;
   transform: none;
 }
+
+/* MESSAGE */
 
 .message {
   display: none;
@@ -440,13 +554,23 @@ textarea {
   color: var(--red);
 }
 
-.empty-state {
-  padding: 24px 16px;
-  color: var(--muted);
-  font-size: 13px;
+.expires {
+  margin-top: 20px;
   text-align: center;
+  color: var(--muted-2);
+  font-size: 11px;
   line-height: 1.4;
 }
+
+.search-empty {
+  display: none;
+  padding: 28px 16px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+}
+
+/* MICRO FEEDBACK */
 
 @keyframes bump {
   0% { transform: scale(1); }
@@ -458,39 +582,63 @@ textarea {
   animation: bump 0.2s ease-out;
 }
 
-.expires {
-  margin-top: 18px;
-  text-align: center;
-  color: var(--muted-2);
-  font-size: 11px;
-}
+/* RESPONSIVE */
 
-@media (min-width: 560px) {
-  .form-grid {
-    grid-template-columns: 1fr 1fr;
+@media (max-width: 520px) {
+  .shell {
+    padding: 0 14px;
   }
 
-  .field.full {
-    grid-column: 1 / -1;
+  .form-body {
+    grid-template-columns: 1fr;
+  }
+
+  .scroll-container {
+    max-height: 48vh;
+  }
+
+  .hero-title {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 380px) {
+  .product-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .stepper {
+    align-self: flex-start;
+  }
+
+  .total-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .total-val {
+    text-align: left;
+    font-size: 22px;
   }
 }
 </style>
 </head>
 
 <body>
-<div class="shell">
+<main class="shell">
   <header class="topbar animate">
-    <div class="logo-icon">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <div class="logo-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
       </svg>
     </div>
-    <span class="brand-name">Amaru Electric</span>
+    <span class="brand-name">${safeBrand}</span>
   </header>
 
   <section class="hero animate" style="animation-delay: 0.1s">
-    <h1 class="hero-title">Solicita tu cotización</h1>
-    <p class="hero-sub">Ingresa tus datos y selecciona los productos para recibir un presupuesto personalizado.</p>
+    <p class="hero-sub">${safeHeroSubtitle}</p>
   </section>
 
   <div id="content" class="content-flow"></div>
@@ -499,7 +647,7 @@ textarea {
   <p class="expires">
     Este enlace expira el <span id="expiresAt"></span>
   </p>
-</div>
+</main>
 
 <script>
 const token = ${JSON.stringify(record.token)};
@@ -529,6 +677,12 @@ function showMessage(type, text) {
   messageEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
+function bump(el) {
+  el.classList.remove("bump");
+  void el.offsetWidth;
+  el.classList.add("bump");
+}
+
 function updateSelectedCount() {
   const inputs = document.querySelectorAll('[data-kind="product-quantity"]');
   let selected = 0;
@@ -542,6 +696,8 @@ function updateSelectedCount() {
   if (badge) {
     badge.textContent =
       selected === 1 ? "1 seleccionado" : selected + " seleccionados";
+
+    badge.classList.toggle("has-selection", selected > 0);
   }
 }
 
@@ -557,43 +713,38 @@ function updateTotal() {
 
   if (totalValue) {
     totalValue.textContent = formatCurrency(total);
-    totalValue.classList.remove("bump");
-    void totalValue.offsetWidth;
-    totalValue.classList.add("bump");
+    totalValue.classList.toggle("nonzero", total > 0);
+    bump(totalValue);
   }
 
   updateSelectedCount();
 }
 
 function renderText(component) {
-  const card = document.createElement("div");
-  card.className = "card animate";
-
-  const body = document.createElement("div");
-  body.className = "form-body";
-  body.textContent = component.value || "";
-
-  card.appendChild(body);
-  return card;
+  const box = document.createElement("div");
+  box.className = "card animate";
+  box.style.padding = "18px 20px";
+  box.style.color = "var(--muted)";
+  box.style.fontSize = "13.5px";
+  box.style.lineHeight = "1.6";
+  box.textContent = component.value || "";
+  return box;
 }
 
 function renderForm(component) {
   const card = document.createElement("div");
   card.className = "card animate";
-  card.style.animationDelay = "0.2s";
 
   const header = document.createElement("div");
   header.className = "form-header";
   header.innerHTML = \`
-    <div class="section-title">Mis Datos</div>
+    <div class="section-title">Mis datos</div>
     <div class="section-sub">Completa la información para contactarte.</div>
   \`;
+  card.appendChild(header);
 
   const body = document.createElement("div");
   body.className = "form-body";
-
-  const grid = document.createElement("div");
-  grid.className = "form-grid";
 
   component.fields.forEach((field) => {
     const fieldWrap = document.createElement("div");
@@ -620,52 +771,66 @@ function renderForm(component) {
     input.dataset.kind = "form-field";
     input.placeholder = field.placeholder || "";
 
-    if (field.required) input.required = true;
+    if (field.required) {
+      input.required = true;
+    }
 
     fieldWrap.appendChild(label);
     fieldWrap.appendChild(input);
-    grid.appendChild(fieldWrap);
+    body.appendChild(fieldWrap);
   });
 
-  body.appendChild(grid);
-  card.appendChild(header);
   card.appendChild(body);
-
   return card;
 }
 
 function renderProducts(component) {
   const card = document.createElement("div");
   card.className = "card animate";
-  card.style.animationDelay = "0.3s";
 
-  card.innerHTML = \`
-    <div class="form-header">
+  const header = document.createElement("div");
+  header.className = "products-header";
+  header.innerHTML = \`
+    <div>
       <div class="section-title">Catálogo</div>
-      <div class="section-sub">Busca y selecciona productos</div>
+      <div class="section-sub">Busca y selecciona productos.</div>
     </div>
+    <div class="products-badge" id="productsSelected">0 seleccionados</div>
+  \`;
+  card.appendChild(header);
 
-    <div class="search-box">
-      <input type="text" class="search-input" placeholder="Buscar componentes..." id="pSearch" autocomplete="off" />
-    </div>
-
-    <div class="scroll-container" id="pList"></div>
-
-    <div class="total-bar">
-      <div class="label total-label">Total Estimado</div>
-      <div class="total-val" id="totalValue">\${formatCurrency(0)}</div>
+  const searchWrap = document.createElement("div");
+  searchWrap.className = "search-box";
+  searchWrap.innerHTML = \`
+    <div class="search-shell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input type="text" class="search-input" placeholder="Buscar componentes..." id="productsSearch" autocomplete="off" />
     </div>
   \`;
+  card.appendChild(searchWrap);
 
-  const list = card.querySelector("#pList");
+  const scrollContainer = document.createElement("div");
+  scrollContainer.className = "scroll-container";
+
+  const list = document.createElement("div");
+  list.className = "product-list";
+  list.id = "productsList";
+
+  const emptySearch = document.createElement("div");
+  emptySearch.className = "search-empty";
+  emptySearch.textContent = "Sin resultados para tu búsqueda.";
 
   if (!Array.isArray(component.items) || component.items.length === 0) {
-    list.innerHTML = "<div class='empty-state'>No hay productos disponibles.</div>";
+    list.innerHTML =
+      "<div style='padding:24px 16px;color:var(--muted);font-size:13px;text-align:center'>No hay productos disponibles.</div>";
+
+    scrollContainer.appendChild(list);
+    card.appendChild(scrollContainer);
     return card;
   }
-
-  const productList = document.createElement("div");
-  productList.className = "product-list";
 
   component.items.forEach((item) => {
     const row = document.createElement("div");
@@ -698,7 +863,8 @@ function renderProducts(component) {
     minusBtn.className = "step-btn";
     minusBtn.type = "button";
     minusBtn.setAttribute("aria-label", "Disminuir cantidad");
-    minusBtn.textContent = "−";
+    minusBtn.innerHTML =
+      "<svg viewBox='0 0 24 24' fill='none'><path d='M5 12h14' stroke='currentColor' stroke-width='2' stroke-linecap='round'/></svg>";
 
     const valueEl = document.createElement("div");
     valueEl.className = "step-val";
@@ -708,7 +874,8 @@ function renderProducts(component) {
     plusBtn.className = "step-btn";
     plusBtn.type = "button";
     plusBtn.setAttribute("aria-label", "Aumentar cantidad");
-    plusBtn.textContent = "+";
+    plusBtn.innerHTML =
+      "<svg viewBox='0 0 24 24' fill='none'><path d='M12 5v14M5 12h14' stroke='currentColor' stroke-width='2' stroke-linecap='round'/></svg>";
 
     const hiddenInput = document.createElement("input");
     hiddenInput.type = "number";
@@ -721,15 +888,16 @@ function renderProducts(component) {
 
     function syncQty(value) {
       const safe = Math.max(0, Number(value) || 0);
+
       hiddenInput.value = String(safe);
       valueEl.textContent = String(safe);
 
-      valueEl.classList.remove("bump");
-      void valueEl.offsetWidth;
-      valueEl.classList.add("bump");
+      bump(valueEl);
 
-      row.classList.toggle("is-selected", safe > 0);
-      stepper.classList.toggle("has-qty", safe > 0);
+      const active = safe > 0;
+      row.classList.toggle("is-selected", active);
+      stepper.classList.toggle("has-qty", active);
+
       updateTotal();
     }
 
@@ -743,41 +911,55 @@ function renderProducts(component) {
 
     row.appendChild(info);
     row.appendChild(stepper);
-    productList.appendChild(row);
+    list.appendChild(row);
   });
 
-  list.appendChild(productList);
+  scrollContainer.appendChild(list);
+  scrollContainer.appendChild(emptySearch);
+  card.appendChild(scrollContainer);
 
-  const searchInput = card.querySelector("#pSearch");
+  const total = document.createElement("div");
+  total.className = "total-bar";
+  total.innerHTML = \`
+    <div class="total-label">Total estimado</div>
+    <div class="total-val" id="totalValue">\${formatCurrency(0)}</div>
+  \`;
+  card.appendChild(total);
+
+  const searchInput = searchWrap.querySelector("#productsSearch");
 
   searchInput.addEventListener("input", (event) => {
     const value = event.target.value.toLowerCase().trim();
+    let visible = 0;
 
-    productList.querySelectorAll(".product-item").forEach((row) => {
-      row.style.display = row.dataset.search.includes(value) ? "flex" : "none";
+    list.querySelectorAll(".product-item").forEach((product) => {
+      const match = product.dataset.search.includes(value);
+      product.style.display = match ? "flex" : "none";
+      if (match) visible++;
     });
+
+    emptySearch.style.display = visible === 0 ? "block" : "none";
   });
 
   return card;
 }
 
 function renderButton(component) {
-  const btn = document.createElement("button");
-  btn.className = "btn-submit animate";
-  btn.type = "button";
-  btn.style.animationDelay = "0.4s";
-  btn.innerHTML = \`
+  const button = document.createElement("button");
+  button.className = "btn-submit animate";
+  button.type = "button";
+  button.innerHTML = \`
     <span>\${component.label || "Enviar cotización"}</span>
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
     </svg>
   \`;
 
-  btn.addEventListener("click", () => {
-    onSubmit(btn, component.label || "Enviar cotización");
+  button.addEventListener("click", () => {
+    onSubmit(button, component.label || "Enviar cotización");
   });
 
-  return btn;
+  return button;
 }
 
 function renderComponent(component) {
@@ -818,7 +1000,7 @@ function getComponentPriority(component) {
   }
 }
 
-async function onSubmit(btn, originalLabel) {
+async function onSubmit(button, originalLabel) {
   const selectedItems = [];
 
   document.querySelectorAll('[data-kind="product-quantity"]').forEach((input) => {
@@ -851,8 +1033,8 @@ async function onSubmit(btn, originalLabel) {
   }
 
   try {
-    btn.disabled = true;
-    btn.textContent = "Enviando...";
+    button.disabled = true;
+    button.textContent = "Enviando...";
 
     const response = await fetch("/api/runtime-links/" + token + "/submit", {
       method: "POST",
@@ -860,7 +1042,9 @@ async function onSubmit(btn, originalLabel) {
       body: JSON.stringify({
         customer,
         items: selectedItems,
-        raw: { submittedAtClient: new Date().toISOString() }
+        raw: {
+          submittedAtClient: new Date().toISOString()
+        }
       })
     });
 
@@ -868,11 +1052,11 @@ async function onSubmit(btn, originalLabel) {
 
     if (!response.ok) {
       showMessage("error", data.message || "No se pudo enviar la solicitud.");
-      btn.disabled = false;
-      btn.innerHTML = \`
+      button.disabled = false;
+      button.innerHTML = \`
         <span>\${originalLabel}</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
         </svg>
       \`;
       return;
@@ -881,11 +1065,11 @@ async function onSubmit(btn, originalLabel) {
     showMessage("success", data.message || successMessage);
   } catch (_) {
     showMessage("error", "Ocurrió un error al enviar la solicitud.");
-    btn.disabled = false;
-    btn.innerHTML = \`
+    button.disabled = false;
+    button.innerHTML = \`
       <span>\${originalLabel}</span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
       </svg>
     \`;
   }
@@ -893,8 +1077,14 @@ async function onSubmit(btn, originalLabel) {
 
 [...config.components]
   .sort((a, b) => getComponentPriority(a) - getComponentPriority(b))
-  .forEach((component) => {
-    contentEl.appendChild(renderComponent(component));
+  .forEach((component, index) => {
+    const element = renderComponent(component);
+
+    if (element.classList.contains("animate")) {
+      element.style.animationDelay = 0.2 + index * 0.1 + "s";
+    }
+
+    contentEl.appendChild(element);
   });
 
 updateTotal();
