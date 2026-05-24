@@ -22,15 +22,16 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   ========================= */
   --bg: #1b1d23;
 
-  --surface: #23262f;
-  --surface-hover: #2a2e38;
-  --surface-soft: #1f222b;
+  --surface: #20242d;
+  --surface-hover: #282d38;
+  --surface-soft: #29313d;
 
   --field: #191c24;
   --field-focus: #232836;
 
-  --item: #262a35;
-  --item-hover: #303645;
+
+  --item: #111821;
+  --item-hover: #172131;
 
   --text: #d2d7e2;
   --text-strong: #f5f7fb;
@@ -256,6 +257,7 @@ button {
   padding: 13px 14px;
   border-radius: var(--radius-md);
   background: var(--item);
+  border: 1px solid rgba(255,255,255,0.055);
 }
 
 .product-card:hover {
