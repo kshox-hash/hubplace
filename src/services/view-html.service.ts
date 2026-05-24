@@ -30,16 +30,16 @@ export function renderViewHtml(record: RuntimeLinkRecord): string {
   --bg: #0f1011;
 
   --surface-1: #16191f;
-  --surface-2: #21262e;
+  --surface-2: #1b1f25;
   --surface-3: #2a303c;
 
   --on-bg: #f3f4f6;
   --on-surface: #ffffff;
   --on-surface-v: #9ca3af;
 
-  --primary: #6366f1;
-  --primary-bg: #1e2148;
-  --primary-bg-2: #2d327d;
+  --primary: #63acf1;
+  --primary-bg: #1e4248;
+  --primary-bg-2: #2d6d7d;
 
   --muted: #9ca3af;
   --muted-2: #6b7280;
