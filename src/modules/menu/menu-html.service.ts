@@ -110,7 +110,7 @@ export function renderMenuHtml(record: RuntimeLinkRecord): string {
 
   --bg: #202124;
 
-  --surface: #0b0c10;
+  --surface: #20242d;
   --surface-hover: #101116;
 
   --text: #d8dbe2;
