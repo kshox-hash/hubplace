@@ -187,15 +187,15 @@ export async function getCalendarBookingsByUserId(userId: string) {
   const result = await pool.query(
     `
     SELECT
-      id,
-      user_id,
-      ''::text as lead_id,
-      client_name as customer_name,
-      COALESCE(client_phone, '') as customer_phone,
+      id::text,
+      user_id::text,
+      ''::text AS lead_id,
+      client_name AS customer_name,
+      COALESCE(client_phone, '') AS customer_phone,
       notes,
-      booking_date,
-      start_time,
-      end_time,
+      TO_CHAR(booking_date, 'YYYY-MM-DD') AS booking_date,
+      TO_CHAR(start_time, 'HH24:MI') AS start_time,
+      TO_CHAR(end_time, 'HH24:MI') AS end_time,
       status
     FROM calendar_bookings
     WHERE user_id = $1
