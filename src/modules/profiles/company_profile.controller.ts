@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { companyProfileService } from "../services/company_profile.service";
+import { companyProfileService } from "./company_profile.service";
 
 type GetByUserIdParams = {
   userId: string;

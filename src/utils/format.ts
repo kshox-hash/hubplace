@@ -1,4 +1,4 @@
-import { ProductsComponent, ProductItem, RuntimeLinkRecord, SubmitBody, ViewConfig } from "../types/runtime";
+import { ProductsComponent, ProductItem, RuntimeLinkRecord, SubmitBody, ViewConfig } from "../runtime/runtime";
 
 export function formatCurrencyCLP(value: number): string {
   return new Intl.NumberFormat("es-CL", {

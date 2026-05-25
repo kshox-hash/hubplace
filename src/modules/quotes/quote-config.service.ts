@@ -4,8 +4,8 @@ import {
   findTemplateByName,
   insertPdfProduct,
   upsertPdfModuleSettings,
-} from "../repository/pdf-config.repository";
-import { PdfConfigOutput, SavePdfConfigInput } from "../types/pdf-config";
+} from "./quote-config.repository";
+import { PdfConfigOutput, SavePdfConfigInput } from "./quote-config.type";
 
 export async function getPdfConfig(
   userId: string

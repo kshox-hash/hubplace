@@ -2,9 +2,9 @@ const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
 
-import { RuntimeLinkRecord, SubmitBody } from "../types/runtime";
-import { buildQuoteDetail, formatCurrencyCLP } from "../utils/format";
-import { sanitizeFileName } from "../utils/token";
+import { RuntimeLinkRecord, SubmitBody } from "../../runtime/runtime";
+import { buildQuoteDetail, formatCurrencyCLP } from "../../utils/format";
+import { sanitizeFileName } from "../../utils/token";
 
 export const GENERATED_PDFS_DIR = path.join(__dirname, "..", "generated-pdfs");
 

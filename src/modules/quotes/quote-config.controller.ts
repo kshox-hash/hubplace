@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getPdfConfig, savePdfConfig } from "../services/pdf-config.service";
-import { SavePdfConfigInput } from "../types/pdf-config";
+import { getPdfConfig, savePdfConfig } from "./quote-config.service";
+import { SavePdfConfigInput } from "./quote-config.type";
 
 export const getPdfConfigController = async (
   req: Request<{ userId: string }>,

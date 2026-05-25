@@ -1,8 +1,8 @@
-import { companyProfileRepository } from "../repository/company_profile_repository";
+import { companyProfileRepository } from "./company_profile_repository";
 import {
   CompanyProfile,
   CompanyProfileInput,
-} from "../types/company-profile.type";
+} from "./company-profile.type";
 
 const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
   if (!userId || !userId.trim()) {

@@ -1,14 +1,14 @@
 import express from "express";
 import cors from "cors";
 
-import runtimeLinksRouter from "./routes/runtime-links.routes";
+import runtimeLinksRouter from "./runtime/runtime-links.routes";
 import { PORT, BASE_URL } from "./config/env";
-import { GENERATED_PDFS_DIR } from "./services/pdf.service";
+import { GENERATED_PDFS_DIR } from "./modules/quotes/quote.service";
 
 //routes 
-import generatePdfRouter from "./routes/pdf-config.routes";
-import companyProfileRoutes from "./routes/company-profile.router";
-import loginRoutes from "./routes/login.router";
+import generatePdfRouter from "./modules/quotes/quote-config.routes";
+import companyProfileRoutes from "./modules/profiles/company-profile.router";
+import loginRoutes from "./login/login.router";
 
 
 const app = express();

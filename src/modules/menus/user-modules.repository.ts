@@ -1,5 +1,5 @@
 import DB from "../../db/db_configuration";
-import { MenuModuleItem } from "../../types/runtime";
+import { MenuModuleItem } from "../../runtime/runtime";
 
 const DEFAULT_MODULES: MenuModuleItem[] = [
   {

@@ -1,6 +1,6 @@
 import { BASE_URL } from "../../config/env";
-import { getPdfConfig } from "../../services/pdf-config.service";
-import { ViewConfig, MenuModuleItem } from "../../types/runtime";
+import { getPdfConfig } from "../quotes/quote-config.service";
+import { ViewConfig, MenuModuleItem } from "../../runtime/runtime";
 import { findEnabledModulesByUserId } from "./user-modules.repository";
 
 function buildModuleUrl(
@@ -16,6 +16,9 @@ function buildModuleUrl(
 
     case "appointments":
       return `${BASE_URL}/open/reservas/${safeLeadId}`;
+      
+    case "appointments":
+      return `${BASE_URL}/open/calendar/${userId}/${safeLeadId}`;
 
     default:
       return "#";

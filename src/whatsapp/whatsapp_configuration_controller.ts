@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { findWhatsAppConfigByUserId } from "../repository/whatsapp_configuration_repository";
-import { sendWhatsAppTextMessage } from "../services/whatsapp.service";
+import { findWhatsAppConfigByUserId } from "./whatsapp_configuration_repository";
+import { sendWhatsAppTextMessage } from "./whatsapp.service";
 
 export const sendWhatsAppController = async (req: Request, res: Response) => {
   try {

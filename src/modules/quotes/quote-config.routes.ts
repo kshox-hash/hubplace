@@ -2,7 +2,7 @@ import express from "express";
 import {
   getPdfConfigController,
   savePdfConfigController,
-} from "../controller/pdf-config.controller";
+} from "./quote-config.controller";
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { runtimeController } from "../controller/runtime.controller";
+import { runtimeController } from "./runtime.controller";
 
 const router = express.Router();
 
@@ -24,6 +24,13 @@ router.get("/open/chatbot/:leadId", runtimeController.openChatbot);
 router.get(
   "/open/cotizador-dinamico/:userId/:leadId",
   runtimeController.openCotizadorDinamico
+);
+
+router.get("/calendar/:token", runtimeController.renderCalendarView);
+
+router.get(
+  "/open/calendar/:userId/:leadId",
+  runtimeController.openCalendar
 );
 
 export default router;

@@ -1,4 +1,4 @@
-import { ViewConfig } from "../types/runtime";
+import { ViewConfig } from "../runtime/runtime";
 
 export function buildCotizadorConfig(leadId: string): ViewConfig {
   return {

@@ -1,5 +1,5 @@
-import { RuntimeLinkRecord } from "../types/runtime";
-import { escapeHtml } from "../utils/html";
+import { RuntimeLinkRecord } from "../../runtime/runtime";
+import { escapeHtml } from "../../utils/html";
 
 export function renderViewHtml(record: RuntimeLinkRecord): string {
   const safeSuccessMessage = escapeHtml(

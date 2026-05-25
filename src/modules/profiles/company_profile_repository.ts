@@ -1,8 +1,8 @@
-import DB from "../db/db_configuration";
+import DB from "../../db/db_configuration";
 import {
   CompanyProfile,
   CompanyProfileInput,
-} from "../types/company-profile.type";
+} from "./company-profile.type";
 
 const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
   const pool = DB.getPool();

@@ -5,26 +5,28 @@ import {
   buildCotizadorConfig,
   buildReservasConfig,
 } from "../builders/view-config.builder";
-import { buildRuntimeConfigFromSavedPdf } from "../builders/runtime-config-from-pdf.builder";
-import { generateQuotePdf } from "../services/pdf.service";
+import { buildRuntimeConfigFromSavedPdf } from "../modules/quotes/runtime-config-from-quote.builder";
+import { generateQuotePdf } from "../modules/quotes/quote.service";
 import {
   createRuntimeRecord,
   getRecordOrNull,
   runtimeLinks,
-} from "../services/runtime-links.service";
-import { renderViewHtml } from "../services/view-html.service";
-import { sendWhatsAppTextMessage } from "../services/whatsapp.service";
-import { findWhatsAppConfigByUserId } from "../repository/whatsapp_configuration_repository";
+} from "./runtime-links.service";
+import { renderViewHtml } from "../modules/quotes/quote-html.service";
+import { sendWhatsAppTextMessage } from "../whatsapp/whatsapp.service";
+import { findWhatsAppConfigByUserId } from "../whatsapp/whatsapp_configuration_repository";
 import {
   CreateRuntimeLinkBody,
   RuntimeLinkRecord,
   SubmitBody,
   ViewConfig,
-} from "../types/runtime";
+} from "./runtime";
 import { generateToken } from "../utils/token";
 
-import { buildMenuConfig } from "../modules/menu/menu.builder";
-import { renderMenuHtml } from "../modules/menu/menu-html.service";
+import { buildMenuConfig } from "../modules/menus/menu.builder";
+import { renderMenuHtml } from "../modules/menus/menu-html.service";
+
+import { renderBookingHtml } from "../modules/appointments/appointments.screen";
 
 function validateConfig(config: unknown): config is ViewConfig {
   if (!config || typeof config !== "object") return false;
@@ -39,6 +41,67 @@ function validateConfig(config: unknown): config is ViewConfig {
 }
 
 export const runtimeController = {
+
+  async openCalendar(
+  req: Request<{ userId: string; leadId: string }>,
+  res: Response
+) {
+  try {
+    const { userId, leadId } = req.params;
+
+    if (!userId || !leadId) {
+      return res.status(400).send("Parámetros inválidos.");
+    }
+
+    const config: ViewConfig = {
+      viewType: "appointments",
+      brand: "amaru electric",
+      title: "Reserva tu hora",
+      subtitle: "Elige un día y horario disponible para agendar tu atención.",
+      successMessage: "Tu hora fue reservada correctamente.",
+      userId,
+      leadId,
+      components: [],
+    };
+
+    const record = createRuntimeRecord(config, 30);
+
+    return res.redirect(`/calendar/${record.token}`);
+  } catch (error) {
+    console.error("Error abriendo calendario:", error);
+
+    return res.status(500).send(
+      `No se pudo abrir el calendario: ${
+        error instanceof Error ? error.message : "error desconocido"
+      }`
+    );
+  }
+},
+
+renderCalendarView(
+  req: Request<{ token: string }>,
+  res: Response
+) {
+  const { token } = req.params;
+
+  const record = getRecordOrNull(token);
+
+  if (!record) {
+    return res
+      .status(404)
+      .send("<h1>404</h1><p>Calendario no encontrado.</p>");
+  }
+
+  if (record.status === "expired") {
+    return res
+      .status(410)
+      .send("<h1>Calendario expirado</h1><p>Este enlace ya no está disponible.</p>");
+  }
+
+  record.openedAt = Date.now();
+
+  return res.send(renderBookingHtml(record));
+},
 
   async openMenu(
   req: Request<{ userId: string; leadId: string }>,

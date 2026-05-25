@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { RuntimeLinkRecord } from "../types/runtime";
+import { RuntimeLinkRecord } from "../runtime/runtime";
 
 export function generateToken(): string {
   return crypto.randomBytes(8).toString("hex");

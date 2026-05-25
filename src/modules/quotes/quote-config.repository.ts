@@ -1,4 +1,4 @@
-import DB from "../db/db_configuration";
+import DB from "../../db/db_configuration";
 
 export async function findTemplateByName(name: string) {
   const res = await DB.getPool().query(

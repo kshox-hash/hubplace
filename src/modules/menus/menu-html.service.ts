@@ -1,4 +1,4 @@
-import { RuntimeLinkRecord } from "../../types/runtime";
+import { RuntimeLinkRecord } from "../../runtime/runtime";
 import { escapeHtml } from "../../utils/html";
 
 export function renderMenuHtml(record: RuntimeLinkRecord): string {
