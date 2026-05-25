@@ -6,10 +6,7 @@ import {
 } from "./appointments-admin.repository";
 
 export const calendarAdminController = {
-  async getSettings(
-    req: Request<{ userId: string }>,
-    res: Response
-  ) {
+  async getSettings(req: Request<{ userId: string }>, res: Response) {
     try {
       const { userId } = req.params;
 
@@ -36,10 +33,7 @@ export const calendarAdminController = {
     }
   },
 
-  async saveSettings(
-    req: Request,
-    res: Response
-  ) {
+  async saveSettings(req: Request, res: Response) {
     try {
       const body = req.body || {};
 
@@ -51,7 +45,7 @@ export const calendarAdminController = {
       const maxDaysAhead = Number(body.maxDaysAhead || 30);
 
       const activeWeekdays = Array.isArray(body.activeWeekdays)
-        ? body.activeWeekdays.map(Number)
+        ? body.activeWeekdays.map(Number).filter((n : any) => n >= 1 && n <= 7)
         : [];
 
       const blockedDates = Array.isArray(body.blockedDates)
@@ -98,10 +92,7 @@ export const calendarAdminController = {
     }
   },
 
-  async getBookings(
-    req: Request<{ userId: string }>,
-    res: Response
-  ) {
+  async getBookings(req: Request<{ userId: string }>, res: Response) {
     try {
       const { userId } = req.params;
 
