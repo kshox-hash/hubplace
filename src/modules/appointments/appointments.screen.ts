@@ -1,205 +1,47 @@
 import { RuntimeLinkRecord } from "../../runtime/runtime";
 import { escapeHtml } from "../../utils/html";
 
-/**
- * renderBookingHtml
- * ─────────────────
- * Genera la página web que el cliente ve al abrir el link de reserva
- * de horas. El flujo es:
- *
- *   1. La página carga los horarios disponibles desde la API:
- *      GET /api/runtime-links/:token/slots
- *      → { slots: { date: string, times: string[] }[] }
- *
- *   2. El cliente elige fecha y hora.
- *
- *   3. Rellena sus datos (nombre, teléfono, notas).
- *
- *   4. POST /api/runtime-links/:token/submit
- *      { customer: { name, phone, notes }, slot: { date, time } }
- *
- * La respuesta esperada de /slots sigue esta forma:
- * {
- *   slots: [
- *     { date: "2025-05-24", times: ["09:00", "09:30", "10:00"] },
- *     { date: "2025-05-25", times: ["11:00", "14:00"] }
- *   ]
- * }
- *
- * Si el backend devuelve `slots` vacío, se muestra un estado "sin
- * disponibilidad" en lugar de romper la UI.
- */
-export function renderBookingHtml(record: RuntimeLinkRecord): string {
-  const safeTitle = escapeHtml(record.config.title || "Reservar hora");
-  const safeBrand = escapeHtml(record.config.brand || "amaru electric");
-  const safeSubtitle = escapeHtml(
-    record.config.subtitle ||
-      "Elige el día y la hora que mejor se adapte a ti."
-  );
-  const safeSuccessMessage = escapeHtml(
-    record.config.successMessage || "¡Hora reservada correctamente!"
-  );
+import { renderBookingHtmlShell } from "../../runtime/booking/bookingHtmlShell";
+import { renderBookingStyles } from "../../runtime/booking/bookingStyles";
+import { renderBookingScript } from "../../runtime/booking/scripts/bookingScript";
 
-  const expiresAtFormatted = new Date(record.expiresAt).toLocaleString(
-    "es-CL"
-  );
+export function renderBookingHtml(
+  record: RuntimeLinkRecord
+): string {
+  const viewModel = {
+    token: record.token,
 
-  return `<!doctype html>
-<html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>${safeTitle}</title>
+    title: escapeHtml(
+      record.config.title || "Reservar hora"
+    ),
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
-  rel="stylesheet"
-/>
+    brand: escapeHtml(
+      record.config.brand || "amaru electric"
+    ),
 
+    subtitle: escapeHtml(
+      record.config.subtitle ||
+        "Elige el día y la hora que mejor se adapte a ti."
+    ),
 
- 
-</head>
+    successMessage: escapeHtml(
+      record.config.successMessage ||
+        "¡Hora reservada correctamente!"
+    ),
 
-<body>
-<main class="shell">
+    expiresAtFormatted: escapeHtml(
+      new Date(record.expiresAt).toLocaleString("es-CL")
+    ),
+  };
 
-  <!-- TOPBAR -->
-  <header class="topbar animate">
-    <div class="logo-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-      </svg>
-    </div>
-    <span class="brand-name">${safeBrand}</span>
-  </header>
+  return renderBookingHtmlShell({
+    ...viewModel,
 
-  <!-- HERO -->
-  <section class="hero animate" style="animation-delay:.08s">
-    <div class="hero-label">
-      <span></span>
-      Reserva online
-    </div>
-    <h1 class="hero-title">${safeTitle}</h1>
-    <p class="hero-sub">${safeSubtitle}</p>
-  </section>
+    styles: renderBookingStyles(),
 
-  <!-- STEP TRACK -->
-  <div class="steps-track animate" style="animation-delay:.14s" id="stepsTrack">
-    <div class="step-node active" id="step-node-1">
-      <div class="step-circle">1</div>
-      <div class="step-label">Fecha</div>
-    </div>
-    <div class="step-node" id="step-node-2">
-      <div class="step-circle">2</div>
-      <div class="step-label">Hora</div>
-    </div>
-    <div class="step-node" id="step-node-3">
-      <div class="step-circle">3</div>
-      <div class="step-label">Datos</div>
-    </div>
-  </div>
-
-  <!-- MAIN CONTENT (steps) -->
-  <div id="mainContent" class="animate" style="animation-delay:.2s">
-
-    <!-- STEP 1: DATE -->
-    <div id="stepDate">
-      <p class="sec-title">Elige un día</p>
-      <div class="card">
-        <div class="card-pad" id="datesContainer">
-          <div class="loader-wrap">
-            <div class="spinner"></div>
-            <span>Cargando disponibilidad…</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 2: TIME (hidden initially) -->
-    <div id="stepTime" style="display:none">
-      <p class="sec-title" id="timeSectionTitle">Horarios disponibles</p>
-      <div class="card">
-        <div class="card-pad">
-          <div id="timesContainer" class="times-grid"></div>
-        </div>
-      </div>
-      <button class="summary-edit" id="btnBackDate" style="margin-bottom:14px; display:block; background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-m); padding:10px 16px; color:var(--muted); font-size:12px; font-weight:700; cursor:pointer;">
-        ← Cambiar fecha
-      </button>
-    </div>
-
-    <!-- STEP 3: FORM (hidden initially) -->
-    <div id="stepForm" style="display:none">
-      <!-- Selection summary -->
-      <div class="summary-bar" id="summaryBar">
-        <div class="summary-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-            <line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8" y1="2" x2="8" y2="6"/>
-            <line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-        </div>
-        <div class="summary-content">
-          <div class="summary-top" id="summaryDate">—</div>
-          <div class="summary-bot" id="summaryTime">—</div>
-        </div>
-        <button class="summary-edit" id="btnBackTime">Cambiar</button>
-      </div>
-
-      <p class="sec-title">Tus datos</p>
-      <div class="card">
-        <div class="card-pad">
-          <div class="form-fields">
-            <div class="field">
-              <label class="label" for="inputName">Nombre completo *</label>
-              <input type="text" id="inputName" placeholder="Ej: María González" autocomplete="name" />
-            </div>
-            <div class="field">
-              <label class="label" for="inputPhone">Teléfono *</label>
-              <input type="tel" id="inputPhone" placeholder="+56 9 1234 5678" autocomplete="tel" inputmode="tel" />
-            </div>
-            <div class="field">
-              <label class="label" for="inputNotes">Notas adicionales</label>
-              <textarea id="inputNotes" placeholder="Dirección, descripción del trabajo, observaciones…"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn-submit" id="btnSubmit">
-        <span>Confirmar reserva</span>
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-        </svg>
-      </button>
-    </div>
-
-  </div><!-- /mainContent -->
-
-  <!-- SUCCESS SCREEN -->
-  <div class="success-screen animate" id="successScreen" style="animation-delay:.1s">
-    <div class="success-icon-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
-    </div>
-    <h2 class="success-title">¡Hora reservada!</h2>
-    <p class="success-sub" id="successSubText">${safeSuccessMessage}</p>
-    <div class="success-detail" id="successDetail"></div>
-  </div>
-
-  <div id="messageEl" class="message"></div>
-
-  <footer class="footer">
-    Enlace válido hasta <strong id="expiresAt">${escapeHtml(expiresAtFormatted)}</strong>
-    &nbsp;·&nbsp; Desarrollado por <strong>Automatiza Fácil</strong>
-  </footer>
-
-</main>
-
-</body>
-</html>`;
+    script: renderBookingScript({
+      token: viewModel.token,
+      successMessage: viewModel.successMessage,
+    }),
+  });
 }
