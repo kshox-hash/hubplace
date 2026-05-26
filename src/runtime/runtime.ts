@@ -35,7 +35,13 @@ export type ProductsComponent = {
 export type FormField = {
   name: string;
   label: string;
-  inputType: "text" | "email" | "tel" | "number" | "textarea";
+  inputType:
+    | "text"
+    | "email"
+    | "tel"
+    | "number"
+    | "textarea";
+
   required?: boolean;
   placeholder?: string;
 };
@@ -48,6 +54,7 @@ export type FormComponent = {
 export type ButtonComponent = {
   type: "button";
   label: string;
+
   action: {
     type: "submit";
   };
@@ -61,40 +68,87 @@ export type UIComponent =
 
 export type ViewConfig = {
   viewType?: RuntimeViewType;
+
   title: string;
+
   subtitle?: string;
+
   brand?: string;
+
   successMessage?: string;
+
   recipientPhone?: string;
+
   userId?: string;
+
   leadId?: string;
+
+  // ── THEME / BRANDING ─────────────────────────
+
+  logoUrl?: string;
+
+  primaryColor?: string;
+
+  backgroundColor?: string;
+
+  surfaceColor?: string;
+
+  textColor?: string;
+
+  mutedColor?: string;
+
+  buttonTextColor?: string;
+
+  // ── MODULES ──────────────────────────────────
+
   modules?: MenuModuleItem[];
+
+  // ── COMPONENTS ───────────────────────────────
+
   components: UIComponent[];
 };
 
 export type RuntimeLinkRecord = {
   token: string;
+
   config: ViewConfig;
+
   createdAt: number;
+
   expiresAt: number;
-  status: "active" | "expired" | "used";
+
+  status:
+    | "active"
+    | "expired"
+    | "used";
+
   openedAt?: number;
+
   submittedAt?: number;
+
   submissions: unknown[];
 };
 
 export type CreateRuntimeLinkBody = {
   expiresInMinutes?: number;
+
   config: ViewConfig;
 };
 
 export type SubmitBody = {
   customer?: Record<string, unknown>;
-  items?: Array<{ productId: string; quantity: number }>;
+
+  items?: Array<{
+    productId: string;
+    quantity: number;
+  }>;
+
   slot?: {
     date?: string;
     time?: string;
   };
+
   appointment?: Record<string, unknown>;
+
   raw?: Record<string, unknown>;
 };
