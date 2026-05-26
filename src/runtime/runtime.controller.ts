@@ -40,6 +40,15 @@ import {
   reserveCalendarSlot,
 } from "../modules/appointments/appointments.service";
 
+import {
+  createBookingConfirmationExpiresAt,
+  createBookingConfirmationToken,
+} from "../runtime/booking/services/bookingTokenService";
+
+import {
+  sendBookingConfirmationEmail,
+} from "../runtime/booking/services/bookingEmailService";
+
 function validateConfig(config: unknown): config is ViewConfig {
   if (!config || typeof config !== "object") return false;
 
@@ -69,7 +78,7 @@ export const runtimeController = {
         brand: "Automatiza Fácil",
         title: "Reserva tu hora",
         subtitle: "Elige el día y horario disponible para agendar tu atención.",
-        successMessage: "Tu hora fue reservada correctamente.",
+        successMessage: "Te enviamos un correo para confirmar tu hora.",
         userId,
         leadId,
         recipientPhone: leadId,
@@ -90,10 +99,7 @@ export const runtimeController = {
     }
   },
 
-  renderCalendarView(
-    req: Request<{ token: string }>,
-    res: Response
-  ) {
+  renderCalendarView(req: Request<{ token: string }>, res: Response) {
     const { token } = req.params;
 
     const record = getRecordOrNull(token);
@@ -107,7 +113,9 @@ export const runtimeController = {
     if (record.status === "expired") {
       return res
         .status(410)
-        .send("<h1>Calendario expirado</h1><p>Este enlace ya no está disponible.</p>");
+        .send(
+          "<h1>Calendario expirado</h1><p>Este enlace ya no está disponible.</p>"
+        );
     }
 
     record.openedAt = Date.now();
@@ -115,10 +123,7 @@ export const runtimeController = {
     return res.send(renderBookingHtml(record));
   },
 
-  async getCalendarSlots(
-    req: Request<{ token: string }>,
-    res: Response
-  ) {
+  async getCalendarSlots(req: Request<{ token: string }>, res: Response) {
     try {
       const { token } = req.params;
 
@@ -186,10 +191,7 @@ export const runtimeController = {
     }
   },
 
-  renderMenuView(
-    req: Request<{ token: string }>,
-    res: Response
-  ) {
+  renderMenuView(req: Request<{ token: string }>, res: Response) {
     const { token } = req.params;
 
     const record = getRecordOrNull(token);
@@ -209,10 +211,7 @@ export const runtimeController = {
     return res.send(renderMenuHtml(record));
   },
 
-  createRuntimeLink(
-    req: Request<{}, {}, CreateRuntimeLinkBody>,
-    res: Response
-  ) {
+  createRuntimeLink(req: Request<{}, {}, CreateRuntimeLinkBody>, res: Response) {
     const { expiresInMinutes = 10, config } = req.body;
 
     if (!validateConfig(config)) {
@@ -255,10 +254,7 @@ export const runtimeController = {
     });
   },
 
-  getRuntimeLink(
-    req: Request<{ token: string }>,
-    res: Response
-  ) {
+  getRuntimeLink(req: Request<{ token: string }>, res: Response) {
     const { token } = req.params;
 
     const record = getRecordOrNull(token);
@@ -321,6 +317,7 @@ export const runtimeController = {
 
         const customerName = String(customer.name || "").trim();
         const customerPhone = String(customer.phone || "").trim();
+        const customerEmail = String(customer.email || "").trim();
         const notes = String(customer.notes || "").trim();
 
         const bookingDate = String(slot.date || "").trim();
@@ -333,12 +330,27 @@ export const runtimeController = {
           });
         }
 
-        if (!customerName || !customerPhone || !bookingDate || !startTime) {
+        if (
+          !customerName ||
+          !customerPhone ||
+          !customerEmail ||
+          !bookingDate ||
+          !startTime
+        ) {
           return res.status(400).json({
             ok: false,
             message: "Faltan datos para reservar.",
           });
         }
+
+        const confirmationToken = createBookingConfirmationToken();
+        const confirmationExpiresAt = createBookingConfirmationExpiresAt();
+
+        const publicBaseUrl =
+          process.env.PUBLIC_BASE_URL || BASE_URL;
+
+        const confirmationUrl =
+          `${publicBaseUrl}/api/bookings/confirm/${confirmationToken}`;
 
         const booking = await reserveCalendarSlot({
           userId,
@@ -350,9 +362,22 @@ export const runtimeController = {
           startTime,
         });
 
+        await sendBookingConfirmationEmail({
+          to: customerEmail,
+          customerName,
+          bookingDate,
+          bookingTime: startTime,
+          confirmationUrl,
+        });
+
         record.submissions.push({
           ...body,
           booking,
+          confirmationToken,
+          confirmationExpiresAt: confirmationExpiresAt.toISOString(),
+          confirmationUrl,
+          emailSentAt: new Date().toISOString(),
+          status: "pending_email_confirmation",
           submittedAt: new Date().toISOString(),
         });
 
@@ -361,7 +386,8 @@ export const runtimeController = {
 
         return res.json({
           ok: true,
-          message: "Hora reservada correctamente.",
+          status: "pending_email_confirmation",
+          message: "Te enviamos un correo para confirmar tu hora.",
           booking,
         });
       }
@@ -422,10 +448,7 @@ export const runtimeController = {
     }
   },
 
-  getSubmissions(
-    req: Request<{ token: string }>,
-    res: Response
-  ) {
+  getSubmissions(req: Request<{ token: string }>, res: Response) {
     const { token } = req.params;
 
     const record = runtimeLinks.get(token);
@@ -452,10 +475,7 @@ export const runtimeController = {
     });
   },
 
-  renderRuntimeView(
-    req: Request<{ token: string }>,
-    res: Response
-  ) {
+  renderRuntimeView(req: Request<{ token: string }>, res: Response) {
     const { token } = req.params;
 
     const record = getRecordOrNull(token);
@@ -550,10 +570,7 @@ export const runtimeController = {
     });
   },
 
-  async openCotizador(
-    req: Request<{ leadId: string }>,
-    res: Response
-  ) {
+  async openCotizador(req: Request<{ leadId: string }>, res: Response) {
     try {
       const rawLeadId = req.params.leadId;
 
@@ -584,19 +601,13 @@ export const runtimeController = {
     }
   },
 
-  openReservas(
-    req: Request<{ leadId: string }>,
-    res: Response
-  ) {
+  openReservas(req: Request<{ leadId: string }>, res: Response) {
     const record = createRuntimeRecord(buildReservasConfig(req.params.leadId), 15);
 
     return res.redirect(`/v/${record.token}`);
   },
 
-  openChatbot(
-    req: Request<{ leadId: string }>,
-    res: Response
-  ) {
+  openChatbot(req: Request<{ leadId: string }>, res: Response) {
     const record = createRuntimeRecord(buildChatbotConfig(req.params.leadId), 15);
 
     return res.redirect(`/v/${record.token}`);
