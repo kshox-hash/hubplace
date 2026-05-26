@@ -4,6 +4,7 @@ import { escapeHtml } from "../../utils/html";
 import { renderBookingHtmlShell } from "../../runtime/booking/bookingHtmlShell";
 import { renderBookingStyles } from "../../runtime/booking/bookingStyles";
 import { renderBookingScript } from "../../runtime/booking/scripts/bookingScript";
+import "../../runtime/booking/bookingIcons"
 
 export function renderBookingHtml(
   record: RuntimeLinkRecord
