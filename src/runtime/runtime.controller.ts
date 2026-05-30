@@ -49,7 +49,7 @@ import {
   sendBookingConfirmationEmail,
 } from "../runtime/booking/services/bookingEmailService";
 
-import { notificationService } from "../modules/notificactions/notificaction.service";
+import { notificationService } from "../modules/notifications/notification.service";
 
 function validateConfig(config: unknown): config is ViewConfig {
   if (!config || typeof config !== "object") return false;
