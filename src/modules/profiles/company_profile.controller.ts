@@ -5,6 +5,10 @@ type GetByUserIdParams = {
   userId: string;
 };
 
+type GetByPublicSlugParams = {
+  slug: string;
+};
+
 type UpsertBody = {
   user_id: string;
   business_name: string;
@@ -46,6 +50,46 @@ export const companyProfileController = {
         error instanceof Error ? error.message : "Error interno del servidor";
 
       if (message === "userId es obligatorio") {
+        return res.status(400).json({ error: message });
+      }
+
+      return res.status(500).json({
+        error: "Error interno del servidor",
+      });
+    }
+  },
+
+  async getByPublicSlug(
+    req: Request<GetByPublicSlugParams>,
+    res: Response,
+  ): Promise<Response> {
+    try {
+      const slug = req.params.slug;
+
+      if (!slug || !slug.trim()) {
+        return res.status(400).json({
+          error: "slug es obligatorio",
+        });
+      }
+
+      const profile = await companyProfileService.getByPublicSlug(slug);
+
+      if (!profile) {
+        return res.status(404).json({
+          error: "Negocio no encontrado",
+        });
+      }
+
+      return res.status(200).json({
+        data: profile,
+      });
+    } catch (error) {
+      console.error("Error obteniendo negocio público:", error);
+
+      const message =
+        error instanceof Error ? error.message : "Error interno del servidor";
+
+      if (message === "publicSlug es obligatorio") {
         return res.status(400).json({ error: message });
       }
 

@@ -12,6 +12,18 @@ const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
   return companyProfileRepository.getByUserId(userId);
 };
 
+const getByPublicSlug = async (
+  publicSlug: string,
+): Promise<CompanyProfile | null> => {
+  const slug = publicSlug.trim().toLowerCase();
+
+  if (!slug) {
+    throw new Error("publicSlug es obligatorio");
+  }
+
+  return companyProfileRepository.getByPublicSlug(slug);
+};
+
 const upsert = async (
   input: CompanyProfileInput,
 ): Promise<CompanyProfile> => {
@@ -37,5 +49,6 @@ const upsert = async (
 
 export const companyProfileService = {
   getByUserId,
+  getByPublicSlug,
   upsert,
 };

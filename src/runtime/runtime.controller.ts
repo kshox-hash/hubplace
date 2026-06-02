@@ -51,6 +51,9 @@ import {
 
 import { notificationService } from "../modules/notifications/notification.service";
 
+import { companyProfileService } from "../modules/profiles/company_profile.service";
+import { findEnabledModulesByUserId } from "../modules/menus/user-modules.repository";
+
 function validateConfig(config: unknown): config is ViewConfig {
   if (!config || typeof config !== "object") return false;
 
@@ -64,6 +67,40 @@ function validateConfig(config: unknown): config is ViewConfig {
 }
 
 export const runtimeController = {
+async openPublicPortal(req: Request, res: Response) {
+  try {
+    const rawPublicSlug = req.params.publicSlug;
+    const publicSlug = Array.isArray(rawPublicSlug)
+      ? rawPublicSlug[0]
+      : rawPublicSlug;
+
+    if (!publicSlug || !publicSlug.trim()) {
+      return res.status(400).send("Slug público obligatorio");
+    }
+
+    const profile = await companyProfileService.getByPublicSlug(publicSlug);
+
+    if (!profile) {
+      return res.status(404).send("Negocio no encontrado");
+    }
+
+    const modules = await findEnabledModulesByUserId(profile.user_id);
+
+    const html = renderMenuHtml({
+      title: profile.business_name,
+      brand: profile.business_name,
+      subtitle: "Selecciona un servicio para continuar.",
+      modules,
+    });
+
+    return res.status(200).send(html);
+  } catch (error) {
+    console.error("Error abriendo portal público:", error);
+
+    return res.status(500).send("Error abriendo portal público");
+  }
+},
+
   async openCalendar(
     req: Request<{ userId: string; leadId: string }>,
     res: Response
@@ -193,25 +230,32 @@ export const runtimeController = {
     }
   },
 
-  renderMenuView(req: Request<{ token: string }>, res: Response) {
-    const { token } = req.params;
+ renderMenuView(req: Request<{ token: string }>, res: Response) {
+  const { token } = req.params;
 
-    const record = getRecordOrNull(token);
+  const record = getRecordOrNull(token);
 
-    if (!record) {
-      return res.status(404).send("<h1>404</h1><p>Menú no encontrado.</p>");
-    }
+  if (!record) {
+    return res.status(404).send("<h1>404</h1><p>Menú no encontrado.</p>");
+  }
 
-    if (record.status === "expired") {
-      return res
-        .status(410)
-        .send("<h1>Menú expirado</h1><p>Este enlace ya no está disponible.</p>");
-    }
+  if (record.status === "expired") {
+    return res
+      .status(410)
+      .send("<h1>Menú expirado</h1><p>Este enlace ya no está disponible.</p>");
+  }
 
-    record.openedAt = Date.now();
+  record.openedAt = Date.now();
 
-    return res.send(renderMenuHtml(record));
-  },
+  return res.send(
+    renderMenuHtml({
+      title: record.config.title,
+      brand: record.config.brand ?? record.config.title,
+      subtitle: record.config.subtitle ?? "",
+      modules: record.config.modules ?? [],
+    })
+  );
+},
 
   createRuntimeLink(req: Request<{}, {}, CreateRuntimeLinkBody>, res: Response) {
     const { expiresInMinutes = 10, config } = req.body;

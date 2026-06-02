@@ -9,14 +9,17 @@ export default class DB {
   static getPool(): Pool {
     if (!DB.pool) {
       DB.pool = new Pool({
-        host: process.env.PGHOST ?? "localhost",
+        host: process.env.PGHOST ?? "dpg-d7h6ejhkh4rs73ajulsg-a.oregon-postgres.render.com",
         port: Number(process.env.PGPORT ?? 5432),
-        user: process.env.PGUSER ?? "postgres",
-        password: process.env.PGPASSWORD ?? "123",
-        database: process.env.PGDATABASE ?? "automatizafacildb",
+        user: process.env.PGUSER ?? "kshox",
+        password: process.env.PGPASSWORD ?? "NkvUunzoK4IHVqdvaaboM925AaA5K9HG",
+        database: process.env.PGDATABASE ?? "automatizafacildb_4h5y",
         max: 10,
         idleTimeoutMillis: 30_000,
         connectionTimeoutMillis: 5_000,
+         ssl: {
+            rejectUnauthorized: false,
+          },
       });
 
       DB.pool.on("error", (err) => {

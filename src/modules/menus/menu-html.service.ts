@@ -1,19 +1,27 @@
-import { RuntimeLinkRecord } from "../../runtime/runtime";
+import { RuntimeLinkRecord, MenuModuleItem } from "../../runtime/runtime";
 import { escapeHtml } from "../../utils/html";
 
-export function renderMenuHtml(record: RuntimeLinkRecord): string {
-  const safeTitle = escapeHtml(record.config.title || "Menú de servicios");
+
+export type MenuViewData = {
+  title: string;
+  brand: string;
+  subtitle: string;
+  modules: MenuModuleItem[];
+};
+
+export function renderMenuHtml(record: MenuViewData): string {
+  const safeTitle = escapeHtml(record.title || "Menú de servicios");
 
   const safeBrand = escapeHtml(
-    record.config.brand || "amaru electric"
+    record.brand || ""
   );
 
   const safeSubtitle = escapeHtml(
-    record.config.subtitle ||
+    record.subtitle ||
       "Selecciona el módulo que quieres utilizar."
   );
 
-  const modules = record.config.modules || [];
+  const modules = record.modules || [];
 
   const cardsHtml = modules
     .map((module, index) => {

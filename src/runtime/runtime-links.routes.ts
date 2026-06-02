@@ -38,6 +38,7 @@ router.get(
   runtimeController.getCalendarSlots
 );
 
+router.get("/open/:publicSlug", runtimeController.openPublicPortal);
 
 
 export default router;

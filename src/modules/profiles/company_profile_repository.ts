@@ -12,6 +12,8 @@ const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
       id,
       user_id,
       business_name,
+      public_slug,
+      is_public_enabled,
       rut,
       city,
       address,
@@ -24,6 +26,34 @@ const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
   `;
 
   const result = await pool.query<CompanyProfile>(query, [userId]);
+  return result.rows[0] ?? null;
+};
+
+const getByPublicSlug = async (
+  publicSlug: string,
+): Promise<CompanyProfile | null> => {
+  const pool = DB.getPool();
+
+  const query = `
+    SELECT
+      id,
+      user_id,
+      business_name,
+      public_slug,
+      is_public_enabled,
+      rut,
+      city,
+      address,
+      phone,
+      created_at,
+      updated_at
+    FROM business_profiles
+    WHERE public_slug = $1
+      AND is_public_enabled = true
+    LIMIT 1
+  `;
+
+  const result = await pool.query<CompanyProfile>(query, [publicSlug]);
   return result.rows[0] ?? null;
 };
 
@@ -56,6 +86,8 @@ const upsert = async (
       id,
       user_id,
       business_name,
+      public_slug,
+      is_public_enabled,
       rut,
       city,
       address,
@@ -84,5 +116,6 @@ const upsert = async (
 
 export const companyProfileRepository = {
   getByUserId,
+  getByPublicSlug,
   upsert,
 };
