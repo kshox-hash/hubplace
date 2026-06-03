@@ -1,4 +1,4 @@
-import { MercadoPagoConfig, Preference, Payment} from "mercadopago";
+import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
 
 type CreatePreferenceInput = {
   accessToken: string;
@@ -7,6 +7,8 @@ type CreatePreferenceInput = {
   amount: number;
 };
 
+const APP_URL =
+  process.env.PUBLIC_BASE_URL;
 
 export async function createPreference(
   input: CreatePreferenceInput
@@ -32,15 +34,15 @@ export async function createPreference(
       external_reference: input.bookingId,
 
       back_urls: {
-        success: "https://runtimegenerateui.onrender.com/payment/success",
-        failure: "https://runtimegenerateui.onrender.com/payment/failure",
-        pending: "https://runtimegenerateui.onrender.com/payment/pending",
+        success: `${APP_URL}/payment/success`,
+        failure: `${APP_URL}/payment/failure`,
+        pending: `${APP_URL}/payment/pending`,
       },
 
       auto_return: "approved",
 
       notification_url:
-        "https://runtimegenerateui.onrender.com/api/payments/webhook",
+        `${APP_URL}/api/payments/webhook`,
     },
   });
 
@@ -51,7 +53,10 @@ export async function createPreference(
   };
 }
 
-export async function getPaymentById(accessToken: string, paymentId: string) {
+export async function getPaymentById(
+  accessToken: string,
+  paymentId: string
+) {
   const client = new MercadoPagoConfig({
     accessToken,
   });
