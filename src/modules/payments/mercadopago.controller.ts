@@ -15,7 +15,7 @@ export const paymentsController = {
         accessToken,
         bookingId: "TEST-001",
         title: "Reserva Flowers",
-        amount: 1000,
+        amount: 3000,
         });
 
       return res.json(payment);
