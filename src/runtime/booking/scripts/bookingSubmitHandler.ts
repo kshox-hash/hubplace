@@ -34,7 +34,7 @@ function initSubmitHandler() {
     setSubmitLoading(true);
 
     try {
-      const res = await fetch(\`/api/runtime-links/\${TOKEN}/submit\`, {
+      const bookingRes = await fetch(\`/api/public/\${PUBLIC_SLUG}/bookings\`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -56,36 +56,46 @@ function initSubmitHandler() {
         })
       });
 
-      const data = await res.json();
+      const bookingData = await bookingRes.json();
 
-      if (!res.ok) {
+      if (!bookingRes.ok) {
         showMessage(
           "error",
-          data.message || "No se pudo realizar la reserva."
+          bookingData.message || "No se pudo realizar la reserva."
         );
 
         setSubmitLoading(false);
         return;
       }
 
-      const displayDate = formatDisplayDate(selDate);
+      const bookingId = bookingData.booking && bookingData.booking.id;
 
-      successDetail.textContent = \`\${displayDate} · \${selTime} hrs\`;
-
-      mainContent.style.display = "none";
-
-      const stepsTrack = document.querySelector(".steps-track");
-
-      if (stepsTrack) {
-        stepsTrack.style.display = "none";
+      if (!bookingId) {
+        showMessage("error", "No se pudo generar la reserva.");
+        setSubmitLoading(false);
+        return;
       }
 
-      successScreen.classList.add("visible");
+      const paymentRes = await fetch(
+        \`/api/public/\${PUBLIC_SLUG}/bookings/\${bookingId}/pay\`,
+        {
+          method: "POST"
+        }
+      );
 
-      successScreen.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      const paymentData = await paymentRes.json();
+
+      if (!paymentRes.ok || !paymentData.checkoutUrl) {
+        showMessage(
+          "error",
+          paymentData.message || "No se pudo generar el pago."
+        );
+
+        setSubmitLoading(false);
+        return;
+      }
+
+      window.location.href = paymentData.checkoutUrl;
     } catch (_) {
       showMessage("error", "Ocurrió un error al enviar la reserva.");
       setSubmitLoading(false);

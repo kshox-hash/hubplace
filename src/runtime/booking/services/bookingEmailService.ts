@@ -4,6 +4,8 @@ import {
   renderConfirmationEmailTemplate,
 } from "../templates/confirmationEmailTemplate";
 
+
+
 type SendBookingConfirmationEmailInput = {
   to: string;
   customerName: string;
@@ -12,13 +14,14 @@ type SendBookingConfirmationEmailInput = {
   confirmationUrl: string;
 };
 
+
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT || 587),
+  host: "smtp.gmail.com",
+  port: Number(process.env.SMTP_PORT || 587  || 465),
   secure: process.env.SMTP_SECURE === "true",
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: "automatizafacil.chile@gmail.com",
+    pass: "vguf xwsg qnmn chjn",
   },
 });
 
@@ -33,7 +36,7 @@ export async function sendBookingConfirmationEmail(
   });
 
   await transporter.sendMail({
-    from: `"Automatiza Fácil" <${process.env.SMTP_FROM_EMAIL}>`,
+    from: `"Automatiza Fácil" <automatizafacil.chile@gmail.com>`,
     to: input.to,
     subject: "Confirma tu reserva",
     html,

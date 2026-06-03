@@ -1,25 +1,27 @@
-import { RuntimeLinkRecord } from "../../runtime/runtime";
 import { escapeHtml } from "../../utils/html";
 
 import { renderBookingHtmlShell } from "../../runtime/booking/bookingHtmlShell";
 import { renderBookingStyles } from "../../runtime/booking/bookingStyles";
 import { renderBookingScript } from "../../runtime/booking/scripts/bookingScript";
 
+export type BookingViewData = {
+  publicSlug: string;
+  title: string;
+  brand: string;
+  subtitle: string;
+  successMessage: string;
+};
 
-export function renderBookingHtml(record: RuntimeLinkRecord): string {
+export function renderBookingHtml(data: BookingViewData): string {
   const viewModel = {
-    token: record.token,
-    title: escapeHtml(record.config.title || "Reservar hora"),
-    brand: escapeHtml(record.config.brand || "amaru electric"),
+    publicSlug: data.publicSlug,
+    title: escapeHtml(data.title || "Reservar hora"),
+    brand: escapeHtml(data.brand || "Automatiza Fácil"),
     subtitle: escapeHtml(
-      record.config.subtitle ||
-        "Elige el día y la hora que mejor se adapte a ti."
+      data.subtitle || "Elige el día y la hora que mejor se adapte a ti."
     ),
     successMessage: escapeHtml(
-      record.config.successMessage || "¡Hora reservada correctamente!"
-    ),
-    expiresAtFormatted: escapeHtml(
-      new Date(record.expiresAt).toLocaleString("es-CL")
+      data.successMessage || "¡Hora reservada correctamente!"
     ),
   };
 
@@ -27,7 +29,7 @@ export function renderBookingHtml(record: RuntimeLinkRecord): string {
     ...viewModel,
     styles: renderBookingStyles(),
     script: renderBookingScript({
-      token: viewModel.token,
+      publicSlug: viewModel.publicSlug,
       successMessage: viewModel.successMessage,
     }),
   });

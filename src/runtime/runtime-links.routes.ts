@@ -1,6 +1,6 @@
 import express from "express";
 import { runtimeController } from "./runtime.controller";
-
+import { paymentsController } from '../modules/payments/mercadopago.controller'
 const router = express.Router();
 
 router.post("/api/runtime-links", runtimeController.createRuntimeLink);
@@ -26,19 +26,49 @@ router.get(
   runtimeController.openCotizadorDinamico
 );
 
-router.get("/calendar/:token", runtimeController.renderCalendarView);
-
-router.get(
-  "/open/calendar/:userId/:leadId",
-  runtimeController.openCalendar
-);
-
 router.get(
   "/api/runtime-links/:token/slots",
   runtimeController.getCalendarSlots
 );
 
+router.get(
+  "/open/:publicSlug/cotizador",
+  runtimeController.openPublicCotizador
+);
+
+router.get(
+  "/open/:publicSlug/reservas",
+  runtimeController.openPublicReservas
+);
+
 router.get("/open/:publicSlug", runtimeController.openPublicPortal);
 
+router.get(
+  "/api/public/:publicSlug/slots",
+  runtimeController.getPublicCalendarSlots
+);
+
+router.post(
+  "/api/public/:publicSlug/bookings",
+  runtimeController.createPublicBooking
+);
+
+//payments
+router.post(
+  "/api/public/:publicSlug/bookings/:bookingId/pay",
+  runtimeController.createPublicBookingPayment
+);
+
+router.post(
+  "/api/payments/webhook",
+  runtimeController.mercadoPagoWebhook
+);
+
+//example payment
+
+router.get(
+  "/api/payments/test",
+  paymentsController.test
+);
 
 export default router;

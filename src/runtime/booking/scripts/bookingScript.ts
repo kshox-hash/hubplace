@@ -10,10 +10,9 @@ import { bookingSubmitHandlerScript } from "./bookingSubmitHandler";
 import { bookingSlotsLoaderScript } from "./bookingSlotsLoader";
 
 import { bookingIconsScript } from "../bookingIcons";
-
 export function renderBookingScript(config: BookingScriptConfig): string {
   return `
-const TOKEN = ${JSON.stringify(config.token)};
+const PUBLIC_SLUG = ${JSON.stringify(config.publicSlug)};
 const SUCCESS = ${JSON.stringify(config.successMessage)};
 
 ${bookingStateScript()}

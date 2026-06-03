@@ -148,10 +148,6 @@ ${vm.styles}
 
   <div id="messageEl" class="message"></div>
 
-  <footer class="footer">
-    Enlace válido hasta <strong id="expiresAt">${vm.expiresAtFormatted}</strong>
-    &nbsp;·&nbsp; Desarrollado por <strong>Automatiza Fácil</strong>
-  </footer>
 
 </main>
 

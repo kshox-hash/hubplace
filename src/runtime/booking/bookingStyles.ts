@@ -535,6 +535,74 @@ textarea {
   display: flex;
 }
 
+/* ── SUMMARY BAR ───────────────────────────────────────── */
+
+.summary-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+}
+
+.summary-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+
+  border-radius: 14px;
+
+  background: var(--primary-soft);
+  color: var(--primary);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.summary-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.summary-date {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.summary-time {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.summary-edit {
+  border: none;
+
+  background: var(--surface-2);
+  color: var(--primary);
+
+  padding: 8px 12px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
 /* ── FOOTER ─────────────────────────────────────────────────────── */
 .footer {
   margin-top: 28px;

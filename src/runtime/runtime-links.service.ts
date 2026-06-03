@@ -1,7 +1,9 @@
 import { RuntimeLinkRecord, ViewConfig } from "../runtime/runtime";
 import { generateToken, isExpired } from "../utils/token";
 
+
 export const runtimeLinks = new Map<string, RuntimeLinkRecord>();
+
 
 export function createRuntimeRecord( 
   config: ViewConfig, 

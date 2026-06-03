@@ -1,15 +1,14 @@
 export type BookingHtmlViewModel = {
-  token: string;
+  publicSlug: string;
   title: string;
   brand: string;
   subtitle: string;
   successMessage: string;
-  expiresAtFormatted: string;
   styles: string;
   script: string;
 };
 
 export type BookingScriptConfig = {
-  token: string;
+  publicSlug: string;
   successMessage: string;
 };

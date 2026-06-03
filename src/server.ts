@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 
@@ -11,6 +14,8 @@ import loginRoutes from "./login/login.router";
 import calendarAdminRoutes from "./modules/appointments/appointments-admin.routes";
 import bookingConfirmationRoutes from "./runtime/booking/routes/bookingConfirmationRoutes";
 import notificationRoutes from "./modules/notifications/notification.routes";
+
+
 
 
 const app = express();

@@ -54,6 +54,10 @@ import { notificationService } from "../modules/notifications/notification.servi
 import { companyProfileService } from "../modules/profiles/company_profile.service";
 import { findEnabledModulesByUserId } from "../modules/menus/user-modules.repository";
 
+import DB from "../db/db_configuration";
+import { createPreference , getPaymentById} from "../modules/payments/mercado.service";
+
+
 function validateConfig(config: unknown): config is ViewConfig {
   if (!config || typeof config !== "object") return false;
 
@@ -67,6 +71,414 @@ function validateConfig(config: unknown): config is ViewConfig {
 }
 
 export const runtimeController = {
+
+
+async mercadoPagoWebhook(req: Request, res: Response) {
+  try {
+    const paymentId =
+      req.body?.data?.id ||
+      req.query?.["data.id"] ||
+      req.query?.id;
+
+    if (!paymentId) {
+      return res.status(200).json({
+        ok: true,
+        ignored: true,
+        message: "Webhook sin paymentId.",
+      });
+    }
+
+    console.log("Payment ID recibido:", paymentId);
+    const paymentInfo = await getPaymentById("APP_USR-1220956273814202-060201-3f58ba8e09ece26415f66a1e586b907d-3442108509",  String(paymentId));
+
+console.log("Pago Mercado Pago:", paymentInfo);
+
+if (paymentInfo.status !== "approved") {
+  return res.status(200).json({
+    ok: true,
+    ignored: true,
+    paymentId,
+    status: paymentInfo.status,
+  });
+}
+
+    return res.status(200).json({
+      ok: true,
+      received: true,
+      paymentId,
+    });
+  } catch (error) {
+    console.error("Error webhook Mercado Pago:", error);
+
+    return res.status(500).json({
+      ok: false,
+      message: "Error procesando webhook.",
+    });
+  }
+},
+
+
+async createPublicBookingPayment(req: Request, res: Response) {
+  try {
+    const rawPublicSlug = req.params.publicSlug;
+    const rawBookingId = req.params.bookingId;
+
+    const publicSlug = Array.isArray(rawPublicSlug)
+      ? rawPublicSlug[0]
+      : rawPublicSlug;
+
+    const bookingId = Array.isArray(rawBookingId)
+      ? rawBookingId[0]
+      : rawBookingId;
+
+    if (!publicSlug || !publicSlug.trim() || !bookingId || !bookingId.trim()) {
+      return res.status(400).json({
+        ok: false,
+        message: "Parámetros inválidos.",
+      });
+    }
+
+    const profile = await companyProfileService.getByPublicSlug(publicSlug);
+
+    if (!profile) {
+      return res.status(404).json({
+        ok: false,
+        message: "Negocio no encontrado.",
+      });
+    }
+
+    const pool = DB.getPool();
+
+    const bookingResult = await pool.query(
+      `
+      SELECT
+        id,
+        user_id,
+        status,
+        payment_status,
+        payment_amount,
+        booking_date,
+        start_time,
+        client_name,
+        client_email
+      FROM calendar_bookings
+      WHERE id = $1
+        AND user_id = $2
+      LIMIT 1
+      `,
+      [bookingId, profile.user_id]
+    );
+
+    const booking = bookingResult.rows[0];
+
+    if (!booking) {
+      return res.status(404).json({
+        ok: false,
+        message: "Reserva no encontrada.",
+      });
+    }
+
+    if (booking.payment_status === "paid") {
+      return res.status(400).json({
+        ok: false,
+        message: "Esta reserva ya está pagada.",
+      });
+    }
+
+    const existingPaymentResult = await pool.query(
+  `
+  SELECT
+    id,
+    status,
+    checkout_url,
+    amount,
+    provider,
+    created_at
+  FROM payments
+  WHERE booking_id = $1
+    AND user_id = $2
+    AND status = 'pending'
+    AND checkout_url IS NOT NULL
+  ORDER BY created_at DESC
+  LIMIT 1
+  `,
+  [booking.id, profile.user_id]
+);
+
+const existingPayment = existingPaymentResult.rows[0];
+
+if (existingPayment?.checkout_url) {
+  return res.json({
+    ok: true,
+    message: "Ya existe un pago pendiente para esta reserva.",
+    checkoutUrl: existingPayment.checkout_url,
+    booking,
+    payment: existingPayment,
+  });
+}
+
+    const amount = Number(booking.payment_amount || 1000);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({
+        ok: false,
+        message: "Monto inválido para el pago.",
+      });
+    }
+
+    const paymentResult = await pool.query(
+      `
+      INSERT INTO payments (
+        user_id,
+        booking_id,
+        amount,
+        status,
+        provider
+      )
+      VALUES ($1, $2, $3, 'pending', 'mercadopago')
+      RETURNING *
+      `,
+      [profile.user_id, booking.id, amount]
+    );
+
+    const payment = paymentResult.rows[0];
+
+    const connectionResult = await pool.query(
+      `
+      SELECT access_token
+      FROM payment_provider_connections
+      WHERE user_id = $1
+        AND provider = 'mercadopago'
+      LIMIT 1
+      `,
+      [profile.user_id]
+    );
+
+    const connection = connectionResult.rows[0];
+
+    if (!connection?.access_token) {
+      return res.status(400).json({
+        ok: false,
+        message: "Mercado Pago no está configurado para este negocio.",
+      });
+    }
+
+    const mercadoPagoPreference = await createPreference({
+      accessToken: connection.access_token,
+      bookingId: booking.id,
+      title: `Reserva ${profile.business_name}`,
+      amount,
+    });
+
+    const updatedPaymentResult = await pool.query(
+      `
+      UPDATE payments
+      SET
+        checkout_url = $1
+      WHERE id = $2
+      RETURNING *
+      `,
+      [mercadoPagoPreference.checkoutUrl, payment.id]
+    );
+
+    const updatedPayment = updatedPaymentResult.rows[0];
+
+    return res.json({
+      ok: true,
+      message: "Pago creado correctamente.",
+      checkoutUrl: mercadoPagoPreference.checkoutUrl,
+      sandboxUrl: mercadoPagoPreference.sandboxUrl,
+      preferenceId: mercadoPagoPreference.preferenceId,
+      booking,
+      payment: updatedPayment,
+    });
+  } catch (error) {
+    console.error("Error creando pago público:", error);
+
+    return res.status(500).json({
+      ok: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "No se pudo crear el pago.",
+    });
+  }
+},
+
+
+async createPublicBooking(req: Request, res: Response) {
+  try {
+    const rawPublicSlug = req.params.publicSlug;
+    const publicSlug = Array.isArray(rawPublicSlug)
+      ? rawPublicSlug[0]
+      : rawPublicSlug;
+
+    if (!publicSlug || !publicSlug.trim()) {
+      return res.status(400).json({
+        ok: false,
+        message: "Slug público obligatorio.",
+      });
+    }
+
+    const profile = await companyProfileService.getByPublicSlug(publicSlug);
+
+    if (!profile) {
+      return res.status(404).json({
+        ok: false,
+        message: "Negocio no encontrado.",
+      });
+    }
+
+    const body = req.body || {};
+    const customer = body.customer || {};
+    const slot = body.slot || {};
+
+    const userId = profile.user_id;
+
+    const customerName = String(customer.name || "").trim();
+    const customerPhone = String(customer.phone || "").trim();
+    const customerEmail = String(customer.email || "").trim();
+    const notes = String(customer.notes || "").trim();
+
+    const bookingDate = String(slot.date || "").trim();
+    const startTime = String(slot.time || "").trim();
+
+    if (
+      !customerName ||
+      !customerPhone ||
+      !customerEmail ||
+      !bookingDate ||
+      !startTime
+    ) {
+      return res.status(400).json({
+        ok: false,
+        message: "Faltan datos para reservar.",
+      });
+    }
+
+    const confirmationToken = createBookingConfirmationToken();
+    const confirmationExpiresAt = createBookingConfirmationExpiresAt();
+
+    const publicBaseUrl = process.env.PUBLIC_BASE_URL || BASE_URL;
+
+    const confirmationUrl =
+      `${publicBaseUrl}/api/bookings/confirm/${confirmationToken}`;
+
+    const booking = await reserveCalendarSlot({
+      userId,
+      leadId: customerPhone,
+      customerName,
+      customerPhone,
+      customerEmail,
+      notes,
+      bookingDate,
+      startTime,
+      confirmationToken,
+      confirmationExpiresAt,
+    });
+/*
+ await sendBookingConfirmationEmail({
+      to: customerEmail,
+      customerName,
+      bookingDate,
+      bookingTime: startTime,
+      confirmationUrl,
+    });
+
+
+*/
+   
+   
+    return res.json({
+  ok: true,
+  status: "pending_payment",
+  message: "Reserva creada. Continúa con el pago.",
+  booking,
+});
+
+  } catch (error) {
+    console.error("Error creando reserva pública:", error);
+
+    return res.status(500).json({
+      ok: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "No se pudo crear la reserva.",
+    });
+  }
+},
+
+  async getPublicCalendarSlots(req: Request, res: Response) {
+  try {
+    const rawPublicSlug = req.params.publicSlug;
+    const publicSlug = Array.isArray(rawPublicSlug)
+      ? rawPublicSlug[0]
+      : rawPublicSlug;
+
+    if (!publicSlug || !publicSlug.trim()) {
+      return res.status(400).json({
+        ok: false,
+        message: "Slug público obligatorio.",
+      });
+    }
+
+    const profile = await companyProfileService.getByPublicSlug(publicSlug);
+
+    if (!profile) {
+      return res.status(404).json({
+        ok: false,
+        message: "Negocio no encontrado.",
+      });
+    }
+
+    const data = await buildCalendarSlots(profile.user_id);
+
+    return res.json(data);
+  } catch (error) {
+    console.error("Error obteniendo disponibilidad pública:", error);
+
+    return res.status(500).json({
+      ok: false,
+      message: "No se pudo cargar la disponibilidad.",
+    });
+  }
+},
+  async openPublicCotizador(req: Request, res: Response) {
+  return res.send(`Cotizador público funcionando: ${req.params.publicSlug}`);
+},
+
+async openPublicReservas(req: Request, res: Response) {
+  try {
+    const rawPublicSlug = req.params.publicSlug;
+    const publicSlug = Array.isArray(rawPublicSlug)
+      ? rawPublicSlug[0]
+      : rawPublicSlug;
+
+    if (!publicSlug || !publicSlug.trim()) {
+      return res.status(400).send("Slug público obligatorio");
+    }
+
+    const profile = await companyProfileService.getByPublicSlug(publicSlug);
+
+    if (!profile) {
+      return res.status(404).send("Negocio no encontrado");
+    }
+
+    const html = renderBookingHtml({
+      publicSlug,
+      title: "Reserva tu hora",
+      brand: profile.business_name,
+      subtitle: "Elige el día y horario disponible para agendar tu atención.",
+      successMessage: "Te enviamos un correo para confirmar tu hora.",
+    });
+
+    return res.status(200).send(html);
+  } catch (error) {
+    console.error("Error abriendo reservas públicas:", error);
+    return res.status(500).send("Error abriendo reservas públicas");
+  }
+},
 async openPublicPortal(req: Request, res: Response) {
   try {
     const rawPublicSlug = req.params.publicSlug;
@@ -159,7 +571,15 @@ async openPublicPortal(req: Request, res: Response) {
 
     record.openedAt = Date.now();
 
-    return res.send(renderBookingHtml(record));
+    return res.send(
+  renderBookingHtml({
+    publicSlug: "",
+    title: record.config.title,
+    brand: record.config.brand ?? "Automatiza Fácil",
+    subtitle: record.config.subtitle ?? "",
+    successMessage: record.config.successMessage ?? "",
+  })
+);
   },
 
   async getCalendarSlots(req: Request<{ token: string }>, res: Response) {
