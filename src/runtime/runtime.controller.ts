@@ -542,7 +542,7 @@ if (existingPayment?.checkout_url) {
   });
 }
 
-    const amount = Number(booking.payment_amount || 2000);
+    const amount = Number(booking.payment_amount || 3000);
 
     if (!Number.isFinite(amount) || amount <= 0) {
       return res.status(400).json({
