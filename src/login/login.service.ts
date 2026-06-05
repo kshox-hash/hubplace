@@ -61,7 +61,7 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 export async function loginWithGoogle(idToken: string) {
   const ticket = await googleClient.verifyIdToken({
     idToken,
-    audience: process.env.GOOGLE_CLIENT_ID,
+    audience: "681122732716-k229s2a7gkvdd4q0vmn4i89kg1d52pfu.apps.googleusercontent.com",
   });
 
   const payload = ticket.getPayload();
