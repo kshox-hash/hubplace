@@ -23,4 +23,10 @@ router.get("/google/failure", (_, res) => {
   return res.status(401).send("Error iniciando sesión con Google");
 })
 
+router.get("/logout", (_req, res) => {
+  return res.redirect(
+    "https://accounts.google.com/logout"
+  );
+});
+
 export default router;
