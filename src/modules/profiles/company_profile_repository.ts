@@ -26,6 +26,7 @@ const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
   `;
 
   const result = await pool.query<CompanyProfile>(query, [userId]);
+
   return result.rows[0] ?? null;
 };
 
@@ -54,6 +55,7 @@ const getByPublicSlug = async (
   `;
 
   const result = await pool.query<CompanyProfile>(query, [publicSlug]);
+
   return result.rows[0] ?? null;
 };
 

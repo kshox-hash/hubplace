@@ -9,7 +9,7 @@ const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
     throw new Error("userId es obligatorio");
   }
 
-  return companyProfileRepository.getByUserId(userId);
+  return companyProfileRepository.getByUserId(userId.trim());
 };
 
 const getByPublicSlug = async (

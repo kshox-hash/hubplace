@@ -18,7 +18,43 @@ type UpsertBody = {
   phone?: string;
 };
 
+type UpsertMeBody = {
+  business_name: string;
+  rut?: string | null;
+  city?: string;
+  address?: string;
+  phone?: string;
+};
+
 export const companyProfileController = {
+  async getMe(req: Request, res: Response): Promise<Response> {
+    try {
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        return res.status(401).json({
+          ok: false,
+          message: "Usuario no autenticado",
+        });
+      }
+
+      const profile = await companyProfileService.getByUserId(userId);
+
+      return res.json({
+        ok: true,
+        profile,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        ok: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Error obteniendo perfil de empresa",
+      });
+    }
+  },
+
   async getByUserId(
     req: Request<GetByUserIdParams>,
     res: Response,
@@ -28,33 +64,24 @@ export const companyProfileController = {
 
       if (!userId || !userId.trim()) {
         return res.status(400).json({
-          error: "userId es obligatorio",
+          ok: false,
+          message: "userId es obligatorio",
         });
       }
 
       const profile = await companyProfileService.getByUserId(userId);
 
-      if (!profile) {
-        return res.status(404).json({
-          error: "Perfil no encontrado",
-        });
-      }
-
-      return res.status(200).json({
-        data: profile,
+      return res.json({
+        ok: true,
+        profile,
       });
     } catch (error) {
-      console.error("Error obteniendo perfil empresa:", error);
-
-      const message =
-        error instanceof Error ? error.message : "Error interno del servidor";
-
-      if (message === "userId es obligatorio") {
-        return res.status(400).json({ error: message });
-      }
-
       return res.status(500).json({
-        error: "Error interno del servidor",
+        ok: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Error obteniendo perfil de empresa",
       });
     }
   },
@@ -68,7 +95,8 @@ export const companyProfileController = {
 
       if (!slug || !slug.trim()) {
         return res.status(400).json({
-          error: "slug es obligatorio",
+          ok: false,
+          message: "slug es obligatorio",
         });
       }
 
@@ -76,63 +104,78 @@ export const companyProfileController = {
 
       if (!profile) {
         return res.status(404).json({
-          error: "Negocio no encontrado",
+          ok: false,
+          message: "Perfil público no encontrado",
         });
       }
 
-      return res.status(200).json({
-        data: profile,
+      return res.json({
+        ok: true,
+        profile,
       });
     } catch (error) {
-      console.error("Error obteniendo negocio público:", error);
-
-      const message =
-        error instanceof Error ? error.message : "Error interno del servidor";
-
-      if (message === "publicSlug es obligatorio") {
-        return res.status(400).json({ error: message });
-      }
-
       return res.status(500).json({
-        error: "Error interno del servidor",
+        ok: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Error obteniendo perfil público",
       });
     }
   },
 
   async upsert(
-    req: Request<Record<string, never>, unknown, UpsertBody>,
+    req: Request<unknown, unknown, UpsertBody>,
     res: Response,
   ): Promise<Response> {
     try {
-      const { user_id, business_name, rut, city, address, phone } = req.body;
+      const profile = await companyProfileService.upsert(req.body);
 
-      const profile = await companyProfileService.upsert({
-        user_id,
-        business_name,
-        rut: rut ?? null,
-        city: city ?? "",
-        address: address ?? "",
-        phone: phone ?? "",
-      });
-
-      return res.status(200).json({
-        data: profile,
+      return res.json({
+        ok: true,
+        profile,
       });
     } catch (error) {
-      console.error("Error guardando perfil empresa:", error);
+      return res.status(400).json({
+        ok: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Error guardando perfil de empresa",
+      });
+    }
+  },
 
-      const message =
-        error instanceof Error ? error.message : "Error interno del servidor";
+  async upsertMe(
+    req: Request<unknown, unknown, UpsertMeBody>,
+    res: Response,
+  ): Promise<Response> {
+    try {
+      const userId = req.user?.userId;
 
-      if (
-        message === "user_id es obligatorio" ||
-        message === "business_name es obligatorio"
-      ) {
-        return res.status(400).json({ error: message });
+      if (!userId) {
+        return res.status(401).json({
+          ok: false,
+          message: "Usuario no autenticado",
+        });
       }
 
-      return res.status(500).json({
-        error: "Error interno del servidor",
+      const profile = await companyProfileService.upsert({
+        ...req.body,
+        user_id: userId,
+      });
+
+      return res.json({
+        ok: true,
+        profile,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        ok: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Error guardando perfil de empresa",
       });
     }
   },
