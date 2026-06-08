@@ -2,7 +2,7 @@ const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
 
-import { RuntimeLinkRecord, SubmitBody } from "../../runtime/runtime";
+import { RuntimeLinkRecord, SubmitBody } from "../../runtime/runtime.types";
 import { buildQuoteDetail, formatCurrencyCLP } from "../../utils/format";
 import { sanitizeFileName } from "../../utils/token";
 

@@ -1,6 +1,6 @@
 import { BASE_URL } from "../../config/env";
 import { getPdfConfig } from "../quotes/quote-config.service";
-import { ViewConfig, MenuModuleItem } from "../../runtime/runtime";
+import { ViewConfig, MenuModuleItem } from "../../runtime/runtime.types";
 import { findEnabledModulesByUserId } from "./user-modules.repository";
 
 function buildModuleUrl(

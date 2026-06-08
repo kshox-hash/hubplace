@@ -1,4 +1,4 @@
-import { RuntimeLinkRecord, MenuModuleItem } from "../../runtime/runtime";
+import { RuntimeLinkRecord, MenuModuleItem } from "../../runtime/runtime.types";
 import { escapeHtml } from "../../utils/html";
 
 

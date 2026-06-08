@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { companyProfileController } from "./company_profile.controller";
-import { requireAuth } from "../../middlewares/requireAuth";
+
 
 const router = Router();
 
@@ -11,13 +11,13 @@ router.get(
 
 router.get(
   "/company-profile/me",
-  requireAuth,
+
   companyProfileController.getMe
 );
 
 router.post(
   "/company-profile/me",
-  requireAuth,
+
   companyProfileController.upsertMe
 );
 
