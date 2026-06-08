@@ -9,6 +9,6 @@ const router = Router();
 
 router.get("/me", authMiddleware, getMySlugController);
 
-router.post("/", authMiddleware, insertSlugController);
+router.post("/slugs", authMiddleware, insertSlugController);
 
 export default router;
