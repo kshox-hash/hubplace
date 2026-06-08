@@ -6,8 +6,14 @@ export async function insertSlugController(
   res: Response
 ): Promise<Response> {
   try {
-    const userId = req.user!.userId;
+    const userId = req.user?.userId;
     const { slug } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({
+        error: "Usuario no autenticado",
+      });
+    }
 
     await insertSlugService({
       userId,

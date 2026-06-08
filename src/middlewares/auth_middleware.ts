@@ -1,15 +1,24 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-export type AuthUser = {
+type AuthUser = {
   userId: string;
   email: string;
 };
 
 declare global {
   namespace Express {
-    interface Request {
-      user?: AuthUser;
+    interface User {
+      userId?: string;
+      email?: string;
+
+      token?: string;
+      user?: {
+        id: string;
+        email: string;
+        name?: string;
+        picture?: string;
+      };
     }
   }
 }
@@ -34,7 +43,7 @@ export function authMiddleware(
       });
     }
 
-    const token = authorization.replace("Bearer ", "");
+    const token = authorization.replace("Bearer ", "").trim();
 
     const decoded = jwt.verify(
       token,
@@ -46,10 +55,12 @@ export function authMiddleware(
       email: decoded.email,
     };
 
-    next();
+    return next();
   } catch {
     return res.status(401).json({
       error: "Token inválido o expirado",
     });
   }
 }
+
+export {};
