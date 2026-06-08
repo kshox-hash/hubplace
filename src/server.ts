@@ -44,7 +44,7 @@ app.use(calendarAdminRoutes);
 app.use("/auth", loginRoutes);
 app.use(bookingConfirmationRoutes);
 app.use("/api", notificationRoutes);
-app.use("/api/slugs", slugRoutes);
+app.use("/api", slugRoutes);
 
 app.use(errorMiddleware);
 

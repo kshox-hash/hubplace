@@ -5,7 +5,7 @@ import { insertSlugController } from "./slug.controller";
 const router = Router();
 
 router.post(
-  "/",
+  "/slugs",
   authMiddleware,
   insertSlugController
 );
