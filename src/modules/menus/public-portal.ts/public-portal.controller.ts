@@ -3,11 +3,15 @@ import { companyProfileService } from "../../profiles/company_profile.service";
 import { findEnabledModulesByUserId } from "../user-modules.repository";
 import { renderPublicPortalHtml } from "./public-portal.renderer";
 
+import  {getSlugByValueService} from "../../slug/slug.service";
+
 type Params = {
   publicSlug: string;
 };
 
 export const publicPortalController = {
+
+
   async open(req: Request<Params>, res: Response): Promise<Response | void> {
     try {
       const { publicSlug } = req.params;
@@ -15,8 +19,9 @@ export const publicPortalController = {
       if (!publicSlug || !publicSlug.trim()) {
         return res.status(400).send("Slug público obligatorio");
       }
-
-      const profile = await companyProfileService.getByPublicSlug(publicSlug);
+      
+    const profile = await getSlugByValueService(publicSlug);
+      //const profile = await companyProfileService.getByPublicSlug(publicSlug);
 
       if (!profile) {
         return res.status(404).send("Negocio no encontrado");

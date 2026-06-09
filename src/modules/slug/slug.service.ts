@@ -84,4 +84,12 @@ export async function insertSlugService({
     userId,
     slug: cleanSlug,
   });
+
+}
+
+export async function getSlugByValueService(slug:string){
+  if(!slug){
+    throw Error("slug no encontrado[getSlugByValueService]")
+  }
+  return await findSlugByValueRepository(slug);
 }
