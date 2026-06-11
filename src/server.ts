@@ -18,6 +18,7 @@ import "./login/strategies/google.strategy";
 import slugRoutes from "./modules/slug/slug.router";
 import { errorMiddleware } from './middlewares/error_middleware';
 import publicPortalRouter from "./modules/menus/public-portal/public-portal.routes"
+import productsRouter from "./modules/quotes/quotes.router";
 
 
 const app = express();
@@ -43,7 +44,9 @@ app.use("/auth", loginRoutes);
 app.use(bookingConfirmationRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", slugRoutes);
-app.use(publicPortalRouter)
+app.use(publicPortalRouter) // ajusta el path
+
+app.use("/api", productsRouter);
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {

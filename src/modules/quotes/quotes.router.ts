@@ -4,7 +4,6 @@ import { authMiddleware } from "../../middlewares/auth_middleware"; // ajusta el
 
 const router = Router();
 
-// ✅ Ruta pública — ANTES de /:productId
 router.get("/public/:userId", productsController.getActivePublic);
 
 // Rutas protegidas
