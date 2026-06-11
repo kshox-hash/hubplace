@@ -65,10 +65,12 @@ export function generateQuotePdf(input: QuotePdfInput) {
       const footerLine = `${brandName} · Documento generado automáticamente`;
       const logoPath = path.join(process.cwd(), "assets", "logo.png");
 
-      const customerName = input.customer.name?.trim() || "-";
-      const customerEmail = input.customer.email?.trim() || "-";
-      const customerPhone = input.customer.phone?.trim() || "-";
-      const customerNotes = input.customer.notes?.trim() || "-";
+      // 👇 guard para evitar crash si customer llega undefined
+      const customer = input.customer ?? { name: "", email: "", phone: "", notes: "" };
+      const customerName = customer.name?.trim() || "-";
+      const customerEmail = customer.email?.trim() || "-";
+      const customerPhone = customer.phone?.trim() || "-";
+      const customerNotes = customer.notes?.trim() || "-";
 
       const quoteNumber = `AF-${String(timestamp).slice(-6)}`;
       const issueDate = new Date().toLocaleDateString("es-CL");
@@ -178,12 +180,14 @@ export function generateQuotePdf(input: QuotePdfInput) {
       let table = drawTableHeader(y);
       y = table.nextY;
 
-      if (input.lines.length === 0) {
+      const lines = Array.isArray(input.lines) ? input.lines : [];
+
+      if (lines.length === 0) {
         doc.rect(margin, y, contentWidth, 42).fill(colors.white);
         doc.fillColor(colors.muted).font("Helvetica").fontSize(10).text("No se seleccionaron productos.", margin + 12, y + 14);
         y += 42;
       } else {
-        input.lines.forEach((line, index) => {
+        lines.forEach((line, index) => {
           const rowHeight = line.description ? 62 : 40;
           const fillColor = index % 2 === 0 ? colors.white : colors.lighter;
 
@@ -236,12 +240,12 @@ export function generateQuotePdf(input: QuotePdfInput) {
 
       doc.fillColor(colors.text).font("Helvetica").fontSize(10)
         .text("Subtotal", labelX, y + 18)
-        .text(formatCurrencyCLP(input.total), valueX, y + 18, { width: valueWidth, align: "right" });
+        .text(formatCurrencyCLP(input.total ?? 0), valueX, y + 18, { width: valueWidth, align: "right" });
 
       doc.text("Descuento", labelX, y + 40).text("$0", valueX, y + 40, { width: valueWidth, align: "right" });
 
       doc.font("Helvetica-Bold").fontSize(12).text("Total", labelX, y + 72)
-        .fontSize(13).text(formatCurrencyCLP(input.total), valueX, y + 70, { width: valueWidth, align: "right" });
+        .fontSize(13).text(formatCurrencyCLP(input.total ?? 0), valueX, y + 70, { width: valueWidth, align: "right" });
 
       y += totalsHeight + 24;
 
