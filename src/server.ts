@@ -44,7 +44,7 @@ app.use("/auth", loginRoutes);
 app.use(bookingConfirmationRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", slugRoutes);
-app.use(publicPortalRouter)
+app.use("/api",publicPortalRouter)
 
 app.use("/products", productsRouter);
 app.use(errorMiddleware);
