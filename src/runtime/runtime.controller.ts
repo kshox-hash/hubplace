@@ -1095,13 +1095,12 @@ async submitRuntimeLink(
       });
     }
 
-    const pdfResult = await generateQuotePdf(record, body);
-    const pdfUrl = `${BASE_URL}/generated-pdfs/${pdfResult.fileName}`;
+
 
     record.submissions.push({
       ...body,
       submittedAt: new Date().toISOString(),
-      pdfUrl,
+    
     });
 
     record.submittedAt = Date.now();
@@ -1136,7 +1135,7 @@ async submitRuntimeLink(
         ) {
           await sendWhatsAppTextMessage(
             recipientPhone,
-            `Tu cotización está lista:\n${pdfUrl}`,
+            `Tu cotización está lista:\n`,
             whatsappConfig.phone_number_id,
             whatsappConfig.whatsapp_access_token
           );
@@ -1149,7 +1148,7 @@ async submitRuntimeLink(
     return res.json({
       ok: true,
       message: "Tu cotización está lista",
-      pdfUrl,
+     
     });
   } catch (error) {
     console.error("Error submitRuntimeLink:", error);

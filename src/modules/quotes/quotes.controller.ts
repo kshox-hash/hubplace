@@ -95,7 +95,7 @@ export const quotesSubmitController = {
         items,
       };
 
-      const { fileName, filePath } = await generateQuotePdf(record as any, submitBody as any);
+      const { fileName, filePath } = await generateQuotePdf(record as any);
 
       // 6. Enviar correo solo si el cliente dejó email
       if (customer.email?.trim()) {
