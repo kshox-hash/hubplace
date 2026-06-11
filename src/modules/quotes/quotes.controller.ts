@@ -121,8 +121,12 @@ export const quotesSubmitController = {
       });
 
     } catch (error: any) {
-      console.error("[quotesSubmit] Error:", error);
+     
+  console.error("[quotesSubmit] Error:", error?.message || error);
+  console.error("[quotesSubmit] Stack:", error?.stack);
+  return res.status(500).json({ ok: false, message: "Error procesando la cotización." });
+}
       return res.status(500).json({ ok: false, message: "Error procesando la cotización." });
     }
-  },
+  
 };
