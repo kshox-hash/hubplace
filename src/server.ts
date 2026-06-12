@@ -19,6 +19,7 @@ import slugRoutes from "./modules/slug/slug.router";
 import { errorMiddleware } from './middlewares/error_middleware';
 import publicPortalRouter from "./modules/menus/public-portal/public-portal.routes"
 import productsRouter from "./modules/quotes/quotes.router";
+import statisticsRouter from "./modules/stadistics/stadistics.router";
 
 
 const app = express();
@@ -47,6 +48,7 @@ app.use("/api", slugRoutes);
 app.use(publicPortalRouter)
 
 app.use("/products", productsRouter);
+app.use("/api", statisticsRouter);
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {

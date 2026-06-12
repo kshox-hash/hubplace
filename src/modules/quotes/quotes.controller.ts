@@ -3,9 +3,10 @@ import fs from "fs";
 
 import { getSlugByValueService } from "../slug/slug.service";
 import { getProductsRepository } from "../quotes/products/products.repository";
-import { generateQuotePdf } from "../quotes/quote.service"; // ajusta el path
+import { generateQuotePdf } from "../quotes/quote.service"; 
 import { sendQuoteEmail } from "../quotes/quote-email.service";
 
+import { notificationService } from "../notifications/notification.service";
 type SubmitQuoteBody = {
   customer: {
     name: string;
@@ -133,12 +134,20 @@ if (customer.email?.trim()) {
   fs.unlink(filePath, () => {});
 }
 
+    await notificationService.quoteCreated({
+  userId: slug.user_id,
+  quoteId: `${publicSlug}-${Date.now()}`,
+  customerName: customer.name,
+});
+
 return res.status(200).json({
   ok: true,
   message: customer.email?.trim()
     ? "¡Cotización enviada! Revisa tu correo."
     : "Cotización recibida. Nos contactaremos pronto.",
 });
+
+
     } catch (error: any) {
      
   console.error("[quotesSubmit] Error:", error?.message || error);
