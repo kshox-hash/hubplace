@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { findEnabledModulesByUserId } from "../user-modules.repository";
 import  {getSlugByValueService} from "../../slug/slug.service";
+import { StatisticsService } from "../../stadistics/stadistics.service";
+
+const statsService = new StatisticsService();
 
 //VIEWS
 import { menuPublicHtml } from "../menu-html";
@@ -84,10 +87,13 @@ export const publicPortalController = {
       
       //GET SLUG TO CHEK IF SHOP EXIST
       const slug = await getSlugByValueService(publicSlug);
-    
+
       if (!slug) {
         return res.status(404).send("Negocio no encontrado");
       }
+
+      statsService.increment(slug.user_id, "page_views").catch(() => {});
+
       //GET MODULES SERVICES ENABLED
       const modules = await findEnabledModulesByUserId(slug.user_id);
       //crear url
