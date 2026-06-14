@@ -4,6 +4,7 @@ type CreatePreferenceInput = {
   accessToken: string;
   bookingId: string;
   title: string;
+  description: string;
   amount: number;
   customerEmail?: string;
   customerName?: string;
@@ -32,6 +33,7 @@ export async function createPreference(
         {
           id: input.bookingId,
           title: input.title,
+          description: input.description,
           quantity: 1,
           unit_price: input.amount,
           currency_id: "CLP",

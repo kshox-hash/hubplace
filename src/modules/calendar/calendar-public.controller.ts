@@ -184,10 +184,13 @@ export const calendarPublicController = {
 
       const payment = await createPaymentRecord(profile.user_id, bookingId, amount);
 
+      const bookingDateStr = new Date(booking.booking_date).toLocaleDateString("es-CL");
+
       const preference = await createPreference({
         accessToken,
         bookingId,
         title: `Reserva ${profile.business_name}`,
+        description: `Hora agendada el ${bookingDateStr} a las ${booking.start_time.slice(0, 5)} - ${booking.client_name}`,
         amount,
         customerEmail: booking.client_email,
         customerName: booking.client_name,
