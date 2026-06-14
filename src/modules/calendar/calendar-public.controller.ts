@@ -189,6 +189,9 @@ export const calendarPublicController = {
         bookingId,
         title: `Reserva ${profile.business_name}`,
         amount,
+        customerEmail: booking.client_email,
+        customerName: booking.client_name,
+        businessName: profile.business_name,
       });
 
       const updatedPayment = await updatePaymentWithPreference(

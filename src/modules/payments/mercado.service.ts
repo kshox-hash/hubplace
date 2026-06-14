@@ -5,6 +5,9 @@ type CreatePreferenceInput = {
   bookingId: string;
   title: string;
   amount: number;
+  customerEmail?: string;
+  customerName?: string;
+  businessName?: string;
 };
 
 const APP_URL =
@@ -18,6 +21,10 @@ export async function createPreference(
   });
 
   const preference = new Preference(client);
+
+  const statementDescriptor = input.businessName
+    ? input.businessName.replace(/[^a-zA-Z0-9 ]/g, "").slice(0, 22).trim()
+    : undefined;
 
   const result = await preference.create({
     body: {
@@ -34,6 +41,15 @@ export async function createPreference(
       external_reference: input.bookingId,
 
       binary_mode: true,
+
+      ...(input.customerEmail && {
+        payer: {
+          name: input.customerName ?? "",
+          email: input.customerEmail,
+        },
+      }),
+
+      ...(statementDescriptor && { statement_descriptor: statementDescriptor }),
 
       back_urls: {
         success: `${APP_URL}/payment/success`,
