@@ -161,6 +161,19 @@ export class StatisticsRepository {
   /**
    * SIN CAMBIOS respecto a tu código original.
    */
+  async getTodayStats(userId: string) {
+    const result = await this.pool.query(
+      `
+      SELECT metric, module_id, count
+      FROM statistics_daily
+      WHERE user_id = $1
+        AND day = CURRENT_DATE
+      `,
+      [userId]
+    );
+    return result.rows;
+  }
+
   async resetMetric(
     userId: string,
     metric: string,

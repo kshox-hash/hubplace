@@ -90,6 +90,19 @@ export class StatisticsService {
    * módulo correspondiente (ej. 'cotizador', 'agenda').
    * Si usas otro nombre de métrica, cambia el string de abajo.
    */
+  async getTodayStats(userId: string) {
+    const rows = await this.repo.getTodayStats(userId);
+
+    return rows.reduce((acc, row) => {
+      const key = row.module_id
+        ? `${row.metric}_${row.module_id}`
+        : `${row.metric}_global`;
+
+      acc[key] = Number(row.count);
+      return acc;
+    }, {} as Record<string, number>);
+  }
+
   async getModuleRanking(userId: string) {
   const dashboard = await this.getDashboard(userId);
 

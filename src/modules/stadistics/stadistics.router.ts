@@ -11,6 +11,7 @@ router.post("/stats/:userId/increment", statisticsController.increment);
 router.get("/stats/:userId/dashboard", statisticsController.getDashboard);
 router.get("/stats/:userId/home", statisticsController.getHomeStats);
 router.get("/stats/:userId/link-opens", statisticsController.getLinkOpensTrend);
+router.get("/stats/:userId/today", statisticsController.getTodayStats);
 router.get("/stats/:userId/module-ranking", statisticsController.getModuleRanking);
 
 // Reviews — summary must be before /:userId to avoid route conflict
