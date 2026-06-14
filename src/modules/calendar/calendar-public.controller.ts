@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { buildCalendarSlots, reserveCalendarSlot } from "../appointments/appointments.service";
 import { renderBookingHtml } from "../appointments/appointments.screen";
-import { companyProfileService } from "../profiles/company_profile.service";
+import { getSlugByValueService } from "../slug/slug.service";
 import { createPreference } from "../payments/mercado.service";
 import {
   createBookingConfirmationExpiresAt,
@@ -26,7 +26,7 @@ export const calendarPublicController = {
         return res.status(400).json({ ok: false, message: "Slug público obligatorio." });
       }
 
-      const profile = await companyProfileService.getByPublicSlug(publicSlug);
+      const profile = await getSlugByValueService(publicSlug);
 
       if (!profile) {
         return res.status(404).json({ ok: false, message: "Negocio no encontrado." });
@@ -49,7 +49,7 @@ export const calendarPublicController = {
         return res.status(400).send("Slug público obligatorio");
       }
 
-      const profile = await companyProfileService.getByPublicSlug(publicSlug);
+      const profile = await getSlugByValueService(publicSlug);
 
       if (!profile) {
         return res.status(404).send("Negocio no encontrado");
@@ -78,7 +78,7 @@ export const calendarPublicController = {
         return res.status(400).json({ ok: false, message: "Slug público obligatorio." });
       }
 
-      const profile = await companyProfileService.getByPublicSlug(publicSlug);
+      const profile = await getSlugByValueService(publicSlug);
 
       if (!profile) {
         return res.status(404).json({ ok: false, message: "Negocio no encontrado." });
@@ -138,7 +138,7 @@ export const calendarPublicController = {
         return res.status(400).json({ ok: false, message: "Parámetros inválidos." });
       }
 
-      const profile = await companyProfileService.getByPublicSlug(publicSlug);
+      const profile = await getSlugByValueService(publicSlug);
 
       if (!profile) {
         return res.status(404).json({ ok: false, message: "Negocio no encontrado." });
