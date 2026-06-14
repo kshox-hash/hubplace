@@ -46,31 +46,10 @@ export const statisticsController = {
     }
   },
 
-  async getLinkOpensTrend(req: Request, res: Response): Promise<Response> {
-    try {
-      if (isForbidden(req)) return res.status(403).json({ ok: false, message: "Forbidden" });
-      const days = req.query.days ? Number(req.query.days) : 30;
-      const data = await statsService.getLinkOpensTrend(uid(req), days);
-      return res.status(200).json(data);
-    } catch (error: any) {
-      return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
-    }
-  },
-
   async getTodayStats(req: Request, res: Response): Promise<Response> {
     try {
       if (isForbidden(req)) return res.status(403).json({ ok: false, message: "Forbidden" });
       const data = await statsService.getTodayStats(uid(req));
-      return res.status(200).json(data);
-    } catch (error: any) {
-      return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
-    }
-  },
-
-  async getModuleRanking(req: Request, res: Response): Promise<Response> {
-    try {
-      if (isForbidden(req)) return res.status(403).json({ ok: false, message: "Forbidden" });
-      const data = await statsService.getModuleRanking(uid(req));
       return res.status(200).json(data);
     } catch (error: any) {
       return res.status(500).json({ ok: false, message: error?.message || "Error interno" });

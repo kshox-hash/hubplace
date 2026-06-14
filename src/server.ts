@@ -5,14 +5,14 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
-import runtimeLinksRouter from "./runtime/runtime.routes";
+import mpWebhookRouter from "./modules/webhook/mp-webhook.router";
 import { PORT, CORS_ORIGINS } from "./config/env";
 import { GENERATED_PDFS_DIR } from "./modules/quotes/quote.service";
 
 import companyProfileRoutes from "./modules/profiles/company-profile.router";
 import loginRoutes from "./login/login.router";
 import calendarAdminRoutes from "./modules/appointments/appointments-admin.routes";
-import bookingConfirmationRoutes from "./runtime/booking/routes/bookingConfirmationRoutes";
+import calendarPublicRouter from "./modules/calendar/calendar-public.router";
 import notificationRoutes from "./modules/notifications/notification.routes";
 import passport from "passport";
 import "./login/strategies/google.strategy";
@@ -81,11 +81,11 @@ app.get("/health", (_req, res) => {
 // ─── Rutas ────────────────────────────────────────────────────────────────────
 app.use("/generated-pdfs", express.static(GENERATED_PDFS_DIR));
 app.use(passport.initialize());
-app.use(runtimeLinksRouter);
+app.use(mpWebhookRouter);
 app.use(companyProfileRoutes);
 app.use(calendarAdminRoutes);
 app.use("/auth", authLimiter, loginRoutes);
-app.use(bookingConfirmationRoutes);
+app.use(calendarPublicRouter);
 app.use("/api", notificationRoutes);
 app.use("/api", slugRoutes);
 app.use(publicPortalRouter);

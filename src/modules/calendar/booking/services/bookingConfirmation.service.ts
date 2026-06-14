@@ -1,4 +1,4 @@
-import  DB  from "../../../db/db_configuration";
+import DB from "../../../../db/db_configuration";
 
 type ConfirmBookingResult =
   | {

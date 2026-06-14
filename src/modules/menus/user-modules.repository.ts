@@ -1,5 +1,13 @@
 import DB from "../../db/db_configuration";
-import { MenuModuleItem } from "../../runtime/runtime.types";
+
+export type MenuModuleItem = {
+  code: string;
+  title: string;
+  description: string;
+  icon: string;
+  enabled: boolean;
+  sortOrder: number;
+};
 
 const DEFAULT_MODULES: MenuModuleItem[] = [
   {

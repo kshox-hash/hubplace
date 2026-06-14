@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
 import { findEnabledModulesByUserId } from "../user-modules.repository";
 import  {getSlugByValueService} from "../../slug/slug.service";
-import { StatisticsService } from "../../stadistics/stadistics.service";
-
-const statsService = new StatisticsService();
-
 //VIEWS
 import { menuPublicHtml } from "../menu-html";
 import { quoteHtml } from "../../quotes/quote-html";
@@ -37,7 +33,6 @@ export const publicPortalController = {
         return res.status(404).send("Negocio no encontrado");
       }
 
-      statsService.increment(slug.user_id, "open_quote_screen").catch(() => {});
 
       const products = await getProductsRepository(slug.user_id);
 
@@ -73,7 +68,6 @@ export const publicPortalController = {
         return res.status(404).send("Negocio no encontrado");
       }
 
-      statsService.increment(slug.user_id, "page_views").catch(() => {});
 
       //GET MODULES SERVICES ENABLED
       const modules = await findEnabledModulesByUserId(slug.user_id);

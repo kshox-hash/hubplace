@@ -1,14 +1,3 @@
-import crypto from "crypto";
-import { RuntimeLinkRecord } from "../runtime/runtime.types";
-
-export function generateToken(): string {
-  return crypto.randomBytes(8).toString("hex");
-}
-
-export function isExpired(record: RuntimeLinkRecord): boolean {
-  return Date.now() > record.expiresAt;
-}
-
 export function sanitizeFileName(value: string): string {
   return String(value || "")
     .replace(/[^\w\-]+/g, "_")

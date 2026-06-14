@@ -51,11 +51,13 @@ GET    /auth/google/callback
 - Graceful shutdown (SIGTERM/SIGINT)
 - Health check en GET /health
 
-## PENDIENTE CRÍTICO — webhook MercadoPago
-**Archivo:** `src/runtime/runtime.controller.ts`
-El endpoint `POST /api/payments/webhook` NO verifica la firma HMAC-SHA256 del header `x-signature`.
-**El usuario quiere resolver esto antes de ir a producción.**
-No tocar el módulo de calendario/pagos hasta que el usuario lo indique.
+## Módulo webhook MercadoPago — `src/modules/webhook/`
+Módulo separado y limpio con verificación HMAC-SHA256 implementada.
+- `mp-webhook.router.ts` — rutas: POST /api/payments/webhook + páginas success/failure/pending
+- `mp-webhook.controller.ts` — handler HTTP
+- `mp-webhook.service.ts` — verificación de firma + lógica de negocio
+- `mp-webhook.repository.ts` — queries a DB (payments, calendar_bookings, company_profiles)
+Requiere `MP_WEBHOOK_SECRET` (secret del panel de MercadoPago) y `ACCESS_TOKEN_MP` en .env.
 
 ## Variables de entorno requeridas
 ```
@@ -70,6 +72,9 @@ PUBLIC_BASE_URL=
 WHATSAPP_ACCESS_TOKEN=
 WHATSAPP_PHONE_NUMBER_ID=
 APP_DEEPLINK_URL=automatiza://auth
+ACCESS_TOKEN_MP=
+MP_WEBHOOK_SECRET=
+BUSINESS_NOTIFICATION_EMAIL=
 ```
 
 ## Nota técnica importante

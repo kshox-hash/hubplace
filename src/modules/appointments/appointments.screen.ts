@@ -1,8 +1,8 @@
 import { escapeHtml } from "../../utils/html";
 
-import { renderBookingHtmlShell } from "../../runtime/booking/bookingHtmlShell";
-import { renderBookingStyles } from "../../runtime/booking/bookingStyles";
-import { renderBookingScript } from "../../runtime/booking/scripts/bookingScript";
+import { renderBookingHtmlShell } from "../calendar/booking/bookingHtmlShell";
+import { renderBookingStyles } from "../calendar/booking/bookingStyles";
+import { renderBookingScript } from "../calendar/booking/scripts/bookingScript";
 
 export type BookingViewData = {
   publicSlug: string;
