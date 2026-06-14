@@ -648,9 +648,9 @@ function showPricesInline(){
     return;
   }
   var lines=PRODUCTS.map(function(p){
-    return '**'+p.name+'** — '+formatPrice(p.price)+(p.description?'\n'+p.description:'');
+    return '**'+p.name+'** — '+formatPrice(p.price)+(p.description?'\\n'+p.description:'');
   });
-  addAi('Nuestros servicios y precios:\n\n'+lines.join('\n\n'),false);
+  addAi('Nuestros servicios y precios:\\n\\n'+lines.join('\\n\\n'),false);
   addAiWithChips('¿Quieres continuar?',[
     {label:'🧾 Pedir cotización',onClick:function(){openQuotePanel();}},
     {label:'📅 Reservar hora',onClick:function(){openBookingPanel();}},
@@ -662,7 +662,7 @@ function showBizInfoInline(){
   var lines=[];
   if(BIZ_INFO.phone)   lines.push('📞 **Teléfono:** '+BIZ_INFO.phone);
   if(BIZ_INFO.address) lines.push('📍 **Dirección:** '+BIZ_INFO.address+(BIZ_INFO.city?', '+BIZ_INFO.city:''));
-  var text=lines.length?'**'+BIZ+'**\n\n'+lines.join('\n'):'Puedes contactarnos directamente para más información sobre el negocio.';
+  var text=lines.length?'**'+BIZ+'**\\n\\n'+lines.join('\\n'):'Puedes contactarnos directamente para más información sobre el negocio.';
   addAi(text,false);
   addAiWithChips('¿Hay algo más en lo que te pueda ayudar?',[
     {label:'📅 Reservar hora',onClick:function(){openBookingPanel();}},
