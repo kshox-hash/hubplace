@@ -6,11 +6,11 @@ type ModuleCard  = { emoji: string; title: string; desc: string; action: string 
 function buildModuleCards(modules: MenuModuleItem[]): ModuleCard[] {
   const cards: ModuleCard[] = [];
   if (modules.some(m => m.code === "reservas"))
-    cards.push({ emoji: "📅", title: "Reservar una hora", desc: "Agenda tu cita disponible", action: "reservas" });
+    cards.push({ emoji: "📅", title: "Reservar una hora",  desc: "Agenda tu cita disponible",      action: "reservas" });
   if (modules.some(m => m.code === "cotizador"))
-    cards.push({ emoji: "🧾", title: "Pedir cotización", desc: "Recibe un presupuesto por correo", action: "cotizar" });
-  cards.push({ emoji: "💰", title: "Consultar precios",      desc: "Conoce nuestras tarifas",     action: "precios" });
-  cards.push({ emoji: "💬", title: "¿Qué servicios ofrecen?", desc: "Descubre lo que hacemos",    action: "info"    });
+    cards.push({ emoji: "🧾", title: "Pedir cotización",   desc: "Recibe un presupuesto por correo", action: "cotizar" });
+  cards.push({ emoji: "💰", title: "Ver precios",          desc: "Conoce nuestras tarifas",         action: "precios" });
+  cards.push({ emoji: "ℹ️", title: "Info del negocio",    desc: "Teléfono, dirección y más",        action: "info"    });
   return cards;
 }
 
@@ -18,7 +18,8 @@ export function portalScripts(
   slug: string,
   bizName: string,
   modules: MenuModuleItem[],
-  products: ProductData[]
+  products: ProductData[],
+  bizInfo: { phone: string | null; address: string | null; city: string | null }
 ): string {
   const moduleCards  = buildModuleCards(modules);
   const safeProducts = products.map(p => ({
@@ -31,10 +32,10 @@ export function portalScripts(
   return `
 const SLUG=${JSON.stringify(slug)};
 const BIZ=${JSON.stringify(bizName)};
+const BIZ_INFO=${JSON.stringify(bizInfo)};
 const MODULE_CARDS=${JSON.stringify(moduleCards)};
 const PRODUCTS=${JSON.stringify(safeProducts)};
 const TABS=['chat','reservas','cotizar','nosotros'];
-let sending=false;
 
 // ── Estado compartido ─────────────────────────────────────────────────────────
 var S={flow:null,date:null,time:null,slots:{},cart:{}};
@@ -637,39 +638,49 @@ function addAiWithModules(){
   m.body.appendChild(mods); appendAiRow(m.row);
 }
 
-// ── Chat libre (API) ──────────────────────────────────────────────────────────
-async function sendMsg(){
-  if(sending) return;
-  var inp=document.getElementById('chatInput');
-  var q=inp.value.trim(); if(!q) return;
-  inp.value=''; inp.style.height='auto';
-  addUser(q); showTyping(); sending=true;
-  document.getElementById('sendBtn').disabled=true;
-  try{
-    var r=await fetch('/api/public/'+SLUG+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});
-    var d=await r.json(); hideTyping();
-    if(d.answer){ addAi(d.answer); }
-    else { addAi(d.message||'No encontré información sobre eso. ¿Puedes reformular tu pregunta?',false); }
-  }catch(e){ hideTyping(); addAi('Hubo un problema al conectar. Intenta de nuevo.',false); }
-  finally{ sending=false; document.getElementById('sendBtn').disabled=false; }
+// ── Acciones inline ──────────────────────────────────────────────────────────
+function showPricesInline(){
+  if(!PRODUCTS||!PRODUCTS.length){
+    addAiWithChips('Por el momento no tenemos una lista de precios publicada.',[
+      {label:'📅 Reservar hora',onClick:function(){openBookingPanel();}},
+      {label:'🏠 Ver opciones',onClick:function(){addAiWithModules();}}
+    ]);
+    return;
+  }
+  var lines=PRODUCTS.map(function(p){
+    return '**'+p.name+'** — '+formatPrice(p.price)+(p.description?'\n'+p.description:'');
+  });
+  addAi('Nuestros servicios y precios:\n\n'+lines.join('\n\n'),false);
+  addAiWithChips('¿Quieres continuar?',[
+    {label:'🧾 Pedir cotización',onClick:function(){openQuotePanel();}},
+    {label:'📅 Reservar hora',onClick:function(){openBookingPanel();}},
+    {label:'🏠 Menú',onClick:function(){addAiWithModules();}}
+  ]);
+}
+
+function showBizInfoInline(){
+  var lines=[];
+  if(BIZ_INFO.phone)   lines.push('📞 **Teléfono:** '+BIZ_INFO.phone);
+  if(BIZ_INFO.address) lines.push('📍 **Dirección:** '+BIZ_INFO.address+(BIZ_INFO.city?', '+BIZ_INFO.city:''));
+  var text=lines.length?'**'+BIZ+'**\n\n'+lines.join('\n'):'Puedes contactarnos directamente para más información sobre el negocio.';
+  addAi(text,false);
+  addAiWithChips('¿Hay algo más en lo que te pueda ayudar?',[
+    {label:'📅 Reservar hora',onClick:function(){openBookingPanel();}},
+    {label:'💰 Ver precios',onClick:function(){showPricesInline();}},
+    {label:'🏠 Ver opciones',onClick:function(){addAiWithModules();}}
+  ]);
 }
 
 // ── Acciones rápidas ──────────────────────────────────────────────────────────
 function quickAction(a){
   if(a==='reservas'){      addUser('Quiero reservar una hora');    openBookingPanel(); }
   else if(a==='cotizar'){  addUser('Quiero pedir una cotización'); startCotizarFlow();  }
-  else if(a==='precios'){  document.getElementById('chatInput').value='¿Cuáles son los precios?'; sendMsg(); }
-  else if(a==='info'){     document.getElementById('chatInput').value='¿Qué servicios ofrecen?'; sendMsg(); }
+  else if(a==='precios'){  showPricesInline(); }
+  else if(a==='info'){     showBizInfoInline(); }
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 (function init(){
-  var inp=document.getElementById('chatInput');
-  var btn=document.getElementById('sendBtn');
-  btn.addEventListener('click',function(){ sendMsg(); });
-  btn.addEventListener('touchend',function(e){ e.preventDefault(); sendMsg(); });
-  inp.addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,160)+'px'; });
-  inp.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMsg(); } });
   document.querySelectorAll('.bn-item').forEach(function(btn){
     btn.addEventListener('click',function(){
       var tab=btn.getAttribute('data-tab');

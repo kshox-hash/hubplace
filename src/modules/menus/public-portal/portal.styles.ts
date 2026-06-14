@@ -43,7 +43,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .bn-item:active{opacity:.6}
 
 /* CHAT — messages */
-.chat-msgs{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 14px 10px;display:flex;flex-direction:column;gap:0;background:radial-gradient(ellipse at 8% 4%,rgba(91,156,246,.05) 0%,transparent 55%),radial-gradient(ellipse at 92% 96%,rgba(167,139,250,.04) 0%,transparent 55%),var(--bg)}
+.chat-msgs{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 14px 28px;display:flex;flex-direction:column;gap:0;background:var(--bg)}
 .user-row{display:flex;justify-content:flex-end;margin:4px 0 16px;animation:msgIn .2s ease-out both}
 .user-pill{max-width:78%;background:linear-gradient(135deg,rgba(91,156,246,.22),rgba(91,156,246,.1));border:1px solid rgba(91,156,246,.25);border-radius:22px 22px 5px 22px;padding:11px 16px;font-size:15px;line-height:1.56;color:var(--text);word-break:break-word}
 .ai-row{display:flex;gap:11px;align-items:flex-start;margin:4px 0 20px;animation:msgIn .22s ease-out both}
@@ -127,18 +127,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .confirm-value{color:var(--text);font-weight:500}
 .confirm-note{font-size:12px;color:var(--muted2);margin-top:10px;padding-top:9px;border-top:1px solid var(--border)}
 
-/* CHAT — input */
-.chat-bar{padding:10px 14px 10px;background:transparent;flex-shrink:0}
-.input-box{position:relative;background:var(--s1);border:1px solid var(--border);border-radius:18px;transition:border-color .2s,box-shadow .2s}
-.input-box:focus-within{border-color:rgba(91,156,246,.38);box-shadow:0 0 0 4px rgba(91,156,246,.07)}
-.msg-input{display:block;width:100%;background:none;border:none;outline:none;padding:14px 56px 14px 18px;color:var(--text);font-size:15px;font-family:inherit;resize:none;line-height:1.5;min-height:50px;max-height:160px}
-.msg-input::placeholder{color:var(--muted)}
-.send-btn{position:absolute;right:7px;bottom:6px;width:40px;height:40px;border-radius:12px;background:var(--primary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .12s,opacity .15s;-webkit-tap-highlight-color:transparent}
-.send-btn:hover{background:#4a8de0}
-.send-btn:active{transform:scale(.86)}
-.send-btn:disabled{opacity:.28;cursor:default}
-.send-btn svg{width:16px;height:16px;fill:#fff;margin-left:2px}
-.input-hint{font-size:11px;color:var(--muted);text-align:center;padding:5px 0 2px;letter-spacing:.02em}
 
 /* OTHER TABS */
 .sec-label{font-size:11.5px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;padding:18px 0 10px}

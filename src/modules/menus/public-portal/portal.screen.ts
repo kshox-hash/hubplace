@@ -80,7 +80,7 @@ export function renderPortalHtml(data: PortalViewData): string {
 
 <div id="quotePanel" class="quote-panel"></div>
 <div id="bookingPanel" class="quote-panel"></div>
-<script>${portalScripts(publicSlug, safe.name, enabledModules, products)}</script>
+<script>${portalScripts(publicSlug, safe.name, enabledModules, products, { phone: safe.phone, address: safe.address, city: safe.city })}</script>
 </body>
 </html>`;
 }
