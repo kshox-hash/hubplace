@@ -77,6 +77,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .ai-mod-desc{font-size:12px;color:var(--muted2);line-height:1.35}
 .ai-mod-arrow{width:15px;height:15px;flex-shrink:0;stroke:var(--muted);opacity:.5}
 
+/* CHAT — chips de sugerencia */
+.ai-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.ai-chip{background:transparent;border:1px solid rgba(91,156,246,.38);border-radius:20px;padding:7px 15px;font-size:13px;font-weight:500;color:var(--primary);cursor:pointer;transition:background .15s,border-color .15s,transform .1s,opacity .2s;-webkit-tap-highlight-color:transparent;font-family:inherit;white-space:nowrap;letter-spacing:.01em}
+.ai-chip:hover{background:rgba(91,156,246,.1);border-color:var(--primary)}
+.ai-chip:active{transform:scale(.95)}
+.ai-chip.used{opacity:.28;pointer-events:none}
+
 /* CHAT — input */
 .chat-bar{padding:10px 14px 10px;background:transparent;flex-shrink:0}
 .input-box{position:relative;background:var(--s1);border:1px solid var(--border);border-radius:18px;transition:border-color .2s,box-shadow .2s}

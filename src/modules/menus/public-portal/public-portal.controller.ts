@@ -3,6 +3,7 @@ import { getSlugByValueService } from "../../slug/slug.service";
 import { quoteHtml } from "../../quotes/quote-html";
 import { getProductsRepository, getActiveProductsRepository } from "../../quotes/products/products.repository";
 import { companyProfileRepository } from "../../profiles/company_profile_repository";
+import { findEnabledModulesByUserId } from "../user-modules.repository";
 import { renderPortalHtml } from "./portal.screen";
 
 
@@ -65,9 +66,10 @@ export const publicPortalController = {
         return res.status(404).send("Negocio no encontrado");
       }
 
-      const [products, profile] = await Promise.all([
+      const [products, profile, enabledModules] = await Promise.all([
         getActiveProductsRepository(slug.user_id),
         companyProfileRepository.getByUserId(slug.user_id),
+        findEnabledModulesByUserId(slug.user_id),
       ]);
 
       const html = renderPortalHtml({
@@ -77,6 +79,7 @@ export const publicPortalController = {
         phone:   profile?.phone   ?? null,
         address: profile?.address ?? null,
         city:    profile?.city    ?? null,
+        enabledModules,
       });
 
       return res.status(200).send(html);

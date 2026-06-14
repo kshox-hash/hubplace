@@ -1,7 +1,108 @@
-export function portalScripts(slug: string, bizName: string, _initial: string): string {
+import { MenuModuleItem } from "../user-modules.repository";
+
+type FlowStep = {
+  text: string;
+  chips: { label: string; next: string }[];
+  tab?: string;
+  delay?: number;
+};
+
+type ModuleCard = { emoji: string; title: string; desc: string; action: string };
+
+function buildFlows(modules: MenuModuleItem[]): Record<string, { steps: Record<string, FlowStep> }> {
+  const flows: Record<string, { steps: Record<string, FlowStep> }> = {};
+
+  if (modules.some((m) => m.code === "reservas")) {
+    flows.reservas = {
+      steps: {
+        start: {
+          text: "¡Perfecto! ¿Tienes alguna preferencia para la reserva?",
+          chips: [
+            { label: "🚀 Lo antes posible", next: "now" },
+            { label: "📅 Quiero elegir fecha", next: "date" },
+            { label: "💬 Tengo una pregunta primero", next: "doubt" },
+          ],
+        },
+        now: {
+          text: "¡Entendido! Te llevo a los horarios disponibles. Elige el que más te acomode.",
+          chips: [],
+          tab: "reservas",
+          delay: 1800,
+        },
+        date: {
+          text: "Perfecto. En reservas puedes seleccionar exactamente el día y hora que prefieras.",
+          chips: [],
+          tab: "reservas",
+          delay: 2000,
+        },
+        doubt: {
+          text: "¡Sin problema! ¿Cuál es tu duda? Escríbela abajo y te ayudo.",
+          chips: [],
+        },
+      },
+    };
+  }
+
+  if (modules.some((m) => m.code === "cotizador")) {
+    flows.cotizar = {
+      steps: {
+        start: {
+          text: "¡Con gusto! ¿Sabes qué servicio necesitas cotizar?",
+          chips: [
+            { label: "✅ Sí, sé qué necesito", next: "knows" },
+            { label: "📋 Quiero ver las opciones", next: "browse" },
+            { label: "🤔 No estoy seguro/a", next: "unsure" },
+          ],
+        },
+        knows: {
+          text: "Perfecto. En Servicios seleccionas lo que necesitas y recibes el presupuesto por correo.",
+          chips: [],
+          tab: "cotizar",
+          delay: 2200,
+        },
+        browse: {
+          text: "Te muestro todo lo que ofrecemos para que elijas lo que necesitas.",
+          chips: [],
+          tab: "cotizar",
+          delay: 1800,
+        },
+        unsure: {
+          text: "Sin problema. Cuéntame qué necesitas y te oriento con las mejores opciones.",
+          chips: [],
+        },
+      },
+    };
+  }
+
+  return flows;
+}
+
+function buildModuleCards(modules: MenuModuleItem[]): ModuleCard[] {
+  const cards: ModuleCard[] = [];
+
+  if (modules.some((m) => m.code === "reservas")) {
+    cards.push({ emoji: "📅", title: "Reservar una hora", desc: "Agenda tu cita disponible", action: "reservas" });
+  }
+
+  if (modules.some((m) => m.code === "cotizador")) {
+    cards.push({ emoji: "🧾", title: "Pedir cotización", desc: "Recibe un presupuesto por correo", action: "cotizar" });
+  }
+
+  cards.push({ emoji: "💰", title: "Consultar precios", desc: "Conoce nuestras tarifas", action: "precios" });
+  cards.push({ emoji: "💬", title: "¿Qué servicios ofrecen?", desc: "Descubre lo que hacemos", action: "info" });
+
+  return cards;
+}
+
+export function portalScripts(slug: string, bizName: string, modules: MenuModuleItem[]): string {
+  const flows = buildFlows(modules);
+  const moduleCards = buildModuleCards(modules);
+
   return `
 const SLUG='${slug}';
 const BIZ=${JSON.stringify(bizName)};
+const FLOWS=${JSON.stringify(flows)};
+const MODULE_CARDS=${JSON.stringify(moduleCards)};
 const TABS=['chat','reservas','cotizar','nosotros'];
 let sending=false;
 
@@ -64,18 +165,78 @@ function addAi(text,animate){
   icon.textContent='\\u2726';
   var body=document.createElement('div');
   body.className='ai-body';
-  var label=document.createElement('div');
-  label.className='ai-label';
-  label.textContent=BIZ;
+  var lbl=document.createElement('div');
+  lbl.className='ai-label';
+  lbl.textContent=BIZ;
   var textEl=document.createElement('div');
   textEl.className='ai-text';
-  body.appendChild(label);
+  body.appendChild(lbl);
   body.appendChild(textEl);
   row.appendChild(icon);
   row.appendChild(body);
   document.getElementById('chatMsgs').appendChild(row);
   if(animate!==false){ typeWrite(textEl,text); }
   else { textEl.innerHTML=renderMd(text); scrollChat(); }
+}
+
+function addAiWithChips(text,chips){
+  var row=document.createElement('div');
+  row.className='ai-row';
+  var icon=document.createElement('div');
+  icon.className='ai-icon-sm';
+  icon.textContent='\\u2726';
+  var body=document.createElement('div');
+  body.className='ai-body';
+  var lbl=document.createElement('div');
+  lbl.className='ai-label';
+  lbl.textContent=BIZ;
+  var textEl=document.createElement('div');
+  textEl.className='ai-text';
+  textEl.innerHTML=renderMd(text);
+  body.appendChild(lbl);
+  body.appendChild(textEl);
+  if(chips&&chips.length){
+    var chipsEl=document.createElement('div');
+    chipsEl.className='ai-chips';
+    chips.forEach(function(chip){
+      var btn=document.createElement('button');
+      btn.type='button';
+      btn.className='ai-chip';
+      btn.textContent=chip.label;
+      btn.addEventListener('click',function(){
+        chipsEl.querySelectorAll('.ai-chip').forEach(function(x){ x.classList.add('used'); });
+        addUser(chip.label);
+        chip.onClick();
+      });
+      chipsEl.appendChild(btn);
+    });
+    body.appendChild(chipsEl);
+  }
+  row.appendChild(icon);
+  row.appendChild(body);
+  document.getElementById('chatMsgs').appendChild(row);
+  scrollChat();
+}
+
+function runFlowStep(flowName,stepId){
+  var flow=FLOWS[flowName];
+  if(!flow) return;
+  var step=flow.steps[stepId];
+  if(!step) return;
+  showTyping();
+  setTimeout(function(){
+    hideTyping();
+    var chips=(step.chips||[]).map(function(c){
+      return {
+        label:c.label,
+        onClick:(function(n){ return function(){ runFlowStep(flowName,n); }; })(c.next)
+      };
+    });
+    addAiWithChips(step.text,chips);
+    if(step.tab){
+      setTimeout(function(){ showTab(step.tab); },step.delay||2000);
+    }
+  },900);
 }
 
 function showTyping(){
@@ -107,21 +268,15 @@ function addAiWithModules(){
   icon.textContent='\\u2726';
   var body=document.createElement('div');
   body.className='ai-body';
-  var label=document.createElement('div');
-  label.className='ai-label';
-  label.textContent=BIZ;
+  var lbl=document.createElement('div');
+  lbl.className='ai-label';
+  lbl.textContent=BIZ;
   var textEl=document.createElement('div');
   textEl.className='ai-text ai-greeting';
   textEl.innerHTML='Hola! Soy el asistente de <b>'+BIZ+'</b>. \\u00bfEn qu\\u00e9 te puedo ayudar hoy?';
   var mods=document.createElement('div');
   mods.className='ai-modules';
-  var items=[
-    {emoji:'\\ud83d\\udcc5',title:'Reservar una hora',desc:'Agenda tu cita disponible',action:'reservas'},
-    {emoji:'\\ud83e\\uddfe',title:'Pedir cotizaci\\u00f3n',desc:'Recibe un presupuesto por correo',action:'cotizar'},
-    {emoji:'\\ud83d\\udcb0',title:'Consultar precios',desc:'Conoce nuestras tarifas',action:'precios'},
-    {emoji:'\\ud83d\\udcac',title:'\\u00bfQu\\u00e9 servicios ofrecen?',desc:'Descubre lo que hacemos',action:'info'}
-  ];
-  items.forEach(function(m){
+  MODULE_CARDS.forEach(function(m){
     var card=document.createElement('button');
     card.type='button';
     card.className='ai-mod-card';
@@ -134,7 +289,7 @@ function addAiWithModules(){
     })(m.action,mods));
     mods.appendChild(card);
   });
-  body.appendChild(label);
+  body.appendChild(lbl);
   body.appendChild(textEl);
   body.appendChild(mods);
   row.appendChild(icon);
@@ -174,20 +329,10 @@ async function sendMsg(){
 function quickAction(a){
   if(a==='reservas'){
     addUser('Quiero reservar una hora');
-    showTyping();
-    setTimeout(function(){
-      hideTyping();
-      addAi('\\u00a1Con gusto! Te llevo a la secci\\u00f3n de reservas donde puedes ver la disponibilidad y agendar tu hora.');
-      setTimeout(function(){ showTab('reservas'); },2400);
-    },900);
+    runFlowStep('reservas','start');
   } else if(a==='cotizar'){
     addUser('Quiero pedir una cotizaci\\u00f3n');
-    showTyping();
-    setTimeout(function(){
-      hideTyping();
-      addAi('\\u00a1Claro! En la secci\\u00f3n Servicios puedes seleccionar lo que necesitas y recibir\\u00e1s el presupuesto por correo.');
-      setTimeout(function(){ showTab('cotizar'); },2600);
-    },900);
+    runFlowStep('cotizar','start');
   } else if(a==='precios'){
     document.getElementById('chatInput').value='\\u00bfCu\\u00e1les son los precios?';
     sendMsg();

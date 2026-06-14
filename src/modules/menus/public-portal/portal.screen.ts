@@ -5,6 +5,7 @@ import { chatTabHtml }        from "./portal-tab-chat";
 import { reservasTabHtml }    from "./portal-tab-reservas";
 import { serviciosTabHtml }   from "./portal-tab-servicios";
 import { nosotrosTabHtml }    from "./portal-tab-nosotros";
+import { MenuModuleItem }     from "../user-modules.repository";
 
 export type PortalViewData = {
   businessName: string;
@@ -13,10 +14,11 @@ export type PortalViewData = {
   phone?: string | null;
   address?: string | null;
   city?: string | null;
+  enabledModules: MenuModuleItem[];
 };
 
 export function renderPortalHtml(data: PortalViewData): string {
-  const { businessName, publicSlug, productCount, phone, address, city } = data;
+  const { businessName, publicSlug, productCount, phone, address, city, enabledModules } = data;
 
   const safe = {
     name:    escapeHtml(businessName),
@@ -76,7 +78,7 @@ export function renderPortalHtml(data: PortalViewData): string {
   </button>
 </nav>
 
-<script>${portalScripts(safe.slug, safe.name, initials.slice(0, 1))}</script>
+<script>${portalScripts(safe.slug, safe.name, enabledModules)}</script>
 </body>
 </html>`;
 }
