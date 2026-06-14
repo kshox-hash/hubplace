@@ -33,6 +33,8 @@ export async function createPreference(
 
       external_reference: input.bookingId,
 
+      binary_mode: true,
+
       back_urls: {
         success: `${APP_URL}/payment/success`,
         failure: `${APP_URL}/payment/failure`,
@@ -41,8 +43,7 @@ export async function createPreference(
 
       auto_return: "approved",
 
-      notification_url:
-        `${APP_URL}/api/payments/webhook`,
+      notification_url: `${APP_URL}/api/payments/webhook`,
     },
   });
 

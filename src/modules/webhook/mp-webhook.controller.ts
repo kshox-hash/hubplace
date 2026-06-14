@@ -46,7 +46,8 @@ export const mpWebhookController = {
       });
     } catch (error) {
       console.error("[webhook] Error procesando pago:", error);
-      return res.status(500).json({ ok: false, message: "Error interno" });
+      // MP requiere 200 siempre — un 500 provoca reintentos y baja el score de integración
+      return res.status(200).json({ ok: false, message: "Error interno, reintento no necesario" });
     }
   },
 };
