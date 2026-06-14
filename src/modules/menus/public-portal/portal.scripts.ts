@@ -1,10 +1,8 @@
-export function portalScripts(slug: string, bizName: string, initial: string): string {
+export function portalScripts(slug: string, bizName: string, _initial: string): string {
   return `
 const SLUG='${slug}';
 const BIZ=${JSON.stringify(bizName)};
-const INIT='${initial}';
 const TABS=['chat','reservas','cotizar','nosotros'];
-let chatStarted=false;
 let sending=false;
 
 function showTab(t){
@@ -16,15 +14,8 @@ function showTab(t){
 }
 
 function scrollChat(){
-  var el=chatStarted?document.getElementById('chatMsgs'):document.getElementById('chatWelcome');
+  var el=document.getElementById('chatMsgs');
   if(el) requestAnimationFrame(function(){ el.scrollTop=el.scrollHeight; });
-}
-
-function startChat(){
-  if(chatStarted) return;
-  chatStarted=true;
-  document.getElementById('chatWelcome').style.display='none';
-  document.getElementById('chatMsgs').classList.remove('hidden');
 }
 
 function renderMd(t){
@@ -44,7 +35,7 @@ function typeWrite(el,rawText){
     if(i<chars.length){
       var c=chars[i]; i++;
       el.innerHTML=renderMd(chars.slice(0,i).join(''));
-      setTimeout(tick,c==='\\n'?80:12);
+      setTimeout(tick,c==='\\n'?80:11);
       scrollChat();
     } else {
       el.innerHTML=renderMd(rawText);
@@ -55,7 +46,6 @@ function typeWrite(el,rawText){
 }
 
 function addUser(text){
-  startChat();
   var row=document.createElement('div');
   row.className='user-row';
   var pill=document.createElement('div');
@@ -67,7 +57,6 @@ function addUser(text){
 }
 
 function addAi(text,animate){
-  startChat();
   var row=document.createElement('div');
   row.className='ai-row';
   var icon=document.createElement('div');
@@ -90,7 +79,6 @@ function addAi(text,animate){
 }
 
 function showTyping(){
-  startChat();
   var row=document.createElement('div');
   row.className='typing-row';
   row.id='typingRow';
@@ -109,6 +97,50 @@ function showTyping(){
 function hideTyping(){
   var r=document.getElementById('typingRow');
   if(r) r.remove();
+}
+
+function addAiWithModules(){
+  var row=document.createElement('div');
+  row.className='ai-row ai-row--intro';
+  var icon=document.createElement('div');
+  icon.className='ai-icon-sm';
+  icon.textContent='\\u2726';
+  var body=document.createElement('div');
+  body.className='ai-body';
+  var label=document.createElement('div');
+  label.className='ai-label';
+  label.textContent=BIZ;
+  var textEl=document.createElement('div');
+  textEl.className='ai-text ai-greeting';
+  textEl.innerHTML='Hola! Soy el asistente de <b>'+BIZ+'</b>. \\u00bfEn qu\\u00e9 te puedo ayudar hoy?';
+  var mods=document.createElement('div');
+  mods.className='ai-modules';
+  var items=[
+    {emoji:'\\ud83d\\udcc5',title:'Reservar una hora',desc:'Agenda tu cita disponible',action:'reservas'},
+    {emoji:'\\ud83e\\uddfe',title:'Pedir cotizaci\\u00f3n',desc:'Recibe un presupuesto por correo',action:'cotizar'},
+    {emoji:'\\ud83d\\udcb0',title:'Consultar precios',desc:'Conoce nuestras tarifas',action:'precios'},
+    {emoji:'\\ud83d\\udcac',title:'\\u00bfQu\\u00e9 servicios ofrecen?',desc:'Descubre lo que hacemos',action:'info'}
+  ];
+  items.forEach(function(m){
+    var card=document.createElement('button');
+    card.type='button';
+    card.className='ai-mod-card';
+    card.innerHTML='<span class="ai-mod-emoji">'+m.emoji+'</span><div class="ai-mod-texts"><div class="ai-mod-title">'+m.title+'</div><div class="ai-mod-desc">'+m.desc+'</div></div><svg class="ai-mod-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+    card.addEventListener('click',(function(action,modsEl){
+      return function(){
+        modsEl.querySelectorAll('.ai-mod-card').forEach(function(c){ c.classList.add('used'); });
+        quickAction(action);
+      };
+    })(m.action,mods));
+    mods.appendChild(card);
+  });
+  body.appendChild(label);
+  body.appendChild(textEl);
+  body.appendChild(mods);
+  row.appendChild(icon);
+  row.appendChild(body);
+  document.getElementById('chatMsgs').appendChild(row);
+  scrollChat();
 }
 
 async function sendMsg(){
@@ -145,22 +177,22 @@ function quickAction(a){
     showTyping();
     setTimeout(function(){
       hideTyping();
-      addAi('Con gusto! Te llevo a la seccion de reservas donde puedes ver la disponibilidad y agendar tu hora.');
+      addAi('\\u00a1Con gusto! Te llevo a la secci\\u00f3n de reservas donde puedes ver la disponibilidad y agendar tu hora.');
       setTimeout(function(){ showTab('reservas'); },2400);
     },900);
   } else if(a==='cotizar'){
-    addUser('Quiero pedir una cotizacion');
+    addUser('Quiero pedir una cotizaci\\u00f3n');
     showTyping();
     setTimeout(function(){
       hideTyping();
-      addAi('Claro! En la seccion Servicios puedes seleccionar lo que necesitas y recibiras el presupuesto por correo.');
+      addAi('\\u00a1Claro! En la secci\\u00f3n Servicios puedes seleccionar lo que necesitas y recibir\\u00e1s el presupuesto por correo.');
       setTimeout(function(){ showTab('cotizar'); },2600);
     },900);
   } else if(a==='precios'){
-    document.getElementById('chatInput').value='Cuales son los precios?';
+    document.getElementById('chatInput').value='\\u00bfCu\\u00e1les son los precios?';
     sendMsg();
   } else if(a==='info'){
-    document.getElementById('chatInput').value='Que servicios ofrecen?';
+    document.getElementById('chatInput').value='\\u00bfQu\\u00e9 servicios ofrecen?';
     sendMsg();
   }
 }
@@ -185,19 +217,7 @@ function quickAction(a){
   document.getElementById('nb-cotizar').addEventListener('click',function(){ showTab('cotizar'); });
   document.getElementById('nb-nosotros').addEventListener('click',function(){ showTab('nosotros'); });
 
-  var cards=document.querySelectorAll('.prompt-card');
-  if(cards[0]) cards[0].addEventListener('click',function(){ quickAction('reservas'); });
-  if(cards[1]) cards[1].addEventListener('click',function(){ quickAction('cotizar'); });
-  if(cards[2]) cards[2].addEventListener('click',function(){ quickAction('precios'); });
-  if(cards[3]) cards[3].addEventListener('click',function(){ quickAction('info'); });
-
-  var gotoChat=document.getElementById('btn-goto-chat');
-  if(gotoChat) gotoChat.addEventListener('click',function(){ showTab('chat'); });
-
-  setTimeout(function(){
-    startChat();
-    addAi('Hola! Soy el asistente de **'+BIZ+'**. Estoy aqui para ayudarte con preguntas sobre nuestros servicios, precios y disponibilidad. En que te puedo ayudar hoy?');
-  },600);
+  setTimeout(function(){ addAiWithModules(); },600);
 })();
 `;
 }
