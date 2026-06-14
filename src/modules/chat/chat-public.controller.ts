@@ -6,6 +6,7 @@ import {
   findBestMatch,
   buildPriceAnswer,
   buildAvailabilityAnswer,
+  buildGreetingAnswer,
 } from "./chat.service";
 import { getActiveProductsRepository } from "../quotes/products/products.repository";
 import { buildCalendarSlots } from "../appointments/appointments.service";
@@ -39,7 +40,9 @@ export const chatPublicController = {
 
       let answer: string;
 
-      if (intent === "price") {
+      if (intent === "greeting") {
+        answer = buildGreetingAnswer(slug.business_name ?? publicSlug);
+      } else if (intent === "price") {
         const products = await getActiveProductsRepository(slug.user_id);
         answer = buildPriceAnswer(products);
       } else if (intent === "availability") {

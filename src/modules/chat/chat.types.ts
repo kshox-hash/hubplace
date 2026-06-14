@@ -14,4 +14,4 @@ export type KnowledgeChunk = {
   chunk_index: number;
 };
 
-export type Intent = "price" | "availability" | "general";
+export type Intent = "greeting" | "price" | "availability" | "general";

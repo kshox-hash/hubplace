@@ -7,8 +7,13 @@ const STOPWORDS = new Set([
   "me", "te", "nos", "como", "mas", "pero", "si", "no", "hay", "tiene",
   "tienen", "quiero", "necesito", "puedo", "puede", "cual", "cuanto", "cuando",
   "donde", "son", "esta", "este", "mi", "tu", "ya", "tan", "muy", "bien",
-  "hola", "buenas", "gracias", "quisiera", "saber", "tener", "ser", "estar",
+  "gracias", "quisiera", "saber", "tener", "ser", "estar",
   "hacer", "dar", "ver", "soy", "estoy", "tengo", "favor", "info", "informacion"
+]);
+
+const GREETING_WORDS = new Set([
+  "hola", "buenas", "buenos", "buen", "dias", "tardes", "noches",
+  "saludos", "hey", "hi", "hello", "ola", "holaa"
 ]);
 
 const PRICE_KEYWORDS = new Set([
@@ -37,10 +42,22 @@ function extractKeywords(text: string): string[] {
 }
 
 export function detectIntent(question: string): Intent {
+  const normalized = normalize(question);
+  const rawWords   = normalized.split(" ");
+
+  // Saludo simple (máx 5 palabras y contiene palabra de saludo)
+  if (rawWords.length <= 5 && rawWords.some(w => GREETING_WORDS.has(w))) {
+    return "greeting";
+  }
+
   const words = extractKeywords(question);
   if (words.some(w => AVAIL_KEYWORDS.has(w))) return "availability";
   if (words.some(w => PRICE_KEYWORDS.has(w))) return "price";
   return "general";
+}
+
+export function buildGreetingAnswer(businessName: string): string {
+  return `¡Hola! 👋 Soy el asistente de **${businessName}**.\n\nEstoy aquí para ayudarte con preguntas sobre nuestros servicios, precios y disponibilidad. ¿En qué te puedo ayudar hoy?`;
 }
 
 function scoreChunk(keywords: string[], chunkText: string): number {
