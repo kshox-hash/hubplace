@@ -65,6 +65,7 @@ export function renderPortalHtml(data: PortalViewData): string {
   Volver al chat
 </button>
 
+<div id="quotePanel" class="quote-panel"></div>
 <script>${portalScripts(publicSlug, safe.name, enabledModules, products)}</script>
 </body>
 </html>`;

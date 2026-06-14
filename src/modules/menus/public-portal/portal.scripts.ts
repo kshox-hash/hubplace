@@ -174,71 +174,6 @@ function addAiWithForm(text,fields,btnLabel,onSubmit){
   setTimeout(function(){ inputs[fields[0].id].focus(); },150);
 }
 
-// ── Tarjetas de producto ──────────────────────────────────────────────────────
-function addAiWithProductCards(text,products){
-  if(!products||!products.length){
-    addAi('No hay servicios disponibles en este momento. Contáctanos directamente.',false); return;
-  }
-  var m=makeAiRow();
-  var el=document.createElement('div'); el.className='ai-text'; el.innerHTML=renderMd(text);
-  m.body.appendChild(el);
-
-  var cards=document.createElement('div'); cards.className='product-cards';
-  var summary=document.createElement('div'); summary.className='cart-summary';
-  var confirmBtn=document.createElement('button'); confirmBtn.type='button';
-  confirmBtn.className='cart-confirm-btn'; confirmBtn.textContent='Solicitar cotización →';
-
-  function refreshSummary(){
-    var lines=[]; var total=0;
-    products.forEach(function(p){
-      var q=S.cart[p.id]||0;
-      if(q>0){ lines.push({name:p.name,q:q,sub:p.price*q}); total+=p.price*q; }
-    });
-    if(!lines.length){ summary.classList.remove('visible'); return; }
-    summary.classList.add('visible');
-    var html='';
-    lines.forEach(function(l){ html+='<div class="cart-line"><span>'+escH(l.name)+' ×'+l.q+'</span><span>'+formatPrice(l.sub)+'</span></div>'; });
-    html+='<div class="cart-total"><span>Total</span><span>'+formatPrice(total)+'</span></div>';
-    summary.innerHTML=html;
-  }
-
-  products.forEach(function(p){
-    var card=document.createElement('div'); card.className='product-card';
-    var info=document.createElement('div'); info.className='product-info';
-    info.innerHTML='<div class="product-name">'+escH(p.name)+'</div>'
-      +(p.description?'<div class="product-desc">'+escH(p.description)+'</div>':'')
-      +'<div class="product-price">'+formatPrice(p.price)+'</div>';
-    var qc=document.createElement('div'); qc.className='qty-ctrl';
-    var minus=document.createElement('button'); minus.type='button'; minus.className='qty-btn'; minus.textContent='−'; minus.disabled=true;
-    var num=document.createElement('span'); num.className='qty-num'; num.textContent='0';
-    var plus=document.createElement('button'); plus.type='button'; plus.className='qty-btn'; plus.textContent='+';
-    (function(pid,numEl,minusEl){
-      plus.addEventListener('click',function(){
-        S.cart[pid]=(S.cart[pid]||0)+1; numEl.textContent=S.cart[pid]; minusEl.disabled=false; refreshSummary();
-      });
-      minusEl.addEventListener('click',function(){
-        S.cart[pid]=Math.max(0,(S.cart[pid]||0)-1); numEl.textContent=S.cart[pid]; if(!S.cart[pid]) minusEl.disabled=true; refreshSummary();
-      });
-    })(p.id,num,minus);
-    qc.appendChild(minus); qc.appendChild(num); qc.appendChild(plus);
-    card.appendChild(info); card.appendChild(qc); cards.appendChild(card);
-  });
-
-  confirmBtn.addEventListener('click',function(){
-    var hasItems=products.some(function(p){ return (S.cart[p.id]||0)>0; });
-    if(!hasItems){
-      summary.innerHTML='<div class="cart-hint">Selecciona al menos un servicio para continuar.</div>';
-      summary.classList.add('visible'); return;
-    }
-    confirmBtn.disabled=true;
-    cards.querySelectorAll('.qty-btn').forEach(function(b){ b.disabled=true; });
-    showQuoteFormStep();
-  });
-
-  m.body.appendChild(cards); m.body.appendChild(summary); m.body.appendChild(confirmBtn);
-  appendAiRow(m.row);
-}
-
 // ── Tarjeta de confirmación ───────────────────────────────────────────────────
 function addConfirmCard(icon,title,rows,note){
   var m=makeAiRow();
@@ -342,48 +277,169 @@ function submitBooking(v){
   ]); });
 }
 
-// ── FLOW: COTIZACIONES ────────────────────────────────────────────────────────
+// ── PANEL DE COTIZACIÓN (slide-in) ────────────────────────────────────────────
+function openQuotePanel(){
+  S.cart={};
+  renderQPStep1();
+  document.getElementById('quotePanel').classList.add('open');
+}
+function closeQuotePanel(){
+  document.getElementById('quotePanel').classList.remove('open');
+  setTimeout(function(){ var p=document.getElementById('quotePanel'); if(p) p.innerHTML=''; },360);
+}
+
+function renderQPStep1(){
+  var panel=document.getElementById('quotePanel');
+  panel.innerHTML='';
+  // Header
+  var hdr=document.createElement('div'); hdr.className='qp-header';
+  var back=document.createElement('button'); back.type='button'; back.className='qp-back';
+  back.innerHTML='<svg viewBox="0 0 24 24" fill="none"><polyline points="15 18 9 12 15 6"/></svg>Volver';
+  back.addEventListener('click',closeQuotePanel);
+  var ttl=document.createElement('div'); ttl.className='qp-title'; ttl.textContent='Cotización';
+  var spc=document.createElement('div'); spc.className='qp-spacer';
+  hdr.appendChild(back); hdr.appendChild(ttl); hdr.appendChild(spc);
+  // Footer
+  var footer=document.createElement('div'); footer.className='qp-footer';
+  var cartBar=document.createElement('div'); cartBar.className='qp-cart-bar'; cartBar.style.display='none';
+  var cartInfo=document.createElement('span'); cartInfo.className='qp-cart-info';
+  var cartTot=document.createElement('span'); cartTot.className='qp-cart-total';
+  cartBar.appendChild(cartInfo); cartBar.appendChild(cartTot);
+  var contBtn=document.createElement('button'); contBtn.type='button'; contBtn.className='qp-btn'; contBtn.textContent='Continuar →';
+  function refreshFooter(){
+    var total=0; var count=0;
+    PRODUCTS.forEach(function(p){ var q=S.cart[p.id]||0; count+=q; total+=p.price*q; });
+    if(count>0){
+      cartBar.style.display='flex';
+      cartInfo.textContent=count+(count!==1?' servicios':' servicio');
+      cartTot.textContent=formatPrice(total);
+    } else { cartBar.style.display='none'; }
+  }
+  // Body
+  var body=document.createElement('div'); body.className='qp-body';
+  var secLbl=document.createElement('p'); secLbl.className='qp-section-title'; secLbl.textContent='Elige tus servicios';
+  body.appendChild(secLbl);
+  if(!PRODUCTS||!PRODUCTS.length){
+    var empty=document.createElement('div');
+    empty.style.cssText='text-align:center;color:var(--muted2);padding:48px 0;font-size:14px';
+    empty.textContent='No hay servicios disponibles por el momento.';
+    body.appendChild(empty); contBtn.disabled=true;
+  } else {
+    var cardList=document.createElement('div'); cardList.className='product-cards';
+    PRODUCTS.forEach(function(p){
+      var card=document.createElement('div'); card.className='product-card';
+      var info=document.createElement('div'); info.className='product-info';
+      info.innerHTML='<div class="product-name">'+escH(p.name)+'</div>'
+        +(p.description?'<div class="product-desc">'+escH(p.description)+'</div>':'')
+        +'<div class="product-price">'+formatPrice(p.price)+'</div>';
+      var qc=document.createElement('div'); qc.className='qty-ctrl';
+      var minus=document.createElement('button'); minus.type='button'; minus.className='qty-btn'; minus.textContent='−';
+      var num=document.createElement('span'); num.className='qty-num';
+      var plus=document.createElement('button'); plus.type='button'; plus.className='qty-btn'; plus.textContent='+';
+      var initQ=S.cart[p.id]||0; num.textContent=String(initQ); minus.disabled=initQ===0;
+      (function(pid,numEl,minusEl){
+        plus.addEventListener('click',function(){ S.cart[pid]=(S.cart[pid]||0)+1; numEl.textContent=String(S.cart[pid]); minusEl.disabled=false; refreshFooter(); });
+        minusEl.addEventListener('click',function(){ S.cart[pid]=Math.max(0,(S.cart[pid]||0)-1); numEl.textContent=String(S.cart[pid]); if(!S.cart[pid]) minusEl.disabled=true; refreshFooter(); });
+      })(p.id,num,minus);
+      qc.appendChild(minus); qc.appendChild(num); qc.appendChild(plus);
+      card.appendChild(info); card.appendChild(qc); cardList.appendChild(card);
+    });
+    body.appendChild(cardList);
+    refreshFooter();
+  }
+  contBtn.addEventListener('click',function(){
+    var hasItems=PRODUCTS.some(function(p){ return (S.cart[p.id]||0)>0; });
+    if(!hasItems){ cartBar.style.display='flex'; cartInfo.textContent='Selecciona al menos un servicio.'; cartTot.textContent=''; return; }
+    renderQPStep2();
+  });
+  footer.appendChild(cartBar); footer.appendChild(contBtn);
+  panel.appendChild(hdr); panel.appendChild(body); panel.appendChild(footer);
+}
+
+function renderQPStep2(){
+  var panel=document.getElementById('quotePanel');
+  panel.innerHTML='';
+  // Header
+  var hdr=document.createElement('div'); hdr.className='qp-header';
+  var back=document.createElement('button'); back.type='button'; back.className='qp-back';
+  back.innerHTML='<svg viewBox="0 0 24 24" fill="none"><polyline points="15 18 9 12 15 6"/></svg>Atrás';
+  back.addEventListener('click',renderQPStep1);
+  var ttl=document.createElement('div'); ttl.className='qp-title'; ttl.textContent='Tus datos';
+  var spc=document.createElement('div'); spc.className='qp-spacer';
+  hdr.appendChild(back); hdr.appendChild(ttl); hdr.appendChild(spc);
+  // Body
+  var body=document.createElement('div'); body.className='qp-body';
+  // Resumen del pedido
+  var sumLbl=document.createElement('p'); sumLbl.className='qp-section-title'; sumLbl.textContent='Resumen del pedido';
+  body.appendChild(sumLbl);
+  var sumBox=document.createElement('div'); sumBox.className='qp-summary';
+  var totalAmt=0;
+  PRODUCTS.forEach(function(p){
+    var q=S.cart[p.id]||0; if(!q) return;
+    var sub=p.price*q; totalAmt+=sub;
+    var row=document.createElement('div'); row.className='cart-line';
+    row.innerHTML='<span>'+escH(p.name)+' ×'+q+'</span><span>'+formatPrice(sub)+'</span>';
+    sumBox.appendChild(row);
+  });
+  var totRow=document.createElement('div'); totRow.className='cart-total';
+  totRow.innerHTML='<span>Total estimado</span><span>'+formatPrice(totalAmt)+'</span>';
+  sumBox.appendChild(totRow);
+  body.appendChild(sumBox);
+  // Formulario
+  var formLbl=document.createElement('p'); formLbl.className='qp-section-title'; formLbl.textContent='¿A dónde enviamos la cotización?';
+  body.appendChild(formLbl);
+  var nameInp=document.createElement('input'); nameInp.type='text'; nameInp.placeholder='Nombre completo'; nameInp.className='qp-input'; nameInp.setAttribute('autocomplete','name');
+  var phoneInp=document.createElement('input'); phoneInp.type='tel'; phoneInp.placeholder='Teléfono'; phoneInp.className='qp-input'; phoneInp.setAttribute('autocomplete','tel');
+  var emailInp=document.createElement('input'); emailInp.type='email'; emailInp.placeholder='Email (opcional)'; emailInp.className='qp-input'; emailInp.setAttribute('autocomplete','email');
+  var errEl=document.createElement('div'); errEl.className='qp-error';
+  body.appendChild(nameInp); body.appendChild(phoneInp); body.appendChild(emailInp); body.appendChild(errEl);
+  // Footer
+  var footer=document.createElement('div'); footer.className='qp-footer';
+  var sendBtn=document.createElement('button'); sendBtn.type='button'; sendBtn.className='qp-btn'; sendBtn.textContent='Enviar cotización';
+  sendBtn.addEventListener('click',function(){
+    var name=nameInp.value.trim(); var phone=phoneInp.value.trim(); var email=emailInp.value.trim();
+    if(!name||!phone){ errEl.textContent='El nombre y teléfono son obligatorios.'; errEl.style.display='block'; return; }
+    errEl.style.display='none';
+    nameInp.disabled=true; phoneInp.disabled=true; emailInp.disabled=true;
+    sendBtn.disabled=true; sendBtn.textContent='Enviando...';
+    var items=PRODUCTS.filter(function(p){ return (S.cart[p.id]||0)>0; }).map(function(p){ return {productId:p.id,quantity:S.cart[p.id]}; });
+    fetch('/shop/'+SLUG+'/quotes/submit',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({customer:{name:name,phone:phone,email:email||'',message:''},items:items})
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.ok){
+        closeQuotePanel();
+        setTimeout(function(){
+          var rows=[{label:'Nombre',value:name},{label:'Teléfono',value:phone}];
+          if(email) rows.push({label:'Email',value:email});
+          addConfirmCard('✅','Cotización enviada!',rows,d.message||'Te contactaremos pronto con el presupuesto.');
+          addAiWithChips('¿Hay algo más en lo que te pueda ayudar?',[
+            {label:'🔄 Nueva cotización',onClick:function(){quickAction('cotizar');}},
+            {label:'🏠 Ver opciones',onClick:function(){addAiWithModules();}}
+          ]);
+        },420);
+      } else {
+        nameInp.disabled=false; phoneInp.disabled=false; emailInp.disabled=false;
+        sendBtn.disabled=false; sendBtn.textContent='Enviar cotización';
+        errEl.textContent=d.message||'No se pudo enviar. Intenta de nuevo.'; errEl.style.display='block';
+      }
+    })
+    .catch(function(){
+      nameInp.disabled=false; phoneInp.disabled=false; emailInp.disabled=false;
+      sendBtn.disabled=false; sendBtn.textContent='Enviar cotización';
+      errEl.textContent='Error de conexión. Intenta de nuevo.'; errEl.style.display='block';
+    });
+  });
+  footer.appendChild(sendBtn);
+  panel.appendChild(hdr); panel.appendChild(body); panel.appendChild(footer);
+  setTimeout(function(){ nameInp.focus(); },200);
+}
+
 function startCotizarFlow(){
-  S.flow='cotizar'; S.cart={};
-  addAi('Perfecto, te llevo al cotizador para que puedas elegir los servicios que necesitas.',false);
-  setTimeout(function(){ showTab('cotizar'); },700);
-}
-
-function showQuoteFormStep(){
-  addAiWithForm(
-    '¡Casi listo! ¿A dónde te enviamos la cotización?',
-    [
-      {id:'name',  placeholder:'Tu nombre',                 type:'text',  autocomplete:'name'},
-      {id:'phone', placeholder:'Teléfono',                  type:'tel',   autocomplete:'tel'},
-      {id:'email', placeholder:'Email (opcional)',          type:'email', autocomplete:'email', required:false},
-    ],
-    'Enviar cotización',
-    function(v){ submitQuote(v); }
-  );
-}
-
-function submitQuote(v){
-  showTyping();
-  var items=PRODUCTS
-    .filter(function(p){ return (S.cart[p.id]||0)>0; })
-    .map(function(p){ return {productId:p.id,quantity:S.cart[p.id]}; });
-  fetch('/shop/'+SLUG+'/quotes/submit',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({customer:{name:v.name,phone:v.phone,email:v.email||'',message:''},items:items})
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(d){
-    hideTyping();
-    if(d.ok){
-      var rows=[{label:'Nombre',value:v.name},{label:'Teléfono',value:v.phone}];
-      if(v.email) rows.push({label:'Email',value:v.email});
-      addConfirmCard('✅','¡Cotización enviada!',rows,d.message||'Te contactaremos pronto con el presupuesto.');
-    } else {
-      addAi(d.message||'No se pudo enviar la cotización. Intenta de nuevo.',false);
-    }
-  })
-  .catch(function(){ hideTyping(); addAi('Error de conexión. Intenta de nuevo.',false); });
+  S.flow='cotizar';
+  openQuotePanel();
 }
 
 // ── Saludo inicial con módulos ────────────────────────────────────────────────
