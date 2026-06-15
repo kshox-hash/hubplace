@@ -43,6 +43,11 @@ const upsert = async (
     address: input.address?.trim() ?? "",
     phone: input.phone?.trim() ?? "",
     brand_color: input.brand_color ?? null,
+    description: input.description?.trim() || null,
+    welcome_message: input.welcome_message?.trim() || null,
+    instagram_url: input.instagram_url?.trim() || null,
+    whatsapp_number: input.whatsapp_number?.replace(/\D/g, "") || null,
+    business_hours: input.business_hours?.trim() || null,
   };
 
   return companyProfileRepository.upsert(sanitizedInput);

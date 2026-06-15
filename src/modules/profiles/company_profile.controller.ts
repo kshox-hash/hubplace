@@ -17,6 +17,11 @@ type UpsertBody = {
   address?: string;
   phone?: string;
   brand_color?: string | null;
+  description?: string | null;
+  welcome_message?: string | null;
+  instagram_url?: string | null;
+  whatsapp_number?: string | null;
+  business_hours?: string | null;
 };
 
 type UpsertMeBody = {
@@ -26,6 +31,11 @@ type UpsertMeBody = {
   address?: string;
   phone?: string;
   brand_color?: string | null;
+  description?: string | null;
+  welcome_message?: string | null;
+  instagram_url?: string | null;
+  whatsapp_number?: string | null;
+  business_hours?: string | null;
 };
 
 export const companyProfileController = {

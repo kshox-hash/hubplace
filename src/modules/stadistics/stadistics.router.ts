@@ -19,3 +19,4 @@ router.get("/stats/:userId/reviews", statisticsController.getAllReviews);
 router.delete("/stats/:userId/reviews/:reviewId", statisticsController.deleteReview);
 
 export default router;
+ 

@@ -15,6 +15,11 @@ export type PortalViewData = {
   address?: string | null;
   city?: string | null;
   brandColor?: string | null;
+  description?: string | null;
+  welcomeMessage?: string | null;
+  instagramUrl?: string | null;
+  whatsappNumber?: string | null;
+  businessHours?: string | null;
   enabledModules: MenuModuleItem[];
   products: { id: string | number; name: string; price: number; description?: string | null }[];
 };
@@ -25,15 +30,19 @@ function sanitizeBrandColor(color: string | null | undefined): string | null {
 }
 
 export function renderPortalHtml(data: PortalViewData): string {
-  const { businessName, publicSlug, productCount, phone, address, city, brandColor, enabledModules, products } = data;
+  const { businessName, publicSlug, productCount, phone, address, city, brandColor, description, welcomeMessage, instagramUrl, whatsappNumber, businessHours, enabledModules, products } = data;
   const safeColor = sanitizeBrandColor(brandColor);
 
   const safe = {
-    name:    escapeHtml(businessName),
-    slug:    escapeHtml(publicSlug),
-    phone:   phone   ? escapeHtml(phone)   : null,
-    address: address ? escapeHtml(address) : null,
-    city:    city    ? escapeHtml(city)    : null,
+    name:           escapeHtml(businessName),
+    slug:           escapeHtml(publicSlug),
+    phone:          phone          ? escapeHtml(phone)          : null,
+    address:        address        ? escapeHtml(address)        : null,
+    city:           city           ? escapeHtml(city)           : null,
+    description:    description    ? escapeHtml(description)    : null,
+    instagramUrl:   instagramUrl   ? escapeHtml(instagramUrl)   : null,
+    whatsappNumber: whatsappNumber ? escapeHtml(whatsappNumber) : null,
+    businessHours:  businessHours  ? escapeHtml(businessHours)  : null,
   };
 
   const initials = businessName.split(" ").slice(0, 2)
@@ -63,7 +72,7 @@ export function renderPortalHtml(data: PortalViewData): string {
   ${chatTabHtml(safe, initials)}
   ${reservasTabHtml(safe)}
   ${serviciosTabHtml(safe, productCount)}
-  ${nosotrosTabHtml(safe, locationLine, initials)}
+  ${nosotrosTabHtml({ ...safe, description: safe.description, instagramUrl: safe.instagramUrl, whatsappNumber: safe.whatsappNumber, businessHours: safe.businessHours }, locationLine, initials)}
 </main>
 
 <nav class="bottom-nav" id="bottomNav">
@@ -87,7 +96,7 @@ export function renderPortalHtml(data: PortalViewData): string {
 
 <div id="quotePanel" class="quote-panel"></div>
 <div id="bookingPanel" class="quote-panel"></div>
-<script>${portalScripts(publicSlug, safe.name, enabledModules, products, { phone: safe.phone, address: safe.address, city: safe.city })}</script>
+<script>${portalScripts(publicSlug, safe.name, enabledModules, products, { phone: safe.phone, address: safe.address, city: safe.city, welcomeMessage: welcomeMessage ?? null, businessHours: safe.businessHours, instagramUrl: safe.instagramUrl, whatsappNumber: safe.whatsappNumber })}</script>
 </body>
 </html>`;
 }

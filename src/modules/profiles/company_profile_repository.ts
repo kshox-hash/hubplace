@@ -19,6 +19,11 @@ const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
       address,
       phone,
       brand_color,
+      description,
+      welcome_message,
+      instagram_url,
+      whatsapp_number,
+      business_hours,
       created_at,
       updated_at
     FROM business_profiles
@@ -48,6 +53,11 @@ const getByPublicSlug = async (
       address,
       phone,
       brand_color,
+      description,
+      welcome_message,
+      instagram_url,
+      whatsapp_number,
+      business_hours,
       created_at,
       updated_at
     FROM business_profiles
@@ -76,10 +86,15 @@ const upsert = async (
       address,
       phone,
       brand_color,
+      description,
+      welcome_message,
+      instagram_url,
+      whatsapp_number,
+      business_hours,
       created_at,
       updated_at
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, NOW(), NOW())
     ON CONFLICT (user_id)
     DO UPDATE SET
       business_name = EXCLUDED.business_name,
@@ -88,6 +103,11 @@ const upsert = async (
       address = EXCLUDED.address,
       phone = EXCLUDED.phone,
       brand_color = EXCLUDED.brand_color,
+      description = EXCLUDED.description,
+      welcome_message = EXCLUDED.welcome_message,
+      instagram_url = EXCLUDED.instagram_url,
+      whatsapp_number = EXCLUDED.whatsapp_number,
+      business_hours = EXCLUDED.business_hours,
       updated_at = NOW()
     RETURNING
       id,
@@ -100,6 +120,11 @@ const upsert = async (
       address,
       phone,
       brand_color,
+      description,
+      welcome_message,
+      instagram_url,
+      whatsapp_number,
+      business_hours,
       created_at,
       updated_at
   `;
@@ -112,6 +137,11 @@ const upsert = async (
     input.address,
     input.phone,
     input.brand_color ?? null,
+    input.description ?? null,
+    input.welcome_message ?? null,
+    input.instagram_url ?? null,
+    input.whatsapp_number ?? null,
+    input.business_hours ?? null,
   ];
 
   const result = await pool.query<CompanyProfile>(query, values);

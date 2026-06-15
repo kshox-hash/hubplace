@@ -9,6 +9,11 @@ export type CompanyProfile = {
   address: string;
   phone: string;
   brand_color: string | null;
+  description: string | null;
+  welcome_message: string | null;
+  instagram_url: string | null;
+  whatsapp_number: string | null;
+  business_hours: string | null;
   created_at: Date;
   updated_at: Date;
 };
@@ -21,4 +26,9 @@ export type CompanyProfileInput = {
   address?: string;
   phone?: string;
   brand_color?: string | null;
+  description?: string | null;
+  welcome_message?: string | null;
+  instagram_url?: string | null;
+  whatsapp_number?: string | null;
+  business_hours?: string | null;
 };

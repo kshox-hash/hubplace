@@ -19,7 +19,15 @@ export function portalScripts(
   bizName: string,
   modules: MenuModuleItem[],
   products: ProductData[],
-  bizInfo: { phone: string | null; address: string | null; city: string | null }
+  bizInfo: {
+    phone: string | null;
+    address: string | null;
+    city: string | null;
+    welcomeMessage: string | null;
+    businessHours: string | null;
+    instagramUrl: string | null;
+    whatsappNumber: string | null;
+  }
 ): string {
   const moduleCards  = buildModuleCards(modules);
   const safeProducts = products.map(p => ({
@@ -33,6 +41,10 @@ export function portalScripts(
 const SLUG=${JSON.stringify(slug)};
 const BIZ=${JSON.stringify(bizName)};
 const BIZ_INFO=${JSON.stringify(bizInfo)};
+const WELCOME_MSG=${JSON.stringify(bizInfo.welcomeMessage)};
+const BIZ_HOURS=${JSON.stringify(bizInfo.businessHours)};
+const BIZ_INSTAGRAM=${JSON.stringify(bizInfo.instagramUrl)};
+const BIZ_WHATSAPP=${JSON.stringify(bizInfo.whatsappNumber)};
 const MODULE_CARDS=${JSON.stringify(moduleCards)};
 const PRODUCTS=${JSON.stringify(safeProducts)};
 const TABS=['chat','reservas','cotizar','nosotros'];
@@ -621,7 +633,8 @@ function startCotizarFlow(){
 function addAiWithModules(){
   var m=makeAiRow(); m.row.classList.add('ai-row--intro');
   var el=document.createElement('div'); el.className='ai-text ai-greeting';
-  el.innerHTML='Hola! Soy el asistente de <b>'+escH(BIZ)+'</b>. ¿En qué te puedo ayudar hoy?';
+  var greetingText=WELCOME_MSG||('Hola! Soy el asistente de **'+BIZ+'**. ¿En qué te puedo ayudar hoy?');
+  el.innerHTML=renderMd(greetingText);
   m.body.appendChild(el);
   var mods=document.createElement('div'); mods.className='ai-modules';
   MODULE_CARDS.forEach(function(card){
@@ -662,6 +675,9 @@ function showBizInfoInline(){
   var lines=[];
   if(BIZ_INFO.phone)   lines.push('📞 **Teléfono:** '+BIZ_INFO.phone);
   if(BIZ_INFO.address) lines.push('📍 **Dirección:** '+BIZ_INFO.address+(BIZ_INFO.city?', '+BIZ_INFO.city:''));
+  if(BIZ_HOURS)        lines.push('🕐 **Horario:** '+BIZ_HOURS);
+  if(BIZ_INSTAGRAM)    lines.push('📸 **Instagram:** '+BIZ_INSTAGRAM);
+  if(BIZ_WHATSAPP)     lines.push('💬 **WhatsApp:** +'+BIZ_WHATSAPP);
   var text=lines.length?'**'+BIZ+'**\\n\\n'+lines.join('\\n'):'Puedes contactarnos directamente para más información sobre el negocio.';
   addAi(text,false);
   addAiWithChips('¿Hay algo más en lo que te pueda ayudar?',[

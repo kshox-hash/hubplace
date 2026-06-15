@@ -73,13 +73,18 @@ export const publicPortalController = {
       ]);
 
       const html = renderPortalHtml({
-        businessName: slug.business_name ?? publicSlug,
+        businessName:   slug.business_name ?? publicSlug,
         publicSlug,
-        productCount: products.length,
-        phone:       profile?.phone       ?? null,
-        address:     profile?.address     ?? null,
-        city:        profile?.city        ?? null,
-        brandColor:  profile?.brand_color ?? null,
+        productCount:   products.length,
+        phone:          profile?.phone           ?? null,
+        address:        profile?.address         ?? null,
+        city:           profile?.city            ?? null,
+        brandColor:     profile?.brand_color     ?? null,
+        description:    profile?.description     ?? null,
+        welcomeMessage: profile?.welcome_message ?? null,
+        instagramUrl:   profile?.instagram_url   ?? null,
+        whatsappNumber: profile?.whatsapp_number ?? null,
+        businessHours:  profile?.business_hours  ?? null,
         enabledModules,
         products: products.map((p: any) => ({
           id:          String(p.id),
