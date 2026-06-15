@@ -3,3 +3,5 @@ node_modules
 ejemplo_negocio.pdf
 automatiza_dashboard
 migrations/add_platform_fee.sql
+migrations/add_services.sql
+migrations/add_calendar_blocks.sql

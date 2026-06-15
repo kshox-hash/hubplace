@@ -122,4 +122,17 @@ export const statisticsController = {
       return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
     }
   },
+
+  async getPublicReviews(req: Request, res: Response): Promise<Response> {
+    try {
+      const userId = String(req.params["userId"]);
+      const [summary, recent] = await Promise.all([
+        reviewsService.getSummary(userId),
+        reviewsService.getAll(userId, 1, 10),
+      ]);
+      return res.json({ ok: true, summary, reviews: recent.data });
+    } catch (error: any) {
+      return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
+    }
+  },
 };

@@ -4,6 +4,9 @@ import { statisticsController } from "./stadistics.controller";
 
 const router = express.Router();
 
+// Rutas públicas (sin auth)
+router.get("/public/reviews/:userId", statisticsController.getPublicReviews);
+
 router.use(authMiddleware);
 
 // Stats

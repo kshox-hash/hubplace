@@ -8,6 +8,9 @@ import rateLimit from "express-rate-limit";
 import mpWebhookRouter from "./modules/webhook/mp-webhook.router";
 import mpConnectRouter from "./modules/mp-connect/mp-connect.router";
 import adminRouter from "./modules/admin/admin.router";
+import servicesRouter from "./modules/services/services.router";
+import clientsRouter from "./modules/clients/clients.router";
+import blocksRouter from "./modules/blocks/blocks.router";
 import { startReminderCron } from "./modules/reminders/reminder.cron";
 import { PORT, CORS_ORIGINS } from "./config/env";
 import { GENERATED_PDFS_DIR } from "./modules/quotes/quote.service";
@@ -105,6 +108,9 @@ app.use(publicPortalRouter);
 app.use("/products", productsRouter);
 app.use("/api", statisticsRouter);
 app.use("/api", quoteSendRouter);
+app.use("/api", servicesRouter);
+app.use("/api", clientsRouter);
+app.use("/api", blocksRouter);
 app.use(errorMiddleware);
 
 // ─── Arranque ─────────────────────────────────────────────────────────────────
