@@ -16,6 +16,7 @@ import {
   createPaymentRecord,
   updatePaymentWithPreference,
 } from "./calendar-public.repository";
+import { sendBookingPaymentLinkEmail } from "./booking/services/bookingPaymentLinkEmailService";
 
 export const calendarPublicController = {
 
@@ -134,11 +135,48 @@ export const calendarPublicController = {
         providerId,
       });
 
+      // Crear preferencia de pago inmediatamente y mandar email con link
+      let checkoutUrl: string | null = null;
+      try {
+        const accessToken = await getMpAccessToken(profile.user_id);
+        if (accessToken) {
+          const amount = Number((booking as Record<string,unknown>)["payment_amount"] ?? 3000);
+          const payment = await createPaymentRecord(profile.user_id, booking.id, amount);
+          const bookingDateStr = new Date(bookingDate).toLocaleDateString("es-CL");
+          const preference = await createPreference({
+            accessToken,
+            bookingId: booking.id,
+            title: `Reserva ${profile.business_name}`,
+            description: `${bookingDateStr} a las ${startTime} - ${customerName}`,
+            amount,
+            customerEmail,
+            customerName,
+            businessName: profile.business_name,
+          });
+          if (preference.checkoutUrl) {
+            await updatePaymentWithPreference(payment.id, preference.checkoutUrl, preference.preferenceId ?? "");
+            checkoutUrl = preference.checkoutUrl;
+            const bookingDateStr2 = new Date(bookingDate).toLocaleDateString("es-CL", {
+              weekday: "long", day: "numeric", month: "long",
+            });
+            sendBookingPaymentLinkEmail({
+              to: customerEmail,
+              customerName,
+              businessName: profile.business_name,
+              bookingDate: bookingDateStr2,
+              bookingTime: startTime,
+              checkoutUrl,
+            }).catch((err) => console.error("[calendar] Error enviando email de pago:", err));
+          }
+        }
+      } catch (err) {
+        console.error("[calendar] Error creando preferencia de pago:", err);
+      }
+
       return res.json({
         ok: true,
-        status: "pending_payment",
-        message: "Reserva creada. Continúa con el pago.",
         booking,
+        checkoutUrl,
       });
     } catch (error) {
       console.error("[calendar] Error creando reserva:", error);

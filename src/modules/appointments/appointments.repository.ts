@@ -180,7 +180,7 @@ export async function createCalendarBooking(input: {
       'pending_payment',
       'unpaid',
       $8, $9, $10, NOW(),
-      NOW() + INTERVAL '10 minutes',
+      NOW() + INTERVAL '45 minutes',
       $11,
       NOW(),
       NOW()

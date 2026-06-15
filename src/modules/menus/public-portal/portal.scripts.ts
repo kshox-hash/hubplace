@@ -270,7 +270,9 @@ function renderBPForm(){
     })
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if(d.ok&&d.booking){
+      if(d.ok&&d.checkoutUrl){
+        window.location.href=d.checkoutUrl;
+      } else if(d.ok&&d.booking){
         renderBPPayment(d.booking.id,name);
       } else {
         nameInp.disabled=false; phoneInp.disabled=false; emailInp.disabled=false;
