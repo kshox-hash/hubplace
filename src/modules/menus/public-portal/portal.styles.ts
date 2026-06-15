@@ -67,16 +67,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 @keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.35}28%{transform:translateY(-6px);opacity:1}}
 
 /* CHAT — módulos IA */
-.ai-modules{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;margin-left:-42px;width:calc(100% + 42px)}
-.ai-mod-card{background:var(--bg);border:1.5px solid var(--primary);border-radius:14px;padding:14px 13px 12px;display:flex;flex-direction:column;cursor:pointer;transition:opacity .18s;-webkit-tap-highlight-color:transparent;font-family:inherit;color:var(--text);text-align:left;width:100%}
-.ai-mod-card:hover{opacity:.75}
-.ai-mod-card:active{opacity:.5}
-.ai-mod-card.used{opacity:.18;pointer-events:none}
-.ai-mod-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
-.ai-mod-emoji{font-size:22px;line-height:1}
-.ai-mod-arrow{width:14px;height:14px;flex-shrink:0;stroke:var(--primary);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.ai-mod-title{font-size:12.5px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1.3;margin-bottom:3px}
-.ai-mod-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.ai-modules{display:flex;flex-direction:column;gap:6px;margin-top:12px;margin-left:-42px;width:calc(100% + 42px)}
+.ai-mod-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;font-size:13.5px;font-weight:500;color:var(--text);cursor:pointer;transition:background .22s,border-color .22s;-webkit-tap-highlight-color:transparent;font-family:inherit;text-align:left;display:flex;align-items:center;justify-content:space-between;letter-spacing:-.01em;line-height:1.3;width:100%}
+.ai-mod-card::after{content:'→';font-size:13px;color:var(--muted2);flex-shrink:0;margin-left:8px;transition:transform .22s,color .22s}
+.ai-mod-card:hover{background:var(--s1);border-color:var(--border-strong)}
+.ai-mod-card:hover::after{transform:translateX(3px);color:var(--text)}
+.ai-mod-card:active{opacity:.6}
+.ai-mod-card.used{opacity:.15;pointer-events:none}
 
 /* CHAT — chips de sugerencia */
 .ai-chips{display:flex;flex-direction:column;gap:4px;margin-top:10px;margin-left:-42px;width:calc(100% + 42px)}
