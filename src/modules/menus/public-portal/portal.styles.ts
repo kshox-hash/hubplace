@@ -95,10 +95,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .chat-form-input:disabled{opacity:.4}
 .chat-form-input::placeholder{color:var(--muted2)}
 .chat-form-error{font-size:12.5px;color:#dc2626;display:none;padding:2px 2px 0}
-.chat-form-btn{background:var(--primary);border:none;border-radius:var(--r);padding:13px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;transition:opacity .18s,transform .15s,box-shadow .18s;-webkit-tap-highlight-color:transparent;box-shadow:0 2px 12px rgba(0,0,0,.12)}
-.chat-form-btn:hover{opacity:.82;box-shadow:0 4px 18px rgba(0,0,0,.16)}
+.chat-form-btn{background:var(--primary);border:none;border-radius:var(--r);padding:13px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;transition:opacity .18s,transform .15s;-webkit-tap-highlight-color:transparent}
+.chat-form-btn:hover{opacity:.82}
 .chat-form-btn:active{transform:scale(.98)}
-.chat-form-btn:disabled{opacity:.3;cursor:default;box-shadow:none}
+.chat-form-btn:disabled{opacity:.3;cursor:default}
 
 /* CHAT — tarjetas de producto */
 .product-cards{display:flex;flex-direction:column;gap:6px;margin-top:12px}
