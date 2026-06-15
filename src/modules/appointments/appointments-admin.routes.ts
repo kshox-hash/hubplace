@@ -15,4 +15,9 @@ router.get(
   calendarAdminController.getBookings
 );
 
+router.patch(
+  "/api/calendar/bookings/:id/status",
+  calendarAdminController.updateBookingStatus
+);
+
 export default router;

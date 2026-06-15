@@ -187,23 +187,40 @@ export async function getCalendarBookingsByUserId(userId: string) {
   const result = await pool.query(
     `
     SELECT
-      id::text,
-      user_id::text,
+      cb.id::text,
+      cb.user_id::text,
       ''::text AS lead_id,
-      client_name AS customer_name,
-      COALESCE(client_phone, '') AS customer_phone,
-      notes,
-      TO_CHAR(booking_date, 'YYYY-MM-DD') AS booking_date,
-      TO_CHAR(start_time, 'HH24:MI') AS start_time,
-      TO_CHAR(end_time, 'HH24:MI') AS end_time,
-      status
-    FROM calendar_bookings
-    WHERE user_id = $1
-      AND status <> 'cancelled'
-    ORDER BY booking_date ASC, start_time ASC
+      cb.client_name AS customer_name,
+      COALESCE(cb.client_phone, '') AS customer_phone,
+      cb.client_email AS customer_email,
+      cb.notes,
+      TO_CHAR(cb.booking_date, 'YYYY-MM-DD') AS booking_date,
+      TO_CHAR(cb.start_time, 'HH24:MI') AS start_time,
+      TO_CHAR(cb.end_time, 'HH24:MI') AS end_time,
+      cb.status,
+      cp.id::text AS provider_id,
+      cp.name AS provider_name,
+      cp.color AS provider_color
+    FROM calendar_bookings cb
+    LEFT JOIN calendar_providers cp ON cb.provider_id = cp.id
+    WHERE cb.user_id = $1
+    ORDER BY cb.booking_date ASC, cb.start_time ASC
     `,
     [userId]
   );
 
   return result.rows;
+}
+
+export async function updateBookingStatus(bookingId: string, status: string) {
+  const allowed = ["pending", "confirmed", "cancelled"];
+  if (!allowed.includes(status)) {
+    throw new Error(`Estado inválido: ${status}`);
+  }
+  const result = await pool.query(
+    `UPDATE calendar_bookings SET status = $2 WHERE id = $1
+     RETURNING id::text, status`,
+    [bookingId, status]
+  );
+  return result.rows[0] ?? null;
 }

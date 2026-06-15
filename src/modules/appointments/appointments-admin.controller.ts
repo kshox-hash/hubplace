@@ -3,6 +3,7 @@ import {
   getCalendarBookingsByUserId,
   getCalendarSettingsByUserId,
   saveCalendarSettings,
+  updateBookingStatus,
 } from "./appointments-admin.repository";
 
 export const calendarAdminController = {
@@ -116,6 +117,22 @@ export const calendarAdminController = {
         ok: false,
         message: "No se pudieron obtener las reservas.",
       });
+    }
+  },
+
+  async updateBookingStatus(req: Request, res: Response) {
+    try {
+      const id = String(req.params["id"] || "").trim();
+      const status = String((req.body || {}).status || "").trim();
+      if (!id || !status) {
+        return res.status(400).json({ ok: false, message: "id y status son requeridos." });
+      }
+      const updated = await updateBookingStatus(id, status);
+      if (!updated) return res.status(404).json({ ok: false, message: "Reserva no encontrada." });
+      return res.json({ ok: true, booking: updated });
+    } catch (error: any) {
+      console.error("Error actualizando estado de reserva:", error);
+      return res.status(400).json({ ok: false, message: error?.message || "No se pudo actualizar." });
     }
   },
 };

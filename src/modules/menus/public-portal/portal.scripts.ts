@@ -21,7 +21,7 @@ const PRODUCTS=${JSON.stringify(safeProducts)};
 const TABS=['chat','reservas','cotizar','nosotros'];
 
 // ── Estado compartido ─────────────────────────────────────────────────────────
-var S={flow:null,date:null,time:null,slots:{},cart:{}};
+var S={flow:null,date:null,time:null,slots:{},cart:{},providerId:null,providerName:null,providers:[]};
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
 function setNavActive(t){
@@ -79,7 +79,8 @@ function closeBookingPanelWithRecovery(){
 }
 
 function fetchAndRenderDates(){
-  fetch('/api/public/'+SLUG+'/slots')
+  var url='/api/public/'+SLUG+'/slots'+(S.providerId?'?providerId='+encodeURIComponent(S.providerId):'');
+  fetch(url)
     .then(function(r){ return r.json(); })
     .then(function(data){
       S.slots=parseSlotsResponse(data);
@@ -91,11 +92,62 @@ function fetchAndRenderDates(){
 }
 
 function openBookingPanel(){
-  S.flow='reservas'; S.date=null; S.time=null;
+  S.flow='reservas'; S.date=null; S.time=null; S.providerId=null; S.providerName=null;
   setNavActive('reservas');
   renderBPLoading();
   document.getElementById('bookingPanel').classList.add('open');
-  fetchAndRenderDates();
+  fetch('/api/public/'+SLUG+'/providers')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      S.providers=(data&&Array.isArray(data.providers))?data.providers:[];
+      if(S.providers.length>=2){ renderBPProviders(); }
+      else {
+        if(S.providers.length===1){ S.providerId=S.providers[0].id; S.providerName=S.providers[0].name; }
+        fetchAndRenderDates();
+      }
+    })
+    .catch(function(){ S.providers=[]; fetchAndRenderDates(); });
+}
+
+function renderBPProviders(){
+  var panel=document.getElementById('bookingPanel');
+  panel.innerHTML='';
+  panel.appendChild(makeBPHeader('Reservar hora',closeBookingPanel,'Volver'));
+  var body=document.createElement('div'); body.className='qp-body';
+  var lbl=document.createElement('p'); lbl.className='qp-section-title'; lbl.textContent='¿Con quién quieres agendar?';
+  body.appendChild(lbl);
+  var list=document.createElement('div'); list.className='bp-dates';
+
+  function pickProvider(id,name){
+    S.providerId=id; S.providerName=name;
+    renderBPLoading();
+    fetchAndRenderDates();
+  }
+
+  // "Cualquiera disponible" card
+  var anyCard=document.createElement('div'); anyCard.className='bp-date-card';
+  anyCard.innerHTML='<div class="bp-provider-avatar" style="background:rgba(99,172,241,.15);color:#63ACF1">✦</div>'
+    +'<div class="bp-date-info"><div class="bp-date-label">Cualquiera disponible</div>'
+    +'<div class="bp-date-slots">Ver todos los horarios</div></div>'
+    +'<svg class="bp-date-arrow" viewBox="0 0 24 24" fill="none"><polyline points="9 18 15 12 9 6"/></svg>';
+  anyCard.addEventListener('click',function(){ pickProvider(null,null); });
+  list.appendChild(anyCard);
+
+  S.providers.forEach(function(p){
+    var color=p.color||'#63ACF1';
+    var card=document.createElement('div'); card.className='bp-date-card';
+    var hex=color.replace('#','');
+    var r=parseInt(hex.substring(0,2),16); var g=parseInt(hex.substring(2,4),16); var b=parseInt(hex.substring(4,6),16);
+    card.innerHTML='<div class="bp-provider-avatar" style="background:rgba('+r+','+g+','+b+',.15);color:'+color+'">'+escH(p.avatar_initials||p.name.charAt(0).toUpperCase())+'</div>'
+      +'<div class="bp-date-info"><div class="bp-date-label">'+escH(p.name)+'</div>'
+      +'<div class="bp-date-slots">Ver disponibilidad</div></div>'
+      +'<svg class="bp-date-arrow" viewBox="0 0 24 24" fill="none"><polyline points="9 18 15 12 9 6"/></svg>';
+    (function(id,name){ card.addEventListener('click',function(){ pickProvider(id,name); }); })(p.id,p.name);
+    list.appendChild(card);
+  });
+
+  body.appendChild(list);
+  panel.appendChild(body);
 }
 
 function closeBookingPanel(){
@@ -192,7 +244,8 @@ function renderBPForm(){
   body.appendChild(sumLbl);
   var sumBox=document.createElement('div'); sumBox.className='qp-summary';
   sumBox.innerHTML='<div class="cart-line"><span>Fecha</span><span>'+escH(formatDate(S.date))+'</span></div>'
-    +'<div class="cart-line" style="margin-bottom:0"><span>Hora</span><span>'+escH(S.time)+'</span></div>';
+    +'<div class="cart-line" style="margin-bottom:0"><span>Hora</span><span>'+escH(S.time)+'</span></div>'
+    +(S.providerName?'<div class="cart-line" style="margin-bottom:0"><span>Con</span><span>'+escH(S.providerName)+'</span></div>':'');
   body.appendChild(sumBox);
   // Formulario
   var formLbl=document.createElement('p'); formLbl.className='qp-section-title'; formLbl.textContent='Tus datos de contacto';
@@ -213,7 +266,7 @@ function renderBPForm(){
     confirmBtn.disabled=true; confirmBtn.textContent='Confirmando...';
     fetch('/api/public/'+SLUG+'/bookings',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({customer:{name:name,phone:phone,email:email,notes:''},slot:{date:S.date,time:S.time}})
+      body:JSON.stringify({customer:{name:name,phone:phone,email:email,notes:''},slot:{date:S.date,time:S.time},providerId:S.providerId||undefined})
     })
     .then(function(r){ return r.json(); })
     .then(function(d){
@@ -258,6 +311,7 @@ function renderBPPayment(bookingId,name){
   var sumBox=document.createElement('div'); sumBox.className='qp-summary';
   sumBox.innerHTML='<div class="cart-line"><span>Nombre</span><span>'+escH(name)+'</span></div>'
     +'<div class="cart-line"><span>Fecha</span><span>'+escH(formatDate(S.date))+'</span></div>'
+    +(S.providerName?'<div class="cart-line"><span>Con</span><span>'+escH(S.providerName)+'</span></div>':'')
     +'<div class="cart-line" style="margin-bottom:0"><span>Hora</span><span>'+escH(S.time)+'</span></div>';
   body.appendChild(sumBox);
   // Footer

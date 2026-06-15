@@ -155,6 +155,7 @@ a.info-row:active,button.info-row:active{background:var(--s3)}
 .bp-date-card:hover{background:var(--s2);border-color:var(--border-strong)}
 .bp-date-card:active{transform:scale(.97)}
 .bp-date-icon{width:44px;height:44px;border-radius:4px;background:var(--primary);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;gap:1px}
+.bp-provider-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;font-weight:700;letter-spacing:-.02em}
 .bp-date-day{font-size:9px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.06em}
 .bp-date-num{font-size:19px;font-weight:700;color:#fff;line-height:1}
 .bp-date-info{flex:1;min-width:0}

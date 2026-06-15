@@ -41,12 +41,12 @@ function getChileWeekday(date: Date): number {
   return jsDay === 0 ? 7 : jsDay;
 }
 
-export async function buildCalendarSlots(userId: string) {
+export async function buildCalendarSlots(userId: string, providerId?: string | null) {
   const settings = await getCalendarSettings(userId);
 
   if (!settings) return { slots: [] };
 
-  const availability = await getCalendarAvailability(userId);
+  const availability = await getCalendarAvailability(userId, providerId);
 
   if (!availability.length) return { slots: [] };
 
@@ -59,7 +59,7 @@ export async function buildCalendarSlots(userId: string) {
   const from = toDateString(today);
   const to = toDateString(endDate);
 
-  const bookings = await getCalendarBookings(userId, from, to);
+  const bookings = await getCalendarBookings(userId, from, to, providerId);
   const blockedDates = await getCalendarBlockedDates(userId, from, to);
 
   const slots: Array<{ date: string; times: string[] }> = [];
@@ -144,6 +144,7 @@ export async function reserveCalendarSlot(input: {
   startTime: string;
   confirmationToken: string;
   confirmationExpiresAt: Date;
+  providerId?: string | null;
 }) {
   const settings = await getCalendarSettings(input.userId);
 
@@ -151,7 +152,7 @@ export async function reserveCalendarSlot(input: {
     throw new Error("Calendario no configurado.");
   }
 
-  const availability = await getCalendarAvailability(input.userId);
+  const availability = await getCalendarAvailability(input.userId, input.providerId);
 
   if (!availability.length) {
     throw new Error("No existe disponibilidad configurada.");
@@ -172,6 +173,7 @@ export async function reserveCalendarSlot(input: {
     userId: input.userId,
     bookingDate: input.bookingDate,
     startTime: input.startTime,
+    providerId: input.providerId,
   });
 
   if (exists) {
@@ -195,5 +197,6 @@ export async function reserveCalendarSlot(input: {
     endTime,
     confirmationToken: input.confirmationToken,
     confirmationExpiresAt: input.confirmationExpiresAt,
+    providerId: input.providerId,
   });
 }

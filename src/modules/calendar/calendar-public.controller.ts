@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { buildCalendarSlots, reserveCalendarSlot } from "../appointments/appointments.service";
 import { renderBookingHtml } from "../appointments/appointments.screen";
 import { getSlugByValueService } from "../slug/slug.service";
+import { getActiveProvidersByUserId } from "../appointments/calendar-providers.repository";
 import { createPreference } from "../payments/mercado.service";
 import {
   createBookingConfirmationExpiresAt,
@@ -18,6 +19,22 @@ import {
 
 export const calendarPublicController = {
 
+  async getProviders(req: Request, res: Response): Promise<Response | void> {
+    try {
+      const publicSlug = String(req.params["publicSlug"] || "").trim();
+      if (!publicSlug) return res.status(400).json({ ok: false, message: "Slug obligatorio." });
+
+      const profile = await getSlugByValueService(publicSlug);
+      if (!profile) return res.status(404).json({ ok: false, message: "Negocio no encontrado." });
+
+      const providers = await getActiveProvidersByUserId(profile.user_id);
+      return res.json({ ok: true, providers });
+    } catch (error) {
+      console.error("[calendar] Error obteniendo proveedores:", error);
+      return res.status(500).json({ ok: false, message: "No se pudo cargar el equipo." });
+    }
+  },
+
   async getSlots(req: Request, res: Response): Promise<Response | void> {
     try {
       const publicSlug = String(req.params["publicSlug"] || "").trim();
@@ -32,7 +49,8 @@ export const calendarPublicController = {
         return res.status(404).json({ ok: false, message: "Negocio no encontrado." });
       }
 
-      const data = await buildCalendarSlots(profile.user_id);
+      const providerId = String(req.query["providerId"] || "").trim() || null;
+      const data = await buildCalendarSlots(profile.user_id, providerId);
 
       return res.json(data);
     } catch (error) {
@@ -94,6 +112,7 @@ export const calendarPublicController = {
       const notes         = String(customer.notes || "").trim();
       const bookingDate   = String(slot.date || "").trim();
       const startTime     = String(slot.time || "").trim();
+      const providerId    = String(body.providerId || "").trim() || null;
 
       if (!customerName || !customerPhone || !customerEmail || !bookingDate || !startTime) {
         return res.status(400).json({ ok: false, message: "Faltan datos para reservar." });
@@ -112,6 +131,7 @@ export const calendarPublicController = {
         startTime,
         confirmationToken,
         confirmationExpiresAt,
+        providerId,
       });
 
       return res.json({

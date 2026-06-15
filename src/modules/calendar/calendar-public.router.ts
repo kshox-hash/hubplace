@@ -9,7 +9,10 @@ const router = express.Router();
 // Página pública de reservas
 router.get("/open/:publicSlug/reservas", calendarPublicController.openReservas);
 
-// Slots disponibles
+// Equipo/proveedores públicos
+router.get("/api/public/:publicSlug/providers", calendarPublicController.getProviders);
+
+// Slots disponibles (acepta ?providerId=xxx)
 router.get("/api/public/:publicSlug/slots", calendarPublicController.getSlots);
 
 // Crear reserva

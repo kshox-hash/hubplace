@@ -68,18 +68,24 @@ export async function getCalendarSettings(userId: string) {
   return result.rows[0] || null;
 }
 
-export async function getCalendarAvailability(userId: string) {
+export async function getCalendarAvailability(userId: string, providerId?: string | null) {
+  if (providerId) {
+    // Try provider-specific rows first; fall back to global rows if none exist
+    const specific = await pool.query<CalendarAvailabilityRow>(
+      `SELECT * FROM calendar_availability
+       WHERE user_id = $1 AND provider_id = $2 AND is_active = true
+       ORDER BY weekday ASC, start_time ASC`,
+      [userId, providerId]
+    );
+    if (specific.rows.length > 0) return specific.rows;
+  }
+
   const result = await pool.query<CalendarAvailabilityRow>(
-    `
-    SELECT *
-    FROM calendar_availability
-    WHERE user_id = $1
-      AND is_active = true
-    ORDER BY weekday ASC, start_time ASC
-    `,
+    `SELECT * FROM calendar_availability
+     WHERE user_id = $1 AND (provider_id IS NULL) AND is_active = true
+     ORDER BY weekday ASC, start_time ASC`,
     [userId]
   );
-
   return result.rows;
 }
 
@@ -105,14 +111,21 @@ export async function getCalendarBlockedDates(
 export async function getCalendarBookings(
   userId: string,
   from: string,
-  to: string
+  to: string,
+  providerId?: string | null
 ) {
+  const providerClause = providerId
+    ? `AND provider_id = $4`
+    : ``;
+  const params: unknown[] = providerId ? [userId, from, to, providerId] : [userId, from, to];
+
   const result = await pool.query<CalendarBookingRow>(
     `
     SELECT *
     FROM calendar_bookings
     WHERE user_id = $1
       AND booking_date BETWEEN $2 AND $3
+      ${providerClause}
       AND (
         status = 'confirmed'
         OR (
@@ -122,7 +135,7 @@ export async function getCalendarBookings(
       )
     ORDER BY booking_date ASC, start_time ASC
     `,
-    [userId, from, to]
+    params
   );
 
   return result.rows;
@@ -139,6 +152,7 @@ export async function createCalendarBooking(input: {
   endTime: string;
   confirmationToken: string;
   confirmationExpiresAt: Date;
+  providerId?: string | null;
 }) {
   const result = await pool.query<CalendarBookingRow>(
     `
@@ -157,6 +171,7 @@ export async function createCalendarBooking(input: {
       confirmation_expires_at,
       confirmation_email_sent_at,
       expires_at,
+      provider_id,
       created_at,
       updated_at
     )
@@ -166,6 +181,7 @@ export async function createCalendarBooking(input: {
       'unpaid',
       $8, $9, $10, NOW(),
       NOW() + INTERVAL '10 minutes',
+      $11,
       NOW(),
       NOW()
     )
@@ -182,6 +198,7 @@ export async function createCalendarBooking(input: {
       input.notes || null,
       input.confirmationToken,
       input.confirmationExpiresAt,
+      input.providerId || null,
     ]
   );
 
@@ -192,7 +209,15 @@ export async function bookingExists(input: {
   userId: string;
   bookingDate: string;
   startTime: string;
+  providerId?: string | null;
 }) {
+  const providerClause = input.providerId
+    ? `AND provider_id = $4`
+    : ``;
+  const params: unknown[] = input.providerId
+    ? [input.userId, input.bookingDate, input.startTime, input.providerId]
+    : [input.userId, input.bookingDate, input.startTime];
+
   const result = await pool.query(
     `
     SELECT id
@@ -200,6 +225,7 @@ export async function bookingExists(input: {
     WHERE user_id = $1
       AND booking_date = $2
       AND start_time = $3
+      ${providerClause}
       AND (
         status = 'confirmed'
         OR (
@@ -209,7 +235,7 @@ export async function bookingExists(input: {
       )
     LIMIT 1
     `,
-    [input.userId, input.bookingDate, input.startTime]
+    params
   );
 
   return (result.rowCount ?? 0) > 0;
