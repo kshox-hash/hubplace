@@ -49,3 +49,14 @@ export async function getBusinessNameByUserId(userId: string): Promise<string | 
   );
   return result.rows[0]?.business_name ?? null;
 }
+
+export async function getAccessTokenByMpUserId(mpUserId: string): Promise<string | null> {
+  const pool = DB.getPool();
+  const result = await pool.query(
+    `SELECT access_token FROM payment_provider_connections
+     WHERE mp_user_id = $1 AND provider = 'mercadopago'
+     LIMIT 1`,
+    [mpUserId]
+  );
+  return result.rows[0]?.access_token ?? null;
+}

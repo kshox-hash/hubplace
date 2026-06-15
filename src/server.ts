@@ -6,6 +6,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
 import mpWebhookRouter from "./modules/webhook/mp-webhook.router";
+import mpConnectRouter from "./modules/mp-connect/mp-connect.router";
 import { PORT, CORS_ORIGINS } from "./config/env";
 import { GENERATED_PDFS_DIR } from "./modules/quotes/quote.service";
 
@@ -86,6 +87,7 @@ app.get("/health", (_req, res) => {
 app.use("/generated-pdfs", express.static(GENERATED_PDFS_DIR));
 app.use(passport.initialize());
 app.use(mpWebhookRouter);
+app.use(mpConnectRouter);
 app.use(companyProfileRoutes);
 app.use(calendarAdminRoutes);
 app.use(calendarProvidersRoutes);

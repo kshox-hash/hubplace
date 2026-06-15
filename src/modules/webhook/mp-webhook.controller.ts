@@ -27,8 +27,10 @@ export const mpWebhookController = {
       return res.status(401).json({ ok: false, message: "Firma inválida" });
     }
 
+    const mpUserId = String(req.body?.user_id ?? "").trim() || undefined;
+
     try {
-      const result = await processApprovedPayment(paymentId);
+      const result = await processApprovedPayment(paymentId, mpUserId);
 
       if (result.skipped) {
         return res.status(200).json({

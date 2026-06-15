@@ -4,6 +4,7 @@ import {
   markPaymentAsPaid,
   confirmBooking,
   getBusinessNameByUserId,
+  getAccessTokenByMpUserId,
 } from "./mp-webhook.repository";
 import { sendBookingPaidEmail } from "../calendar/booking/services/bookingPaidEmailService";
 import { sendBusinessBookingPaidEmail } from "../calendar/booking/services/businessBookingPaidEmailService";
@@ -70,13 +71,17 @@ export type WebhookResult =
   | { skipped: false; bookingId: string };
 
 export async function processApprovedPayment(
-  paymentId: string
+  paymentId: string,
+  mpUserId?: string
 ): Promise<WebhookResult> {
-  if (!ACCESS_TOKEN_MP) {
-    throw new Error("ACCESS_TOKEN_MP no está configurado");
+  // Buscar el token del vendedor por su MP user ID; si no existe, usar el global como fallback
+  let accessToken = mpUserId ? await getAccessTokenByMpUserId(String(mpUserId)) : null;
+  if (!accessToken) {
+    if (!ACCESS_TOKEN_MP) throw new Error("No se encontró token de MercadoPago para procesar el pago");
+    accessToken = ACCESS_TOKEN_MP;
   }
 
-  const paymentInfo = await getPaymentById(ACCESS_TOKEN_MP, paymentId);
+  const paymentInfo = await getPaymentById(accessToken, paymentId);
 
   if (paymentInfo.status !== "approved") {
     return { skipped: true, reason: `status=${paymentInfo.status}` };
