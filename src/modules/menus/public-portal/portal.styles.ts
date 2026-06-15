@@ -19,7 +19,7 @@ export function portalStyles(): string {
   --nav:58px;
   --r:6px;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
 
 /* HEADER */
 .hdr{position:fixed;top:0;left:0;right:0;height:var(--hdr);background:rgba(255,255,255,.88);border-bottom:1px solid var(--border);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:flex;align-items:center;gap:10px;padding:0 18px;z-index:200}
