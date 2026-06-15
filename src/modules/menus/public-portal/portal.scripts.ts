@@ -48,7 +48,6 @@ const WELCOME_MSG=${JSON.stringify(bizInfo.welcomeMessage)};
 const BIZ_HOURS=${JSON.stringify(bizInfo.businessHours)};
 const BIZ_INSTAGRAM=${JSON.stringify(bizInfo.instagramUrl)};
 const BIZ_WHATSAPP=${JSON.stringify(bizInfo.whatsappNumber)};
-const BIZ_DESC=${JSON.stringify(bizInfo.description)};
 const MODULE_CARDS=${JSON.stringify(moduleCards)};
 const PRODUCTS=${JSON.stringify(safeProducts)};
 const TABS=['chat','reservas','cotizar','nosotros'];
@@ -649,13 +648,7 @@ function addAiWithModules(){
     })(card.action,mods));
     mods.appendChild(btn);
   });
-  m.body.appendChild(mods);
-  if(BIZ_DESC){
-    var desc=document.createElement('p'); desc.className='ai-biz-desc';
-    desc.textContent=BIZ_DESC;
-    m.body.appendChild(desc);
-  }
-  appendAiRow(m.row);
+  m.body.appendChild(mods); appendAiRow(m.row);
 }
 
 // ── Acciones inline ──────────────────────────────────────────────────────────

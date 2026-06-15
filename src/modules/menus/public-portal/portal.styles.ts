@@ -26,6 +26,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .hdr-avatar{width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff;flex-shrink:0;letter-spacing:-.01em;user-select:none}
 .hdr-info{flex:1;min-width:0}
 .hdr-name{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.04em;color:var(--text);line-height:1}
+.hdr-desc{font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em;line-height:1.3}
 .hdr-badge{font-size:9.5px;font-weight:700;background:var(--green-dim);color:var(--green);border:1px solid rgba(22,163,74,.18);border-radius:3px;padding:3px 10px;display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.06em;text-transform:uppercase}
 .hdr-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:bpulse 2.5s infinite;flex-shrink:0}
 @keyframes bpulse{0%,100%{opacity:1}50%{opacity:.25}}
@@ -75,7 +76,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .ai-mod-card:hover::after{transform:translateX(3px);color:var(--text)}
 .ai-mod-card:active{background:var(--s1);opacity:.7}
 .ai-mod-card.used{opacity:.15;pointer-events:none}
-.ai-biz-desc{font-size:13px;color:var(--muted);line-height:1.45;margin-top:10px;padding:0 2px;letter-spacing:-.01em}
 
 /* CHAT — chips de sugerencia */
 .ai-chips{display:flex;flex-direction:column;gap:4px;margin-top:10px;margin-left:-42px;width:calc(100% + 42px)}
