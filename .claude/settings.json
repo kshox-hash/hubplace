@@ -16,7 +16,9 @@
       "Read(//c/Users/josef/Desktop/runtimeGenerateUi/automatiza_dashboard/lib/features/calendar/widgets/**)",
       "Bash(cd /c/Users/josep/Desktop/runtimeGenerateUi/automatiza_dashboard && find lib -type f -name \"*.dart\" | head -100)",
       "Read(//c/c/Users/josep/Desktop/runtimeGenerateUi/automatiza_dashboard/**)",
-      "Bash(del \"c:\\\\Users\\\\josep\\\\Desktop\\\\runtimeGenerateUi\\\\automatiza_dashboard\\\\lib\\\\shared\\\\widgets\\\\back_header_widget.dart\")"
+      "Bash(del \"c:\\\\Users\\\\josep\\\\Desktop\\\\runtimeGenerateUi\\\\automatiza_dashboard\\\\lib\\\\shared\\\\widgets\\\\back_header_widget.dart\")",
+      "Read(//c/Users/josef/Desktop/runtimeGenerateUi/automatiza_dashboard/lib/features/calendar/presentation/screens/**)",
+      "Bash(npm i *)"
     ]
   }
 }

@@ -31,7 +31,9 @@ import { errorMiddleware } from "./middlewares/error_middleware";
 import publicPortalRouter from "./modules/menus/public-portal/public-portal.routes";
 import productsRouter from "./modules/quotes/quotes.router";
 import statisticsRouter from "./modules/stadistics/stadistics.router";
-import quoteSendRouter from "./modules/quotes/quote-send.routes";
+import quotesExtendedRouter from "./modules/quotes/quotes-extended.routes";
+import { initQuoteServicesTable } from "./modules/quotes/quote-services/quote-services.repository";
+import { initQuoteHistoryTable } from "./modules/quotes/quote-history/quote-history.repository";
 import DB from "./db/db_configuration";
 
 // ─── Proceso ────────────────────────────────────────────────────────────────
@@ -107,16 +109,20 @@ app.use("/api", slugRoutes);
 app.use(publicPortalRouter);
 app.use("/products", productsRouter);
 app.use("/api", statisticsRouter);
-app.use("/api", quoteSendRouter);
+app.use("/api", quotesExtendedRouter);
 app.use("/api", servicesRouter);
 app.use("/api", clientsRouter);
 app.use("/api", blocksRouter);
 app.use(errorMiddleware);
 
 // ─── Arranque ─────────────────────────────────────────────────────────────────
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
   console.log(`[server] Escuchando en puerto ${PORT}`);
   startReminderCron();
+  await Promise.all([
+    initQuoteServicesTable().catch((e) => console.error("[init] quote_services:", e)),
+    initQuoteHistoryTable().catch((e) => console.error("[init] quote_history:", e)),
+  ]);
 });
 
 // ─── Graceful shutdown ────────────────────────────────────────────────────────
