@@ -508,19 +508,12 @@ function renderQPSuccess(name){
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 (function init(){
-  function scrollThenOpen(openFn){
-    var anchor=document.getElementById('svc-anchor');
-    if(anchor){ anchor.scrollIntoView({behavior:'smooth',block:'end'}); }
-    setTimeout(openFn,380);
-  }
-  function handleAction(action,el){
-    document.querySelectorAll('.svc-item').forEach(function(s){ s.classList.remove('active'); });
-    if(el&&el.classList.contains('svc-item')){ el.classList.add('active'); }
-    if(action==='reservas')       scrollThenOpen(openBookingPanel);
-    else if(action==='cotizador') scrollThenOpen(openQuotePanel);
-  }
   document.querySelectorAll('[data-action]').forEach(function(el){
-    el.addEventListener('click',function(){ handleAction(el.getAttribute('data-action'),el); });
+    el.addEventListener('click',function(){
+      var action=el.getAttribute('data-action');
+      if(action==='reservas')       openBookingPanel();
+      else if(action==='cotizador') openQuotePanel();
+    });
   });
 })();
 `;
