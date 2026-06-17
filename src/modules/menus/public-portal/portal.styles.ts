@@ -48,23 +48,33 @@ body{height:100%;background:transparent;color:var(--text);font-family:'Inter',sy
 .bn-item.active::before{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:22px;height:2px;background:var(--primary);border-radius:0 0 2px 2px}
 .bn-item:active{opacity:.45}
 
-/* HOME PORTAL */
+/* HOME */
 .home-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:rgba(247,246,242,.82)}
-.home-banner{padding:38px 22px 32px;background:var(--primary);border-radius:0 0 28px 28px;position:relative;overflow:hidden}
-.home-banner::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.07) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
-.home-banner-name{font-size:27px;font-weight:700;color:#fff;letter-spacing:-.055em;line-height:1.15;margin-bottom:7px;position:relative;z-index:1}
-.home-banner-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.5;position:relative;z-index:1}
-.home-status{padding:16px 20px 0;display:flex;align-items:center}
-.home-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-dim);color:var(--green);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:20px;padding:4px 11px}
-.home-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:bpulse 2.5s infinite;flex-shrink:0}
-.home-welcome{margin:14px 16px 0;background:var(--s1);border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.6;color:var(--muted)}
-.home-section{font-size:10px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.1em;padding:20px 16px 12px}
-.home-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 32px}
-.home-tile{background:var(--s1);border:none;border-radius:18px;padding:20px 16px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:7px;cursor:pointer;transition:background .18s,transform .15s;-webkit-tap-highlight-color:transparent;font-family:inherit;text-align:left}
-.home-tile:active{transform:scale(.95);background:var(--s2)}
-.home-tile-emoji{font-size:26px;line-height:1;margin-bottom:2px}
-.home-tile-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.025em;line-height:1.2}
-.home-tile-desc{font-size:12px;color:var(--muted);line-height:1.35}
+
+.h-hero{display:flex;flex-direction:column;align-items:center;padding:36px 20px 20px;text-align:center}
+.h-avatar{width:72px;height:72px;border-radius:22px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;letter-spacing:-.03em;margin-bottom:14px;user-select:none}
+.h-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-dim);color:var(--green);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:20px;padding:4px 12px;margin-bottom:12px}
+.h-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:bpulse 2.5s infinite;flex-shrink:0}
+.h-name{font-size:24px;font-weight:700;letter-spacing:-.05em;line-height:1.18;color:var(--text);margin-bottom:6px}
+.h-desc{font-size:13.5px;color:var(--muted);line-height:1.5;max-width:280px}
+
+.h-welcome{margin:4px 16px 6px;background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:flex-start;gap:11px}
+.h-welcome-icon{font-size:20px;flex-shrink:0;line-height:1.4}
+.h-welcome-text{font-size:13.5px;line-height:1.6;color:var(--muted)}
+
+.h-label{font-size:10px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.1em;padding:18px 16px 10px}
+.h-list{display:flex;flex-direction:column;gap:6px;padding:0 16px 32px}
+
+.home-tile{background:none;border:none;font-family:inherit}
+.h-card{background:var(--s1);border-radius:14px;padding:15px 14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .18s,transform .13s;-webkit-tap-highlight-color:transparent;text-align:left;width:100%}
+.h-card:hover{background:var(--s2)}
+.h-card:active{transform:scale(.97);background:var(--s2)}
+.h-card-icon{width:44px;height:44px;border-radius:12px;background:var(--primary-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.h-card-icon svg{width:20px;height:20px;stroke:var(--text)}
+.h-card-body{flex:1;min-width:0}
+.h-card-title{font-size:15px;font-weight:600;color:var(--text);letter-spacing:-.02em;line-height:1.2;margin-bottom:2px}
+.h-card-desc{font-size:12.5px;color:var(--muted);line-height:1.35}
+.h-arrow{width:15px;height:15px;stroke:var(--muted2);flex-shrink:0;opacity:.45}
 
 /* CHAT — tarjetas de producto */
 .product-cards{display:flex;flex-direction:column;gap:6px;margin-top:12px}
