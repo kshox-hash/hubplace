@@ -16,12 +16,13 @@ export function portalStyles(): string {
 html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 
 /* ── PAGE ─────────────────────────────────────────────── */
-.page{max-width:480px;margin:0 auto;padding:16px 14px 52px;display:flex;flex-direction:column;gap:12px}
+.page{max-width:480px;margin:0 auto;padding:14px 14px 52px;display:flex;flex-direction:column;gap:12px}
 
 /* ── HERO ─────────────────────────────────────────────── */
-.hero{border-radius:24px;overflow:hidden;position:relative;background:linear-gradient(150deg,var(--accent) 0%,var(--accent2) 100%);padding:36px 24px 0}
-.hero-glow{position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:rgba(255,255,255,.1);border-radius:50%;pointer-events:none}
-.hero-glow2{position:absolute;bottom:60px;left:-40px;width:140px;height:140px;background:rgba(255,255,255,.07);border-radius:50%;pointer-events:none}
+.hero{position:relative;background:linear-gradient(150deg,var(--accent) 0%,var(--accent2) 100%);padding:48px 24px 0;overflow:hidden}
+.hero-inner{max-width:480px;margin:0 auto}
+.hero-glow{position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.1);border-radius:50%;pointer-events:none}
+.hero-glow2{position:absolute;bottom:60px;left:-60px;width:180px;height:180px;background:rgba(255,255,255,.07);border-radius:50%;pointer-events:none}
 .hero-content{position:relative;z-index:1;text-align:center}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 14px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px}
 .hero-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2.5s infinite;flex-shrink:0}
@@ -37,8 +38,8 @@ html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'In
 .hero-btn-secondary:hover{background:rgba(255,255,255,.25)}
 
 /* ── PREVIEW CARD (decorativo en el hero) ─────────────── */
-.hero-preview{margin:0 -4px;position:relative;z-index:1;padding-bottom:0}
-.preview-card{background:rgba(255,255,255,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.3);border-bottom:none;border-radius:20px 20px 0 0;padding:18px 18px 20px}
+.hero-preview{max-width:480px;margin:28px auto 0;position:relative;z-index:1}
+.preview-card{background:rgba(255,255,255,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.3);border-bottom:none;border-radius:20px 20px 0 0;padding:18px 18px 22px}
 .preview-card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .preview-cal-icon{width:28px;height:28px;background:rgba(255,255,255,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .preview-cal-icon svg{stroke:#fff;stroke-width:2}

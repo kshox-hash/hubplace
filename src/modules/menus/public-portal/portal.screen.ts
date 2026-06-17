@@ -181,41 +181,45 @@ export function renderPortalHtml(data: PortalViewData): string {
 <style>${portalStyles()}${colorVars}</style>
 </head>
 <body>
-<div class="page">
 
-  <!-- ── HERO ── -->
+  <!-- ── HERO (full-width) ── -->
   <section class="hero">
     <div class="hero-glow"></div>
     <div class="hero-glow2"></div>
-    <div class="hero-content">
-      <div class="hero-badge"><span class="hero-dot"></span>En línea</div>
-      <h1 class="hero-title">${safe.name}</h1>
-      ${safe.description ? `<p class="hero-sub">${safe.description}</p>` : ""}
-      ${safe.welcomeMessage ? `<p class="hero-sub">${safe.welcomeMessage}</p>` : ""}
-      ${bookingBtn || quoteBtn ? `<div class="hero-ctas">${bookingBtn}${quoteBtn}</div>` : ""}
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge"><span class="hero-dot"></span>En línea</div>
+        <h1 class="hero-title">${safe.name}</h1>
+        ${safe.description ? `<p class="hero-sub">${safe.description}</p>` : ""}
+        ${safe.welcomeMessage && !safe.description ? `<p class="hero-sub">${safe.welcomeMessage}</p>` : ""}
+        ${bookingBtn || quoteBtn ? `<div class="hero-ctas">${bookingBtn}${quoteBtn}</div>` : ""}
+      </div>
+      ${previewCard}
     </div>
-    ${previewCard}
   </section>
 
-  <!-- ── SERVICIOS ── -->
-  ${products.length > 0 ? `
-  <div class="section-card">
-    <h2 class="section-title">Nuestros servicios</h2>
-    <p class="section-sub">Todo lo que ofrecemos para ti</p>
-    <div class="svc-grid${isSingleCol ? " svc-grid-full" : ""}">${servicesHtml}</div>
-  </div>` : ""}
+  <!-- ── CONTENIDO ── -->
+  <div class="page">
 
-  <!-- ── CONTACTO ── -->
-  ${contactBlock ? `
-  <div class="section-card">
-    <h2 class="section-title">Contáctanos</h2>
-    <p class="section-sub" style="margin-bottom:14px">Estamos para ayudarte</p>
-    <div class="contact-list">${contactBlock}</div>
-  </div>` : ""}
+    <!-- SERVICIOS -->
+    ${products.length > 0 ? `
+    <div class="section-card">
+      <h2 class="section-title">Nuestros servicios</h2>
+      <p class="section-sub">Todo lo que ofrecemos para ti</p>
+      <div class="svc-grid${isSingleCol ? " svc-grid-full" : ""}">${servicesHtml}</div>
+    </div>` : ""}
 
-  <div class="pg-footer">Powered by <strong>Automatiza Fácil</strong></div>
+    <!-- CONTACTO -->
+    ${contactBlock ? `
+    <div class="section-card">
+      <h2 class="section-title">Contáctanos</h2>
+      <p class="section-sub" style="margin-bottom:14px">Estamos para ayudarte</p>
+      <div class="contact-list">${contactBlock}</div>
+    </div>` : ""}
 
-</div>
+    <div class="pg-footer">Powered by <strong>Automatiza Fácil</strong></div>
+
+  </div>
 
 <div id="quotePanel" class="quote-panel"></div>
 <div id="bookingPanel" class="quote-panel"></div>
