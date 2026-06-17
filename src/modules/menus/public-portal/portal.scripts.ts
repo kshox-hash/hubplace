@@ -40,7 +40,7 @@ function showTab(t){
     if(p) p.classList.toggle('active',x===t);
   });
   setActive(t);
-  if(t==='reservas') ensureServices();
+  if(t==='reservas'){ensureServices();loadCalendar();}
 }
 
 // ── slide panels ──────────────────────────────────────────────────────────────
@@ -206,6 +206,119 @@ function renderHomeProducts(){
   el.innerHTML=html;
 }
 
+// ── Calendar widget ───────────────────────────────────────────────────────────
+var calSlots={};      // { 'YYYY-MM-DD': ['09:00',...] }
+var calLoaded=false;
+var calYear=new Date().getFullYear();
+var calMonth=new Date().getMonth(); // 0-based
+var MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+var DAYS_SHORT=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+function loadCalendar(){
+  if(calLoaded){renderAllCals();return;}
+  fetch('/api/public/'+SLUG+'/slots')
+    .then(function(r){return r.json();})
+    .then(function(data){
+      calLoaded=true;calSlots={};
+      if(data&&Array.isArray(data.slots)){
+        data.slots.forEach(function(s){
+          if(s.date&&s.times&&s.times.length) calSlots[s.date]=s.times;
+        });
+      }
+      renderAllCals();
+    })
+    .catch(function(){calLoaded=true;renderAllCals();});
+}
+
+function renderAllCals(){
+  renderCalWidget('calHome');
+  renderCalWidget('calReservas');
+}
+
+function renderCalWidget(id){
+  var el=document.getElementById(id);if(!el)return;
+  var today=new Date();
+  var todayStr=today.getFullYear()+'-'+pad2(today.getMonth()+1)+'-'+pad2(today.getDate());
+
+  // Month grid
+  var firstDay=new Date(calYear,calMonth,1);
+  var lastDay=new Date(calYear,calMonth+1,0);
+  var startDow=firstDay.getDay(); // 0=Sun
+  var totalDays=lastDay.getDate();
+
+  // Day name headers (starting Sunday)
+  var dayNames=DAYS_SHORT.map(function(d){return '<div class="cal-day-name">'+d+'</div>';}).join('');
+
+  // Empty cells before first day
+  var cells='';
+  for(var i=0;i<startDow;i++) cells+='<div class="cal-cell cal-empty"></div>';
+
+  for(var d=1;d<=totalDays;d++){
+    var dateStr=calYear+'-'+pad2(calMonth+1)+'-'+pad2(d);
+    var dayDate=new Date(calYear,calMonth,d);
+    var isPast=dayDate<new Date(today.getFullYear(),today.getMonth(),today.getDate());
+    var isToday=dateStr===todayStr;
+    var hasSlots=!!(calSlots[dateStr]&&calSlots[dateStr].length);
+
+    var cls='cal-cell';
+    var extra='';
+    if(isToday){
+      cls+=' cal-today';
+    } else if(isPast){
+      cls+=' cal-past';
+    } else if(hasSlots){
+      cls+=' cal-avail';
+      extra=' data-cal-date="'+dateStr+'" title="'+calSlots[dateStr].length+' horarios disponibles"';
+    } else {
+      cls+=' cal-taken';
+    }
+    cells+='<div class="'+cls+'"'+extra+'>'+d+'</div>';
+  }
+
+  var isPrevDisabled=(calYear===today.getFullYear()&&calMonth<=today.getMonth());
+  var html='<div class="cal-hdr">'
+    +'<span class="cal-title">'+MONTHS[calMonth]+' '+calYear+'</span>'
+    +'<div class="cal-nav">'
+    +'<button class="cal-nav-btn" id="'+id+'Prev" type="button"'+(isPrevDisabled?' disabled style="opacity:.35;cursor:default"':'')+'>'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="15 18 9 12 15 6"/></svg>'
+    +'</button>'
+    +'<button class="cal-nav-btn" id="'+id+'Next" type="button">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="9 18 15 12 9 6"/></svg>'
+    +'</button>'
+    +'</div>'
+    +'</div>'
+    +'<div class="cal-grid">'+dayNames+cells+'</div>'
+    +'<div class="cal-legend">'
+    +'<div class="cal-leg-item"><div class="cal-leg-dot" style="background:var(--green)"></div>Disponible</div>'
+    +'<div class="cal-leg-item"><div class="cal-leg-dot" style="background:var(--red);opacity:.5"></div>Sin turnos</div>'
+    +'<div class="cal-leg-item"><div class="cal-leg-dot" style="background:var(--primary)"></div>Hoy</div>'
+    +'</div>';
+
+  el.innerHTML=html;
+
+  // Nav buttons
+  var prevBtn=document.getElementById(id+'Prev');
+  var nextBtn=document.getElementById(id+'Next');
+  if(prevBtn&&!isPrevDisabled){
+    prevBtn.addEventListener('click',function(){
+      calMonth--;if(calMonth<0){calMonth=11;calYear--;}
+      renderAllCals();
+    });
+  }
+  if(nextBtn){
+    nextBtn.addEventListener('click',function(){
+      calMonth++;if(calMonth>11){calMonth=0;calYear++;}
+      renderAllCals();
+    });
+  }
+  // Click on available day → open booking
+  el.querySelectorAll('.cal-avail').forEach(function(cell){
+    cell.addEventListener('click',function(){openBookingPanel();});
+  });
+}
+
+function pad2(n){return n<10?'0'+n:String(n);}
+
 // ── Quote panel ───────────────────────────────────────────────────────────────
 function renderQPStep1(){
   QCart={};
@@ -315,6 +428,7 @@ function renderQPSuccess(name){
 (function init(){
   loadServices();
   renderHomeProducts();
+  loadCalendar();
 })();
 `;
 }

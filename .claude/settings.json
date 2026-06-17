@@ -33,10 +33,12 @@
       "Bash(git checkout *)",
       "Bash(flutter build *)",
       "PowerShell(cd \"c:\\\\Users\\\\Josep\\\\Desktop\\\\runtimeGenerateUi\"; npx tsc --noEmit 2>&1; Write-Host \"Exit: $LASTEXITCODE\")",
-      "PowerShell(cd \"c:\\\\Users\\\\Josep\\\\Desktop\\\\runtimeGenerateUi\"; npx tsc --noEmit 2>&1; Write-Host \"Exit:$LASTEXITCODE\")"
+      "PowerShell(cd \"c:\\\\Users\\\\Josep\\\\Desktop\\\\runtimeGenerateUi\"; npx tsc --noEmit 2>&1; Write-Host \"Exit:$LASTEXITCODE\")",
+      "Read(//c/Users/Josep/.claude/projects/c--Users-josep-Desktop-runtimeGenerateUi/memory/**)"
     ],
     "additionalDirectories": [
-      "c:\\Users\\Josep\\Desktop\\runtimeGenerateUi\\src\\modules\\menus\\public-portal"
+      "c:\\Users\\Josep\\Desktop\\runtimeGenerateUi\\src\\modules\\menus\\public-portal",
+      "C:\\Users\\Josep\\.claude\\projects\\c--Users-josep-Desktop-runtimeGenerateUi\\memory"
     ]
   }
 }

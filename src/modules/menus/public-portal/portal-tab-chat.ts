@@ -64,26 +64,32 @@ export function chatTabHtml(d: ChatData): string {
   <div class="bottom-cols">
     <div>
       <div class="sec-hdr">
+        <span class="sec-title">Disponibilidad</span>
+        <button class="sec-link" type="button" data-action="reservas">Reservar ${S_ARR}</button>
+      </div>
+      <div class="cal-widget" id="calHome">
+        <div class="cal-loading"><div class="spinner"></div>Cargando…</div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-hdr">
         <span class="sec-title">Productos</span>
         <button class="sec-link" type="button" data-action="productos">Ver catálogo ${S_ARR}</button>
       </div>
       <div class="prod-card-wrap" id="homeProductList">
         <div class="loader-row" style="padding:20px 0"><div class="spinner"></div></div>
       </div>
-    </div>
-    ${hasCotizar ? `
-    <div>
-      <div class="sec-hdr"><span class="sec-title">Cotizaciones</span></div>
+      ${hasCotizar ? `
+      <div class="sec-hdr" style="margin-top:20px"><span class="sec-title">Cotizaciones</span></div>
       <div class="cot-card">
         <div class="cot-icon-wrap">${S_COT}</div>
         <div>
           <div class="cot-lbl">Presupuesto online</div>
           <div class="cot-name">Solicitar cotización</div>
-          <div class="cot-desc">Elige productos y recibís tu presupuesto por email al instante.</div>
         </div>
         <a class="btn-primary" href="/shop/${d.slug}/cotizador" style="width:100%">${S_COT} Abrir cotizador</a>
-      </div>
-    </div>` : ""}
+      </div>` : ""}
+    </div>
   </div>`;
 
   return `
