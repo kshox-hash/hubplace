@@ -148,7 +148,7 @@ export const calendarPublicController = {
       });
       try {
         const accessToken = await getMpAccessToken(profile.user_id);
-        const amount = Number(booking.payment_amount || 0);
+        const amount = Number(booking.payment_amount ?? 0);
         if (amount === 0) {
           // Reserva gratuita — confirmar inmediatamente y notificar al cliente
           await confirmFreeBooking(booking.id);
