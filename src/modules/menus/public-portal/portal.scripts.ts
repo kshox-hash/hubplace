@@ -506,9 +506,9 @@ function renderQPSuccess(name){
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 (function init(){
-  document.querySelectorAll('.mod-card-wrap').forEach(function(wrap){
-    wrap.addEventListener('click',function(){
-      var action=wrap.getAttribute('data-action');
+  document.querySelectorAll('.mod-card').forEach(function(card){
+    card.addEventListener('click',function(){
+      var action=card.getAttribute('data-action');
       if(action==='reservas')       openBookingPanel();
       else if(action==='cotizador') openQuotePanel();
     });

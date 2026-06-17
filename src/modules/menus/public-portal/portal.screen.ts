@@ -35,26 +35,63 @@ function formatPrice(price: number): string {
   return "$" + price.toLocaleString("es-CL");
 }
 
-const MODULE_ICONS: Record<string, string> = {
-  reservas:  `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
-  cotizador: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
-};
-const DEFAULT_MOD_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`;
-
 const MOD_ACTION: Record<string, string> = {
   reservas:  "reservas",
   cotizador: "cotizador",
 };
 
-const MODULE_GRADIENTS: Record<string, [string, string]> = {
-  reservas:  ["#ff4d6d", "#c9184a"],
-  cotizador: ["#4361ee", "#4cc9f0"],
+type ModCard = { title: string; desc: string; num: string; illus: string };
+
+const MODULE_CARDS: Record<string, ModCard> = {
+  reservas: {
+    title: "Reservar hora",
+    desc:  "Agenda tu cita seleccionando día y horario disponible.",
+    num:   "01",
+    illus: `<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="ig-res" cx="35%" cy="30%" r="70%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#93c5fd"/>
+      <stop offset="55%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </radialGradient>
+  </defs>
+  <circle cx="48" cy="48" r="44" fill="url(#ig-res)"/>
+  <circle cx="48" cy="48" r="30" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2.5"/>
+  <circle cx="48" cy="48" r="17" fill="rgba(255,255,255,.18)"/>
+  <ellipse cx="34" cy="29" rx="9" ry="6" fill="rgba(255,255,255,.35)" transform="rotate(-20 34 29)"/>
+</svg>`,
+  },
+  cotizador: {
+    title: "Pedir cotización",
+    desc:  "Solicita un presupuesto personalizado en segundos.",
+    num:   "02",
+    illus: `<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="ig-cot" cx="35%" cy="30%" r="70%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#f9a8d4"/>
+      <stop offset="45%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </radialGradient>
+  </defs>
+  <circle cx="48" cy="48" r="44" fill="url(#ig-cot)"/>
+  <ellipse cx="35" cy="29" rx="11" ry="7" fill="rgba(255,255,255,.38)" transform="rotate(-18 35 29)"/>
+  <circle cx="62" cy="62" r="12" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+</svg>`,
+  },
 };
-const FALLBACK_GRADIENTS: [string, string][] = [
-  ["#7209b7", "#b5179e"],
-  ["#06d6a0", "#118ab2"],
-  ["#f72585", "#7209b7"],
+
+const FALLBACK_CARDS: ModCard[] = [
+  {
+    title: "Ver más", desc: "Explora todo lo que ofrecemos para ti.", num: "03",
+    illus: `<svg width="96" height="96" viewBox="0 0 96 96" fill="none"><defs><radialGradient id="ig-f1" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#6ee7b7"/><stop offset="100%" stop-color="#059669"/></radialGradient></defs><circle cx="48" cy="48" r="44" fill="url(#ig-f1)"/><ellipse cx="34" cy="30" rx="9" ry="6" fill="rgba(255,255,255,.35)" transform="rotate(-20 34 30)"/></svg>`,
+  },
+  {
+    title: "Más opciones", desc: "Contáctanos para saber más.", num: "04",
+    illus: `<svg width="96" height="96" viewBox="0 0 96 96" fill="none"><defs><radialGradient id="ig-f2" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#fde68a"/><stop offset="100%" stop-color="#d97706"/></radialGradient></defs><circle cx="48" cy="48" r="44" fill="url(#ig-f2)"/><ellipse cx="34" cy="30" rx="9" ry="6" fill="rgba(255,255,255,.35)" transform="rotate(-20 34 30)"/></svg>`,
+  },
 ];
+
+const CHEVRON_RIGHT = `<svg width="12" height="12" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>`;
 
 export function renderPortalHtml(data: PortalViewData): string {
   const {
@@ -88,18 +125,16 @@ export function renderPortalHtml(data: PortalViewData): string {
 
   // ── Module cards ───────────────────────────────────────────────────────────
   const moduleCardsHtml = enabledModules.map((m, i) => {
-    const icon   = MODULE_ICONS[m.code] ?? DEFAULT_MOD_ICON;
-    const action = MOD_ACTION[m.code]   ?? m.code;
-    const [c1, c2] = MODULE_GRADIENTS[m.code] ?? FALLBACK_GRADIENTS[i % FALLBACK_GRADIENTS.length];
-    const grad = `linear-gradient(135deg,${c1},${c2})`;
+    const action = MOD_ACTION[m.code] ?? m.code;
+    const card   = MODULE_CARDS[m.code] ?? FALLBACK_CARDS[i % FALLBACK_CARDS.length];
     return `
-    <div class="mod-card-wrap" style="background:${grad}" data-action="${escapeHtml(action)}">
-      <button class="mod-card-inner" type="button">
-        <div class="mod-card-icon">${icon}</div>
-        <div class="mod-card-title">${escapeHtml(m.title)}</div>
-        <div class="mod-card-desc">${escapeHtml(m.description)}</div>
-      </button>
-    </div>`;
+    <button class="mod-card" data-action="${escapeHtml(action)}" type="button">
+      <div class="mod-num">${card.num}</div>
+      <div class="mod-title">${escapeHtml(card.title)}</div>
+      <div class="mod-desc">${escapeHtml(card.desc)}</div>
+      <div class="mod-arrow">${CHEVRON_RIGHT}</div>
+      <div class="mod-illus">${card.illus}</div>
+    </button>`;
   }).join("");
 
   // ── Contact rows ───────────────────────────────────────────────────────────
@@ -182,8 +217,9 @@ export function renderPortalHtml(data: PortalViewData): string {
 <div class="page">
 
   ${moduleCardsHtml ? `
-  <div class="section-card mod-section">
-    <h2 class="section-title">¿Cómo podemos ayudarte?</h2>
+  <div class="mod-section">
+    <p class="mod-label">Servicios</p>
+    <h2 class="mod-headline">¿Cómo podemos<br><em>ayudarte?</em></h2>
     <div class="mod-grid">${moduleCardsHtml}</div>
   </div>` : ""}
 

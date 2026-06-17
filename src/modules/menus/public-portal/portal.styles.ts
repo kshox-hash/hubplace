@@ -36,18 +36,23 @@ html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'In
 .section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:22px 20px}
 .section-title{font-size:17px;font-weight:800;letter-spacing:-.03em;color:var(--text);margin-bottom:14px}
 
-/* ── MODULE SECTION (dark) ────────────────────────────── */
-.mod-section{background:#0d0d0d !important;border-color:#1e1e1e !important}
-.mod-section .section-title{color:#fff}
+/* ── MODULE SECTION HEADER ────────────────────────────── */
+.mod-section{background:transparent !important;border:none !important;padding:0 !important}
+.mod-label{font-size:9.5px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px}
+.mod-headline{font-size:30px;font-weight:800;color:var(--text);letter-spacing:-.045em;line-height:1.1;margin-bottom:18px}
+.mod-headline em{font-style:italic;font-weight:700}
+
+/* ── MODULE CARDS GRID ────────────────────────────────── */
 .mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mod-card-wrap{position:relative;border-radius:20px;padding:1.5px;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.mod-card-wrap::before{content:'';position:absolute;inset:-8px;border-radius:28px;background:inherit;filter:blur(16px);opacity:.5;z-index:-1;pointer-events:none}
-.mod-card-inner{width:100%;background:#141414;border-radius:19px;padding:18px 14px 16px;display:flex;flex-direction:column;gap:0;border:none;font-family:inherit;text-align:left;cursor:pointer;min-height:168px;-webkit-tap-highlight-color:transparent;transition:opacity .15s}
-.mod-card-inner:active{opacity:.7}
-.mod-card-icon{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin-bottom:auto;flex-shrink:0}
-.mod-card-icon svg{stroke:#fff;stroke-width:2;flex-shrink:0}
-.mod-card-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.03em;margin-bottom:6px;margin-top:14px}
-.mod-card-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5}
+.mod-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px 14px 16px;display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:190px;cursor:pointer;font-family:inherit;text-align:left;-webkit-tap-highlight-color:transparent;transition:transform .2s,box-shadow .2s;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.mod-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.09)}
+.mod-card:active{transform:scale(.97);box-shadow:none}
+.mod-num{font-size:9px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px}
+.mod-title{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.03em;line-height:1.2;margin-bottom:7px;max-width:105px}
+.mod-desc{font-size:11px;color:var(--muted);line-height:1.5;max-width:108px;margin-bottom:auto}
+.mod-arrow{width:28px;height:28px;border-radius:50%;background:var(--text);display:flex;align-items:center;justify-content:center;margin-top:16px;flex-shrink:0}
+.mod-arrow svg{stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.mod-illus{position:absolute;right:-10px;bottom:-6px;width:96px;height:96px;pointer-events:none;filter:drop-shadow(0 8px 18px rgba(0,0,0,.15))}
 
 /* ── CONTACT ──────────────────────────────────────────── */
 .contact-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:12px;overflow:hidden}
