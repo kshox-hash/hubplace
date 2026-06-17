@@ -1,8 +1,7 @@
-type Product = { id: string | number; name: string; price: number; description?: string | null; code?: string | null };
+type Product = { id: string|number; name: string; price: number; description?: string|null; code?: string|null };
 
-function formatPrice(n: number): string {
-  if (n === 0) return 'Consultar';
-  return '$' + Number(n).toLocaleString('es-CL');
+function fmtPrice(n: number): string {
+  return n === 0 ? "Consultar" : "$" + Number(n).toLocaleString("es-CL");
 }
 
 export function nosotrosTabHtml(products: Product[]): string {
@@ -10,29 +9,30 @@ export function nosotrosTabHtml(products: Product[]): string {
     return `
   <div id="panel-nosotros" class="panel">
     <div class="pscroll">
-      <p class="sec-lbl">Catálogo de productos</p>
-      <div class="prod-empty">
-        <p>Sin productos disponibles aún.</p>
-      </div>
+      <div class="sec-hdr"><span class="sec-title">Catálogo de productos</span></div>
+      <div class="prod-card-wrap"><div class="prod-empty">Sin productos disponibles aún.</div></div>
     </div>
   </div>`;
   }
 
-  const cards = products.map(p => `
-    <div class="prod-card">
-      <div class="prod-head">
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-price">${formatPrice(p.price)}</div>
+  const items = products.map(p => `
+    <div class="prod-item">
+      <div class="prod-item-left">
+        <div class="prod-item-name">${p.name}</div>
+        ${p.description ? `<div class="prod-item-desc">${p.description}</div>` : ""}
+        ${p.code ? `<span class="prod-item-code">${p.code}</span>` : ""}
       </div>
-      ${p.description ? `<div class="prod-desc">${p.description}</div>` : ''}
-      ${p.code ? `<span class="prod-code">${p.code}</span>` : ''}
-    </div>`).join('');
+      <div class="prod-item-price">${fmtPrice(p.price)}</div>
+    </div>`).join("");
 
   return `
   <div id="panel-nosotros" class="panel">
     <div class="pscroll">
-      <p class="sec-lbl">Catálogo de productos</p>
-      <div class="prod-grid">${cards}</div>
+      <div class="sec-hdr">
+        <span class="sec-title">Catálogo de productos</span>
+        <span style="font-size:12px;color:var(--dim);font-weight:600">${products.length} producto${products.length !== 1 ? "s" : ""}</span>
+      </div>
+      <div class="prod-card-wrap">${items}</div>
     </div>
   </div>`;
 }

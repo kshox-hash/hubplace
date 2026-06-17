@@ -32,7 +32,8 @@
       "Bash(git ls-tree *)",
       "Bash(git checkout *)",
       "Bash(flutter build *)",
-      "PowerShell(cd \"c:\\\\Users\\\\Josep\\\\Desktop\\\\runtimeGenerateUi\"; npx tsc --noEmit 2>&1; Write-Host \"Exit: $LASTEXITCODE\")"
+      "PowerShell(cd \"c:\\\\Users\\\\Josep\\\\Desktop\\\\runtimeGenerateUi\"; npx tsc --noEmit 2>&1; Write-Host \"Exit: $LASTEXITCODE\")",
+      "PowerShell(cd \"c:\\\\Users\\\\Josep\\\\Desktop\\\\runtimeGenerateUi\"; npx tsc --noEmit 2>&1; Write-Host \"Exit:$LASTEXITCODE\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\Josep\\Desktop\\runtimeGenerateUi\\src\\modules\\menus\\public-portal"
