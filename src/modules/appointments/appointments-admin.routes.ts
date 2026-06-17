@@ -4,12 +4,10 @@ import { calendarAdminController } from "./appointments-admin.controller";
 
 const router = express.Router();
 
-router.use(authMiddleware);
-
-router.put("/api/calendar/settings",                    calendarAdminController.saveSettings);
-router.get("/api/calendar/settings/:userId",            calendarAdminController.getSettings);
-router.get("/api/calendar/bookings/:userId",            calendarAdminController.getBookings);
-router.patch("/api/calendar/bookings/:id/status",       calendarAdminController.updateBookingStatus);
-router.patch("/api/calendar/bookings/:id/reschedule",   calendarAdminController.rescheduleBooking);
+router.put("/api/calendar/settings",                  authMiddleware, calendarAdminController.saveSettings);
+router.get("/api/calendar/settings/:userId",          authMiddleware, calendarAdminController.getSettings);
+router.get("/api/calendar/bookings/:userId",          authMiddleware, calendarAdminController.getBookings);
+router.patch("/api/calendar/bookings/:id/status",     authMiddleware, calendarAdminController.updateBookingStatus);
+router.patch("/api/calendar/bookings/:id/reschedule", authMiddleware, calendarAdminController.rescheduleBooking);
 
 export default router;
