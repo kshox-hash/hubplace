@@ -104,6 +104,15 @@ export async function updatePaymentWithPreference(
   return result.rows[0];
 }
 
+export async function getBusinessNameByUserId(userId: string): Promise<string> {
+  const pool = DB.getPool();
+  const result = await pool.query(
+    `SELECT business_name FROM business_profiles WHERE user_id = $1 LIMIT 1`,
+    [userId]
+  );
+  return result.rows[0]?.business_name ?? "Negocio";
+}
+
 export async function confirmFreeBooking(bookingId: string): Promise<void> {
   const pool = DB.getPool();
   await pool.query(

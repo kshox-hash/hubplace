@@ -212,7 +212,10 @@ export async function getCalendarBookingsByUserId(userId: string) {
       cb.status,
       cp.id::text AS provider_id,
       cp.name AS provider_name,
-      cp.color AS provider_color
+      cp.color AS provider_color,
+      cb.service_id::text AS service_id,
+      cb.service_name,
+      cb.service_color
     FROM calendar_bookings cb
     LEFT JOIN calendar_providers cp ON cb.provider_id = cp.id
     WHERE cb.user_id = $1

@@ -618,6 +618,60 @@ textarea {
   font-weight: 700;
 }
 
+/* ── SERVICE SELECTOR ───────────────────────────────────────────── */
+.services-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.svc-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  background: var(--surface-1);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-xl);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 160ms ease, background 160ms ease;
+  width: 100%;
+}
+
+.svc-card:hover {
+  border-color: rgba(99,172,241,.3);
+  background: var(--surface-2);
+}
+
+.svc-dot {
+  width: 12px;
+  height: 12px;
+  min-width: 12px;
+  border-radius: 50%;
+}
+
+.svc-name {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.svc-price {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--primary);
+}
+
+.svc-arrow {
+  font-size: 16px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 @media (max-width: 400px) {
   .times-grid {

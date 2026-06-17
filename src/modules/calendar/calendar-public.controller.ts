@@ -20,7 +20,9 @@ import {
   updatePaymentWithPreference,
   getPlatformFeePct,
   confirmFreeBooking,
+  getBusinessNameByUserId,
 } from "./calendar-public.repository";
+import { getServiceById } from "../appointments/calendar-services.repository";
 import { sendBookingPaymentLinkEmail } from "./booking/services/bookingPaymentLinkEmailService";
 import { sendBookingPaidEmail } from "./booking/services/bookingPaidEmailService";
 
@@ -125,6 +127,21 @@ export const calendarPublicController = {
         return res.status(400).json({ ok: false, message: "Faltan datos para reservar." });
       }
 
+      const serviceId = String(body.serviceId || "").trim() || null;
+
+      // Resolve service data
+      let servicePrice: number | null = null;
+      let serviceName: string | null = null;
+      let serviceColor: string | null = null;
+      if (serviceId) {
+        const svc = await getServiceById(serviceId, profile.user_id);
+        if (svc) {
+          servicePrice = svc.price;
+          serviceName  = svc.name;
+          serviceColor = svc.color;
+        }
+      }
+
       const confirmationToken     = createBookingConfirmationToken();
       const confirmationExpiresAt = createBookingConfirmationExpiresAt();
 
@@ -139,10 +156,15 @@ export const calendarPublicController = {
         confirmationToken,
         confirmationExpiresAt,
         providerId,
+        serviceId,
+        serviceName,
+        serviceColor,
+        servicePrice,
       });
 
       // Crear preferencia de pago o confirmar gratis
       let checkoutUrl: string | null = null;
+      const businessName = await getBusinessNameByUserId(profile.user_id);
       const bookingDateLabel = new Date(bookingDate).toLocaleDateString("es-CL", {
         weekday: "long", day: "numeric", month: "long",
       });
@@ -155,7 +177,7 @@ export const calendarPublicController = {
           sendBookingPaidEmail({
             to: customerEmail,
             customerName,
-            businessName: profile.business_name,
+            businessName,
             bookingDate: bookingDateLabel,
             bookingTime: startTime,
           }).catch((err) => console.error("[calendar] Error enviando email de confirmación:", err));
@@ -168,12 +190,12 @@ export const calendarPublicController = {
           const preference = await createPreference({
             accessToken,
             bookingId: booking.id,
-            title: `Reserva ${profile.business_name}`,
+            title: `Reserva ${businessName}`,
             description: `${bookingDateStr} a las ${startTime} - ${customerName}`,
             amount,
             customerEmail,
             customerName,
-            businessName: profile.business_name,
+            businessName,
             marketplaceFee,
           });
           if (preference.checkoutUrl) {
@@ -182,7 +204,7 @@ export const calendarPublicController = {
             sendBookingPaymentLinkEmail({
               to: customerEmail,
               customerName,
-              businessName: profile.business_name,
+              businessName,
               bookingDate: bookingDateLabel,
               bookingTime: startTime,
               checkoutUrl,
@@ -248,7 +270,7 @@ export const calendarPublicController = {
         });
       }
 
-      const amount = Number(booking.payment_amount || 3000);
+      const amount = Number(booking.payment_amount ?? 0);
 
       if (!Number.isFinite(amount) || amount <= 0) {
         return res.status(400).json({ ok: false, message: "Monto inválido para el pago." });
@@ -263,6 +285,7 @@ export const calendarPublicController = {
         });
       }
 
+      const businessName = await getBusinessNameByUserId(profile.user_id);
       const feePct = await getPlatformFeePct(profile.user_id);
       const marketplaceFee = Math.round(amount * feePct / 100);
 
@@ -273,12 +296,12 @@ export const calendarPublicController = {
       const preference = await createPreference({
         accessToken,
         bookingId,
-        title: `Reserva ${profile.business_name}`,
+        title: `Reserva ${businessName}`,
         description: `Hora agendada el ${bookingDateStr} a las ${booking.start_time.slice(0, 5)} - ${booking.client_name}`,
         amount,
         customerEmail: booking.client_email,
         customerName: booking.client_name,
-        businessName: profile.business_name,
+        businessName,
         marketplaceFee,
       });
 

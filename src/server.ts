@@ -35,6 +35,8 @@ import quotesExtendedRouter from "./modules/quotes/quotes-extended.routes";
 import { initQuoteServicesTable } from "./modules/quotes/quote-services/quote-services.repository";
 import { initQuoteHistoryTable } from "./modules/quotes/quote-history/quote-history.repository";
 import { initCalendarBookingPriceColumn } from "./modules/appointments/appointments-admin.repository";
+import { initCalendarServicesTable } from "./modules/appointments/calendar-services.repository";
+import calendarServicesRoutes from "./modules/appointments/calendar-services.routes";
 import DB from "./db/db_configuration";
 
 // ─── Proceso ────────────────────────────────────────────────────────────────
@@ -100,6 +102,7 @@ app.use(adminRouter);
 app.use(companyProfileRoutes);
 app.use(calendarAdminRoutes);
 app.use(calendarProvidersRoutes);
+app.use(calendarServicesRoutes);
 app.use("/auth", authLimiter, loginRoutes);
 app.use(calendarPublicRouter);
 app.use("/api", chatAdminRouter);
@@ -124,6 +127,7 @@ const server = app.listen(PORT, async () => {
     initQuoteServicesTable().catch((e) => console.error("[init] quote_services:", e)),
     initQuoteHistoryTable().catch((e) => console.error("[init] quote_history:", e)),
     initCalendarBookingPriceColumn().catch((e) => console.error("[init] calendar_booking_price:", e)),
+    initCalendarServicesTable().catch((e) => console.error("[init] calendar_services:", e)),
   ]);
 });
 

@@ -8,6 +8,7 @@ import { bookingDateRendererScript } from "./bookingDateRenderer";
 import { bookingTimeRendererScript } from "./bookingTimeRenderer";
 import { bookingSubmitHandlerScript } from "./bookingSubmitHandler";
 import { bookingSlotsLoaderScript } from "./bookingSlotsLoader";
+import { bookingServiceLoaderScript } from "./bookingServiceLoader";
 
 import { bookingIconsScript } from "../bookingIcons";
 export function renderBookingScript(config: BookingScriptConfig): string {
@@ -24,9 +25,10 @@ ${bookingDateRendererScript()}
 ${bookingTimeRendererScript()}
 ${bookingSubmitHandlerScript()}
 ${bookingSlotsLoaderScript()}
+${bookingServiceLoaderScript()}
 
 initStepNavigation();
 initSubmitHandler();
-loadSlots();
+loadServices();
 `;
 }

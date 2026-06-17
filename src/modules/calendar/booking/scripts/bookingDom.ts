@@ -1,8 +1,11 @@
 export function bookingDomScript(): string {
   return `
+const stepService = document.getElementById("stepService");
 const stepDate = document.getElementById("stepDate");
 const stepTime = document.getElementById("stepTime");
 const stepForm = document.getElementById("stepForm");
+const servicesContainer = document.getElementById("servicesContainer");
+const stepsTrack = document.getElementById("stepsTrack");
 
 const datesContainer = document.getElementById("datesContainer");
 const timesContainer = document.getElementById("timesContainer");

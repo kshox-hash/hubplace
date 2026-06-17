@@ -41,7 +41,7 @@ ${vm.styles}
     <p class="hero-sub">${vm.subtitle}</p>
   </section>
 
-  <div class="steps-track animate" style="animation-delay:.14s" id="stepsTrack">
+  <div class="steps-track animate" style="animation-delay:.14s;display:none" id="stepsTrack">
     <div class="step-node active" id="step-node-1">
       <div class="step-circle">1</div>
       <div class="step-label">Fecha</div>
@@ -58,7 +58,17 @@ ${vm.styles}
 
   <div id="mainContent" class="animate" style="animation-delay:.2s">
 
-    <div id="stepDate">
+    <div id="stepService">
+      <p class="sec-title">¿Qué servicio necesitás?</p>
+      <div id="servicesContainer">
+        <div class="loader-wrap">
+          <div class="spinner"></div>
+          <span>Cargando servicios…</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="stepDate" style="display:none">
       <p class="sec-title">Elige un día</p>
       <div class="card">
         <div class="card-pad" id="datesContainer">

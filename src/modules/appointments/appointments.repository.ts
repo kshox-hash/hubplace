@@ -155,6 +155,9 @@ export async function createCalendarBooking(input: {
   confirmationExpiresAt: Date;
   providerId?: string | null;
   paymentAmount?: number | null;
+  serviceId?: string | null;
+  serviceName?: string | null;
+  serviceColor?: string | null;
 }) {
   const result = await pool.query<CalendarBookingRow>(
     `
@@ -175,6 +178,9 @@ export async function createCalendarBooking(input: {
       confirmation_email_sent_at,
       expires_at,
       provider_id,
+      service_id,
+      service_name,
+      service_color,
       created_at,
       updated_at
     )
@@ -186,6 +192,7 @@ export async function createCalendarBooking(input: {
       $9, $10, $11, NOW(),
       NOW() + INTERVAL '45 minutes',
       $12,
+      $13, $14, $15,
       NOW(),
       NOW()
     )
@@ -204,6 +211,9 @@ export async function createCalendarBooking(input: {
       input.confirmationToken,
       input.confirmationExpiresAt,
       input.providerId || null,
+      input.serviceId || null,
+      input.serviceName || null,
+      input.serviceColor || null,
     ]
   );
 

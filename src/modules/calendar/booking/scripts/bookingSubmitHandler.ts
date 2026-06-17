@@ -1,5 +1,13 @@
 export function bookingSubmitHandlerScript(): string {
   return `
+function showSuccess(detail) {
+  mainContent.style.display = "none";
+  stepsTrack.style.display = "none";
+  successDetail.textContent = detail || "";
+  successScreen.style.display = "flex";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function initSubmitHandler() {
   btnSubmit.addEventListener("click", async () => {
     hideMessage();
@@ -36,66 +44,34 @@ function initSubmitHandler() {
     try {
       const bookingRes = await fetch(\`/api/public/\${PUBLIC_SLUG}/bookings\`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customer: {
-            name,
-            phone,
-            email,
-            notes
-          },
-          slot: {
-            date: selDate,
-            time: selTime
-          },
-          raw: {
-            submittedAtClient: new Date().toISOString()
-          }
+          customer: { name, phone, email, notes },
+          slot: { date: selDate, time: selTime },
+          serviceId: selServiceId || undefined,
+          raw: { submittedAtClient: new Date().toISOString() }
         })
       });
 
       const bookingData = await bookingRes.json();
 
       if (!bookingRes.ok) {
-        showMessage(
-          "error",
-          bookingData.message || "No se pudo realizar la reserva."
-        );
-
+        showMessage("error", bookingData.message || "No se pudo realizar la reserva.");
         setSubmitLoading(false);
         return;
       }
 
-      const bookingId = bookingData.booking && bookingData.booking.id;
-
-      if (!bookingId) {
-        showMessage("error", "No se pudo generar la reserva.");
-        setSubmitLoading(false);
+      // Paid booking — redirect to MercadoPago checkout
+      if (bookingData.checkoutUrl) {
+        window.location.href = bookingData.checkoutUrl;
         return;
       }
 
-      const paymentRes = await fetch(
-        \`/api/public/\${PUBLIC_SLUG}/bookings/\${bookingId}/pay\`,
-        {
-          method: "POST"
-        }
-      );
-
-      const paymentData = await paymentRes.json();
-
-      if (!paymentRes.ok || !paymentData.checkoutUrl) {
-        showMessage(
-          "error",
-          paymentData.message || "No se pudo generar el pago."
-        );
-
-        setSubmitLoading(false);
-        return;
-      }
-
-      window.location.href = paymentData.checkoutUrl;
+      // Free booking or no payment configured — show success
+      const serviceLabel = selServiceName ? selServiceName + " · " : "";
+      const dateLabel = selDate ? formatDisplayDate(selDate) : "";
+      const timeLabel = selTime ? "a las " + selTime : "";
+      showSuccess(serviceLabel + dateLabel + " " + timeLabel);
     } catch (_) {
       showMessage("error", "Ocurrió un error al enviar la reserva.");
       setSubmitLoading(false);

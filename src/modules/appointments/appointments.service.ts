@@ -145,6 +145,10 @@ export async function reserveCalendarSlot(input: {
   confirmationToken: string;
   confirmationExpiresAt: Date;
   providerId?: string | null;
+  serviceId?: string | null;
+  serviceName?: string | null;
+  serviceColor?: string | null;
+  servicePrice?: number | null;
 }) {
   const settings = await getCalendarSettings(input.userId);
 
@@ -186,6 +190,11 @@ export async function reserveCalendarSlot(input: {
 
   const endTime = addMinutes(input.startTime, duration);
 
+  // If a service was selected, its price takes priority over the calendar default price
+  const paymentAmount = input.servicePrice != null
+    ? input.servicePrice
+    : Number(settings.booking_price ?? 0);
+
   return createCalendarBooking({
     userId: input.userId,
     customerName: input.customerName,
@@ -198,6 +207,9 @@ export async function reserveCalendarSlot(input: {
     confirmationToken: input.confirmationToken,
     confirmationExpiresAt: input.confirmationExpiresAt,
     providerId: input.providerId,
-    paymentAmount: Number(settings.booking_price ?? 0),
+    paymentAmount,
+    serviceId: input.serviceId,
+    serviceName: input.serviceName,
+    serviceColor: input.serviceColor,
   });
 }
