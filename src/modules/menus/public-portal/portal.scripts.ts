@@ -56,17 +56,171 @@ function closePanel(id){
   if(el) el.classList.remove('open');
   if(ov) ov.classList.remove('open');
 }
-function openBookingPanel(){
-  var wrap=document.getElementById('bookingIframeWrap');
-  if(wrap&&!wrap.querySelector('iframe')){
-    var ifr=document.createElement('iframe');
-    ifr.src='/open/'+SLUG+'/reservas';
-    ifr.setAttribute('allow','payment');
-    wrap.appendChild(ifr);
-  }
-  openPanel('bookingPanel');
-}
 function openQuotePanel(){renderQPStep1();openPanel('quotePanel');}
+
+// ── Booking flow state ────────────────────────────────────────────────────────
+var bk={date:null,svc:null,time:null,step:null};
+
+function setBkHeader(title,showBack){
+  var t=document.getElementById('bkTitle');
+  var b=document.getElementById('bkBack');
+  if(t) t.textContent=title;
+  if(b) b.style.display=showBack?'flex':'none';
+}
+
+// Entry: click on a calendar day
+function openBookingFromDay(dateStr){
+  bk.date=dateStr; bk.svc=null; bk.time=null; bk.step='svc';
+  openPanel('bookingPanel');
+  renderBkSvcStep();
+}
+
+// Generic "Reservar" → go to Reservas tab (calendar is the entry)
+function openBookingPanel(){ showTab('reservas'); }
+
+function renderBkSvcStep(){
+  bk.step='svc';
+  var label=fmtDateLabel(bk.date);
+  setBkHeader(label,false);
+  var body=document.getElementById('bkBody'); if(!body) return;
+  if(!svcsLoaded){
+    body.innerHTML='<div class="bk-scroll"><div class="cal-loading"><div class="spinner"></div>Cargando…</div></div>';
+    ensureServices();
+    setTimeout(function(){if(svcsLoaded) renderBkSvcStep();},1200);
+    return;
+  }
+  var svcs=svcsCache;
+  if(!svcs.length){
+    body.innerHTML='<div class="bk-scroll"><div class="bk-empty">No hay servicios disponibles en este momento.</div></div>';
+    return;
+  }
+  var rows=svcs.map(function(s,i){
+    var color=s.color&&/^#[0-9a-fA-F]{6}$/.test(s.color)?s.color:CARD_PALETTES[i%CARD_PALETTES.length];
+    var price=s.price!=null?fmtPrice(Number(s.price)):'Consultar';
+    var dur=s.duration_minutes?s.duration_minutes+' min':'';
+    return '<div class="bk-svc-item" data-bk-svc-i="'+i+'">'
+      +'<div class="bk-svc-dot" style="background:'+color+'"></div>'
+      +'<div class="bk-svc-info"><div class="bk-svc-name">'+escH(s.name)+'</div>'
+      +(dur?'<div class="bk-svc-meta">'+escH(dur)+'</div>':'')
+      +'</div>'
+      +'<div class="bk-svc-price">'+escH(price)+'</div>'
+      +'<div class="bk-svc-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>'
+      +'</div>';
+  }).join('');
+  var dateBadge='<div class="bk-date-badge">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'
+    +escH(label)+'</div>';
+  body.innerHTML='<div class="bk-scroll">'+dateBadge
+    +'<div class="bk-sec-title">Elegí un servicio</div>'+rows+'</div>';
+}
+
+function renderBkTimeStep(){
+  bk.step='time';
+  setBkHeader(escH(bk.svc?bk.svc.name:'Horarios'),true);
+  var body=document.getElementById('bkBody'); if(!body) return;
+  var times=(bk.date&&calSlots[bk.date])||[];
+  var label=fmtDateLabel(bk.date);
+  var badge='<div class="bk-date-badge">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'
+    +escH(label)+'</div>';
+  if(!times.length){
+    body.innerHTML='<div class="bk-scroll">'+badge
+      +'<div class="bk-empty">No hay horarios disponibles para este día.<br><br>'
+      +'<button class="btn-primary" type="button" id="bkChangeDay" style="font-size:13px">Cambiar fecha</button></div></div>';
+    var cd=document.getElementById('bkChangeDay');
+    if(cd) cd.addEventListener('click',function(){closePanel('bookingPanel');showTab('reservas');});
+    return;
+  }
+  var chips=times.map(function(t){
+    return '<button class="bk-time-chip" type="button" data-bk-time="'+escH(t)+'">'+escH(t)+'</button>';
+  }).join('');
+  body.innerHTML='<div class="bk-scroll">'+badge
+    +'<div class="bk-sec-title">Elegí un horario</div>'
+    +'<div class="bk-times-grid">'+chips+'</div></div>';
+}
+
+function renderBkFormStep(){
+  bk.step='form';
+  setBkHeader('Tus datos',true);
+  var body=document.getElementById('bkBody'); if(!body) return;
+  var label=fmtDateLabel(bk.date);
+  var svcIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+  var calIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+  body.innerHTML='<div class="bk-scroll">'
+    +'<div class="bk-summary-card">'
+    +'<div class="bk-summary-row">'+svcIcon+escH(bk.svc?bk.svc.name:'')+'</div>'
+    +'<div class="bk-summary-row">'+calIcon+escH(label)+' — '+escH(bk.time||'')+'</div>'
+    +'</div>'
+    +'<div class="bk-inp-wrap"><div class="bk-inp-lbl">Nombre completo</div>'
+    +'<input class="bk-inp" id="bkName" type="text" placeholder="Tu nombre" autocomplete="name"></div>'
+    +'<div class="bk-inp-wrap"><div class="bk-inp-lbl">Teléfono</div>'
+    +'<input class="bk-inp" id="bkPhone" type="tel" placeholder="+54911..." autocomplete="tel"></div>'
+    +'<div class="bk-inp-wrap"><div class="bk-inp-lbl">Email</div>'
+    +'<input class="bk-inp" id="bkEmail" type="email" placeholder="tu@email.com" autocomplete="email"></div>'
+    +'<div id="bkFormErr" class="bk-inp-err" style="margin-bottom:10px"></div>'
+    +'<button class="btn-primary" type="button" id="bkSubmit" style="width:100%;font-size:14px">Confirmar reserva</button>'
+    +'</div>';
+  var btn=document.getElementById('bkSubmit');
+  if(btn) btn.addEventListener('click',submitBooking);
+}
+
+function submitBooking(){
+  var name=((document.getElementById('bkName')||{}).value||'').trim();
+  var phone=((document.getElementById('bkPhone')||{}).value||'').trim();
+  var email=((document.getElementById('bkEmail')||{}).value||'').trim();
+  var errEl=document.getElementById('bkFormErr');
+  if(!name||!phone||!email){if(errEl)errEl.textContent='Completá todos los campos.';return;}
+  if(errEl) errEl.textContent='';
+  var btn=document.getElementById('bkSubmit');
+  if(btn){btn.textContent='Enviando…';btn.disabled=true;}
+  fetch('/api/public/'+SLUG+'/bookings',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      serviceId:bk.svc?bk.svc.id:null,
+      slot:{date:bk.date,time:bk.time},
+      customer:{name:name,phone:phone,email:email}
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.ok||d.id||d.booking_id||d.bookingId) renderBkSuccess();
+    else{
+      if(errEl) errEl.textContent=d.message||'Error al confirmar. Intentá de nuevo.';
+      if(btn){btn.textContent='Confirmar reserva';btn.disabled=false;}
+    }
+  })
+  .catch(function(){
+    if(errEl) errEl.textContent='Error de conexión. Intentá de nuevo.';
+    if(btn){btn.textContent='Confirmar reserva';btn.disabled=false;}
+  });
+}
+
+function renderBkSuccess(){
+  bk.step='success';
+  setBkHeader('¡Confirmado!',false);
+  var body=document.getElementById('bkBody'); if(!body) return;
+  body.innerHTML='<div class="bk-success">'
+    +'<div class="bk-success-icon">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+    +'</div>'
+    +'<div class="bk-success-title">¡Reserva confirmada!</div>'
+    +'<div class="bk-success-sub">Tu turno quedó registrado.<br>Recibirás una confirmación a tu email.</div>'
+    +'<button class="btn-primary" type="button" id="bkDone" style="width:100%;margin-top:28px">Listo</button>'
+    +'</div>';
+  var done=document.getElementById('bkDone');
+  if(done) done.addEventListener('click',function(){closePanel('bookingPanel');});
+}
+
+function fmtDateLabel(dateStr){
+  if(!dateStr) return '';
+  var parts=dateStr.split('-');
+  if(parts.length!==3) return dateStr;
+  var d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+  var days=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  var ms=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return days[d.getDay()]+' '+d.getDate()+' de '+ms[d.getMonth()];
+}
 
 // ── click handler (safe for text nodes & SVG children) ────────────────────────
 document.addEventListener('click',function(e){
@@ -97,8 +251,30 @@ document.addEventListener('click',function(e){
     return;
   }
 
-  // close buttons
+  // close / back booking panel
   if(t.closest('#closeBooking')){ closePanel('bookingPanel'); return; }
+  if(t.closest('#bkBack')){
+    if(bk.step==='time') renderBkSvcStep();
+    else if(bk.step==='form') renderBkTimeStep();
+    else closePanel('bookingPanel');
+    return;
+  }
+
+  // booking panel step interactions
+  var svcItem=t.closest('[data-bk-svc-i]');
+  if(svcItem){
+    var idx=parseInt(svcItem.getAttribute('data-bk-svc-i')||'0',10);
+    bk.svc=svcsCache[idx]||null;
+    renderBkTimeStep();
+    return;
+  }
+  var timeChip=t.closest('[data-bk-time]');
+  if(timeChip){
+    bk.time=timeChip.getAttribute('data-bk-time');
+    renderBkFormStep();
+    return;
+  }
+
   if(t.closest('#closeQuote')){   closePanel('quotePanel');   return; }
   if(t.closest('#slideOverlay')){ closePanel('bookingPanel'); closePanel('quotePanel'); return; }
 });
@@ -144,7 +320,7 @@ function renderHomeGrid(svcs){
     var bg=s.color&&/^#[0-9a-fA-F]{6}$/.test(s.color)?s.color:CARD_PALETTES[i%CARD_PALETTES.length];
     var price=s.price!=null?fmtPrice(Number(s.price)):'Consultar';
     var dur=s.duration_minutes?s.duration_minutes+' min':'';
-    html+='<div class="proj-card" data-open-booking="1">'
+    html+='<div class="proj-card" data-action="reservas">'
       +'<div class="proj-card-top" style="background:'+escH(bg)+'">'
       +(dur?'<span class="proj-card-top-badge">'+escH(dur)+'</span>':'<span></span>')
       +'<span class="proj-card-price">'+escH(price)+'</span>'
@@ -155,7 +331,7 @@ function renderHomeGrid(svcs){
       +(dur?'<span class="proj-tag" style="background:var(--primary-dim);color:var(--primary)">'+escH(dur)+'</span>':'')
       +(Number(s.price)===0?'<span class="proj-tag" style="background:var(--green-dim);color:var(--green)">Gratis</span>':'')
       +'</div>'
-      +'<div class="proj-card-footer"><button class="proj-btn" type="button">Reservar</button></div>'
+      +'<div class="proj-card-footer"><button class="proj-btn" type="button" tabindex="-1">Ver disponibilidad</button></div>'
       +'</div></div>';
   });
   el.innerHTML=html;
@@ -165,8 +341,7 @@ function renderHomeGrid(svcs){
 function renderSvcRows(id,svcs){
   var el=document.getElementById(id);if(!el) return;
   if(!svcs.length){
-    el.innerHTML='<div class="svc-empty">No hay servicios configurados.<br>'
-      +'<button class="btn-primary" type="button" data-open-booking="1" style="margin-top:14px;font-size:13px">Reservar hora</button></div>';
+    el.innerHTML='<div class="svc-empty">No hay servicios configurados aún.</div>';
     return;
   }
   var html='';
@@ -174,7 +349,7 @@ function renderSvcRows(id,svcs){
     var color=s.color&&/^#[0-9a-fA-F]{6}$/.test(s.color)?s.color:'#5A67F2';
     var price=s.price!=null?fmtPrice(Number(s.price)):'Consultar';
     var dur=s.duration_minutes?s.duration_minutes+' min':'';
-    html+='<div class="svc-row" data-open-booking="1">'
+    html+='<div class="svc-row">'
       +'<div class="svc-dot" style="background:'+escH(color)+'"></div>'
       +'<div class="svc-body">'
       +'<div class="svc-name">'+escH(s.name)+'</div>'
@@ -311,9 +486,12 @@ function renderCalWidget(id){
       renderAllCals();
     });
   }
-  // Click on available day → open booking
+  // Click on available day → booking flow (day → svc → time → form)
   el.querySelectorAll('.cal-avail').forEach(function(cell){
-    cell.addEventListener('click',function(){openBookingPanel();});
+    cell.addEventListener('click',function(){
+      var dateStr=cell.getAttribute('data-cal-date');
+      if(dateStr) openBookingFromDay(dateStr);
+    });
   });
 }
 

@@ -167,12 +167,17 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
 
 <div class="slide-panel" id="bookingPanel">
   <div class="sp-hdr">
-    <span class="sp-title">Reservar hora</span>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="sp-back" id="bkBack" type="button" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="sp-title" id="bkTitle">Reservar hora</span>
+    </div>
     <button class="sp-close" id="closeBooking" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
-  <div class="booking-iframe-wrap" id="bookingIframeWrap"></div>
+  <div class="sp-body" id="bkBody"></div>
 </div>
 
 <div class="slide-panel" id="quotePanel">

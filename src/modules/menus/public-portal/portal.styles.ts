@@ -504,6 +504,69 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .cal-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .cal-loading{text-align:center;padding:24px 0;color:var(--dim);font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px}
 
+/* ── BOOKING FLOW INLINE ─────────────────────────────────────────────────── */
+.sp-back{
+  width:28px;height:28px;border-radius:8px;background:var(--bg);
+  border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .15s;-webkit-tap-highlight-color:transparent
+}
+.sp-back:hover{background:var(--primary-dim)}
+.sp-back svg{width:14px;height:14px;stroke:var(--soft);stroke-width:2.2}
+.bk-scroll{padding:16px 20px;overflow-y:auto;flex:1}
+.bk-date-badge{
+  display:inline-flex;align-items:center;gap:6px;background:var(--primary-dim);
+  color:var(--primary);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;
+  margin-bottom:18px
+}
+.bk-sec-title{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.bk-svc-item{
+  display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:12px;
+  background:var(--panel);border:1px solid var(--border);margin-bottom:8px;
+  cursor:pointer;transition:border-color .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent
+}
+.bk-svc-item:hover{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+.bk-svc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.bk-svc-info{flex:1}
+.bk-svc-name{font-size:14px;font-weight:600;color:var(--text)}
+.bk-svc-meta{font-size:11.5px;color:var(--soft);margin-top:1px}
+.bk-svc-price{font-size:13px;font-weight:700;color:var(--primary)}
+.bk-svc-arr svg{width:14px;height:14px;stroke:var(--dim)}
+.bk-times-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.bk-time-chip{
+  padding:10px 4px;border-radius:10px;background:var(--panel);border:1.5px solid var(--border);
+  font-size:13px;font-weight:600;color:var(--text);cursor:pointer;text-align:center;
+  transition:border-color .15s,background .15s,color .15s;-webkit-tap-highlight-color:transparent
+}
+.bk-time-chip:hover,.bk-time-chip.sel{
+  border-color:var(--primary);background:var(--primary-dim);color:var(--primary)
+}
+.bk-summary-card{
+  background:var(--primary-dim);border-radius:12px;padding:14px;margin-bottom:20px;
+  border:1px solid var(--primary-glow)
+}
+.bk-summary-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--primary);font-weight:600;margin-bottom:4px}
+.bk-summary-row:last-child{margin-bottom:0}
+.bk-summary-row svg{width:13px;height:13px;stroke:var(--primary);flex-shrink:0}
+.bk-inp-wrap{margin-bottom:12px}
+.bk-inp-lbl{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.bk-inp{
+  width:100%;padding:10px 12px;border-radius:10px;
+  border:1.5px solid var(--border);background:var(--panel);
+  font-size:14px;color:var(--text);outline:none;
+  transition:border-color .15s;font-family:inherit
+}
+.bk-inp:focus{border-color:var(--primary)}
+.bk-inp-err{color:#ef4444;font-size:11.5px;margin-top:3px}
+.bk-success{text-align:center;padding:48px 20px}
+.bk-success-icon{
+  width:64px;height:64px;background:rgba(34,197,94,.12);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 18px
+}
+.bk-success-icon svg{width:30px;height:30px;stroke:#22c55e;stroke-width:2.5;fill:none}
+.bk-success-title{font-size:19px;font-weight:700;color:var(--text);margin-bottom:8px}
+.bk-success-sub{font-size:13.5px;color:var(--soft);line-height:1.5}
+.bk-empty{text-align:center;padding:32px 16px;color:var(--dim);font-size:13.5px;line-height:1.5}
+
 /* Mobile perfil view (in home panel) */
 .mobile-profile{
   background:var(--panel);border-radius:var(--r);border:1px solid var(--border);
