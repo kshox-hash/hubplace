@@ -36,16 +36,25 @@ function formatPrice(price: number): string {
 }
 
 const MODULE_ICONS: Record<string, string> = {
-  reservas: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  reservas:  `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
   cotizador: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
 };
 const DEFAULT_MOD_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`;
-const CHEVRON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
 
 const MOD_ACTION: Record<string, string> = {
   reservas:  "reservas",
   cotizador: "cotizador",
 };
+
+const MODULE_GRADIENTS: Record<string, [string, string]> = {
+  reservas:  ["#ff4d6d", "#c9184a"],
+  cotizador: ["#4361ee", "#4cc9f0"],
+};
+const FALLBACK_GRADIENTS: [string, string][] = [
+  ["#7209b7", "#b5179e"],
+  ["#06d6a0", "#118ab2"],
+  ["#f72585", "#7209b7"],
+];
 
 export function renderPortalHtml(data: PortalViewData): string {
   const {
@@ -78,18 +87,19 @@ export function renderPortalHtml(data: PortalViewData): string {
     : `<div class="hero-avatar hero-avatar-txt">${initials}</div>`;
 
   // ── Module cards ───────────────────────────────────────────────────────────
-  const moduleCardsHtml = enabledModules.map(m => {
+  const moduleCardsHtml = enabledModules.map((m, i) => {
     const icon   = MODULE_ICONS[m.code] ?? DEFAULT_MOD_ICON;
     const action = MOD_ACTION[m.code]   ?? m.code;
+    const [c1, c2] = MODULE_GRADIENTS[m.code] ?? FALLBACK_GRADIENTS[i % FALLBACK_GRADIENTS.length];
+    const grad = `linear-gradient(135deg,${c1},${c2})`;
     return `
-    <button class="mod-card" data-action="${escapeHtml(action)}" type="button">
-      <div class="mod-icon-wrap">${icon}</div>
-      <div class="mod-body">
-        <div class="mod-title">${escapeHtml(m.title)}</div>
-        <div class="mod-desc">${escapeHtml(m.description)}</div>
-      </div>
-      <div class="mod-arrow">${CHEVRON}</div>
-    </button>`;
+    <div class="mod-card-wrap" style="background:${grad}" data-action="${escapeHtml(action)}">
+      <button class="mod-card-inner" type="button">
+        <div class="mod-card-icon">${icon}</div>
+        <div class="mod-card-title">${escapeHtml(m.title)}</div>
+        <div class="mod-card-desc">${escapeHtml(m.description)}</div>
+      </button>
+    </div>`;
   }).join("");
 
   // ── Contact rows ───────────────────────────────────────────────────────────
@@ -172,9 +182,9 @@ export function renderPortalHtml(data: PortalViewData): string {
 <div class="page">
 
   ${moduleCardsHtml ? `
-  <div class="section-card">
+  <div class="section-card mod-section">
     <h2 class="section-title">¿Cómo podemos ayudarte?</h2>
-    <div class="mod-list">${moduleCardsHtml}</div>
+    <div class="mod-grid">${moduleCardsHtml}</div>
   </div>` : ""}
 
   ${contactBlock ? `

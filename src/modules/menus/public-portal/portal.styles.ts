@@ -36,18 +36,18 @@ html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'In
 .section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:22px 20px}
 .section-title{font-size:17px;font-weight:800;letter-spacing:-.03em;color:var(--text);margin-bottom:14px}
 
-/* ── MODULE CARDS ─────────────────────────────────────── */
-.mod-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.mod-card{width:100%;background:var(--white);border:none;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;font-family:inherit;text-align:left;transition:background .15s;-webkit-tap-highlight-color:transparent}
-.mod-card:hover{background:#f8fafc}
-.mod-card:active{background:#f1f5f9}
-.mod-icon-wrap{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.mod-icon-wrap svg{stroke:#fff;stroke-width:2}
-.mod-body{flex:1;min-width:0}
-.mod-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:2px}
-.mod-desc{font-size:12px;color:var(--muted);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mod-arrow{flex-shrink:0;opacity:.35}
-.mod-arrow svg{stroke:var(--text);display:block}
+/* ── MODULE SECTION (dark) ────────────────────────────── */
+.mod-section{background:#0d0d0d !important;border-color:#1e1e1e !important}
+.mod-section .section-title{color:#fff}
+.mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mod-card-wrap{position:relative;border-radius:20px;padding:1.5px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mod-card-wrap::before{content:'';position:absolute;inset:-8px;border-radius:28px;background:inherit;filter:blur(16px);opacity:.5;z-index:-1;pointer-events:none}
+.mod-card-inner{width:100%;background:#141414;border-radius:19px;padding:18px 14px 16px;display:flex;flex-direction:column;gap:0;border:none;font-family:inherit;text-align:left;cursor:pointer;min-height:168px;-webkit-tap-highlight-color:transparent;transition:opacity .15s}
+.mod-card-inner:active{opacity:.7}
+.mod-card-icon{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin-bottom:auto;flex-shrink:0}
+.mod-card-icon svg{stroke:#fff;stroke-width:2;flex-shrink:0}
+.mod-card-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.03em;margin-bottom:6px;margin-top:14px}
+.mod-card-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5}
 
 /* ── CONTACT ──────────────────────────────────────────── */
 .contact-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:12px;overflow:hidden}
