@@ -694,5 +694,61 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 }
 .btn-outline:hover{background:var(--primary-dim);border-color:var(--primary-glow);color:var(--primary)}
 .btn-outline svg{width:14px;height:14px;stroke-width:1.75}
+
+/* ── PORTAL GATE ─────────────────────────────────────────────────────── */
+.portal-gate{
+  position:fixed;inset:0;z-index:9999;
+  background:#EEF2F7;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .35s ease;
+}
+.gate-card{
+  background:#fff;border-radius:24px;
+  border:1px solid var(--border);
+  box-shadow:0 8px 40px rgba(0,0,0,.10);
+  padding:40px 36px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  width:min(88vw,360px);text-align:center;
+}
+.gate-av{
+  width:64px;height:64px;border-radius:18px;
+  background:var(--primary);color:#fff;
+  font-size:22px;font-weight:800;letter-spacing:-.03em;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:6px;
+}
+.gate-biz{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.04em}
+.gate-sub{font-size:13px;color:var(--soft);margin-bottom:8px}
+.gate-google-wrap{margin-top:4px}
+
+/* ── IR USER CHIP (icon rail bottom) ─────────────────────────────────── */
+.ir-user-chip{
+  margin-top:auto;padding:10px 8px 14px;
+  flex-direction:column;align-items:center;gap:5px;
+  border-top:1px solid var(--border);width:100%;
+}
+.ir-user-av{display:flex;align-items:center;justify-content:center}
+.ir-user-email{
+  font-size:9.5px;color:var(--dim);font-weight:500;
+  max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;
+}
+.ir-user-out{
+  font-size:10px;color:var(--soft);background:none;border:none;
+  cursor:pointer;padding:2px 6px;border-radius:6px;transition:background .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.ir-user-out:hover{background:var(--bg);color:var(--text)}
+
+/* ── MOBILE HEADER USER ───────────────────────────────────────────────── */
+.mhdr-user{
+  margin-left:auto;display:flex;align-items:center;gap:8px;
+}
+.mhdr-user-av{display:flex;align-items:center;justify-content:center}
+.mhdr-user-out{
+  font-size:11px;color:var(--soft);background:none;
+  border:1px solid var(--border);border-radius:8px;
+  padding:3px 9px;cursor:pointer;font-family:inherit;font-weight:500;
+  -webkit-tap-highlight-color:transparent;
+}
 `;
 }

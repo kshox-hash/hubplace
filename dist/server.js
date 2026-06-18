@@ -59,7 +59,10 @@ app.use((0, helmet_1.default)({
     contentSecurityPolicy: {
         directives: {
             ...helmet_1.default.contentSecurityPolicy.getDefaultDirectives(),
-            "script-src": ["'self'", "'unsafe-inline'"],
+            "script-src": ["'self'", "'unsafe-inline'", "https://accounts.google.com"],
+            "frame-src": ["https://accounts.google.com"],
+            "connect-src": ["'self'", "https://accounts.google.com"],
+            "img-src": ["'self'", "data:", "https://lh3.googleusercontent.com"],
         },
     },
 }));

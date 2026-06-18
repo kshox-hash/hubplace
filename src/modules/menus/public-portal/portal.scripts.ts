@@ -2,12 +2,12 @@ type ProductData = { id: string|number; name: string; price: number; description
 
 export function portalScripts(
   slug: string,
-  _bizName: string,
+  bizName: string,
   userId: number,
   _modules: unknown[],
   products: ProductData[],
   _bizInfo: unknown,
-  _initials: string,
+  initials: string,
   googleClientId: string | null,
 ): string {
   const safeProducts = products.map(p => ({
@@ -17,11 +17,17 @@ export function portalScripts(
     description: p.description || "",
   }));
 
+  const safeBizName   = bizName.replace(/`/g, "'");
+  const safeInitials  = initials.replace(/`/g, "'");
+
   return `
 var SLUG=${JSON.stringify(slug)};
 var USER_ID=${JSON.stringify(userId)};
 var PRODUCTS=${JSON.stringify(safeProducts)};
 var GOOGLE_CLIENT_ID=${JSON.stringify(googleClientId || '')};
+var BIZ_NAME=${JSON.stringify(safeBizName)};
+var BIZ_INITIALS=${JSON.stringify(safeInitials)};
+var PGU_KEY='pgPortalUser_'+SLUG;
 var TABS=['chat','reservas','nosotros','cotizar','resenas'];
 var svcsLoaded=false;
 var svcsCache=[];
@@ -32,6 +38,75 @@ var portalGoogleUser=null; // {name,email,picture,credential}
 // ── helpers ───────────────────────────────────────────────────────────────────
 function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtPrice(n){if(n===0)return 'Gratis';return '$'+Number(n||0).toLocaleString('es-CL');}
+
+// ── gate (login screen) ───────────────────────────────────────────────────────
+function showGate(){
+  var g=document.getElementById('portalGate');
+  if(g) g.style.display='flex';
+  if(GOOGLE_CLIENT_ID){
+    function tryRenderGateBtn(){
+      if(window.google && window.google.accounts){
+        window.google.accounts.id.initialize({
+          client_id:GOOGLE_CLIENT_ID,
+          callback:handleGoogleSignIn,
+          auto_select:false
+        });
+        var el=document.getElementById('gateGoogleBtn');
+        if(el) window.google.accounts.id.renderButton(el,{
+          type:'standard',theme:'outline',size:'large',
+          text:'signin_with',shape:'rectangular',width:260
+        });
+      } else {
+        setTimeout(tryRenderGateBtn,300);
+      }
+    }
+    tryRenderGateBtn();
+  }
+}
+
+function hideGate(){
+  var g=document.getElementById('portalGate');
+  if(g){g.style.opacity='0';g.style.pointerEvents='none';setTimeout(function(){g.style.display='none';g.style.opacity='';},350);}
+}
+
+function renderUserChip(user){
+  // desktop icon rail chip
+  var chip=document.getElementById('irUserChip');
+  var avEl=document.getElementById('irUserAv');
+  var emailEl=document.getElementById('irUserEmail');
+  if(chip && avEl && emailEl){
+    avEl.innerHTML=user.picture
+      ?'<img src="'+escH(user.picture)+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover" referrerpolicy="no-referrer">'
+      :'<div style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff">'+escH((user.name||'?').charAt(0).toUpperCase())+'</div>';
+    emailEl.textContent=user.email||user.name||'';
+    chip.style.display='flex';
+  }
+  // mobile header chip
+  var mhdr=document.getElementById('mhdrUser');
+  var mhdrAv=document.getElementById('mhdrUserAv');
+  if(mhdr && mhdrAv){
+    mhdrAv.innerHTML=user.picture
+      ?'<img src="'+escH(user.picture)+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover" referrerpolicy="no-referrer">'
+      :'<div style="width:28px;height:28px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">'+escH((user.name||'?').charAt(0).toUpperCase())+'</div>';
+    mhdr.style.display='flex';
+  }
+  // wire logout buttons
+  ['irUserOut','mhdrUserOut'].forEach(function(id){
+    var btn=document.getElementById(id);
+    if(btn) btn.onclick=signOut;
+  });
+}
+
+function signOut(){
+  portalGoogleUser=null;
+  try{localStorage.removeItem(PGU_KEY);}catch(e){}
+  if(window.google && window.google.accounts) window.google.accounts.id.disableAutoSelect();
+  var chip=document.getElementById('irUserChip');
+  if(chip) chip.style.display='none';
+  var mhdr=document.getElementById('mhdrUser');
+  if(mhdr) mhdr.style.display='none';
+  showGate();
+}
 
 // ── tab switching ─────────────────────────────────────────────────────────────
 function setActive(t){
@@ -894,7 +969,6 @@ var rvRating=0;
 
 function handleGoogleSignIn(response){
   if(!response||!response.credential) return;
-  // decode payload (no verify needed — backend verifies on submit)
   try{
     var parts=response.credential.split('.');
     var payload=JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
@@ -904,8 +978,14 @@ function handleGoogleSignIn(response){
       picture:    payload.picture||'',
       credential: response.credential
     };
+    try{localStorage.setItem(PGU_KEY,JSON.stringify({
+      name:portalGoogleUser.name,
+      email:portalGoogleUser.email,
+      picture:portalGoogleUser.picture
+    }));}catch(e){}
+    hideGate();
+    renderUserChip(portalGoogleUser);
   }catch(e){ portalGoogleUser=null; }
-  renderReviewForm();
 }
 
 function openReviewPanel(){
@@ -1030,20 +1110,37 @@ function submitReview(){
   loadProviders();
   loadCalendar();
   ensureReviews();
-  if(GOOGLE_CLIENT_ID){
-    function tryInitGoogle(){
-      if(window.google && window.google.accounts){
-        window.google.accounts.id.initialize({
-          client_id:GOOGLE_CLIENT_ID,
-          callback:handleGoogleSignIn,
-          auto_select:false
-        });
-      } else {
-        setTimeout(tryInitGoogle,300);
+
+  if(!GOOGLE_CLIENT_ID){
+    // sin Google configurado — portal abierto sin login
+    hideGate();
+    return;
+  }
+
+  // intentar restaurar sesión desde localStorage
+  try{
+    var stored=localStorage.getItem(PGU_KEY);
+    if(stored){
+      var parsed=JSON.parse(stored);
+      if(parsed && parsed.email){
+        portalGoogleUser={name:parsed.name||'',email:parsed.email,picture:parsed.picture||'',credential:null};
+        hideGate();
+        renderUserChip(portalGoogleUser);
+        // inicializar GIS en background para renovar credential silenciosamente
+        function tryInitSilent(){
+          if(window.google && window.google.accounts){
+            window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleSignIn,auto_select:true});
+            window.google.accounts.id.prompt(function(n){void n;});
+          } else { setTimeout(tryInitSilent,400); }
+        }
+        tryInitSilent();
+        return;
       }
     }
-    tryInitGoogle();
-  }
+  }catch(e){}
+
+  // sin sesión guardada — mostrar gate
+  showGate();
 })();
 `;
 }

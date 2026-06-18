@@ -76,6 +76,16 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
 </head>
 <body>
 
+<!-- LOGIN GATE -->
+<div id="portalGate" class="portal-gate">
+  <div class="gate-card">
+    <div class="gate-av">${initials}</div>
+    <div class="gate-biz">${s.name}</div>
+    <div class="gate-sub">Iniciá sesión para continuar</div>
+    <div id="gateGoogleBtn" class="gate-google-wrap"></div>
+  </div>
+</div>
+
 <!-- ICON RAIL -->
 <nav class="icon-rail">
   <div class="ir-av">${initials}</div>
@@ -84,6 +94,11 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
   <button class="ir-btn" data-tab="nosotros" type="button">${S_PROD}<span class="ir-lbl">Productos</span></button>
   <button class="ir-btn" data-tab="cotizar" type="button">${S_COT}<span class="ir-lbl">Cotizar</span></button>
   <button class="ir-btn" data-tab="resenas" type="button">${S_STAR}<span class="ir-lbl">Reseñas</span></button>
+  <div id="irUserChip" class="ir-user-chip" style="display:none">
+    <div id="irUserAv" class="ir-user-av"></div>
+    <div id="irUserEmail" class="ir-user-email"></div>
+    <button id="irUserOut" class="ir-user-out" type="button">Salir</button>
+  </div>
 </nav>
 
 <div class="portal-main">
@@ -148,6 +163,10 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
   <div class="mhdr-av">${initials}</div>
   <div class="mhdr-name">${s.name}</div>
   <span class="mhdr-badge">En línea</span>
+  <div id="mhdrUser" class="mhdr-user" style="display:none">
+    <div id="mhdrUserAv" class="mhdr-user-av"></div>
+    <button id="mhdrUserOut" class="mhdr-user-out" type="button">Salir</button>
+  </div>
 </header>
 
 <!-- MOBILE BOTTOM NAV -->
