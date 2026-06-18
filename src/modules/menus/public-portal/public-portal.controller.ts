@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { getSlugByValueService } from "../../slug/slug.service";
 import { quoteHtml } from "../../quotes/quote-html";
 import { getProductsRepository, getActiveProductsRepository } from "../../quotes/products/products.repository";
@@ -160,6 +161,37 @@ export const publicPortalController = {
       return res.json({ ok: true });
     } catch (e: any) {
       return res.status(500).json({ ok: false, message: e.message });
+    }
+  },
+
+  async portalSignIn(req: Request, res: Response): Promise<Response> {
+    try {
+      const { googleCredential } = req.body || {};
+      if (!googleCredential) {
+        return res.status(400).json({ ok: false, message: "Credencial requerida." });
+      }
+      if (!process.env.GOOGLE_CLIENT_ID) {
+        return res.status(500).json({ ok: false, message: "Google auth no configurado." });
+      }
+
+      const ticket = await googleClient.verifyIdToken({
+        idToken: googleCredential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      if (!payload?.email) {
+        return res.status(401).json({ ok: false, message: "Token inválido." });
+      }
+
+      const token = jwt.sign(
+        { email: payload.email, name: payload.name ?? "", picture: payload.picture ?? "" },
+        process.env.JWT_SECRET!,
+        { expiresIn: "7d", issuer: "portal" },
+      );
+
+      return res.json({ ok: true, token });
+    } catch {
+      return res.status(401).json({ ok: false, message: "Error de autenticación." });
     }
   },
 };

@@ -34,10 +34,22 @@ var svcsCache=[];
 var QCart={};
 var reviewsLoaded=false;
 var portalGoogleUser=null; // {name,email,picture,credential}
+var portalToken=null;
+var PGT_KEY='pgPortalToken_'+SLUG;
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtPrice(n){if(n===0)return 'Gratis';return '$'+Number(n||0).toLocaleString('es-CL');}
+function pfetch(url,opts){
+  opts=opts||{};
+  if(portalToken){
+    opts.headers=Object.assign({},opts.headers||{},{'Authorization':'Bearer '+portalToken});
+  }
+  return fetch(url,opts).then(function(r){
+    if(r.status===401){signOut();throw new Error('session_expired');}
+    return r;
+  });
+}
 
 // ── gate (login screen) ───────────────────────────────────────────────────────
 function showGate(){
@@ -149,7 +161,7 @@ var providersLoaded=false;
 
 function loadProviders(){
   if(providersLoaded) return;
-  fetch('/api/public/'+SLUG+'/providers')
+  pfetch('/api/public/'+SLUG+'/providers')
     .then(function(r){return r.json();})
     .then(function(d){
       providersLoaded=true;
@@ -304,7 +316,7 @@ function submitBooking(){
   if(errEl) errEl.textContent='';
   var btn=document.getElementById('bkSubmit');
   if(btn){btn.textContent='Enviando…';btn.disabled=true;}
-  fetch('/api/public/'+SLUG+'/bookings',{
+  pfetch('/api/public/'+SLUG+'/bookings',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
@@ -455,7 +467,7 @@ function ensureServices(){
 }
 
 function loadServices(){
-  fetch('/api/public/'+SLUG+'/booking-services')
+  pfetch('/api/public/'+SLUG+'/booking-services')
     .then(function(r){return r.json();})
     .then(function(d){
       var list=Array.isArray(d)?d:Array.isArray(d.services)?d.services:[];
@@ -573,7 +585,7 @@ var DAYS_SHORT=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 
 function loadCalendar(){
   if(calLoaded){renderAllCals();return;}
-  fetch('/api/public/'+SLUG+'/slots')
+  pfetch('/api/public/'+SLUG+'/slots')
     .then(function(r){return r.json();})
     .then(function(data){
       calLoaded=true;calSlots={};
@@ -783,7 +795,7 @@ function renderQPStep2(){
     if(!name||!phone){errEl.textContent='Nombre y teléfono son obligatorios.';errEl.style.display='block';return;}
     errEl.style.display='none';sendBtn.disabled=true;sendBtn.textContent='Enviando...';
     var items=PRODUCTS.filter(function(p){return (QCart[p.id]||0)>0;}).map(function(p){return {productId:p.id,quantity:QCart[p.id]};});
-    fetch('/shop/'+SLUG+'/quotes/submit',{method:'POST',headers:{'Content-Type':'application/json'},
+    pfetch('/shop/'+SLUG+'/quotes/submit',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({customer:{name:name,phone:phone,email:email||'',message:''},items:items})})
     .then(function(r){return r.json();})
     .then(function(d){
@@ -821,7 +833,7 @@ function renderStars(avg){
 function ensureReviews(){
   if(reviewsLoaded) return;
   reviewsLoaded=true;
-  fetch('/public/reviews/'+USER_ID)
+  pfetch('/api/public/reviews/'+USER_ID)
     .then(function(r){return r.json();})
     .then(function(data){
       renderReviewsTab(data);
@@ -969,23 +981,28 @@ var rvRating=0;
 
 function handleGoogleSignIn(response){
   if(!response||!response.credential) return;
-  try{
-    var parts=response.credential.split('.');
-    var payload=JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
-    portalGoogleUser={
-      name:       payload.name||'',
-      email:      payload.email||'',
-      picture:    payload.picture||'',
-      credential: response.credential
-    };
-    try{localStorage.setItem(PGU_KEY,JSON.stringify({
-      name:portalGoogleUser.name,
-      email:portalGoogleUser.email,
-      picture:portalGoogleUser.picture
-    }));}catch(e){}
+  fetch('/api/public/'+SLUG+'/auth',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({googleCredential:response.credential})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(!d.ok||!d.token) return; // auth falló, gate queda visible
+    try{
+      var parts=response.credential.split('.');
+      var pl=JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+      portalGoogleUser={name:pl.name||'',email:pl.email||'',picture:pl.picture||'',credential:response.credential};
+    }catch(e){ portalGoogleUser={name:d.name||'',email:d.email||'',picture:'',credential:null}; }
+    portalToken=d.token;
+    try{
+      localStorage.setItem(PGU_KEY,JSON.stringify({name:portalGoogleUser.name,email:portalGoogleUser.email,picture:portalGoogleUser.picture}));
+      localStorage.setItem(PGT_KEY,d.token);
+    }catch(e){}
     hideGate();
     renderUserChip(portalGoogleUser);
-  }catch(e){ portalGoogleUser=null; }
+  })
+  .catch(function(){}); // error de red — gate queda visible
 }
 
 function openReviewPanel(){
@@ -1071,7 +1088,7 @@ function submitReview(){
   var comment=commentEl?(commentEl.value||'').trim():'';
   var btn=document.getElementById('rvSubmit');
   if(btn){btn.textContent='Enviando…';btn.disabled=true;}
-  fetch('/api/public/'+SLUG+'/reviews',{
+  pfetch('/api/public/'+SLUG+'/reviews',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
