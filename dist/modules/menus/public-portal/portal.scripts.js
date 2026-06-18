@@ -735,25 +735,41 @@ function ensureReviews(){
     .catch(function(){
       var el=document.getElementById('reviewsContent');
       if(el) el.innerHTML='<div class="bk-empty">No se pudieron cargar las reseñas.</div>';
+      var inb=document.getElementById('homeInbox');
+      if(inb) inb.innerHTML='<div class="inbox-empty">No se pudieron cargar las reseñas.</div>';
+      var inbM=document.getElementById('homeInboxMobile');
+      if(inbM) inbM.innerHTML='<div class="inbox-empty">No se pudieron cargar las reseñas.</div>';
     });
 }
 
 var INBOX_COLORS=['#5A67F2','#F97316','#22C55E','#EC4899','#14B8A6','#8B5CF6','#F59E0B','#EF4444'];
 
 function renderHomeInbox(data){
-  var el=document.getElementById('homeInbox'); if(!el) return;
+  renderInboxCard('homeInbox',data);
+  renderInboxCard('homeInboxMobile',data);
+}
+function renderInboxCard(id,data){
+  var el=document.getElementById(id); if(!el) return;
   var reviews=(data&&data.reviews)||[];
   var summary=(data&&data.summary)||{};
+  var avg=parseFloat(summary.average||'0');
   var total=parseInt(summary.total||'0',10);
   if(!reviews.length){
-    el.innerHTML='<div class="inbox-empty">Aún no hay reseñas de clientes.</div>';
+    el.innerHTML='<div class="inbox-empty" style="padding:32px 20px">'
+      +'<div style="font-size:28px;margin-bottom:8px">💬</div>'
+      +'<div style="font-size:13px;font-weight:600;color:var(--soft);margin-bottom:4px">Sin reseñas aún</div>'
+      +'<div style="font-size:12px;color:var(--dim)">Tus clientes podrán dejarte opiniones pronto.</div>'
+      +'</div>';
     return;
   }
-  var hdr='<div class="inbox-hdr">'
-    +'<span class="inbox-hdr-title">Opiniones</span>'
-    +(total?'<span class="inbox-hdr-count">'+total+'</span>':'')
-    +'</div>';
-  var items=reviews.slice(0,5).map(function(r,i){
+  var avgBar=avg?'<div style="display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--border-inner)">'
+    +'<span style="font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.04em">'+avg.toFixed(1)+'</span>'
+    +'<div>'
+    +'<div style="font-size:12px;color:#F59E0B;letter-spacing:1px">'+renderStars(avg)+'</div>'
+    +'<div style="font-size:10.5px;color:var(--dim);margin-top:1px">'+total+' reseña'+(total!==1?'s':'')+'</div>'
+    +'</div>'
+    +'</div>':'';
+  var items=reviews.slice(0,4).map(function(r,i){
     var name=r.client_name||'Cliente';
     var initLetter=name.trim().charAt(0).toUpperCase()||'?';
     var color=INBOX_COLORS[i%INBOX_COLORS.length];
@@ -772,7 +788,7 @@ function renderHomeInbox(data){
       +'</div>'
       +'</div>';
   }).join('');
-  el.innerHTML=hdr+items;
+  el.innerHTML=avgBar+items;
 }
 
 function updateProfileRating(data){

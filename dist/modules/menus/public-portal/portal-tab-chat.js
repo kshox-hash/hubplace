@@ -33,6 +33,13 @@ function chatTabHtml(d) {
   <div class="sec-hdr"><span class="sec-title">Servicios</span></div>
   <div class="svc-list-full" id="mobileServiceList">
     <div class="svc-empty"><div class="spinner" style="margin:0 auto 8px"></div>Cargando servicios…</div>
+  </div>
+  <div class="sec-hdr" style="margin-top:24px">
+    <span class="sec-title">Opiniones</span>
+    <button class="sec-link" type="button" data-action="resenas">Ver todas</button>
+  </div>
+  <div class="inbox-card" id="homeInboxMobile">
+    <div class="inbox-empty"><div class="spinner" style="margin:0 auto 8px"></div>Cargando…</div>
   </div>`;
     const desktopHome = `
   ${d.welcome ? `<div class="home-welcome-msg">👋 ${d.welcome}</div>` : ""}

@@ -141,7 +141,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
     background:var(--panel);
     border-right:1px solid var(--border);
     z-index:200;overflow-y:auto;overflow-x:hidden;
-    scrollbar-width:none
+    scrollbar-width:none;
+    box-shadow:none
   }
   .profile-rail::-webkit-scrollbar{display:none}
 
@@ -156,7 +157,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
     background:linear-gradient(135deg,var(--primary),#93C5FD);
     display:flex;align-items:center;justify-content:center;
     font-size:22px;font-weight:800;color:#fff;user-select:none;letter-spacing:-.03em;
-    box-shadow:0 8px 24px var(--primary-glow)
+    box-shadow:none
   }
   .pr-name{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.04em;margin-bottom:2px}
   .pr-role{font-size:12px;color:var(--soft);margin-bottom:12px;line-height:1.4}
