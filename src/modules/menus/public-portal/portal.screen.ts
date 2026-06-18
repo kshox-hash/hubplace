@@ -5,6 +5,7 @@ import { chatTabHtml }      from "./portal-tab-chat";
 import { reservasTabHtml }  from "./portal-tab-reservas";
 import { serviciosTabHtml } from "./portal-tab-servicios";
 import { resenasTabHtml }   from "./portal-tab-resenas";
+import { nosotrosTabHtml }  from "./portal-tab-nosotros";
 import { MenuModuleItem }   from "../user-modules.repository";
 
 export type PortalViewData = {
@@ -51,68 +52,6 @@ function prRow(icon: string, label: string, val: string, badge?: string): string
     </div>
   </div>`;
 }
-
-// ── TARJETAS KANBAN ────────────────────────────────────────────────────────────
-
-const CARD_PALETTES = [
-  { bg: "#FFF0E6", accent: "#F97316", accentDim: "#FED7AA", accentText: "#9A3412" },
-  { bg: "#EFF6FF", accent: "#3B82F6", accentDim: "#BFDBFE", accentText: "#1E40AF" },
-  { bg: "#F0FDF4", accent: "#22C55E", accentDim: "#BBF7D0", accentText: "#166534" },
-  { bg: "#F5F3FF", accent: "#8B5CF6", accentDim: "#DDD6FE", accentText: "#4C1D95" },
-  { bg: "#FDF2F8", accent: "#EC4899", accentDim: "#FBCFE8", accentText: "#831843" },
-  { bg: "#FFFBEB", accent: "#F59E0B", accentDim: "#FDE68A", accentText: "#78350F" },
-];
-
-const STATUS_LABELS = ["Disponible", "Popular", "Destacado", "Nuevo", "Top ventas", "Recomendado"];
-const DATE_LABELS   = ["Hoy", "Hace 2 días", "Hace 3 días", "Hace 5 días", "Hace 7 días", "Hace 14 días"];
-
-function formatPrice(price: number): string {
-  return price.toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
-}
-
-function buildProductCard(product: { name: string; price: number; description?: string|null }, index: number): string {
-  const p      = CARD_PALETTES[index % CARD_PALETTES.length];
-  const status = STATUS_LABELS[index % STATUS_LABELS.length];
-  const date   = DATE_LABELS[index % DATE_LABELS.length];
-  const name   = escapeHtml(product.name);
-  const desc   = product.description ? escapeHtml(product.description) : null;
-
-  return `<div style="background:${p.bg};border-radius:18px;border:1.5px solid ${p.accentDim};overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:box-shadow .2s,transform .2s" onmouseenter="this.style.boxShadow='0 8px 28px rgba(0,0,0,.12)';this.style.transform='translateY(-3px)'" onmouseleave="this.style.boxShadow='0 2px 12px rgba(0,0,0,.06)';this.style.transform='none'">
-  <div style="padding:14px 15px 8px;display:flex;align-items:center;justify-content:space-between">
-    <span style="font-size:10.5px;font-weight:600;color:${p.accentText};opacity:.75;letter-spacing:.02em">${date}</span>
-    <div style="width:9px;height:9px;border-radius:50%;background:${p.accent};opacity:.85"></div>
-  </div>
-  <div style="padding:2px 15px 18px;flex:1">
-    <div style="font-size:14.5px;font-weight:700;color:#18202F;letter-spacing:-.03em;line-height:1.3;margin-bottom:5px">${name}</div>
-    ${desc ? `<div style="font-size:11.5px;color:#5E7087;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${desc}</div>` : ""}
-  </div>
-  <div style="padding:12px 15px 14px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid ${p.accentDim}">
-    <span style="font-size:9.5px;font-weight:700;background:${p.accentDim};color:${p.accentText};border-radius:20px;padding:3px 9px;letter-spacing:.02em">${status}</span>
-    <span style="font-size:14px;font-weight:800;color:${p.accent};font-variant-numeric:tabular-nums;white-space:nowrap">${formatPrice(product.price)}</span>
-  </div>
-</div>`;
-}
-
-function nosotrosTabHtml(products: PortalViewData["products"]): string {
-  const hasProducts = products && products.length > 0;
-  return `
-<div class="panel" id="tab-nosotros">
-  <div class="pscroll">
-    <div class="sec-hdr" style="margin-bottom:20px">
-      <div>
-        <div class="sec-title">Productos &amp; Servicios</div>
-        <div class="sec-sub">${hasProducts ? `${products.length} disponibles` : "Sin productos aún"}</div>
-      </div>
-    </div>
-    ${hasProducts
-      ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">${products.map((p, i) => buildProductCard(p, i)).join("")}</div>`
-      : `<div class="prod-empty">Sin productos publicados aún.<br/><span style="font-size:12px">Agrega tus servicios desde el panel de administración.</span></div>`
-    }
-  </div>
-</div>`;
-}
-
-// ──────────────────────────────────────────────────────────────────────────────
 
 export function renderPortalHtml(data: PortalViewData): string {
   const {
