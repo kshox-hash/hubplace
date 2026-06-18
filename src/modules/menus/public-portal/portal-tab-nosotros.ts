@@ -31,27 +31,38 @@ function buildProductCard(product: Product, index: number): string {
 
   const av2 = PALETTES[(index + 2) % PALETTES.length].pastel;
   const av3 = PALETTES[(index + 4) % PALETTES.length].pastel;
+  // Use the shared `proj-card` structure so portal.styles.ts applies automatically.
+  const price = fmtPrice(product.price);
+  const code = product.code ? escapeHtml(String(product.code)) : "Producto";
+  // Choose solid and pastel fills for top and avatars
+  const bgGrad = c.top;
+  const pastel = c.pastel;
+  const solid = c.solid;
 
   return `
-    <div class="prod-card" style="background:#fff;border-radius:18px;border:1.5px solid ${c.dim};overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:box-shadow .2s,transform .2s" onmouseenter="this.style.boxShadow='0 8px 28px rgba(0,0,0,.12)';this.style.transform='translateY(-3px)'" onmouseleave="this.style.boxShadow='0 2px 12px rgba(0,0,0,.06)';this.style.transform='none'">
-      <div style="height:72px;background:${c.top};padding:10px 14px;display:flex;align-items:flex-start;justify-content:space-between">
-        <span style="font-size:10.5px;font-weight:600;color:rgba(0,0,0,.5);letter-spacing:.02em">${dateStr}</span>
+  <div class="proj-card" data-action="reservas">
+    <div class="proj-card-top" style="background:${bgGrad}">
+      <span class="proj-card-top-date">${dateStr}</span>
+      <div class="card-avatars">
+        <div class="card-av" style="background:${pastel};color:rgba(0,0,0,.65)">${letter}</div>
+        <div class="card-av" style="background:${av2};color:rgba(0,0,0,.5)"></div>
+        <div class="card-av" style="background:${av3};color:rgba(0,0,0,.5)"></div>
       </div>
-      <div style="padding:0 14px;margin-top:-16px;display:flex">
-        <div style="width:30px;height:30px;border-radius:50%;border:2.5px solid #fff;background:${c.pastel};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(0,0,0,.6)">${letter}</div>
-        <div style="width:30px;height:30px;border-radius:50%;border:2.5px solid #fff;background:${av2};margin-left:-10px"></div>
-        <div style="width:30px;height:30px;border-radius:50%;border:2.5px solid #fff;background:${av3};margin-left:-10px"></div>
+    </div>
+    <div class="proj-card-body">
+      <div class="proj-card-name">${name}</div>
+      ${desc ? `<div style="font-size:11.5px;color:var(--soft);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-bottom:8px">${desc}</div>` : ""}
+      <div class="proj-card-badge-row">
+        <span class="proj-card-status">${badge}</span>
+        <span class="proj-card-prog-val">&nbsp;</span>
       </div>
-      <div style="padding:10px 15px 0;flex:1">
-        <div style="font-size:14.5px;font-weight:700;color:#18202F;letter-spacing:-.03em;line-height:1.3;margin-bottom:5px">${name}</div>
-        ${desc ? `<div style="font-size:11.5px;color:#5E7087;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-bottom:8px">${desc}</div>` : ""}
-        <span style="display:inline-block;font-size:9.5px;font-weight:700;background:${c.dim};color:${c.text};border-radius:20px;padding:3px 9px;letter-spacing:.02em;margin-bottom:10px">${badge}</span>
+      <div class="proj-card-prog-bar"><div class="proj-card-prog-fill" style="width:40%;background:${solid}"></div></div>
+      <div class="proj-card-footer">
+        <span class="proj-card-price" style="color:var(--dim);font-weight:600">${code}</span>
+        <span class="proj-card-price" style="color:${solid};font-weight:800">${price}</span>
       </div>
-      <div style="padding:12px 15px 14px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid ${c.dim}">
-        <span style="font-size:9.5px;font-weight:600;color:#8B97A8;letter-spacing:.02em">${product.code ? escapeHtml(product.code) : "Producto"}</span>
-        <span style="font-size:14px;font-weight:800;color:${c.solid};font-variant-numeric:tabular-nums;white-space:nowrap">${fmtPrice(product.price)}</span>
-      </div>
-    </div>`;
+    </div>
+  </div>`;
 }
 
 export function nosotrosTabHtml(products: Product[]): string {
@@ -83,7 +94,7 @@ export function nosotrosTabHtml(products: Product[]): string {
           <div class="sec-sub">${products.length} disponible${products.length !== 1 ? "s" : ""}</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="proj-grid">
         ${cards}
       </div>
     </div>

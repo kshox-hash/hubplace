@@ -56,6 +56,30 @@ export function chatTabHtml(d: ChatData): string {
   const desktopHome = `
   <div class="sec-hdr">
     <div>
+      <div class="sec-title">Dashboard</div>
+      <div class="sec-sub">Resumen de tu portal público</div>
+    </div>
+  </div>
+  <div class="home-stat-grid">
+    <div class="home-stat-card">
+      <div class="home-stat-card-title">Servicios</div>
+      <div class="home-stat-card-value">${d.productCount}</div>
+      <div class="home-stat-card-note">Tu catálogo de ofertas visibles para el cliente.</div>
+    </div>
+    <div class="home-stat-card">
+      <div class="home-stat-card-title">Reservas</div>
+      <div class="home-stat-card-value">${hasBooking ? 'Activadas' : 'No activadas'}</div>
+      <div class="home-stat-card-note">${hasBooking ? 'Los clientes pueden agendar turnos.' : 'Activa el módulo de reservas para recibir pedidos.'}</div>
+    </div>
+    <div class="home-stat-card">
+      <div class="home-stat-card-title">Cotizaciones</div>
+      <div class="home-stat-card-value">${hasCotizar ? 'Disponibles' : 'No disponibles'}</div>
+      <div class="home-stat-card-note">${hasCotizar ? 'El módulo de cotizaciones está online.' : 'Activa el cotizador para vender más.'}</div>
+    </div>
+  </div>
+
+  <div class="sec-hdr">
+    <div>
       <div class="sec-title">Servicios disponibles</div>
       <div class="sec-sub">Seleccioná un servicio para reservar</div>
     </div>
