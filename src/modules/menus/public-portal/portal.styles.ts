@@ -294,7 +294,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 }
 .proj-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
 .proj-card-top{
-  height:76px;position:relative;padding:12px 12px 0;
+  height:96px;position:relative;padding:14px 14px 0;
   display:flex;align-items:flex-start;justify-content:space-between
 }
 .proj-card-top-badge{
@@ -329,10 +329,33 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .proj-btn:active{transform:scale(.95)}
 .proj-btn svg{width:12px;height:12px;stroke-width:2.5}
 
-/* Bottom two-col layout */
-.bottom-cols{display:grid;grid-template-columns:1fr;gap:16px;margin-top:4px}
-@media(min-width:720px){.bottom-cols{grid-template-columns:1fr 1fr}}
-@media(min-width:1000px){.bottom-cols{grid-template-columns:3fr 2fr}}
+/* Home dashboard grid — top: services full width, bottom: calendar + inbox */
+.home-bottom{display:grid;grid-template-columns:1fr;gap:14px;margin-top:4px}
+@media(min-width:700px){.home-bottom{grid-template-columns:1fr 1fr}}
+
+/* Inbox-style panel (reviews, right column) */
+.inbox-card{background:var(--panel);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow-s);overflow:hidden}
+.inbox-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border-inner)}
+.inbox-hdr-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.03em}
+.inbox-hdr-count{font-size:11px;font-weight:700;color:var(--primary);background:var(--primary-dim);border-radius:20px;padding:2px 8px}
+.inbox-item{
+  display:flex;align-items:flex-start;gap:10px;padding:11px 16px;
+  border-bottom:1px solid var(--border-inner);transition:background .12s;cursor:default
+}
+.inbox-item:last-child{border-bottom:none}
+.inbox-item:hover{background:var(--bg)}
+.inbox-av{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;user-select:none;margin-top:1px
+}
+.inbox-body{flex:1;min-width:0}
+.inbox-name-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.inbox-name{font-size:13px;font-weight:600;color:var(--text)}
+.inbox-date{font-size:10.5px;color:var(--dim)}
+.inbox-stars{font-size:11px;color:var(--amber);letter-spacing:.5px;margin-bottom:2px}
+.inbox-preview{font-size:12px;color:var(--soft);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inbox-empty{text-align:center;padding:28px 16px;color:var(--dim);font-size:13px}
 
 /* ── PRODUCTS LIST ───────────────────────────────────────────────────── */
 .prod-card-wrap{background:var(--panel);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow-s);overflow:hidden}

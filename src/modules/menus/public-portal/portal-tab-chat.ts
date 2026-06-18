@@ -55,40 +55,46 @@ export function chatTabHtml(d: ChatData): string {
 
   const desktopHome = `
   <div class="sec-hdr">
-    <span class="sec-title">Servicios disponibles</span>
+    <div>
+      <div class="sec-title">Servicios disponibles</div>
+      <div class="sec-sub">Seleccioná un servicio para reservar</div>
+    </div>
     <button class="sec-link" type="button" data-action="reservas">Ver todos ${S_ARR}</button>
   </div>
   <div class="proj-grid" id="homeServiceGrid">
     <div style="grid-column:1/-1" class="loader-row"><div class="spinner"></div><span>Cargando servicios…</span></div>
   </div>
-  <div class="bottom-cols">
+
+  <div class="home-bottom">
     <div>
       <div class="sec-hdr">
-        <span class="sec-title">Disponibilidad</span>
+        <div>
+          <div class="sec-title">Disponibilidad</div>
+          <div class="sec-sub">Días con turnos disponibles</div>
+        </div>
         <button class="sec-link" type="button" data-action="reservas">Reservar ${S_ARR}</button>
       </div>
       <div class="cal-widget" id="calHome">
         <div class="cal-loading"><div class="spinner"></div>Cargando…</div>
       </div>
     </div>
+
     <div>
       <div class="sec-hdr">
-        <span class="sec-title">Productos</span>
-        <button class="sec-link" type="button" data-action="productos">Ver catálogo ${S_ARR}</button>
+        <div>
+          <div class="sec-title">Reseñas</div>
+          <div class="sec-sub">Lo que dicen los clientes</div>
+        </div>
+        <button class="sec-link" type="button" data-action="resenas">Ver todas ${S_ARR}</button>
       </div>
-      <div class="prod-card-wrap" id="homeProductList">
-        <div class="loader-row" style="padding:20px 0"><div class="spinner"></div></div>
+      <div class="inbox-card" id="homeInbox">
+        <div class="inbox-empty"><div class="spinner" style="margin:0 auto 8px"></div>Cargando…</div>
       </div>
       ${hasCotizar ? `
-      <div class="sec-hdr" style="margin-top:20px"><span class="sec-title">Cotizaciones</span></div>
-      <div class="cot-card">
-        <div class="cot-icon-wrap">${S_COT}</div>
-        <div>
-          <div class="cot-lbl">Presupuesto online</div>
-          <div class="cot-name">Solicitar cotización</div>
-        </div>
-        <a class="btn-primary" href="/shop/${d.slug}/cotizador" style="width:100%">${S_COT} Abrir cotizador</a>
-      </div>` : ""}
+      <div class="sec-hdr" style="margin-top:16px">
+        <div><div class="sec-title">Cotizar</div></div>
+      </div>
+      <a class="btn-primary" href="/shop/${d.slug}/cotizador" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none">${S_COT} Abrir cotizador</a>` : ""}
     </div>
   </div>`;
 

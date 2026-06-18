@@ -246,6 +246,7 @@ document.addEventListener('click',function(e){
     if(a==='reservas')      showTab('reservas');
     else if(a==='cotizar')  showTab('cotizar');
     else if(a==='productos')showTab('nosotros');
+    else if(a==='resenas')  showTab('resenas');
     return;
   }
 
@@ -647,11 +648,49 @@ function ensureReviews(){
     .then(function(data){
       renderReviewsTab(data);
       updateProfileRating(data);
+      renderHomeInbox(data);
     })
     .catch(function(){
       var el=document.getElementById('reviewsContent');
       if(el) el.innerHTML='<div class="bk-empty">No se pudieron cargar las reseñas.</div>';
     });
+}
+
+var INBOX_COLORS=['#5A67F2','#F97316','#22C55E','#EC4899','#14B8A6','#8B5CF6','#F59E0B','#EF4444'];
+
+function renderHomeInbox(data){
+  var el=document.getElementById('homeInbox'); if(!el) return;
+  var reviews=(data&&data.reviews)||[];
+  var summary=(data&&data.summary)||{};
+  var total=parseInt(summary.total||'0',10);
+  if(!reviews.length){
+    el.innerHTML='<div class="inbox-empty">Aún no hay reseñas de clientes.</div>';
+    return;
+  }
+  var hdr='<div class="inbox-hdr">'
+    +'<span class="inbox-hdr-title">Opiniones</span>'
+    +(total?'<span class="inbox-hdr-count">'+total+'</span>':'')
+    +'</div>';
+  var items=reviews.slice(0,5).map(function(r,i){
+    var name=r.client_name||'Cliente';
+    var initLetter=name.trim().charAt(0).toUpperCase()||'?';
+    var color=INBOX_COLORS[i%INBOX_COLORS.length];
+    var stars='';for(var s=1;s<=5;s++) stars+='<span style="color:'+(s<=(r.rating||0)?'#F59E0B':'var(--dim)')+'">★</span>';
+    var date='';
+    if(r.created_at){try{date=new Date(r.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short'});}catch(e){}}
+    return '<div class="inbox-item">'
+      +'<div class="inbox-av" style="background:'+color+'">'+escH(initLetter)+'</div>'
+      +'<div class="inbox-body">'
+      +'<div class="inbox-name-row">'
+      +'<span class="inbox-name">'+escH(name)+'</span>'
+      +(date?'<span class="inbox-date">'+escH(date)+'</span>':'')
+      +'</div>'
+      +'<div class="inbox-stars">'+stars+'</div>'
+      +(r.comment?'<div class="inbox-preview">'+escH(r.comment)+'</div>':'')
+      +'</div>'
+      +'</div>';
+  }).join('');
+  el.innerHTML=hdr+items;
 }
 
 function updateProfileRating(data){
