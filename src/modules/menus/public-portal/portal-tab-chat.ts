@@ -57,68 +57,106 @@ export function chatTabHtml(d: ChatData): string {
   <div class="sec-hdr">
     <div>
       <div class="sec-title">Dashboard</div>
-      <div class="sec-sub">Resumen de tu portal público</div>
+      <div class="sec-sub">Panel principal con métricas y accesos rápidos</div>
     </div>
   </div>
-  <div class="home-stat-grid">
-    <div class="home-stat-card">
-      <div class="home-stat-card-title">Servicios</div>
-      <div class="home-stat-card-value">${d.productCount}</div>
-      <div class="home-stat-card-note">Tu catálogo de ofertas visibles para el cliente.</div>
-    </div>
-    <div class="home-stat-card">
-      <div class="home-stat-card-title">Reservas</div>
-      <div class="home-stat-card-value">${hasBooking ? 'Activadas' : 'No activadas'}</div>
-      <div class="home-stat-card-note">${hasBooking ? 'Los clientes pueden agendar turnos.' : 'Activa el módulo de reservas para recibir pedidos.'}</div>
-    </div>
-    <div class="home-stat-card">
-      <div class="home-stat-card-title">Cotizaciones</div>
-      <div class="home-stat-card-value">${hasCotizar ? 'Disponibles' : 'No disponibles'}</div>
-      <div class="home-stat-card-note">${hasCotizar ? 'El módulo de cotizaciones está online.' : 'Activa el cotizador para vender más.'}</div>
-    </div>
-  </div>
-
-  <div class="sec-hdr">
-    <div>
-      <div class="sec-title">Servicios disponibles</div>
-      <div class="sec-sub">Seleccioná un servicio para reservar</div>
-    </div>
-    <button class="sec-link" type="button" data-action="reservas">Ver todos ${S_ARR}</button>
-  </div>
-  <div class="proj-grid" id="homeServiceGrid">
-    <div style="grid-column:1/-1" class="loader-row"><div class="spinner"></div><span>Cargando servicios…</span></div>
-  </div>
-
-  <div class="home-bottom">
-    <div>
-      <div class="sec-hdr">
-        <div>
-          <div class="sec-title">Disponibilidad</div>
-          <div class="sec-sub">Días con turnos disponibles</div>
+  <div class="dashboard-grid">
+    <aside class="dashboard-aside">
+      <div class="dashboard-aside-card">
+        <div class="dashboard-aside-top">
+          <div class="dashboard-aside-avatar">${d.initials}</div>
+          <div>
+            <div class="dashboard-aside-name">${d.name}</div>
+            ${d.desc ? `<div class="dashboard-aside-role">${d.desc}</div>` : ""}
+          </div>
         </div>
-        <button class="sec-link" type="button" data-action="reservas">Reservar ${S_ARR}</button>
-      </div>
-      <div class="cal-widget" id="calHome">
-        <div class="cal-loading"><div class="spinner"></div>Cargando…</div>
-      </div>
-    </div>
-
-    <div>
-      <div class="sec-hdr">
-        <div>
-          <div class="sec-title">Reseñas</div>
-          <div class="sec-sub">Lo que dicen los clientes</div>
+        <div class="dashboard-aside-badge">En línea</div>
+        ${d.welcome ? `<div class="dashboard-aside-welcome">👋 ${d.welcome}</div>` : ""}
+        <div class="dashboard-aside-info">
+          ${d.phone ? `<div class="dashboard-aside-info-row"><span>Teléfono</span><strong>${d.phone}</strong></div>` : ""}
+          ${d.hours ? `<div class="dashboard-aside-info-row"><span>Horario</span><strong>${d.hours}</strong></div>` : ""}
+          ${d.locationLine ? `<div class="dashboard-aside-info-row"><span>Ubicación</span><strong>${d.locationLine}</strong></div>` : ""}
+          ${d.ig ? `<div class="dashboard-aside-info-row"><span>Instagram</span><strong><a href="${d.ig}" target="_blank" rel="noopener">Ver perfil</a></strong></div>` : ""}
         </div>
-        <button class="sec-link" type="button" data-action="resenas">Ver todas ${S_ARR}</button>
+        <div class="dashboard-aside-actions">
+          ${hasBooking ? `<button class="btn-outline" type="button" data-action="reservas">${S_CAL} Reservar</button>` : ""}
+          ${hasCotizar ? `<button class="btn-outline" type="button" data-action="cotizar">${S_COT} Cotizar</button>` : ""}
+          ${d.waHref ? `<a class="btn-wa" href="${d.waHref}" target="_blank" rel="noopener" style="width:100%;justify-content:center">${S_WA} WhatsApp</a>` : ""}
+        </div>
       </div>
-      <div class="inbox-card" id="homeInbox">
+      <div class="dashboard-aside-card dashboard-aside-secondary">
+        <div class="dashboard-aside-section-title">Información rápida</div>
+        <div class="dashboard-aside-list">
+          <div class="dashboard-aside-list-item"><span>Productos</span><strong>${d.productCount}</strong></div>
+          <div class="dashboard-aside-list-item"><span>Reservas</span><strong>${hasBooking ? 'Activado' : 'Desactivado'}</strong></div>
+          <div class="dashboard-aside-list-item"><span>Cotizador</span><strong>${hasCotizar ? 'Activo' : 'Inactivo'}</strong></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <div class="dashboard-top-cards">
+        <div class="dashboard-top-card" style="background:linear-gradient(150deg,#FBBDC7,#F9D4DC);">
+          <div class="dashboard-top-card-label">Web Designing</div>
+          <div class="dashboard-top-card-value">3 proyectos</div>
+          <div class="dashboard-top-card-note">Progreso y tareas pendientes</div>
+        </div>
+        <div class="dashboard-top-card" style="background:linear-gradient(150deg,#93C5FD,#C3DBFD);">
+          <div class="dashboard-top-card-label">Mobile App</div>
+          <div class="dashboard-top-card-value">2 proyectos</div>
+          <div class="dashboard-top-card-note">Diseño e implementación</div>
+        </div>
+        <div class="dashboard-top-card" style="background:linear-gradient(150deg,#FDE68A,#FEF3C2);color:#1E3A8A;">
+          <div class="dashboard-top-card-label">Dashboard</div>
+          <div class="dashboard-top-card-value">Analytics</div>
+          <div class="dashboard-top-card-note">Vista de métricas generales</div>
+        </div>
+        <div class="dashboard-top-card" style="background:linear-gradient(150deg,#C4B5FD,#DDD6FE);">
+          <div class="dashboard-top-card-label">Marketing</div>
+          <div class="dashboard-top-card-value">1 campaña</div>
+          <div class="dashboard-top-card-note">Promociones activas</div>
+        </div>
+      </div>
+
+      <div class="dashboard-main-card">
+        <div class="dashboard-main-card-header">
+          <div>
+            <div class="sec-title">Calendario</div>
+            <div class="sec-sub">Fechas y turnos disponibles</div>
+          </div>
+          <button class="sec-link" type="button" data-action="reservas">Reservar</button>
+        </div>
+        <div class="cal-widget" id="calHome">
+          <div class="cal-loading"><div class="spinner"></div>Cargando…</div>
+        </div>
+      </div>
+    </main>
+
+    <div class="dashboard-right">
+      <div class="dashboard-right-card inbox-card" id="homeInbox">
+        <div class="inbox-hdr">
+          <span class="inbox-hdr-title">Inbox</span>
+          <span class="inbox-hdr-count">Últimas</span>
+        </div>
         <div class="inbox-empty"><div class="spinner" style="margin:0 auto 8px"></div>Cargando…</div>
       </div>
-      ${hasCotizar ? `
-      <div class="sec-hdr" style="margin-top:16px">
-        <div><div class="sec-title">Cotizar</div></div>
-      </div>
-      <a class="btn-primary" href="/shop/${d.slug}/cotizador" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none">${S_COT} Abrir cotizador</a>` : ""}
+      ${hasCotizar ? `<div class="dashboard-right-card cot-card">
+        <div class="cot-icon-wrap">${S_COT}</div>
+        <div>
+          <div class="cot-lbl">Presupuesto</div>
+          <div class="cot-name">Solicitar cotización</div>
+          <div class="cot-desc">Recibí tu presupuesto por email.</div>
+        </div>
+        <a class="btn-primary" href="/shop/${d.slug}/cotizador" style="width:100%;text-decoration:none">${S_COT} Abrir cotizador</a>
+      </div>` : `
+      <div class="dashboard-right-card cot-card">
+        <div class="cot-icon-wrap">${S_COT}</div>
+        <div>
+          <div class="cot-lbl">Cotizaciones</div>
+          <div class="cot-name">Módulo inactivo</div>
+          <div class="cot-desc">Activa el cotizador para recibir pedidos.</div>
+        </div>
+      </div>`}
     </div>
   </div>`;
 
