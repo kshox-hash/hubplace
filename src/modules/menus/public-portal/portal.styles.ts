@@ -901,6 +901,24 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .hm-svc-list{padding:6px 16px 4px}
 #homeInbox{padding:4px 16px}
 
+/* ── SERVICE PROJECT CARDS (home tab) ──────────────────────────────────── */
+.svc-proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 14px 14px}
+.svc-proj-card{
+  border-radius:16px;padding:14px;cursor:pointer;
+  display:flex;flex-direction:column;gap:8px;min-height:120px;
+  transition:transform .18s,opacity .15s;-webkit-tap-highlight-color:transparent
+}
+.svc-proj-card:hover{transform:translateY(-3px);opacity:.9}
+.svc-proj-card:active{transform:scale(.97)}
+.svc-proj-name{font-size:13.5px;font-weight:700;color:rgba(0,0,0,.75);letter-spacing:-.03em;line-height:1.35}
+.svc-proj-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(0,0,0,.1);border-radius:20px;
+  padding:3px 9px;font-size:11px;font-weight:600;color:rgba(0,0,0,.55);width:fit-content
+}
+.svc-proj-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px}
+.svc-proj-price{font-size:14px;font-weight:800;color:rgba(0,0,0,.65);font-variant-numeric:tabular-nums}
+
 /* Calendario: sin chrome, celdas altura fija 36px */
 .hm-cal-inner{border:none!important;border-radius:0!important;box-shadow:none!important;padding:10px 16px!important;margin:0!important}
 .hm-cal-inner .cal-cell{aspect-ratio:unset!important;height:36px}

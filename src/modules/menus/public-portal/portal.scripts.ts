@@ -408,7 +408,7 @@ function loadServices(){
 }
 
 function applyServices(svcs){
-  renderSvcRows('homeServiceGrid', svcs.slice(0,4));
+  renderSvcCards('homeServiceGrid', svcs.slice(0,4));
   renderSvcGrid('svcGrid', svcs);
   renderSvcRows('mobileServiceList', svcs);
   var statEl=document.getElementById('prStatSvcs');
@@ -505,6 +505,46 @@ function renderHomeGrid(id,svcs){
       +'</div>';
   });
   el.innerHTML=html;
+}
+
+// Card grid (home tab — pastel "Ongoing Projects" style)
+var S_CLOCK_SM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:10px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+function renderSvcCards(id,svcs){
+  var el=document.getElementById(id);if(!el) return;
+  if(!svcs.length){
+    el.innerHTML='<div class="svc-empty" style="grid-column:1/-1">No hay servicios configurados aún.</div>';
+    return;
+  }
+  var html='';
+  svcs.forEach(function(s,i){
+    var bg=CARD_PALETTES[i%CARD_PALETTES.length];
+    var price=s.price!=null?fmtPrice(Number(s.price)):'Consultar';
+    var dur=s.duration_minutes?s.duration_minutes+' min':'';
+    var provHtml='';
+    if(providersCache.length>0){
+      provHtml='<div class="svc-card-provs">';
+      providersCache.slice(0,3).forEach(function(p,pi){
+        var pc=p.color&&/^#[0-9a-fA-F]{6}$/.test(p.color)?p.color:CARD_PALETTES[pi%CARD_PALETTES.length];
+        var ini=(p.avatar_initials||(p.name||'?').trim().charAt(0)).toUpperCase();
+        provHtml+='<div class="svc-card-prov" style="background:'+pc+'">'+escH(ini)+'</div>';
+      });
+      provHtml+='</div>';
+    }
+    html+='<div class="svc-proj-card" style="background:'+bg+'" data-svc-card="'+i+'">'
+      +'<div class="svc-proj-name">'+escH(s.name)+'</div>'
+      +(dur?'<div class="svc-proj-badge">'+S_CLOCK_SM+' '+escH(dur)+'</div>':'')
+      +'<div class="svc-proj-foot">'
+      +provHtml
+      +'<div class="svc-proj-price">'+escH(price)+'</div>'
+      +'</div>'
+      +'</div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.svc-proj-card').forEach(function(card){
+    card.addEventListener('click',function(){
+      showTab('reservas');
+    });
+  });
 }
 
 // Row list (reservas tab + mobile home + desktop home)
