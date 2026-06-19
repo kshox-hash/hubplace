@@ -46,28 +46,28 @@ export function chatTabHtml(d: ChatData): string {
 
     <!-- ROW 2 — Stats -->
     <div class="hm-stats">
-      <div class="hm-stat">
+      <div class="hm-stat" style="--accent:#4F7FE8">
         <div class="hm-stat-icon" style="background:rgba(79,127,232,.12);color:#4F7FE8">${S_SVC}</div>
         <div class="hm-stat-body">
           <div class="hm-stat-val" id="hmStatSvcs">—</div>
           <div class="hm-stat-lbl">Servicios</div>
         </div>
       </div>
-      <div class="hm-stat">
-        <div class="hm-stat-icon" style="background:rgba(251,191,36,.12);color:#F59E0B">${S_STAR}</div>
+      <div class="hm-stat" style="--accent:#F59E0B">
+        <div class="hm-stat-icon" style="background:rgba(245,158,11,.12);color:#F59E0B">${S_STAR}</div>
         <div class="hm-stat-body">
           <div class="hm-stat-val" id="hmStatRating">—</div>
           <div class="hm-stat-lbl">Calificación</div>
         </div>
       </div>
-      <div class="hm-stat">
+      <div class="hm-stat" style="--accent:#22c55e">
         <div class="hm-stat-icon" style="background:rgba(34,197,94,.12);color:#22c55e">${S_CAL}</div>
         <div class="hm-stat-body">
           <div class="hm-stat-val" id="hmStatNext">—</div>
           <div class="hm-stat-lbl">Próximo turno</div>
         </div>
       </div>
-      <div class="hm-stat">
+      <div class="hm-stat" style="--accent:#a855f7">
         <div class="hm-stat-icon" style="background:rgba(168,85,247,.12);color:#a855f7">${S_CLOCK}</div>
         <div class="hm-stat-body">
           <div class="hm-stat-val" id="hmStatReviews">—</div>
@@ -76,29 +76,47 @@ export function chatTabHtml(d: ChatData): string {
       </div>
     </div>
 
-    <!-- ROW 3 — Main content (services + reviews) -->
+    <!-- ROW 3 — Main content -->
     <div class="hm-main">
-      <!-- Services card -->
-      <div class="hm-card">
+
+      <!-- LEFT: Services -->
+      <div class="hm-card hm-card--blue">
         <div class="hm-card-hdr">
           <div class="hm-card-title">Servicios</div>
-          ${hasBooking ? `<button class="sec-link" type="button" data-action="reservas">Ver todos</button>` : ""}
+          ${hasBooking ? `<button class="sec-link" type="button" data-action="reservas">Ver todos →</button>` : ""}
         </div>
-        <div class="svc-cards-grid hm-card-body" id="homeServiceGrid">
+        <div class="svc-cards-grid hm-card-scroll" id="homeServiceGrid">
           <div class="svc-empty" style="grid-column:1/-1"><div class="spinner" style="margin:0 auto 8px"></div>Cargando…</div>
         </div>
-        ${hasCotizar ? `<button class="hm-cot-btn" type="button" data-action="cotizar" style="margin-top:auto">${S_COT} Pedir cotización</button>` : ""}
+        ${hasCotizar ? `<button class="hm-cot-btn" type="button" data-action="cotizar">${S_COT} Pedir cotización</button>` : ""}
       </div>
 
-      <!-- Reviews card -->
-      <div class="hm-card">
-        <div class="hm-card-hdr">
-          <div class="hm-card-title">Opiniones</div>
-          <button class="sec-link" type="button" data-action="resenas">Ver todas</button>
+      <!-- RIGHT col: Calendar + Reviews -->
+      <div class="hm-right-col">
+
+        <!-- Calendar -->
+        ${hasBooking ? `
+        <div class="hm-card hm-card--green">
+          <div class="hm-card-hdr">
+            <div class="hm-card-title">Disponibilidad</div>
+            <button class="sec-link" type="button" data-action="reservas">Reservar →</button>
+          </div>
+          <div class="cal-widget hm-cal-inner" id="calHome">
+            <div class="cal-loading"><div class="spinner"></div>Cargando…</div>
+          </div>
+        </div>` : `<div id="calHome" style="display:none"></div>`}
+
+        <!-- Reviews -->
+        <div class="hm-card hm-card--purple" style="flex:1;min-height:0">
+          <div class="hm-card-hdr">
+            <div class="hm-card-title">Opiniones</div>
+            <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
+          </div>
+          <div class="hm-card-scroll" id="homeInbox">
+            <div class="inbox-empty"><div class="spinner" style="margin:0 auto 8px"></div>Cargando…</div>
+          </div>
         </div>
-        <div class="hm-card-body" id="homeInbox">
-          <div class="inbox-empty"><div class="spinner" style="margin:0 auto 8px"></div>Cargando…</div>
-        </div>
+
       </div>
     </div>
 
@@ -121,7 +139,6 @@ export function chatTabHtml(d: ChatData): string {
     <div id="desktopHome" style="display:none"></div>
     <div id="mobileServiceList" style="display:none"></div>
     <div id="homeInboxMobile" style="display:none"></div>
-    <div id="calHome" style="display:none"></div>
     <div id="prAvailSection" style="display:none"><span id="prNextSlot"></span></div>
     <div id="prStatSvcs" style="display:none"></div>
 
