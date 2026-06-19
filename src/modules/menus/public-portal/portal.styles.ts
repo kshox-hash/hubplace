@@ -901,8 +901,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 /* ── SERVICE PROJECT CARDS (home tab) ──────────────────────────────────── */
 .svc-proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 14px 14px}
 .svc-proj-card{
-  border-radius:16px;padding:14px;cursor:pointer;
-  display:flex;flex-direction:column;gap:8px;min-height:120px;
+  border-radius:16px;padding:12px;cursor:pointer;
+  display:flex;flex-direction:column;gap:6px;min-height:90px;
   transition:transform .18s,opacity .15s;-webkit-tap-highlight-color:transparent
 }
 .svc-proj-card:hover{transform:translateY(-3px);opacity:.9}
@@ -941,16 +941,15 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   .hm-stats{grid-template-columns:repeat(4,1fr);padding:12px 20px;gap:10px}
   .hm-main{flex-direction:row;padding:0 20px 20px;gap:14px;overflow:hidden;min-height:0}
 
-  /* 6 — Calendario: columna izquierda (flex:13 = ~65% del ancho) */
-  .hm-card-left{flex:13;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-  .hm-card-left .hm-cal-inner{flex:1;min-height:0;overflow:hidden}
+  /* 6 — Calendario: columna izquierda */
+  .hm-card-left{flex:12;min-height:0;display:flex;flex-direction:column;overflow:hidden;align-self:flex-start;min-height:420px}
+  .hm-card-left .hm-cal-inner{flex:0 0 auto;overflow:hidden}
   .hm-card-left .hm-card-hdr{flex-shrink:0}
-  .hm-card-left .hm-cal-footer{flex-shrink:0}
+  .hm-card-left .hm-cal-footer{flex-shrink:0;margin-top:auto}
 
-  /* 7 — Columna derecha (flex:7 = ~35% del ancho) */
-  .hm-right-col{flex:7;min-height:0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
-  .hm-right-col .hm-card{overflow:hidden}
-  .hm-right-col .hm-card:last-child{flex:1;min-height:0}
+  /* 7 — Columna derecha */
+  .hm-right-col{flex:8;min-height:420px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+  .hm-right-col .hm-card{flex:1;min-height:0;overflow:hidden}
 }
 `;
 }

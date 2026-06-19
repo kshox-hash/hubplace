@@ -94,7 +94,7 @@ export function chatTabHtml(d: ChatData): string {
           <div class="cal-loading"><div class="spinner"></div>Cargando…</div>
         </div>
         <div class="hm-cal-footer">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 90" preserveAspectRatio="none">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 90" preserveAspectRatio="xMidYMax slice">
             <defs>
               <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#EFF6FF"/>
