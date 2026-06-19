@@ -901,20 +901,19 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 /* ── SERVICE PROJECT CARDS (home tab) ──────────────────────────────────── */
 .svc-proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 14px 14px}
 .svc-proj-card{
-  border-radius:16px;padding:12px;cursor:pointer;
-  display:flex;flex-direction:column;gap:6px;min-height:90px;
-  transition:transform .18s,opacity .15s;-webkit-tap-highlight-color:transparent
+  background:#fff;border-radius:16px;padding:13px;cursor:pointer;
+  display:flex;flex-direction:column;gap:7px;
+  border:1px solid var(--border);
+  transition:border-color .18s,box-shadow .18s;-webkit-tap-highlight-color:transparent
 }
-.svc-proj-card:hover{transform:translateY(-3px);opacity:.9}
-.svc-proj-card:active{transform:scale(.97)}
-.svc-proj-name{font-size:13.5px;font-weight:700;color:rgba(0,0,0,.75);letter-spacing:-.03em;line-height:1.35}
-.svc-proj-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  background:rgba(0,0,0,.1);border-radius:20px;
-  padding:3px 9px;font-size:11px;font-weight:600;color:rgba(0,0,0,.55);width:fit-content
-}
-.svc-proj-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px}
-.svc-proj-price{font-size:14px;font-weight:800;color:rgba(0,0,0,.65);font-variant-numeric:tabular-nums}
+.svc-proj-card:hover{border-color:var(--nav-act);box-shadow:0 2px 12px rgba(79,135,245,.12)}
+.svc-proj-card:active{transform:scale(.98)}
+.svc-proj-top{display:flex;align-items:center;justify-content:space-between}
+.svc-proj-price-lbl{font-size:11.5px;font-weight:700;color:var(--dim);font-variant-numeric:tabular-nums}
+.svc-proj-name{font-size:13.5px;font-weight:700;color:var(--text);line-height:1.3}
+.svc-proj-tags{display:flex;gap:5px;flex-wrap:wrap}
+.svc-tag{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:20px}
+.svc-proj-foot{display:flex;align-items:center;margin-top:auto;padding-top:2px}
 
 /* Calendario: sin chrome, celdas compactas */
 .hm-cal-inner{background:#F4F7FC!important;border:none!important;border-radius:0!important;box-shadow:none!important;padding:8px 14px!important;margin:0!important}
