@@ -408,7 +408,7 @@ function loadServices(){
 }
 
 function applyServices(svcs){
-  renderSvcRows('homeServiceGrid', svcs);
+  renderSvcRows('homeServiceGrid', svcs.slice(0,4));
   renderSvcGrid('svcGrid', svcs);
   renderSvcRows('mobileServiceList', svcs);
   var statEl=document.getElementById('prStatSvcs');
@@ -953,7 +953,7 @@ function ensureReviews(){
 var INBOX_COLORS=['#5A67F2','#F97316','#22C55E','#EC4899','#14B8A6','#8B5CF6','#F59E0B','#EF4444'];
 
 function renderHomeInbox(data){
-  renderInboxCard('homeInbox',data);
+  renderInboxCard('homeInbox',data,2);
   renderInboxCard('homeInboxMobile',data);
   // update home dashboard stats
   var summary=(data&&data.summary)||{};
@@ -964,7 +964,7 @@ function renderHomeInbox(data){
   var hmRev=document.getElementById('hmStatReviews');
   if(hmRev) hmRev.textContent=total>0?String(total):'0';
 }
-function renderInboxCard(id,data){
+function renderInboxCard(id,data,maxItems){
   var el=document.getElementById(id); if(!el) return;
   var reviews=(data&&data.reviews)||[];
   var summary=(data&&data.summary)||{};
@@ -985,7 +985,7 @@ function renderInboxCard(id,data){
     +'<div style="font-size:10.5px;color:var(--dim);margin-top:1px">'+total+' reseña'+(total!==1?'s':'')+'</div>'
     +'</div>'
     +'</div>':'';
-  var items=reviews.slice(0,4).map(function(r,i){
+  var items=reviews.slice(0,maxItems||4).map(function(r,i){
     var name=r.google_name||r.client_name||'Cliente';
     var initLetter=(name.trim().charAt(0)||'?').toUpperCase();
     var color=INBOX_COLORS[i%INBOX_COLORS.length];

@@ -93,15 +93,19 @@ export function chatTabHtml(d: ChatData): string {
 
       <!-- RIGHT col: Services + Reviews -->
       <div class="hm-right-col">
+
         <div class="hm-card hm-card--blue">
           <div class="hm-card-hdr">
             <div class="hm-card-title">Servicios</div>
             ${hasBooking ? `<button class="sec-link" type="button" data-action="reservas">Ver todos →</button>` : ""}
           </div>
-          <div class="hm-svc-list hm-card-scroll" id="homeServiceGrid">
+          <div class="hm-svc-list" id="homeServiceGrid">
             <div class="svc-empty"><div class="spinner" style="margin:0 auto 8px"></div>Cargando…</div>
           </div>
-          ${hasCotizar ? `<button class="hm-cot-btn" type="button" data-action="cotizar">${S_COT} Pedir cotización</button>` : ""}
+          ${hasCotizar ? `
+          <div class="hm-card-foot">
+            <button class="hm-foot-btn" type="button" data-action="cotizar">${S_COT} Pedir cotización</button>
+          </div>` : ""}
         </div>
 
         <div class="hm-card hm-card--purple">
@@ -109,10 +113,16 @@ export function chatTabHtml(d: ChatData): string {
             <div class="hm-card-title">Opiniones</div>
             <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
           </div>
-          <div class="hm-card-scroll" id="homeInbox">
-            <div class="inbox-empty"><div class="spinner" style="margin:0 auto 8px"></div>Cargando…</div>
+          <div id="homeInbox">
+            <div class="inbox-empty" style="padding:20px 14px;text-align:center">
+              <div class="spinner" style="margin:0 auto 8px"></div>Cargando…
+            </div>
+          </div>
+          <div class="hm-card-foot">
+            <button id="openReviewBtn" class="hm-foot-btn" type="button">✏ Escribir una reseña</button>
           </div>
         </div>
+
       </div>
     </div>
 

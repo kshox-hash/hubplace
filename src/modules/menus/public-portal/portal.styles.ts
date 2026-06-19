@@ -909,33 +909,32 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .hm-card--purple .hm-card-hdr{background:linear-gradient(90deg,rgba(168,85,247,.06),transparent)}
 .hm-card-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.02em}
 
-/* scrollable content area inside cards */
-.hm-card-scroll{
-  overflow-y:auto;scrollbar-width:thin;
-  padding:10px 14px;flex:1;min-height:0
-}
+/* no scroll needed — JS limits items shown */
+.hm-card-scroll{padding:10px 14px;flex:1}
+.hm-svc-list{padding:6px 14px}
+#homeInbox{padding:4px 14px}
 
-/* ---- Calendar inside card: strip chrome, fill remaining space ---- */
+/* ---- Calendar: strip chrome, fill remaining left column ---- */
 .hm-cal-inner{
   flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;
   border:none!important;border-radius:0!important;
   box-shadow:none!important;padding:10px 14px!important;margin:0!important
 }
 
-/* ---- Service list (compact rows for home right col) ---- */
-.hm-svc-list{overflow-y:auto;scrollbar-width:thin;padding:8px 14px;flex:1;min-height:0}
-
-/* ---- Cotizar button ---- */
-.hm-cot-btn{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  margin:0 14px 12px;padding:10px;border-radius:12px;
-  background:var(--bg);border:1.5px solid var(--border);
-  font-size:12.5px;font-weight:600;color:var(--text);cursor:pointer;
-  font-family:inherit;transition:background .15s,border-color .15s;
-  -webkit-tap-highlight-color:transparent;flex-shrink:0
+/* ---- Card footer (cotizar + escribir reseña) ---- */
+.hm-card-foot{
+  padding:0 14px 12px;flex-shrink:0
 }
-.hm-cot-btn:hover{background:var(--primary-dim);border-color:var(--primary-glow);color:var(--primary)}
-.hm-cot-btn svg{width:14px;height:14px;stroke:currentColor;flex-shrink:0}
+.hm-foot-btn{
+  display:flex;align-items:center;justify-content:center;gap:7px;width:100%;
+  padding:9px 12px;border-radius:11px;cursor:pointer;font-family:inherit;
+  font-size:12px;font-weight:600;border:1.5px solid var(--border);
+  background:var(--bg);color:var(--soft);
+  transition:background .15s,border-color .15s,color .15s;
+  -webkit-tap-highlight-color:transparent
+}
+.hm-foot-btn:hover{background:var(--primary-dim);border-color:var(--primary-glow);color:var(--primary)}
+.hm-foot-btn svg{width:13px;height:13px;stroke:currentColor;flex-shrink:0}
 
 /* ---- Right column (services + reviews stacked) ---- */
 .hm-right-col{display:flex;flex-direction:column;gap:12px}
