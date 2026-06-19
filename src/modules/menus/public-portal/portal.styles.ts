@@ -919,15 +919,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .svc-proj-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px}
 .svc-proj-price{font-size:14px;font-weight:800;color:rgba(0,0,0,.65);font-variant-numeric:tabular-nums}
 
-/* Calendario: sin chrome, celdas altura fija 36px */
-.hm-cal-inner{background:#F4F7FC!important;border:none!important;border-radius:0!important;box-shadow:none!important;padding:10px 16px!important;margin:0!important}
-.hm-cal-inner .cal-cell{aspect-ratio:unset!important;height:36px}
+/* Calendario: sin chrome, celdas compactas */
+.hm-cal-inner{background:#F4F7FC!important;border:none!important;border-radius:0!important;box-shadow:none!important;padding:8px 14px!important;margin:0!important}
+.hm-cal-inner .cal-cell{aspect-ratio:unset!important;height:28px;font-size:11px!important}
+.hm-cal-inner .cal-day-name{padding:2px 0 4px!important;font-size:8.5px!important}
 
 /* 8 — Pie de tarjeta */
 .hm-card-foot{padding:0 16px 14px;flex-shrink:0}
 
 /* Calendar footer illustration */
-.hm-cal-footer{width:100%;height:90px;overflow:hidden;flex-shrink:0;margin-top:auto}
+.hm-cal-footer{width:100%;height:88px;overflow:hidden;flex-shrink:0}
 .hm-cal-footer svg{display:block;width:100%;height:100%}
 .hm-foot-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px;border-radius:11px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--soft);transition:background .15s,color .15s}
 .hm-foot-btn:hover{background:var(--primary-dim);color:var(--primary);border-color:var(--primary-glow)}
@@ -945,7 +946,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
   /* 6 — Calendario: columna izquierda (flex:13 = ~65% del ancho) */
   .hm-card-left{flex:13;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-  .hm-card-left .hm-cal-inner{overflow:hidden}
+  .hm-card-left .hm-cal-inner{flex:1;min-height:0;overflow:hidden}
+  .hm-card-left .hm-card-hdr{flex-shrink:0}
+  .hm-card-left .hm-cal-footer{flex-shrink:0}
 
   /* 7 — Columna derecha (flex:7 = ~35% del ancho) */
   .hm-right-col{flex:7;min-height:0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
