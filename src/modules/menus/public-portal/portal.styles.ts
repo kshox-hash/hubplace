@@ -473,17 +473,19 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .day-card{
   display:flex;flex-direction:column;align-items:center;gap:4px;
   min-width:52px;padding:10px 6px 12px;border-radius:16px;cursor:default;
-  background:var(--panel);border:1.5px solid var(--border);
-  transition:transform .15s;-webkit-tap-highlight-color:transparent;
+  background:rgba(15,23,42,.05);border:1.5px solid transparent;
+  transition:transform .15s,background .15s;-webkit-tap-highlight-color:transparent;
   position:relative
 }
-.day-card.avail{cursor:pointer;border-color:rgba(34,197,94,.35);background:var(--green-dim)}
-.day-card.avail:hover{transform:translateY(-2px)}
+.day-card.avail{cursor:pointer;background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3)}
+.day-card.avail .day-wd,.day-card.avail .day-num{color:#166534}
+.day-card.avail:hover{background:rgba(34,197,94,.28);transform:translateY(-2px)}
 .day-card.avail:active{transform:scale(.97)}
-.day-card.today{border-color:var(--primary);background:var(--primary-dim)}
-.day-card.selected{border-color:var(--primary);background:var(--primary)}
+.day-card.today{background:var(--nav-act);border-color:transparent}
+.day-card.today .day-wd,.day-card.today .day-num{color:#fff}
+.day-card.selected{background:var(--nav-act);border-color:transparent}
 .day-card.selected .day-wd,.day-card.selected .day-num{color:#fff}
-.day-card.past{opacity:.35}
+.day-card.past{opacity:.3;background:rgba(15,23,42,.03)}
 .day-wd{font-size:9.5px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
 .day-num{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.04em;line-height:1}
 .day-dot{
@@ -923,6 +925,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 /* 8 — Pie de tarjeta */
 .hm-card-foot{padding:0 16px 14px;flex-shrink:0}
+
+/* Calendar footer illustration */
+.hm-cal-footer{width:100%;height:90px;overflow:hidden;flex-shrink:0;margin-top:auto}
+.hm-cal-footer svg{display:block;width:100%;height:100%}
 .hm-foot-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px;border-radius:11px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--soft);transition:background .15s,color .15s}
 .hm-foot-btn:hover{background:var(--primary-dim);color:var(--primary);border-color:var(--primary-glow)}
 .hm-foot-btn svg{width:13px;height:13px;stroke:currentColor;flex-shrink:0}
