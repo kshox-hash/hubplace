@@ -850,128 +850,64 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 /* ── HOME DASHBOARD ──────────────────────────────────────────────────── */
 .hm-panel{overflow-y:auto!important}
 
-/* ---- Greeting ---- */
-.hm-row-greeting{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;padding:22px 22px 0
-}
-.hm-greet-hi{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.05em;line-height:1.2}
-.hm-greet-sub{font-size:12.5px;color:var(--dim);font-weight:500;margin-top:3px}
+.hm-row-greeting{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 20px 0}
+.hm-greet-hi{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.05em}
+.hm-greet-sub{font-size:12px;color:var(--dim);margin-top:2px}
 .hm-greet-actions{display:flex;gap:8px;flex-shrink:0}
-.hm-action-btn{
-  display:flex;align-items:center;gap:7px;padding:9px 15px;border-radius:12px;
-  font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
-  font-family:inherit;text-decoration:none;border:none;
-  -webkit-tap-highlight-color:transparent;transition:transform .12s,opacity .15s
-}
+.hm-action-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;text-decoration:none;border:none;transition:opacity .15s}
 .hm-action-btn svg{width:14px;height:14px;flex-shrink:0;stroke-width:2}
-.hm-action-btn:active{transform:scale(.97)}
 .hm-action-primary{background:var(--primary);color:#fff}
 .hm-action-primary svg{stroke:#fff}
 .hm-action-wa{background:#22c55e;color:#fff}
 .hm-action-wa svg{stroke:#fff}
 
-/* ---- Stats ---- */
-.hm-stats{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px 22px
-}
-.hm-stat{
-  background:var(--panel);border:1px solid var(--border);border-radius:16px;
-  padding:11px 14px;box-shadow:var(--shadow-s);
-  display:flex;align-items:center;gap:10px;
-  border-left:3px solid var(--accent,var(--primary))
-}
-.hm-stat-icon{
-  width:34px;height:34px;border-radius:10px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center
-}
-.hm-stat-icon svg{width:16px;height:16px;stroke-width:2}
-.hm-stat-val{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.04em;line-height:1}
-.hm-stat-lbl{font-size:10px;color:var(--dim);font-weight:500;margin-top:2px;white-space:nowrap}
+/* Stats — ícono circular, número grande, sin borde de color */
+.hm-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px 20px}
+.hm-stat{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.hm-stat-icon{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.hm-stat-icon svg{width:20px;height:20px;stroke-width:2}
+.hm-stat-val{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.04em;line-height:1}
+.hm-stat-lbl{font-size:11px;color:var(--dim);margin-top:3px}
 
-/* ---- Main 2-col grid ---- */
-.hm-main{display:flex;flex-direction:column;gap:12px;padding:0 22px 22px}
+/* Main */
+.hm-main{display:flex;flex-direction:column;gap:12px;padding:0 20px 20px}
 
-/* ---- Cards ---- */
-.hm-card{
-  background:var(--panel);border:1px solid var(--border);border-radius:20px;
-  box-shadow:var(--shadow-s);display:flex;flex-direction:column;overflow:hidden
-}
-.hm-card--blue {border-top:3px solid #4F7FE8}
-.hm-card--green{border-top:3px solid #22c55e}
-.hm-card--purple{border-top:3px solid #a855f7}
-.hm-card-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;flex-shrink:0;border-bottom:1px solid var(--border)
-}
-.hm-card--blue .hm-card-hdr{background:linear-gradient(90deg,rgba(79,127,232,.06),transparent)}
-.hm-card--green .hm-card-hdr{background:linear-gradient(90deg,rgba(34,197,94,.06),transparent)}
-.hm-card--purple .hm-card-hdr{background:linear-gradient(90deg,rgba(168,85,247,.06),transparent)}
-.hm-card-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.02em}
+/* Cards — limpias, sin borde de color arriba */
+.hm-card{background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 1px 6px rgba(0,0,0,.06);display:flex;flex-direction:column;overflow:hidden}
+.hm-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;flex-shrink:0;border-bottom:1px solid var(--border)}
+.hm-card-title{font-size:13.5px;font-weight:700;color:var(--text)}
 
-/* no scroll needed — JS limits items shown */
-.hm-card-scroll{padding:10px 14px;flex:1}
-.hm-svc-list{padding:6px 14px}
-#homeInbox{padding:4px 14px}
+/* Contenido de cards — sin scroll, JS limita ítems */
+.hm-svc-list{padding:6px 16px 4px}
+#homeInbox{padding:4px 16px}
 
-/* ---- Calendar: strip chrome, fill remaining left column ---- */
-.hm-cal-inner{
-  flex:1;min-height:0;overflow:hidden;
-  border:none!important;border-radius:0!important;
-  box-shadow:none!important;padding:10px 14px!important;margin:0!important
-}
-/* Celda fija de 38px — evita que aspect-ratio:1 agrande las celdas en col ancha */
-.hm-cal-inner .cal-cell{
-  aspect-ratio:unset!important;height:38px
-}
+/* Calendario — sin chrome propio, celdas de altura fija */
+.hm-cal-inner{border:none!important;border-radius:0!important;box-shadow:none!important;padding:10px 16px!important;margin:0!important}
+.hm-cal-inner .cal-cell{aspect-ratio:unset!important;height:36px}
 
-/* ---- Card footer (cotizar + escribir reseña) ---- */
-.hm-card-foot{
-  padding:0 14px 12px;flex-shrink:0
-}
-.hm-foot-btn{
-  display:flex;align-items:center;justify-content:center;gap:7px;width:100%;
-  padding:9px 12px;border-radius:11px;cursor:pointer;font-family:inherit;
-  font-size:12px;font-weight:600;border:1.5px solid var(--border);
-  background:var(--bg);color:var(--soft);
-  transition:background .15s,border-color .15s,color .15s;
-  -webkit-tap-highlight-color:transparent
-}
-.hm-foot-btn:hover{background:var(--primary-dim);border-color:var(--primary-glow);color:var(--primary)}
+/* Footer de card — botones secundarios */
+.hm-card-foot{padding:0 16px 14px;flex-shrink:0}
+.hm-foot-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px;border-radius:11px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--soft);transition:background .15s,color .15s}
+.hm-foot-btn:hover{background:var(--primary-dim);color:var(--primary);border-color:var(--primary-glow)}
 .hm-foot-btn svg{width:13px;height:13px;stroke:currentColor;flex-shrink:0}
 
-/* ---- Right column (services + reviews stacked) ---- */
 .hm-right-col{display:flex;flex-direction:column;gap:12px}
 
-/* ── DESKTOP: fija en pantalla, sin scroll exterior ──────────────────── */
+/* ── DESKTOP ── */
 @media(min-width:800px){
-  .hm-panel{
-    display:grid!important;overflow:hidden!important;
-    grid-template-rows:auto auto 1fr;padding:0;gap:0
-  }
-  .hm-row-greeting{padding:20px 22px 0}
-  .hm-stats{padding:12px 22px;grid-template-columns:repeat(4,1fr);gap:10px}
-  .hm-main{
-    flex-direction:row;padding:0 22px 20px;gap:12px;
-    overflow:hidden;min-height:0
-  }
-  /* Calendar: columna izquierda ancha, flex-col para que el cal-widget crezca */
-  .hm-card-left{
-    flex:12;min-height:0;
-    display:flex;flex-direction:column;overflow:hidden
-  }
-  .hm-card-left .hm-cal-inner{
-    flex:1;min-height:0;overflow-y:auto
-  }
-  /* Columna derecha: servicios arriba (40%) + reseñas abajo (60%) */
-  .hm-right-col{
-    flex:8;min-height:0;overflow:hidden;
-    display:flex;flex-direction:column;gap:12px
-  }
-  .hm-right-col .hm-card:first-child{flex:4;min-height:0}
-  .hm-right-col .hm-card:last-child{flex:6;min-height:0}
-  .hm-card-scroll{overflow-y:auto;scrollbar-width:thin}
-  .hm-svc-list{overflow-y:auto}
+  .hm-panel{display:grid!important;overflow:hidden!important;grid-template-rows:auto auto 1fr;padding:0;gap:0}
+  .hm-row-greeting{padding:20px 20px 0}
+  .hm-stats{grid-template-columns:repeat(4,1fr);padding:12px 20px;gap:10px}
+  .hm-main{flex-direction:row;padding:0 20px 20px;gap:14px;overflow:hidden;min-height:0}
+
+  /* Columna izquierda: calendario */
+  .hm-card-left{flex:13;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  .hm-card-left .hm-cal-inner{overflow:hidden}
+
+  /* Columna derecha: servicios + reseñas apilados */
+  .hm-right-col{flex:7;min-height:0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+  .hm-right-col .hm-card{overflow:hidden}
+  .hm-right-col .hm-card:last-child{flex:1;min-height:0}
 }
 `;
 }
