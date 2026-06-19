@@ -67,6 +67,7 @@ export const publicPortalController = {
       }
 
       // Redirigir a login si Google auth está activo y no hay sesión de portal
+      let portalUser: { name?: string; email?: string; picture?: string } | null = null;
       if (process.env.GOOGLE_CLIENT_ID) {
         const jwt = await import("jsonwebtoken");
         const token: string | undefined = req.cookies?.["portal_session"];
@@ -74,14 +75,13 @@ export const publicPortalController = {
           return res.redirect("/auth/portal/" + encodeURIComponent(publicSlug) + "/google");
         }
         try {
-          jwt.verify(token, process.env.JWT_SECRET!, { issuer: "portal" });
+          const payload = jwt.verify(token, process.env.JWT_SECRET!, { issuer: "portal" }) as any;
+          portalUser = { name: payload.name, email: payload.email, picture: payload.picture };
         } catch {
           res.clearCookie("portal_session");
           return res.redirect("/auth/portal/" + encodeURIComponent(publicSlug) + "/google");
         }
       }
-
-      const portalUser = (req as any).portalUser as { name?: string; email?: string; picture?: string } | undefined;
 
       const slug = await getSlugByValueService(publicSlug);
 
