@@ -123,10 +123,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   }
   /* Nav list */
   .ir-nav{
-    display:flex;flex-direction:column;gap:6px;padding:14px 10px;flex:1
+    display:flex;flex-direction:column;gap:4px;padding:12px 10px;flex:1
   }
   .ir-btn{
-    width:100%;padding:10px 14px;border-radius:14px;border:none;cursor:pointer;
+    flex:1;width:100%;padding:0 14px;border-radius:14px;border:none;cursor:pointer;
     background:none;display:flex;flex-direction:row;align-items:center;gap:12px;
     color:var(--rail-icon);transition:background .15s,color .15s;
     -webkit-tap-highlight-color:transparent;text-align:left
