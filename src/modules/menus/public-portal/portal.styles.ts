@@ -1021,11 +1021,11 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
   padding:16px 18px 14px
 }
 .hm-card-brand{
-  border:1px solid var(--primary-glow);
-  border-top:3px solid var(--primary);
-  background:linear-gradient(160deg,var(--primary-dim) 0%,#F8FAFF 100%)
+  border:1px solid rgba(234,88,12,.28);
+  border-top:3px solid #EA580C;
+  background:linear-gradient(160deg,#FFEDD5 0%,#FFF7ED 100%)
 }
-.hm-card-brand .hm-title-name{color:var(--primary)}
+.hm-card-brand .hm-title-name{color:#C2410C}
 .hm-title-name{
   font-size:22px;font-weight:900;
   letter-spacing:-.05em;line-height:1.1;margin-bottom:5px
@@ -1037,7 +1037,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .hm-title-stats{
   display:flex;align-items:center;gap:6px;
   font-size:12px;font-weight:600;color:var(--soft);
-  padding-top:8px;border-top:1px solid var(--primary-glow)
+  padding-top:8px;border-top:1px solid rgba(234,88,12,.18)
 }
 .hm-title-stat{display:flex;align-items:center;gap:3px}
 .hm-title-sep{color:var(--dim)}
