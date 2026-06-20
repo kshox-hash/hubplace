@@ -951,8 +951,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 /* ── TITLE BLOCK ──────────────────────────────────────────────────────── */
 .hm-title-block{
-  width:100%;flex-shrink:0;
-  padding:20px 0 4px
+  flex-shrink:0;
+  padding:4px 0 2px
 }
 .hm-title-name{
   font-size:24px;font-weight:900;color:var(--text);

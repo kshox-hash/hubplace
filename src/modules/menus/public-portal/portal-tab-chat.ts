@@ -52,19 +52,19 @@ export function chatTabHtml(d: ChatData): string {
     <!-- MAIN -->
     <div class="hm-main">
 
-      <!-- TÍTULO — encabezado del portal -->
-      <div class="hm-title-block">
-        <div class="hm-title-name">${d.name}</div>
-        <div class="hm-title-sub">${d.desc ?? "Reservá tu turno de forma rápida y sencilla"}</div>
-        <div class="hm-title-stats">
-          <span class="hm-title-stat"><span style="color:#F59E0B">★</span> <span id="heroRating">—</span></span>
-          <span class="hm-title-sep">·</span>
-          <span class="hm-title-stat"><span id="heroReviews">0</span> reseñas</span>
-        </div>
-      </div>
-
       <!-- COLUMNA IZQUIERDA — servicios (angosta) -->
       <div class="hm-left-col">
+
+        <!-- TÍTULO -->
+        <div class="hm-title-block">
+          <div class="hm-title-name">${d.name}</div>
+          <div class="hm-title-sub">${d.desc ?? "Reservá tu turno de forma rápida y sencilla"}</div>
+          <div class="hm-title-stats">
+            <span class="hm-title-stat"><span style="color:#F59E0B">★</span> <span id="heroRating">—</span></span>
+            <span class="hm-title-sep">·</span>
+            <span class="hm-title-stat"><span id="heroReviews">0</span> reseñas</span>
+          </div>
+        </div>
 
         <!-- Servicios recientes -->
         <div class="hm-card hm-card-svc">
