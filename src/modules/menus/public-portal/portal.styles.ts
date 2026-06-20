@@ -114,19 +114,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   }
   /* Brand */
   .ir-brand{
-    display:flex;align-items:center;gap:11px;
-    padding:22px 18px 20px
+    display:flex;flex-direction:column;gap:5px;
+    padding:20px 18px 16px;border-bottom:1px solid var(--border)
   }
-  .ir-brand-av{
-    width:36px;height:36px;border-radius:11px;flex-shrink:0;
-    background:var(--primary-dim);border:1.5px solid var(--primary-glow);
-    display:flex;align-items:center;justify-content:center;
-    font-size:12px;font-weight:800;color:var(--primary);letter-spacing:-.02em
-  }
-  .ir-brand-name{
-    font-size:13.5px;font-weight:700;color:var(--text);letter-spacing:-.03em;
+  .ir-brand-logo{display:flex;align-items:center}
+  .ir-brand-logo svg{display:block}
+  .ir-brand-biz{
+    font-size:11px;color:var(--dim);font-weight:400;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis
   }
+  .ir-brand-biz span{color:var(--soft);font-weight:600}
   /* Nav list */
   .ir-nav{
     display:flex;flex-direction:column;gap:6px;padding:14px 10px;flex:1
