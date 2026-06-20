@@ -51,28 +51,13 @@ export function chatTabHtml(d: ChatData): string {
 
     <!-- HERO -->
     <div class="hm-hero">
-      <div class="hm-hero-inner">
-        <div class="hm-hero-left">
-          <div class="hm-hero-avatar">${d.initials}</div>
-          <div class="hm-hero-text">
-            <div class="hm-hero-greeting">Bienvenido a</div>
-            <div class="hm-hero-name">${d.name}</div>
-            ${d.desc ? `<div class="hm-hero-desc">${d.desc}</div>` : ""}
-          </div>
-        </div>
-        <div class="hm-hero-right">
-          <div class="hm-hero-stat">
-            <div class="hm-hero-stat-val">
-              <span class="hm-hero-star">★</span><span id="heroRating">—</span>
-            </div>
-            <div class="hm-hero-stat-lbl">Calificación</div>
-          </div>
-          <div class="hm-hero-stat-divider"></div>
-          <div class="hm-hero-stat">
-            <div class="hm-hero-stat-val" id="heroReviews">0</div>
-            <div class="hm-hero-stat-lbl">Reseñas</div>
-          </div>
-        </div>
+      <div class="hm-hero-label">Bienvenido a</div>
+      <div class="hm-hero-name">${d.name}</div>
+      ${d.desc ? `<div class="hm-hero-sub">${d.desc}</div>` : `<div class="hm-hero-sub">Reservá tu turno de forma rápida y sencilla</div>`}
+      <div class="hm-hero-pills">
+        <div class="hm-hero-pill"><span class="hm-hero-star">★</span><span id="heroRating">—</span><span class="hm-hero-pill-lbl">calificación</span></div>
+        <div class="hm-hero-pill-sep"></div>
+        <div class="hm-hero-pill"><span id="heroReviews">0</span><span class="hm-hero-pill-lbl">reseñas</span></div>
       </div>
     </div>
 

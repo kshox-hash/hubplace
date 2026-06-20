@@ -952,42 +952,52 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 /* ── HERO ─────────────────────────────────────────────────────────────── */
 .hm-hero{
   flex-shrink:0;position:relative;overflow:hidden;
-  background:var(--primary) url('/assets/banner.png') center/cover no-repeat;
-  padding:22px 20px 20px
+  background:var(--primary);
+  padding:28px 22px 24px
 }
 .hm-hero::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(0,0,0,.52) 0%,rgba(0,0,0,.32) 100%);
+  background:linear-gradient(135deg,rgba(0,0,0,.22) 0%,rgba(0,0,0,.06) 100%);
   pointer-events:none
 }
 .hm-hero::after{
-  content:'';position:absolute;bottom:-40px;right:-30px;
-  width:160px;height:160px;border-radius:50%;
-  background:rgba(255,255,255,.06);pointer-events:none
+  content:'';position:absolute;
+  top:-60px;right:-60px;
+  width:220px;height:220px;border-radius:50%;
+  background:rgba(255,255,255,.07);pointer-events:none
 }
-.hm-hero-inner{
+.hm-hero-label{
   position:relative;z-index:1;
-  display:flex;align-items:center;justify-content:space-between;gap:14px
+  font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.65);margin-bottom:6px
 }
-.hm-hero-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
-.hm-hero-avatar{
-  width:52px;height:52px;border-radius:16px;flex-shrink:0;
-  background:rgba(255,255,255,.2);
-  border:2px solid rgba(255,255,255,.35);
-  color:#fff;font-size:18px;font-weight:800;letter-spacing:-.02em;
-  display:flex;align-items:center;justify-content:center;
-  backdrop-filter:blur(4px)
+.hm-hero-name{
+  position:relative;z-index:1;
+  font-size:28px;font-weight:900;color:#fff;
+  letter-spacing:-.05em;line-height:1.05;
+  text-shadow:0 2px 20px rgba(0,0,0,.2);
+  margin-bottom:8px
 }
-.hm-hero-text{min-width:0;flex:1}
-.hm-hero-greeting{font-size:11px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
-.hm-hero-name{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hm-hero-desc{font-size:12px;color:rgba(255,255,255,.72);margin-top:4px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.hm-hero-right{display:flex;align-items:center;gap:0;flex-shrink:0}
-.hm-hero-stat{display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 14px}
-.hm-hero-stat-val{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1;display:flex;align-items:center;gap:3px}
-.hm-hero-star{color:#FCD34D;font-size:18px;line-height:1}
-.hm-hero-stat-lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.05em}
-.hm-hero-stat-divider{width:1px;height:32px;background:rgba(255,255,255,.2)}
+.hm-hero-sub{
+  position:relative;z-index:1;
+  font-size:13px;font-weight:400;color:rgba(255,255,255,.78);
+  line-height:1.5;margin-bottom:16px;
+  max-width:340px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
+}
+.hm-hero-pills{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:0;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:12px;
+  padding:7px 14px;
+  width:fit-content;backdrop-filter:blur(6px)
+}
+.hm-hero-pill{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#fff}
+.hm-hero-star{color:#FCD34D;font-size:14px}
+.hm-hero-pill-lbl{font-size:11px;font-weight:500;color:rgba(255,255,255,.65)}
+.hm-hero-pill-sep{width:1px;height:18px;background:rgba(255,255,255,.25);margin:0 12px}
 
 /* ── CARDS ────────────────────────────────────────────────────────────── */
 .hm-card{
@@ -1331,9 +1341,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
     padding:0;gap:0
   }
   .hm-welcome-desk{display:none}
-  .hm-hero{padding:28px 32px 26px}
-  .hm-hero-name{font-size:26px}
-  .hm-hero-avatar{width:60px;height:60px;font-size:22px;border-radius:18px}
+  .hm-hero{padding:32px 36px 28px}
+  .hm-hero-name{font-size:34px}
   .hm-main{
     flex-direction:row;
     padding:24px 28px 24px 28px;
