@@ -61,7 +61,10 @@ export function chatTabHtml(d: ChatData): string {
         <!-- Servicios recientes -->
         <div class="hm-card hm-card-svc">
           <div class="hm-card-hdr">
-            <div class="hm-card-title">Servicios recientes</div>
+            <div class="hm-card-title-row">
+              <span class="hm-card-title-icon" style="color:#7C3AED">${S_SVC}</span>
+              <span class="hm-card-title">Servicios recientes</span>
+            </div>
             <button class="sec-link" type="button" data-action="reservas">Ver todos →</button>
           </div>
           <div id="homeServiceGrid" class="hm-svc-list-home">
@@ -78,7 +81,10 @@ export function chatTabHtml(d: ChatData): string {
         <!-- Opiniones -->
         <div class="hm-card hm-card-reviews">
           <div class="hm-card-hdr">
-            <div class="hm-card-title">Opiniones</div>
+            <div class="hm-card-title-row">
+              <span class="hm-card-title-icon" style="color:#D97706">${S_STAR}</span>
+              <span class="hm-card-title">Opiniones</span>
+            </div>
             <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
           </div>
           <div class="hm-reviews-panel" id="hmReviewsPanel">
@@ -128,10 +134,10 @@ export function chatTabHtml(d: ChatData): string {
         </div>` : `<div id="calHome" style="display:none"></div>`}
 
         <!-- Turnos disponibles -->
-        <div class="hm-card">
+        <div class="hm-card hm-card-avail">
           <div class="hm-card-hdr">
             <div class="hm-card-title-row">
-              <span class="hm-card-title-icon" style="color:#16A34A">${S_CLOCK}</span>
+              <span class="hm-card-title-icon" style="color:#059669">${S_CLOCK}</span>
               <span class="hm-card-title">Turnos disponibles</span>
             </div>
             ${hasBooking ? `<button class="sec-link" type="button" data-action="reservas">Ver agenda →</button>` : ""}
