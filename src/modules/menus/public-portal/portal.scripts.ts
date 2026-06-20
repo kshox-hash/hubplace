@@ -824,13 +824,15 @@ function renderCalWidget(id){
     var extra='';
     if(isToday){
       cls+=' cal-today';
+      extra=' data-cal-date="'+dateStr+'"';
     } else if(isPast){
       cls+=' cal-past';
     } else if(hasSlots){
       cls+=' cal-avail';
-      extra=' data-cal-date="'+dateStr+'" title="'+calSlots[dateStr].length+' horarios disponibles"';
+      extra=' data-cal-date="'+dateStr+'"';
     } else {
       cls+=' cal-taken';
+      extra=' data-cal-date="'+dateStr+'"';
     }
     cells+='<div class="'+cls+'"'+extra+'>'+d+'</div>';
   }
@@ -871,11 +873,132 @@ function renderCalWidget(id){
       renderAllCals();
     });
   }
-  // Click on available day → booking flow (day → svc → time → form)
+  // Click on available day → booking flow
   el.querySelectorAll('.cal-avail').forEach(function(cell){
     cell.addEventListener('click',function(){
       var dateStr=cell.getAttribute('data-cal-date');
       if(dateStr) openBookingFromDay(dateStr);
+    });
+  });
+  // Tooltip on hover/tap for all non-past days
+  setupCalTooltips(el);
+}
+
+// ── Calendar day tooltip ──────────────────────────────────────────────────────
+var _calTipEl=null;
+var _calTipTimer=null;
+
+function getCalTipEl(){
+  if(!_calTipEl){
+    _calTipEl=document.createElement('div');
+    _calTipEl.className='cal-tip';
+    document.body.appendChild(_calTipEl);
+    _calTipEl.addEventListener('mouseenter',function(){clearTimeout(_calTipTimer);});
+    _calTipEl.addEventListener('mouseleave',hideCalTip);
+  }
+  return _calTipEl;
+}
+
+function hideCalTip(){
+  _calTipTimer=setTimeout(function(){
+    var t=getCalTipEl();t.classList.remove('ct-visible');
+  },150);
+}
+
+function showCalTip(cell,date){
+  clearTimeout(_calTipTimer);
+  var tip=getCalTipEl();
+  var DAY=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  var MON=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var d=new Date(date+'T12:00');
+  var today=new Date();today.setHours(0,0,0,0);
+  var dDay=new Date(date+'T00:00');
+  var isToday=dDay.getTime()===today.getTime();
+  var slots=calSlots[date]||[];
+  var hasSlots=slots.length>0;
+  var svcDotColors=['#6366F1','#2563EB','#059669','#D97706','#EC4899','#14B8A6'];
+
+  var html='<div class="cal-tip-date">'
+    +DAY[d.getDay()]+' '+d.getDate()+' '+MON[d.getMonth()]
+    +(isToday?'<span class="cal-tip-date-badge">Hoy</span>':hasSlots?'<span class="cal-tip-date-badge" style="background:#ECFDF5;color:#059669">Disponible</span>':'<span class="cal-tip-date-badge" style="background:#FEF3C7;color:#D97706">Sin turnos</span>')
+    +'</div>'
+    +'<div class="cal-tip-divider"></div>';
+
+  if(hasSlots){
+    html+='<div class="cal-tip-section">Turnos disponibles</div>'
+      +'<div class="cal-tip-slots">';
+    slots.slice(0,4).forEach(function(t){
+      html+='<span class="cal-tip-slot" data-tip-slot-date="'+date+'" data-tip-slot-time="'+t+'">'+t+'</span>';
+    });
+    if(slots.length>4) html+='<span class="cal-tip-more">+'+( slots.length-4)+'</span>';
+    html+='</div><div class="cal-tip-divider"></div>';
+  }
+
+  if(svcsCache&&svcsCache.length>0){
+    html+='<div class="cal-tip-section">Servicios</div>'
+      +'<div class="cal-tip-svcs">';
+    svcsCache.slice(0,3).forEach(function(s,i){
+      html+='<div class="cal-tip-svc-item">'
+        +'<div class="cal-tip-dot" style="background:'+svcDotColors[i%svcDotColors.length]+'"></div>'
+        +(s.name||s.title||'Servicio')
+        +'</div>';
+    });
+    html+='</div><div class="cal-tip-divider"></div>';
+  }
+
+  if(providersCache&&providersCache.length>0){
+    html+='<div class="cal-tip-section">Atiende</div>'
+      +'<div class="cal-tip-people">';
+    providersCache.slice(0,3).forEach(function(p){
+      var initials=((p.name||'?').trim().split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2)).toUpperCase();
+      html+='<div class="cal-tip-person">'
+        +'<div class="cal-tip-avatar">'
+        +(p.picture||p.avatar?'<img src="'+(p.picture||p.avatar)+'" alt="">':initials)
+        +'</div>'
+        +(p.name||'Profesional')
+        +'</div>';
+    });
+    html+='</div><div class="cal-tip-divider"></div>';
+  }
+
+  if(hasSlots){
+    html+='<button class="cal-tip-btn" data-tip-day="'+date+'">Reservar este día →</button>';
+  } else {
+    html+='<div class="cal-tip-empty">Sin disponibilidad este día</div>';
+  }
+
+  tip.innerHTML=html;
+
+  // Position
+  var rect=cell.getBoundingClientRect();
+  var TW=230,TH=tip.offsetHeight||260;
+  var left=rect.left+rect.width/2-TW/2;
+  var top=rect.bottom+8;
+  if(left+TW>window.innerWidth-8) left=window.innerWidth-TW-8;
+  if(left<8) left=8;
+  if(top+TH>window.innerHeight-8) top=rect.top-TH-8;
+  tip.style.left=left+'px';tip.style.top=top+'px';
+  tip.classList.add('ct-visible');
+
+  tip.querySelectorAll('[data-tip-slot-date]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      openBookingFromSlot(btn.getAttribute('data-tip-slot-date'),btn.getAttribute('data-tip-slot-time'));
+      hideCalTip();
+    });
+  });
+  var dayBtn=tip.querySelector('[data-tip-day]');
+  if(dayBtn) dayBtn.addEventListener('click',function(){
+    openBookingFromDay(dayBtn.getAttribute('data-tip-day'));
+    hideCalTip();
+  });
+}
+
+function setupCalTooltips(el){
+  el.querySelectorAll('.cal-cell[data-cal-date]').forEach(function(cell){
+    cell.addEventListener('mouseenter',function(){showCalTip(cell,cell.getAttribute('data-cal-date'));});
+    cell.addEventListener('mouseleave',hideCalTip);
+    cell.addEventListener('click',function(e){
+      if(!cell.classList.contains('cal-avail')) showCalTip(cell,cell.getAttribute('data-cal-date'));
     });
   });
 }

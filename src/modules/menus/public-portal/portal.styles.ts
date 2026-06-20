@@ -672,7 +672,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   background:rgba(15,23,42,.05)
 }
 .cal-cell.cal-empty{pointer-events:none;background:transparent}
-.cal-cell.cal-past{color:#D1D5DB;pointer-events:none;background:transparent}
+.cal-cell.cal-past{color:#94A3B8;pointer-events:none;background:transparent}
 .cal-cell.cal-today{background:#2563EB;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(37,99,235,.35)}
 .cal-cell.cal-avail{
   cursor:pointer;font-weight:700;color:#fff;
@@ -1125,6 +1125,67 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .rv-bar-track{flex:1;height:6px;border-radius:3px;background:#F0F4F8;overflow:hidden}
 .rv-bar-fill{height:100%;border-radius:3px;background:#F59E0B;transition:width .4s ease}
 .rv-bar-count{font-size:10.5px;color:var(--dim);width:20px;flex-shrink:0;font-variant-numeric:tabular-nums}
+
+/* ── CALENDAR TOOLTIP ────────────────────────────────────────────────── */
+.cal-tip{
+  position:fixed;z-index:9900;
+  background:#fff;border:1px solid var(--border);
+  border-radius:18px;
+  box-shadow:0 16px 48px rgba(15,23,42,.18),0 4px 12px rgba(15,23,42,.08);
+  width:230px;pointer-events:auto;
+  opacity:0;transform:scale(.93) translateY(-6px);
+  transition:opacity .18s cubic-bezier(.34,1.56,.64,1),transform .18s cubic-bezier(.34,1.56,.64,1);
+  overflow:hidden
+}
+.cal-tip.ct-visible{opacity:1;transform:scale(1) translateY(0)}
+.cal-tip-date{
+  font-size:12.5px;font-weight:800;color:var(--text);
+  padding:12px 15px 9px;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:7px
+}
+.cal-tip-date-badge{
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;
+  background:#EEF4FF;color:var(--primary);letter-spacing:.02em
+}
+.cal-tip-divider{height:1px;background:var(--border-inner)}
+.cal-tip-section{
+  font-size:9.5px;font-weight:700;color:var(--dim);
+  text-transform:uppercase;letter-spacing:.08em;padding:8px 15px 4px
+}
+.cal-tip-slots{display:flex;flex-wrap:wrap;gap:4px;padding:0 13px 10px}
+.cal-tip-slot{
+  padding:3px 9px;border-radius:7px;
+  background:#EEF4FF;color:var(--primary);
+  font-size:11px;font-weight:700;cursor:pointer;
+  transition:background .15s,color .15s
+}
+.cal-tip-slot:hover{background:var(--primary);color:#fff}
+.cal-tip-more{
+  padding:3px 9px;border-radius:7px;
+  background:var(--border-inner);color:var(--dim);
+  font-size:11px;font-weight:600
+}
+.cal-tip-svcs,.cal-tip-people{padding:0 15px 10px;display:flex;flex-direction:column;gap:3px}
+.cal-tip-svc-item,.cal-tip-person{
+  font-size:11.5px;color:var(--soft);
+  display:flex;align-items:center;gap:6px
+}
+.cal-tip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cal-tip-empty{font-size:12px;color:var(--dim);padding:8px 15px 12px;font-style:italic}
+.cal-tip-avatar{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--primary-dim);color:var(--primary);
+  font-size:8.5px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;overflow:hidden
+}
+.cal-tip-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.cal-tip-btn{
+  display:block;width:calc(100% - 24px);margin:2px 12px 12px;
+  padding:9px;border:none;border-radius:11px;
+  background:var(--primary);color:#fff;font-size:12.5px;font-weight:700;
+  cursor:pointer;text-align:center;transition:background .15s
+}
+.cal-tip-btn:hover{background:#1D4ED8}
 
 /* ── CTA AZUL ─────────────────────────────────────────────────────────── */
 .hm-cta-card{
