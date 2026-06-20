@@ -1023,20 +1023,19 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   border-radius:18px;background:#2B62D9;
   display:flex;align-items:center;overflow:hidden;
   box-shadow:0 6px 24px rgba(43,98,217,.28);
-  min-height:96px;flex-shrink:0
+  flex-shrink:0
 }
-.hm-cta-body{flex:1;padding:18px 16px}
-.hm-cta-title{font-size:14px;font-weight:800;color:#fff;line-height:1.35;letter-spacing:-.02em}
+.hm-cta-body{flex:1;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.hm-cta-title{font-size:14px;font-weight:800;color:#fff;line-height:1.35;letter-spacing:-.02em;flex:1}
 .hm-cta-btn{
-  display:inline-flex;align-items:center;gap:7px;
-  margin-top:12px;padding:7px 14px;border-radius:10px;
+  display:inline-flex;align-items:center;gap:7px;flex-shrink:0;
+  padding:8px 16px;border-radius:10px;
   border:1.5px solid rgba(255,255,255,.5);
   background:transparent;color:#fff;
   font-size:12px;font-weight:700;font-family:inherit;
-  cursor:pointer;transition:background .15s
+  cursor:pointer;transition:background .15s;white-space:nowrap
 }
 .hm-cta-btn:hover{background:rgba(255,255,255,.12)}
-.hm-cta-art{width:80px;flex-shrink:0;align-self:stretch;background:#1A4FB0}
 
 /* ── CALENDAR WIDGET INSIDE HOME ──────────────────────────────────────── */
 .hm-cal-inner{
@@ -1096,8 +1095,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
     flex:8;display:flex;flex-direction:column;
     gap:12px;overflow:hidden;min-height:0
   }
-  .hm-card-svc{overflow:hidden;display:flex;flex-direction:column}
-  .hm-card-reviews{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+  .hm-card-svc{flex:3;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+  .hm-card-reviews{flex:2;min-height:0;overflow:hidden;display:flex;flex-direction:column}
   .hm-reviews-panel{flex:1;min-height:0;overflow:hidden}
 }
 `;

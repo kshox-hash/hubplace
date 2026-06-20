@@ -144,7 +144,6 @@ export function chatTabHtml(d: ChatData): string {
             <div class="hm-cta-title">Organiza tus servicios y crece tu negocio</div>
             ${hasBooking ? `<button class="hm-cta-btn" type="button" data-action="reservas">Crear nueva reserva</button>` : ""}
           </div>
-          <div class="hm-cta-art"></div>
         </div>
 
       </div>
