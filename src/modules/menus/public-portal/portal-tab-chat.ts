@@ -114,7 +114,7 @@ export function chatTabHtml(d: ChatData): string {
             <div class="hm-card-title">Opiniones</div>
             <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
           </div>
-          <div class="hm-reviews-panel">
+          <div class="hm-reviews-panel" id="hmReviewsPanel">
             <div class="hm-reviews-left">
               <div class="hm-reviews-avg" id="hmStatRatingBig">—</div>
               <div class="hm-reviews-stars" style="color:#F59E0B">★★★★★</div>

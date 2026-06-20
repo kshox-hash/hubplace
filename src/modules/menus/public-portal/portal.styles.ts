@@ -996,6 +996,27 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .hm-svc-cot-btn:hover{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.3);transform:translateY(-1px)}
 .hm-svc-cot-btn:active{transform:scale(.97)}
 
+/* ── EMPTY STATE ROW ─────────────────────────────────────────────────── */
+.hm-empty-row{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px
+}
+.hm-empty-icon{
+  width:40px;height:40px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center
+}
+.hm-empty-icon svg{width:18px;height:18px;stroke-width:1.8}
+.hm-empty-body{flex:1;min-width:0}
+.hm-empty-title{font-size:13px;font-weight:600;color:var(--text)}
+.hm-empty-sub{font-size:11.5px;color:var(--dim);margin-top:2px;line-height:1.4}
+.hm-empty-action{
+  flex-shrink:0;padding:7px 13px;border-radius:10px;border:none;cursor:pointer;
+  background:#EEF4FF;color:var(--primary);
+  font-size:11.5px;font-weight:600;font-family:inherit;white-space:nowrap;
+  transition:background .15s,transform .12s
+}
+.hm-empty-action:hover{background:var(--primary);color:#fff;transform:translateY(-1px)}
+
 /* ── PRÓXIMAS RESERVAS ────────────────────────────────────────────────── */
 .hm-upcoming-list{}
 .hm-upc-row{

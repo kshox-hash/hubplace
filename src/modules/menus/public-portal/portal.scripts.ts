@@ -1038,6 +1038,20 @@ function renderHomeInbox(data){
   if(hmRatingBig) hmRatingBig.textContent=avg>0?avg.toFixed(1):'—';
   var hmRevBig=document.getElementById('hmStatReviewsBig');
   if(hmRevBig) hmRevBig.textContent=String(total);
+  // si no hay reseñas, mostrar empty state compacto
+  var reviewsPanel=document.getElementById('hmReviewsPanel');
+  if(total===0 && reviewsPanel){
+    reviewsPanel.innerHTML='<div class="hm-empty-row">'
+      +'<div class="hm-empty-icon" style="background:rgba(245,158,11,.1);color:#D97706">'
+      +'<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+      +'</div>'
+      +'<div class="hm-empty-body">'
+      +'<div class="hm-empty-title">Sin reseñas aún</div>'
+      +'<div class="hm-empty-sub">Las opiniones de tus clientes aparecerán aquí</div>'
+      +'</div>'
+      +'</div>';
+    return;
+  }
   // bar chart distribution
   var dist={5:0,4:0,3:0,2:0,1:0};
   reviews2.forEach(function(r){
@@ -1250,11 +1264,15 @@ function submitReview(){
 // ── init ─────────────────────────────────────────────────────────────────────
 function initUpcoming(){
   var el=document.getElementById('hmUpcoming');if(!el) return;
-  el.innerHTML='<div style="padding:20px 16px;text-align:center">'
-    +'<div style="font-size:11.5px;color:var(--dim);margin-bottom:10px">Reservá un turno para verlo aquí</div>'
-    +'<button class="hm-svc-cot-btn" type="button" data-action="reservas" style="max-width:200px;margin:0 auto">'
-    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:13px;height:13px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'
-    +' Ver disponibilidad</button>'
+  el.innerHTML='<div class="hm-empty-row">'
+    +'<div class="hm-empty-icon" style="background:#EEF4FF;color:var(--primary)">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>'
+    +'</div>'
+    +'<div class="hm-empty-body">'
+    +'<div class="hm-empty-title">Sin próximas reservas</div>'
+    +'<div class="hm-empty-sub">Cuando reserves un turno aparecerá aquí</div>'
+    +'</div>'
+    +'<button class="hm-empty-action" type="button" data-action="reservas">Ver agenda</button>'
     +'</div>';
   el.querySelectorAll('[data-action="reservas"]').forEach(function(btn){
     btn.addEventListener('click',function(){ showTab('reservas'); });
