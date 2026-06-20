@@ -41,15 +41,6 @@ export function chatTabHtml(d: ChatData): string {
   return `
   <div id="panel-chat" class="panel active hm-panel">
 
-    <!-- TOP BAR -->
-    <div class="hm-topbar">
-      <div class="hm-topbar-left">
-        <div class="hm-topbar-greet">¡Hola, ${firstName}! 👋</div>
-        <div class="hm-topbar-sub">Bienvenido a ${d.name}</div>
-      </div>
-      ${hasBooking ? `<button class="hm-nueva-reserva" type="button" data-action="reservas">${S_CAL} Nueva reserva</button>` : ""}
-    </div>
-
     <!-- stubs para JS (stats data) -->
     <div style="display:none">
       <span id="hmStatSvcs"></span>
