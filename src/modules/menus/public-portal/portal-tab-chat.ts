@@ -112,7 +112,7 @@ export function chatTabHtml(d: ChatData): string {
       <!-- COLUMNA DERECHA — calendario (ancha, llena altura) -->
       <div class="hm-right-col">
 
-        <!-- Calendario con heatmap de 7 días -->
+        <!-- Calendario -->
         ${hasBooking ? `
         <div class="hm-card hm-card-cal">
           <div class="hm-card-hdr">
@@ -122,22 +122,24 @@ export function chatTabHtml(d: ChatData): string {
             </div>
             <button class="sec-link" type="button" data-action="reservas">Reservar →</button>
           </div>
-          <!-- Heatmap 7 días -->
-          <div id="hmHeatStrip" class="hm-heat-strip"></div>
           <div class="cal-widget hm-cal-inner" id="calHome">
             <div class="cal-loading"><div class="spinner"></div>Cargando…</div>
           </div>
         </div>` : `<div id="calHome" style="display:none"></div>`}
 
-        <!-- Quick Book -->
-        <div class="hm-qbook-card">
-          <div class="hm-qbook-hdr">
-            <div class="hm-qbook-dot"></div>
-            <span class="hm-qbook-title">Reservar ahora</span>
-            <span class="hm-qbook-sub">Próximos turnos</span>
+        <!-- Turnos disponibles -->
+        <div class="hm-card">
+          <div class="hm-card-hdr">
+            <div class="hm-card-title-row">
+              <span class="hm-card-title-icon" style="color:#16A34A">${S_CLOCK}</span>
+              <span class="hm-card-title">Turnos disponibles</span>
+            </div>
+            ${hasBooking ? `<button class="sec-link" type="button" data-action="reservas">Ver agenda →</button>` : ""}
           </div>
-          <div class="hm-qbook-slots" id="hmQuickSlots">
-            <div class="hm-qbook-loading"><div class="spinner"></div></div>
+          <div id="hmUpcoming" class="hm-upcoming-list">
+            <div style="padding:14px 16px;display:flex;align-items:center;gap:8px;color:var(--dim);font-size:12.5px">
+              <div class="spinner"></div>Cargando…
+            </div>
           </div>
         </div>
 
