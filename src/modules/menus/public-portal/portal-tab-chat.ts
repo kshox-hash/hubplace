@@ -134,7 +134,6 @@ export function chatTabHtml(d: ChatData): string {
 
         <!-- CTA Azul -->
         <div class="hm-cta-card">
-          <img src="/assets/cardbottom.png" alt="" class="hm-cta-img">
           <div class="hm-cta-body">
             <div class="hm-cta-title">Organiza tus servicios y crece tu negocio</div>
             ${hasBooking ? `<button class="hm-cta-btn" type="button" data-action="reservas">Crear nueva reserva</button>` : ""}

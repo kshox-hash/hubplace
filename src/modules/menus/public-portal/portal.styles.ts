@@ -1018,13 +1018,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 /* ── CTA AZUL ─────────────────────────────────────────────────────────── */
 .hm-cta-card{
-  border-radius:18px;background:#2B62D9;
-  display:flex;align-items:center;overflow:hidden;
+  border-radius:18px;overflow:hidden;
   box-shadow:0 6px 24px rgba(43,98,217,.28);
-  flex-shrink:0
+  flex-shrink:0;position:relative;
+  background:url('/assets/cardbottom.png') center/cover no-repeat
 }
-.hm-cta-img{width:110px;flex-shrink:0;align-self:stretch;object-fit:cover;object-position:center}
-.hm-cta-body{flex:1;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.hm-cta-card::before{
+  content:'';position:absolute;inset:0;
+  background:rgba(30,70,180,.72);border-radius:18px
+}
+.hm-cta-body{position:relative;z-index:1;flex:1;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px}
 .hm-cta-title{font-size:14px;font-weight:800;color:#fff;line-height:1.35;letter-spacing:-.02em;flex:1}
 .hm-cta-btn{
   display:inline-flex;align-items:center;gap:7px;flex-shrink:0;
