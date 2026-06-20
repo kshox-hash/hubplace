@@ -926,7 +926,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .hm-stat-spark{flex-shrink:0;opacity:.85}
 
 /* ── LAYOUT ───────────────────────────────────────────────────────────── */
-.hm-panel{display:flex;flex-direction:column;overflow-y:auto;background:url('/assets/backgroundhome.jpg') center/cover no-repeat fixed}
+.hm-panel{display:flex;flex-direction:column;overflow-y:auto;background-color:#EAF0F8;background-image:radial-gradient(circle,#B8CDEA 1px,transparent 1px);background-size:22px 22px}
 .hm-main{display:flex;flex-direction:column;gap:10px;padding:0 16px 20px}
 .hm-left-col{display:flex;flex-direction:column;gap:10px}
 .hm-right-col{display:flex;flex-direction:column;gap:10px}
