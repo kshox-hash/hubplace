@@ -32,64 +32,29 @@ export function chatTabHtml(d: ChatData): string {
   return `
   <div id="panel-chat" class="panel active hm-panel">
 
-    <!-- ROW 1 — Stats -->
-    <div class="hm-stats">
-      <div class="hm-stat" style="background:#F4F8FF">
-        <div class="hm-stat-icon" style="background:#C3D7FA;color:#2B62D9">${S_SVC}</div>
-        <div class="hm-stat-body">
-          <div class="hm-stat-lbl">Servicios</div>
-          <div class="hm-stat-val" id="hmStatSvcs">—</div>
-        </div>
-        <svg class="hm-stat-spark" style="color:#2B62D9" viewBox="0 0 56 24" width="56" height="24" fill="none"><polyline points="0,20 8,14 16,17 24,9 32,12 40,5 48,8 56,4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="hm-stat" style="background:#FFFDF0">
-        <div class="hm-stat-icon" style="background:#F0D070;color:#9A7200">${S_STAR}</div>
-        <div class="hm-stat-body">
-          <div class="hm-stat-lbl">Calificación</div>
-          <div class="hm-stat-val" id="hmStatRating">—</div>
-        </div>
-        <svg class="hm-stat-spark" style="color:#9A7200" viewBox="0 0 56 24" width="56" height="24" fill="none"><polyline points="0,16 8,18 16,12 24,14 32,8 40,11 48,6 56,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="hm-stat" style="background:#F4F8FF">
-        <div class="hm-stat-icon" style="background:#C3D7FA;color:#2B62D9">${S_CAL}</div>
-        <div class="hm-stat-body">
-          <div class="hm-stat-lbl">Próximo turno</div>
-          <div class="hm-stat-val" id="hmStatNext">—</div>
-        </div>
-        <svg class="hm-stat-spark" style="color:#2B62D9" viewBox="0 0 56 24" width="56" height="24" fill="none"><polyline points="0,22 8,16 16,19 24,10 32,13 40,7 48,10 56,3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="hm-stat" style="background:#FFFDF0">
-        <div class="hm-stat-icon" style="background:#F0D070;color:#9A7200">${S_CLOCK}</div>
-        <div class="hm-stat-body">
-          <div class="hm-stat-lbl">Reseñas</div>
-          <div class="hm-stat-val" id="hmStatReviews">—</div>
-        </div>
-        <svg class="hm-stat-spark" style="color:#9A7200" viewBox="0 0 56 24" width="56" height="24" fill="none"><polyline points="0,18 8,14 16,10 24,12 32,6 40,8 48,4 56,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    </div>
-
-    <!-- ROW 3 — Main content -->
+    <!-- MAIN content — ocupa toda la altura -->
     <div class="hm-main">
 
-      <!-- LEFT: Calendar (espacio grande) -->
+      <!-- LEFT: Calendar -->
       ${hasBooking ? `
-      <div class="hm-card hm-card--green hm-card-left">
+      <div class="hm-card hm-card-left">
         <div class="hm-card-hdr">
           <div class="hm-card-title">Disponibilidad</div>
           <button class="sec-link" type="button" data-action="reservas">Reservar →</button>
         </div>
+        <div class="cal-next-strip" id="calNextStrip" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Próximo turno: <strong id="hmStatNext">—</strong>
+        </div>
         <div class="cal-widget hm-cal-inner" id="calHome">
           <div class="cal-loading"><div class="spinner"></div>Cargando…</div>
-        </div>
-        <div class="hm-cal-footer">
-          <img src="/assets/cardbottom.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"/>
         </div>
       </div>` : `<div id="calHome" style="display:none"></div>`}
 
       <!-- RIGHT col: Services + Reviews -->
       <div class="hm-right-col">
 
-        <div class="hm-card hm-card--blue">
+        <div class="hm-card hm-card-svc">
           <div class="hm-card-hdr">
             <div class="hm-card-title">Servicios</div>
             ${hasBooking ? `<button class="sec-link" type="button" data-action="reservas">Ver todos →</button>` : ""}
@@ -99,12 +64,21 @@ export function chatTabHtml(d: ChatData): string {
           </div>
         </div>
 
-        <div class="hm-card hm-card--purple">
+        <div class="hm-card hm-card-reviews">
           <div class="hm-card-hdr">
             <div class="hm-card-title">Opiniones</div>
             <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
           </div>
-          <div id="homeInbox">
+          <div class="reviews-summary">
+            <div class="reviews-score">
+              <span class="reviews-score-val" id="hmStatRating">—</span>
+              <div class="reviews-stars-row">
+                <span style="color:#F59E0B">★★★★★</span>
+              </div>
+              <span class="reviews-count"><span id="hmStatReviews">0</span> reseñas</span>
+            </div>
+          </div>
+          <div id="homeInbox" class="reviews-list">
             <div class="inbox-empty" style="padding:20px 14px;text-align:center">
               <div class="spinner" style="margin:0 auto 8px"></div>Cargando…
             </div>
@@ -114,7 +88,6 @@ export function chatTabHtml(d: ChatData): string {
       </div>
     </div>
 
-
     <!-- JS compat stubs -->
     <div id="mobilePerfil" style="display:none"></div>
     <div id="desktopHome" style="display:none"></div>
@@ -122,6 +95,7 @@ export function chatTabHtml(d: ChatData): string {
     <div id="homeInboxMobile" style="display:none"></div>
     <div id="prAvailSection" style="display:none"><span id="prNextSlot"></span></div>
     <div id="prStatSvcs" style="display:none"></div>
+    <div id="hmStatSvcs" style="display:none"></div>
 
   </div>`;
 }

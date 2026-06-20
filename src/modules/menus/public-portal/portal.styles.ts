@@ -929,9 +929,25 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 /* 8 — Pie de tarjeta */
 .hm-card-foot{padding:0 16px 14px;flex-shrink:0}
 
-/* Calendar footer illustration */
-.hm-cal-footer{width:100%;height:88px;overflow:hidden;flex-shrink:0}
-.hm-cal-footer svg{display:block;width:100%;height:100%}
+/* Próximo turno strip dentro del card de calendario */
+.cal-next-strip{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 16px;font-size:12px;color:var(--soft);
+  border-bottom:1px solid var(--border-inner);flex-shrink:0
+}
+.cal-next-strip svg{width:13px;height:13px;flex-shrink:0;stroke:var(--nav-act)}
+.cal-next-strip strong{color:var(--text);font-weight:700}
+
+/* Reviews summary */
+.reviews-summary{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 16px;border-bottom:1px solid var(--border-inner);flex-shrink:0
+}
+.reviews-score{display:flex;flex-direction:column;align-items:center;gap:2px}
+.reviews-score-val{font-size:32px;font-weight:800;color:var(--text);letter-spacing:-.05em;line-height:1}
+.reviews-stars-row{font-size:13px;letter-spacing:1px}
+.reviews-count{font-size:11px;color:var(--dim);font-weight:500}
+.reviews-list{flex:1;min-height:0;overflow-y:auto}
 .hm-foot-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px;border-radius:11px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--soft);transition:background .15s,color .15s}
 .hm-foot-btn:hover{background:var(--primary-dim);color:var(--primary);border-color:var(--primary-glow)}
 .hm-foot-btn svg{width:13px;height:13px;stroke:currentColor;flex-shrink:0}
@@ -941,19 +957,18 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 /* ── DESKTOP ── */
 @media(min-width:800px){
-  .hm-panel{display:grid!important;overflow:hidden!important;grid-template-rows:auto 1fr;padding:0;gap:0}
-  .hm-stats{grid-template-columns:repeat(4,1fr);padding:16px 20px 12px;gap:12px}
-  .hm-main{flex-direction:row;padding:0 20px 20px;gap:14px;overflow:hidden;min-height:0}
+  .hm-panel{display:grid!important;overflow:hidden!important;grid-template-rows:1fr;padding:0;gap:0}
+  .hm-main{flex-direction:row;padding:16px 20px 20px;gap:14px;overflow:hidden;min-height:0}
 
-  /* 6 — Calendario: columna izquierda */
+  /* Calendario: columna izquierda */
   .hm-card-left{flex:12;display:flex;flex-direction:column;overflow:hidden}
   .hm-card-left .hm-cal-inner{flex:1;min-height:0;overflow:hidden}
   .hm-card-left .hm-card-hdr{flex-shrink:0}
-  .hm-card-left .hm-cal-footer{flex-shrink:0}
 
-  /* 7 — Columna derecha */
+  /* Columna derecha */
   .hm-right-col{flex:8;display:flex;flex-direction:column;gap:12px;overflow:hidden}
-  .hm-right-col .hm-card{flex:1;min-height:0;overflow:hidden}
+  .hm-card-svc{flex:2;min-height:0;overflow:hidden}
+  .hm-card-reviews{flex:3;min-height:0;overflow:hidden;display:flex;flex-direction:column}
 }
 `;
 }

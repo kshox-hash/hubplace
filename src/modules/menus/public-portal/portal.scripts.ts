@@ -424,6 +424,8 @@ function updateHomeDashStats(){
   var dates=Object.keys(calSlots).filter(function(d){return d>=todayStr&&calSlots[d]&&calSlots[d].length>0;}).sort();
   var hmNext=document.getElementById('hmStatNext');
   if(hmNext) hmNext.textContent=dates.length?fmtDateShort(dates[0]):'—';
+  var strip=document.getElementById('calNextStrip');
+  if(strip&&dates.length) strip.style.display='flex';
 }
 
 function renderSvcGrid(id,svcs){
