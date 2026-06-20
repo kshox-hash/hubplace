@@ -1075,18 +1075,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 @media(min-width:800px){
   .hm-panel{
     display:grid!important;overflow:hidden!important;
-    grid-template-rows:auto auto 1fr;
+    grid-template-rows:auto 1fr;
     padding:0;gap:0
   }
-  .hm-topbar{padding:20px 24px 4px}
-  .hm-topbar-search{display:flex}
-  .hm-stats{
-    grid-template-columns:repeat(4,1fr);
-    padding:12px 24px 8px;gap:12px
-  }
+  .hm-topbar{padding:20px 24px 8px}
   .hm-main{
     flex-direction:row;
-    padding:8px 24px 20px;
+    padding:6px 24px 20px;
     gap:14px;overflow:hidden;min-height:0
   }
   .hm-left-col{

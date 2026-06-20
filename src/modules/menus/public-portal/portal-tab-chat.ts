@@ -47,49 +47,15 @@ export function chatTabHtml(d: ChatData): string {
         <div class="hm-topbar-greet">¡Hola, ${firstName}! 👋</div>
         <div class="hm-topbar-sub">Bienvenido a ${d.name}</div>
       </div>
-      <div class="hm-topbar-right">
-        <div class="hm-topbar-search">
-          ${S_SEARCH}<span>Buscar servicios, reservas...</span>
-        </div>
-        <button class="hm-topbar-icon-btn" type="button" aria-label="Notificaciones">${S_BELL}</button>
-        ${hasBooking ? `<button class="hm-nueva-reserva" type="button" data-action="reservas">${S_CAL} Nueva reserva</button>` : ""}
-      </div>
+      ${hasBooking ? `<button class="hm-nueva-reserva" type="button" data-action="reservas">${S_CAL} Nueva reserva</button>` : ""}
     </div>
 
-    <!-- STATS -->
-    <div class="hm-stats">
-      <div class="hm-stat" style="--sc:#3B76ED">
-        <div class="hm-stat-icon" style="background:#EBF2FF;color:#2563EB">${S_SVC}</div>
-        <div class="hm-stat-body">
-          <div class="hm-stat-val" id="hmStatSvcs">—</div>
-          <div class="hm-stat-lbl">Servicios activos</div>
-        </div>
-        ${SPARK_BLUE}
-      </div>
-      <div class="hm-stat" style="--sc:#D97706">
-        <div class="hm-stat-icon" style="background:#FEF3C7;color:#D97706">${S_STAR}</div>
-        <div class="hm-stat-body">
-          <div class="hm-stat-val" id="hmStatRating">—</div>
-          <div class="hm-stat-lbl">Calificación promedio</div>
-        </div>
-        ${SPARK_GOLD}
-      </div>
-      <div class="hm-stat" style="--sc:#22C55E">
-        <div class="hm-stat-icon" style="background:#D1FAE5;color:#059669">${S_CAL}</div>
-        <div class="hm-stat-body">
-          <div class="hm-stat-val" id="hmStatNext">—</div>
-          <div class="hm-stat-lbl">Próximo turno</div>
-        </div>
-        ${SPARK_GREEN}
-      </div>
-      <div class="hm-stat" style="--sc:#8B5CF6">
-        <div class="hm-stat-icon" style="background:#EDE9FE;color:#7C3AED">${S_CLOCK}</div>
-        <div class="hm-stat-body">
-          <div class="hm-stat-val" id="hmStatReviews">—</div>
-          <div class="hm-stat-lbl">Reseñas recibidas</div>
-        </div>
-        ${SPARK_PURPLE}
-      </div>
+    <!-- stubs para JS (stats data) -->
+    <div style="display:none">
+      <span id="hmStatSvcs"></span>
+      <span id="hmStatRating"></span>
+      <span id="hmStatNext"></span>
+      <span id="hmStatReviews"></span>
     </div>
 
     <!-- MAIN -->
