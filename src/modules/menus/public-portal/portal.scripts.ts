@@ -344,6 +344,12 @@ document.addEventListener('click',function(e){
     return;
   }
 
+  // quote opener
+  if(t.closest('[data-open-quote]')){
+    openQuotePanel();
+    return;
+  }
+
   // close / back booking panel
   if(t.closest('#closeBooking')){ closePanel('bookingPanel'); return; }
   if(t.closest('#bkBack')){

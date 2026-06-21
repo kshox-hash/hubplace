@@ -36,7 +36,7 @@ export function serviciosTabHtml(d: SafeData): string {
           <div class="cot-name">Solicitar cotización</div>
           <div class="cot-desc">${countLabel}</div>
         </div>
-        <a class="btn-primary" href="/shop/${d.slug}/cotizador" style="width:100%">${S_COT} Abrir cotizador ${S_ARR}</a>
+        <button class="btn-primary" type="button" data-open-quote style="width:100%">${S_COT} Abrir cotizador ${S_ARR}</button>
       </div>
       <div class="sec-hdr"><span class="sec-title">¿Cómo funciona?</span></div>
       <div class="how-card">${steps}</div>
