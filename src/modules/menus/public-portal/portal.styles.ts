@@ -529,30 +529,31 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .rdash-mnav-btn svg{width:16px;height:16px;stroke-width:2;stroke:var(--soft)}
 .rdash-mnav-btn:disabled{opacity:.25;cursor:default}
 
-/* Calendar outer — constrains width so cells never distort */
-.mc-outer{max-width:320px;margin:0 auto 20px}
+/* Calendar — fills available width, cells always cuadradas */
+.mc-outer{margin-bottom:20px}
 .month-cal-grid{width:100%}
 .mc-hdr-row{
   display:grid;grid-template-columns:repeat(7,1fr);
-  margin-bottom:2px
+  margin-bottom:4px
 }
 .mc-hdr-cell{
-  text-align:center;font-size:10px;font-weight:600;
-  color:var(--dim);letter-spacing:.02em;
-  padding-bottom:8px
+  text-align:center;font-size:11px;font-weight:600;
+  color:var(--dim);letter-spacing:.01em;
+  padding-bottom:10px
 }
-.mc-body{display:grid;grid-template-columns:repeat(7,1fr);gap:2px 0}
+.mc-body{display:grid;grid-template-columns:repeat(7,1fr)}
 .mc-cell{
-  height:40px;display:flex;flex-direction:column;
+  aspect-ratio:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:4px;
   cursor:default;-webkit-tap-highlight-color:transparent
 }
 .mc-ring{
-  width:34px;height:34px;border-radius:50%;
+  width:72%;aspect-ratio:1;
+  max-width:42px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  transition:background .15s
+  transition:background .15s,transform .12s
 }
-.mc-num{font-size:13px;font-weight:400;color:#CBD5E1;line-height:1}
+.mc-num{font-size:clamp(12px,3.5vw,15px);font-weight:400;color:#CBD5E1;line-height:1}
 .mc-dot{
   width:4px;height:4px;border-radius:50%;
   background:var(--primary);opacity:0;flex-shrink:0
@@ -562,21 +563,22 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 /* Past */
 .mc-past .mc-num{color:#D1D5DB}
 
-/* No slots, future */
+/* Future sin slots */
 .mc-day .mc-num{color:#9CA3AF;font-weight:500}
 
-/* Available */
+/* Disponible */
 .mc-avail{cursor:pointer}
 .mc-avail .mc-num{color:var(--text);font-weight:600}
 .mc-avail .mc-dot{opacity:1}
 .mc-avail:hover .mc-ring{background:var(--primary-dim)}
-.mc-avail:active .mc-ring{transform:scale(.87)}
+.mc-avail:active .mc-ring{transform:scale(.85)}
 
-/* Today */
+/* Hoy */
 .mc-today .mc-ring{background:var(--primary-dim)}
 .mc-today .mc-num{color:var(--primary);font-weight:700}
 
-/* Selected */
+/* Seleccionado */
+.mc-sel{cursor:pointer}
 .mc-sel .mc-ring{background:var(--primary)}
 .mc-sel .mc-num{color:#fff;font-weight:700}
 .mc-sel .mc-dot{background:rgba(255,255,255,.7)}
