@@ -405,21 +405,25 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .home-actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
 
 /* ── PRODUCT LIST ─────────────────────────────────────────────────────────── */
-.prd-list{display:grid;grid-template-columns:1fr;gap:8px}
-@media(min-width:600px){.prd-list{grid-template-columns:repeat(2,1fr)}}
+.prd-search-wrap{position:relative;margin-bottom:14px}
+.prd-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--soft);pointer-events:none}
+.prd-search{width:100%;padding:10px 14px 10px 38px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:14px;outline:none;transition:border-color .18s}
+.prd-search:focus{border-color:var(--primary)}
+.prd-search::placeholder{color:var(--soft)}
+.prd-list{display:flex;flex-direction:column;gap:8px}
 .prd-card{
-  background:var(--panel);border-radius:16px;border:1px solid var(--border);
-  display:flex;overflow:hidden;
-  transition:border-color .18s,transform .15s
+  background:var(--panel);border-radius:14px;border:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;padding:10px 14px 10px 10px;
+  transition:border-color .18s,background .18s
 }
 .prd-card:hover{border-color:var(--primary);background:var(--primary-dim)}
-
-.prd-accent{width:4px;flex-shrink:0}
-.prd-body{padding:14px 18px;flex:1;display:flex;align-items:center;gap:14px}
+.prd-thumb{width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0}
+.prd-thumb-dot{display:flex;align-items:center;justify-content:center;opacity:.85}
 .prd-info{flex:1;min-width:0}
-.prd-name{font-size:14.5px;font-weight:600;color:var(--text);letter-spacing:-.02em}
-.prd-desc{font-size:12px;color:var(--soft);margin-top:2px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.prd-name{font-size:14px;font-weight:600;color:var(--text);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prd-desc{font-size:12px;color:var(--soft);margin-top:2px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
 .prd-price{font-size:14px;font-weight:700;color:var(--primary);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums}
+.prd-no-results{text-align:center;color:var(--dim);padding:24px 16px;font-size:13px}
 
 /* Inbox panel */
 .inbox-card{background:var(--panel);border-radius:26px;border:1px solid var(--border);overflow:hidden}

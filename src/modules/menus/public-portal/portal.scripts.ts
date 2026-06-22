@@ -712,6 +712,22 @@ function renderSvcRows(id,svcs){
   el.innerHTML=html;
 }
 
+// ── product search ────────────────────────────────────────────────────────────
+function filterPrd(q){
+  var list=document.getElementById('prd-list');
+  var empty=document.getElementById('prd-empty-search');
+  if(!list) return;
+  var term=(q||'').toLowerCase().trim();
+  var cards=list.querySelectorAll('.prd-card');
+  var visible=0;
+  cards.forEach(function(c){
+    var match=!term||c.getAttribute('data-name').indexOf(term)!==-1;
+    c.style.display=match?'':'none';
+    if(match) visible++;
+  });
+  if(empty) empty.style.display=visible===0?'':'none';
+}
+
 // ── products (home, runs on init independently) ────────────────────────────────
 function renderHomeProducts(){
   var el=document.getElementById('homeProductList');if(!el) return;

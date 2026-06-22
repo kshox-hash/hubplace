@@ -149,6 +149,8 @@ export const publicPortalController = {
           name:        String(p.name || ""),
           price:       Number(p.price || 0),
           description: p.description ?? null,
+          color:       String(p.color || "#63ACF1"),
+          photo:       Array.isArray(p.photos) && p.photos.length > 0 ? String(p.photos[0]) : null,
         })),
         portalUser: portalUser ?? null,
       });
