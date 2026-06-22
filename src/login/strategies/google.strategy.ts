@@ -3,7 +3,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import jwt from "jsonwebtoken";
 import DB from "../../db/db_configuration";
 
-passport.use(
+if (process.env.GOOGLE_CLIENT_ID) passport.use(
   new GoogleStrategy(
     {
       clientID:        process.env.GOOGLE_CLIENT_ID    as string,

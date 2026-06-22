@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
+import cloudinary from "../../config/cloudinary.config";
 import {
   getServicesByUserId,
   getActiveServicesByUserId,
   createService,
   updateService,
   deleteService,
+  addPhotoToService,
+  removePhotoFromService,
 } from "./calendar-services.repository";
+
+const MAX_PHOTOS = 3;
 
 export const calendarServicesController = {
 
@@ -84,6 +89,71 @@ export const calendarServicesController = {
     } catch (err) {
       console.error("[calendar-services] remove:", err);
       return res.status(500).json({ ok: false, message: "No se pudo eliminar el servicio." });
+    }
+  },
+
+  async uploadPhoto(req: Request, res: Response) {
+    try {
+      const userId = String(req.user?.userId ?? "").trim();
+      const id     = String(req.params["id"] || "").trim();
+
+      const file = (req as any).file as Express.Multer.File | undefined;
+      if (!file) return res.status(400).json({ ok: false, message: "No se recibió ninguna imagen." });
+
+      // Verificar límite de 3 fotos antes de subir
+      const services = await getServicesByUserId(userId);
+      const svc = services.find(s => s.id === id);
+      if (!svc) return res.status(404).json({ ok: false, message: "Servicio no encontrado." });
+      if (svc.photos.length >= MAX_PHOTOS) {
+        return res.status(400).json({ ok: false, message: `Máximo ${MAX_PHOTOS} fotos por servicio.` });
+      }
+
+      // Subir a Cloudinary con compresión máxima para app de ventas
+      const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: `services/${userId}`,
+            transformation: [
+              { width: 800, height: 600, crop: "limit" },
+              { quality: "auto:low", fetch_format: "auto" },
+            ],
+          },
+          (err, result) => {
+            if (err || !result) return reject(err ?? new Error("Upload failed"));
+            resolve(result);
+          }
+        );
+        stream.end(file.buffer);
+      });
+
+      const photos = await addPhotoToService(id, userId, uploadResult.secure_url);
+      return res.json({ ok: true, photos });
+    } catch (err) {
+      console.error("[calendar-services] uploadPhoto:", err);
+      return res.status(500).json({ ok: false, message: "No se pudo subir la foto." });
+    }
+  },
+
+  async deletePhoto(req: Request, res: Response) {
+    try {
+      const userId = String(req.user?.userId ?? "").trim();
+      const id     = String(req.params["id"] || "").trim();
+      const url    = String(req.body?.url || "").trim();
+
+      if (!url) return res.status(400).json({ ok: false, message: "URL requerida." });
+
+      // Borrar de Cloudinary usando el public_id extraído de la URL
+      const publicId = url.split("/upload/")[1]?.replace(/\.[^.]+$/, "");
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId).catch(() => {});
+      }
+
+      const photos = await removePhotoFromService(id, userId, url);
+      if (photos === null) return res.status(404).json({ ok: false, message: "Servicio no encontrado." });
+      return res.json({ ok: true, photos });
+    } catch (err) {
+      console.error("[calendar-services] deletePhoto:", err);
+      return res.status(500).json({ ok: false, message: "No se pudo eliminar la foto." });
     }
   },
 };

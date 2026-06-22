@@ -437,7 +437,7 @@ function loadServices(){
 }
 
 function applyServices(svcs){
-  renderSvcHomeList('homeServiceGrid', svcs.slice(0,6));
+  renderSvcHomeList('homeServiceGrid', svcs.slice(0,5));
   renderSvcGrid('svcGrid', svcs);
   renderSvcRows('mobileServiceList', svcs);
   var statEl=document.getElementById('prStatSvcs');
@@ -457,7 +457,19 @@ function openSvcDetailPanel(svc,color){
   var dur=svc.duration_minutes?(svc.duration_minutes+' min'):'';
   var cat=escH(svc.category||svc.type||'');
 
-  var html='<div class="sdp-hero" style="border-left:4px solid '+(color||'var(--primary)')+';">'
+  // Galería de fotos si existen
+  var photos=Array.isArray(svc.photos)&&svc.photos.length>0?svc.photos:[];
+  var photosHtml='';
+  if(photos.length>0){
+    photosHtml='<div class="sdp-photos">';
+    photos.forEach(function(url){
+      photosHtml+='<img class="sdp-photo" src="'+escH(url)+'" alt="" loading="lazy">';
+    });
+    photosHtml+='</div>';
+  }
+
+  var html=photosHtml
+    +'<div class="sdp-hero" style="border-left:4px solid '+(color||'var(--primary)')+';">'
     +'<div class="sdp-hero-name">'+escH(svc.name||'Servicio')+'</div>'
     +'<div class="sdp-hero-badges">'
     +(cat?'<span class="sdp-badge sdp-badge-cat">'+cat+'</span>':'')

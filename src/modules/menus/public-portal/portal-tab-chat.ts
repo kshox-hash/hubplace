@@ -66,52 +66,55 @@ export function chatTabHtml(d: ChatData): string {
           </div>
         </div>
 
-        <!-- Servicios recientes -->
-        <div class="hm-card hm-card-svc">
-          <div class="hm-card-hdr">
-            <div class="hm-card-title-row">
-              <span class="hm-card-title-icon" style="color:#7C3AED">${S_SVC}</span>
-              <span class="hm-card-title">Servicios recientes</span>
-            </div>
-            <button class="sec-link" type="button" data-action="reservas">Ver todos →</button>
-          </div>
-          <div id="homeServiceGrid" class="hm-svc-list-home">
-            <div class="inbox-empty" style="padding:16px;text-align:center">
-              <div class="spinner" style="margin:0 auto 8px"></div>Cargando…
-            </div>
-          </div>
-          ${hasCotizar ? `
-          <div class="hm-svc-cot-row">
-            <button class="hm-svc-cot-btn" type="button" data-action="cotizar">${S_COT} Pedir cotización</button>
-          </div>` : ""}
-        </div>
+        <!-- Servicios recientes + Opiniones 60/40 -->
+        <div class="hm-svc-rv-wrap">
 
-        <!-- Opiniones -->
-        <div class="hm-card hm-card-reviews">
-          <div class="hm-card-hdr">
-            <div class="hm-card-title-row">
-              <span class="hm-card-title-icon" style="color:#D97706">${S_STAR}</span>
-              <span class="hm-card-title">Opiniones</span>
+          <div class="hm-card hm-card-svc">
+            <div class="hm-card-hdr">
+              <div class="hm-card-title-row">
+                <span class="hm-card-title-icon" style="color:#7C3AED">${S_SVC}</span>
+                <span class="hm-card-title">Servicios recientes</span>
+              </div>
+              <button class="sec-link" type="button" data-action="reservas">Ver todos →</button>
             </div>
-            <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
+            <div id="homeServiceGrid" class="hm-svc-list-home">
+              <div class="inbox-empty" style="padding:16px;text-align:center">
+                <div class="spinner" style="margin:0 auto 8px"></div>Cargando…
+              </div>
+            </div>
+            ${hasCotizar ? `
+            <div class="hm-svc-cot-row">
+              <button class="hm-svc-cot-btn" type="button" data-action="cotizar">${S_COT} Pedir cotización</button>
+            </div>` : ""}
           </div>
-          <div class="hm-reviews-panel" id="hmReviewsPanel">
-            <div class="hm-reviews-left">
-              <div class="hm-reviews-avg" id="hmStatRatingBig">—</div>
-              <div class="hm-reviews-stars" style="color:#F59E0B">★★★★★</div>
-              <div class="hm-reviews-count">(<span id="hmStatReviewsBig">0</span> reseñas)</div>
+
+          <div class="hm-card hm-card-reviews">
+            <div class="hm-card-hdr">
+              <div class="hm-card-title-row">
+                <span class="hm-card-title-icon" style="color:#D97706">${S_STAR}</span>
+                <span class="hm-card-title">Opiniones</span>
+              </div>
+              <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
             </div>
-            <div class="hm-reviews-chat-icon" style="color:#3B76ED">${S_CHAT}</div>
-            <div class="hm-reviews-bars" id="hmReviewBars">
-              ${[5,4,3,2,1].map(s=>`
-              <div class="rv-bar-row">
-                <span class="rv-bar-star">${s}★</span>
-                <div class="rv-bar-track"><div class="rv-bar-fill" style="width:0%"></div></div>
-                <span class="rv-bar-count">0</span>
-              </div>`).join("")}
+            <div class="hm-reviews-panel" id="hmReviewsPanel">
+              <div class="hm-reviews-left">
+                <div class="hm-reviews-avg" id="hmStatRatingBig">—</div>
+                <div class="hm-reviews-stars" style="color:#F59E0B">★★★★★</div>
+                <div class="hm-reviews-count">(<span id="hmStatReviewsBig">0</span> reseñas)</div>
+              </div>
+              <div class="hm-reviews-chat-icon" style="color:#3B76ED">${S_CHAT}</div>
+              <div class="hm-reviews-bars" id="hmReviewBars">
+                ${[5,4,3,2,1].map(s=>`
+                <div class="rv-bar-row">
+                  <span class="rv-bar-star">${s}★</span>
+                  <div class="rv-bar-track"><div class="rv-bar-fill" style="width:0%"></div></div>
+                  <span class="rv-bar-count">0</span>
+                </div>`).join("")}
+              </div>
             </div>
           </div>
-        </div>
+
+        </div><!-- /hm-svc-rv-wrap -->
 
         <!-- CTA Azul -->
         <div class="hm-cta-card">
@@ -141,21 +144,7 @@ export function chatTabHtml(d: ChatData): string {
           </div>
         </div>` : `<div id="calHome" style="display:none"></div>`}
 
-        <!-- Turnos disponibles -->
-        <div class="hm-card hm-card-avail">
-          <div class="hm-card-hdr">
-            <div class="hm-card-title-row">
-              <span class="hm-card-title-icon" style="color:#059669">${S_CLOCK}</span>
-              <span class="hm-card-title">Turnos disponibles</span>
-            </div>
-            ${hasBooking ? `<button class="sec-link" type="button" data-action="reservas">Ver agenda →</button>` : ""}
-          </div>
-          <div id="hmUpcoming" class="hm-upcoming-list">
-            <div style="padding:14px 16px;display:flex;align-items:center;gap:8px;color:var(--dim);font-size:12.5px">
-              <div class="spinner"></div>Cargando…
-            </div>
-          </div>
-        </div>
+        <div id="hmUpcoming" style="display:none"></div>
 
       </div>
     </div>
