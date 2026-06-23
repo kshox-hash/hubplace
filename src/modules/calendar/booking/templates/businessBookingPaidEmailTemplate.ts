@@ -22,7 +22,7 @@ export function renderBusinessBookingPaidEmailTemplate(
       </h1>
 
       <p style="margin:0;font-size:15px;line-height:1.7;color:#b8bdc7;">
-        ${input.businessName}, tienes una nueva reserva pagada.
+        ${input.businessName}, tienes una nueva reserva confirmada.
       </p>
 
       <div style="margin-top:24px;padding:18px;border-radius:18px;background:#1b1f25;">
@@ -43,7 +43,7 @@ export function renderBusinessBookingPaidEmailTemplate(
         </div>
 
         <div style="margin-top:12px;color:#10b981;font-weight:700;font-size:14px;">
-          Pagado: $${input.amount.toLocaleString("es-CL")}
+          ${input.amount === 0 ? 'Gratuito' : `Pagado: $${input.amount.toLocaleString("es-CL")}`}
         </div>
       </div>
 

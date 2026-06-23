@@ -25,6 +25,7 @@ import {
 import { getServiceById } from "../appointments/calendar-services.repository";
 import { sendBookingPaymentLinkEmail } from "./booking/services/bookingPaymentLinkEmailService";
 import { sendBookingPaidEmail } from "./booking/services/bookingPaidEmailService";
+import { sendBusinessBookingPaidEmail } from "./booking/services/businessBookingPaidEmailService";
 
 export const calendarPublicController = {
 
@@ -172,8 +173,9 @@ export const calendarPublicController = {
         const accessToken = await getMpAccessToken(profile.user_id);
         const amount = Number(booking.payment_amount ?? 0);
         if (amount === 0) {
-          // Reserva gratuita — confirmar inmediatamente y notificar al cliente
+          // Reserva gratuita — confirmar inmediatamente y notificar a cliente y negocio
           await confirmFreeBooking(booking.id);
+          statsService.increment(profile.user_id, "booking_paid").catch(() => {});
           sendBookingPaidEmail({
             to: customerEmail,
             customerName,
@@ -181,6 +183,19 @@ export const calendarPublicController = {
             bookingDate: bookingDateLabel,
             bookingTime: startTime,
           }).catch((err) => console.error("[calendar] Error enviando email de confirmación:", err));
+          const businessEmail = process.env.BUSINESS_NOTIFICATION_EMAIL;
+          if (businessEmail) {
+            sendBusinessBookingPaidEmail({
+              to: businessEmail,
+              businessName,
+              customerName,
+              customerEmail,
+              customerPhone,
+              bookingDate: bookingDateLabel,
+              bookingTime: startTime,
+              amount: 0,
+            }).catch((err) => console.error("[calendar] Error enviando email al negocio:", err));
+          }
         } else if (accessToken) {
           // Reserva con precio — iniciar flujo de pago MP
           const feePct = await getPlatformFeePct(profile.user_id);

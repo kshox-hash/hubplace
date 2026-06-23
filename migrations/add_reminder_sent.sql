@@ -1,2 +1,0 @@
-ALTER TABLE calendar_bookings
-  ADD COLUMN IF NOT EXISTS reminder_sent BOOLEAN NOT NULL DEFAULT false;

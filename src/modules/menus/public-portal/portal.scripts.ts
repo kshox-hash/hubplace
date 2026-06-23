@@ -275,7 +275,7 @@ function submitBooking(){
   })
   .then(function(r){return r.json();})
   .then(function(d){
-    if(d.ok||d.id||d.booking_id||d.bookingId) renderBkSuccess();
+    if(d.ok||d.id||d.booking_id||d.bookingId) renderBkSuccess(d.checkoutUrl||null);
     else{
       if(errEl) errEl.textContent=d.message||'Error al confirmar. Intentá de nuevo.';
       if(btn){btn.textContent='Confirmar reserva';btn.disabled=false;}
@@ -287,16 +287,19 @@ function submitBooking(){
   });
 }
 
-function renderBkSuccess(){
+function renderBkSuccess(checkoutUrl){
   bk.step='success';
   setBkHeader('¡Confirmado!',false);
   var body=document.getElementById('bkBody'); if(!body) return;
+  var subMsg=checkoutUrl
+    ?'Te enviamos el link de pago a tu correo.<br>Revisa tu bandeja de entrada para completar el pago.'
+    :'Tu cita quedó confirmada.<br>Recibirás la confirmación en tu correo.';
   body.innerHTML='<div class="bk-success">'
     +'<div class="bk-success-icon">'
     +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
     +'</div>'
     +'<div class="bk-success-title">¡Reserva confirmada!</div>'
-    +'<div class="bk-success-sub">Tu turno quedó registrado.<br>Recibirás una confirmación a tu email.</div>'
+    +'<div class="bk-success-sub">'+subMsg+'</div>'
     +'<button class="btn-primary" type="button" id="bkDone" style="width:100%;margin-top:28px">Listo</button>'
     +'</div>';
   var done=document.getElementById('bkDone');
