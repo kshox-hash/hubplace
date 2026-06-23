@@ -26,6 +26,7 @@ import { getServiceById } from "../appointments/calendar-services.repository";
 import { sendBookingPaymentLinkEmail } from "./booking/services/bookingPaymentLinkEmailService";
 import { sendBookingPaidEmail } from "./booking/services/bookingPaidEmailService";
 import { sendBusinessBookingPaidEmail } from "./booking/services/businessBookingPaidEmailService";
+import { notificationService } from "../notifications/notification.service";
 
 export const calendarPublicController = {
 
@@ -176,6 +177,12 @@ export const calendarPublicController = {
           // Reserva gratuita — confirmar inmediatamente y notificar a cliente y negocio
           await confirmFreeBooking(booking.id);
           statsService.increment(profile.user_id, "booking_paid").catch(() => {});
+          notificationService.bookingCreated({
+            userId: profile.user_id,
+            bookingId: booking.id,
+            customerName,
+            startText: `${bookingDateLabel} a las ${startTime}`,
+          }).catch(() => {});
           sendBookingPaidEmail({
             to: customerEmail,
             customerName,

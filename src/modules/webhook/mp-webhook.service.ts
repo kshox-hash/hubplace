@@ -9,6 +9,7 @@ import {
 import { sendBookingPaidEmail } from "../calendar/booking/services/bookingPaidEmailService";
 import { sendBusinessBookingPaidEmail } from "../calendar/booking/services/businessBookingPaidEmailService";
 import { StatisticsService } from "../stadistics/stadistics.service";
+import { notificationService } from "../notifications/notification.service";
 
 const statsService = new StatisticsService();
 
@@ -115,6 +116,12 @@ export async function processApprovedPayment(
   const bookingTimeStr = String(booking.start_time).slice(0, 5);
 
   statsService.increment(booking.user_id, "booking_paid").catch(() => {});
+  notificationService.bookingCreated({
+    userId: booking.user_id,
+    bookingId,
+    customerName: booking.client_name || "Cliente",
+    startText: `el ${bookingDateStr} a las ${bookingTimeStr}`,
+  }).catch(() => {});
 
   if (booking.client_email) {
     sendBookingPaidEmail({
