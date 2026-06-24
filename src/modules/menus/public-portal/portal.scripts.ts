@@ -328,7 +328,9 @@ document.addEventListener('click',function(e){
   var tabBtn=t.closest('[data-tab]');
   if(tabBtn&&(tabBtn.classList.contains('bn-item')||tabBtn.classList.contains('ir-btn')||tabBtn.classList.contains('cn-tab')||tabBtn.classList.contains('mdr-item'))){
     if(tabBtn.classList.contains('mdr-item')) closeMobileDrawer();
-    showTab(tabBtn.getAttribute('data-tab'));
+    var tabName=tabBtn.getAttribute('data-tab');
+    if(tabName==='cotizar'){ openQuotePanel(); return; }
+    showTab(tabName);
     return;
   }
 
@@ -337,7 +339,7 @@ document.addEventListener('click',function(e){
   if(actBtn){
     var a=actBtn.getAttribute('data-action');
     if(a==='reservas')      showTab('reservas');
-    else if(a==='cotizar')  showTab('cotizar');
+    else if(a==='cotizar')  openQuotePanel();
     else if(a==='productos')showTab('nosotros');
     else if(a==='resenas')  showTab('resenas');
     return;
