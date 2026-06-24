@@ -22,6 +22,7 @@ export type PortalViewData = {
   instagramUrl?: string | null;
   whatsappNumber?: string | null;
   businessHours?: string | null;
+  coverImage?: string | null;
   enabledModules: MenuModuleItem[];
   products: { id: string|number; name: string; price: number; description?: string|null; color?: string|null; photos?: string[] }[];
   portalUser?: { name?: string; email?: string; picture?: string } | null;
@@ -60,6 +61,7 @@ export function renderPortalHtml(data: PortalViewData): string {
     phone, address, city, brandColor,
     description, welcomeMessage,
     instagramUrl, whatsappNumber, businessHours,
+    coverImage,
     enabledModules, products,
     portalUser,
   } = data;
@@ -189,7 +191,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
     <span class="cn-status">En línea</span>
   </nav>
 
-  ${chatTabHtml({ name: s.name, slug: s.slug, desc: s.desc, welcome: s.welcome, enabledModules, phone: s.phone, ig: s.ig, wa: s.wa, hours: s.hours, locationLine, waHref, initials, productCount, portalUser })}
+  ${chatTabHtml({ name: s.name, slug: s.slug, desc: s.desc, welcome: s.welcome, enabledModules, phone: s.phone, ig: s.ig, wa: s.wa, hours: s.hours, locationLine, waHref, initials, productCount, portalUser, coverImage: coverImage ?? null })}
   ${reservasTabHtml()}
   ${nosotrosTabHtml(products)}
   ${serviciosTabHtml({ slug: s.slug, productCount })}

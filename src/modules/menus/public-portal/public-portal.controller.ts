@@ -143,6 +143,7 @@ export const publicPortalController = {
         instagramUrl:   profile?.instagram_url   ?? null,
         whatsappNumber: profile?.whatsapp_number ?? null,
         businessHours:  profile?.business_hours  ?? null,
+        coverImage:     profile?.cover_image     ?? null,
         enabledModules,
         products: products.map((p: any) => ({
           id:          String(p.id),

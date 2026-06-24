@@ -14,6 +14,7 @@ export type CompanyProfile = {
   instagram_url: string | null;
   whatsapp_number: string | null;
   business_hours: string | null;
+  cover_image: string | null;
   created_at: Date;
   updated_at: Date;
 };
@@ -31,4 +32,5 @@ export type CompanyProfileInput = {
   instagram_url?: string | null;
   whatsapp_number?: string | null;
   business_hours?: string | null;
+  cover_image?: string | null;
 };

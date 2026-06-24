@@ -393,6 +393,23 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .sec-link{font-size:12px;font-weight:600;color:var(--primary);text-decoration:none;cursor:pointer;background:none;border:none;font-family:inherit;transition:opacity .15s}
 .sec-link:hover{opacity:.7}
 
+/* ── COVER BANNER ────────────────────────────────────────────────────────── */
+.hm-cover{
+  width:100%;height:148px;flex-shrink:0;
+  border-radius:0 0 28px 28px
+}
+.hm-cover-meta{
+  padding:0 22px;margin-top:-26px;flex-shrink:0;
+  position:relative;z-index:1
+}
+.hm-cover-av{
+  width:54px;height:54px;border-radius:16px;
+  background:linear-gradient(135deg,var(--primary),#93C5FD);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:800;color:#fff;letter-spacing:-.03em;user-select:none;
+  border:3px solid #fff
+}
+
 /* ── HOME TAB ─────────────────────────────────────────────────────────────── */
 .home-welcome-msg{
   background:var(--bg);border-radius:16px;
@@ -1441,16 +1458,18 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 /* ── DESKTOP ──────────────────────────────────────────────────────────── */
 @media(min-width:800px){
   .hm-panel{
-    display:grid!important;overflow:hidden!important;
-    grid-template-rows:1fr;
+    display:flex!important;flex-direction:column;overflow:hidden!important;
     padding:0;gap:0
   }
+  .hm-cover{height:168px}
+  .hm-cover-meta{margin-top:-30px;padding:0 28px}
+  .hm-cover-av{width:62px;height:62px;font-size:20px}
   .hm-welcome-desk{display:none}
   .hm-card-brand{padding:20px 22px 18px}
   .hm-card-brand .hm-title-name{font-size:30px}
   .hm-main{
-    flex-direction:row;
-    padding:24px 28px 24px 28px;
+    flex:1;flex-direction:row;
+    padding:14px 28px 24px 28px;
     gap:16px;overflow:hidden;min-height:0
   }
   /* izquierda 60%: título + servicios/opiniones + cta */

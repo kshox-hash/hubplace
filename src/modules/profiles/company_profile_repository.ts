@@ -24,6 +24,7 @@ const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
       instagram_url,
       whatsapp_number,
       business_hours,
+      cover_image,
       created_at,
       updated_at
     FROM business_profiles
@@ -58,6 +59,7 @@ const getByPublicSlug = async (
       instagram_url,
       whatsapp_number,
       business_hours,
+      cover_image,
       created_at,
       updated_at
     FROM business_profiles
@@ -91,10 +93,11 @@ const upsert = async (
       instagram_url,
       whatsapp_number,
       business_hours,
+      cover_image,
       created_at,
       updated_at
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, NOW(), NOW())
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW(), NOW())
     ON CONFLICT (user_id)
     DO UPDATE SET
       business_name = EXCLUDED.business_name,
@@ -108,6 +111,7 @@ const upsert = async (
       instagram_url = EXCLUDED.instagram_url,
       whatsapp_number = EXCLUDED.whatsapp_number,
       business_hours = EXCLUDED.business_hours,
+      cover_image = EXCLUDED.cover_image,
       updated_at = NOW()
     RETURNING
       id,
@@ -125,6 +129,7 @@ const upsert = async (
       instagram_url,
       whatsapp_number,
       business_hours,
+      cover_image,
       created_at,
       updated_at
   `;
@@ -142,6 +147,7 @@ const upsert = async (
     input.instagram_url ?? null,
     input.whatsapp_number ?? null,
     input.business_hours ?? null,
+    input.cover_image ?? null,
   ];
 
   const result = await pool.query<CompanyProfile>(query, values);
