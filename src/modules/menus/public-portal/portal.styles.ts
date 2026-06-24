@@ -533,14 +533,22 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .rdash-mnav-btn svg{width:16px;height:16px;stroke-width:2;stroke:var(--soft)}
 .rdash-mnav-btn:disabled{opacity:.25;cursor:default}
 
-/* Card wrapper */
+/* Panel intro */
+.rsv-intro{margin-bottom:20px}
+.rsv-intro-title{font-size:21px;font-weight:800;color:var(--text);letter-spacing:-.05em;line-height:1.1;margin-bottom:5px}
+.rsv-intro-sub{font-size:13px;color:var(--dim);line-height:1.5}
+
+/* Card — solo el calendario */
 .rdash-card{
   background:var(--panel);border:1px solid var(--border);border-radius:var(--r);
-  padding:16px;margin-bottom:20px
+  padding:14px
+}
+.rdash-card-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px
 }
 /* Calendar — home-style colored square cells */
-.rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:14px;align-items:start}
-.rdash-cal-col{}
+.rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start;margin-bottom:22px}
 .rdash-info-col{display:flex;flex-direction:column;gap:10px}
 .month-cal-grid{width:100%}
 .mc-hdr-row{
@@ -626,8 +634,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 }
 
 /* Service grid — 4-col brick tiles */
-.rdash-sec-hdr{margin:4px 0 10px}
+.rdash-sec-hdr{margin:0 0 10px}
 .rdash-sec-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.04em}
+.rdash-sec-sub{font-size:11px;color:var(--dim);margin-top:2px}
 .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .svc-grid-item{
   background:var(--panel);border:1px solid var(--border);border-radius:10px;
