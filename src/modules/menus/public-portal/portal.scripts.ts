@@ -331,6 +331,7 @@ document.addEventListener('click',function(e){
   if(tabBtn&&(tabBtn.classList.contains('bn-item')||tabBtn.classList.contains('ir-btn')||tabBtn.classList.contains('cn-tab')||tabBtn.classList.contains('mdr-item'))){
     if(tabBtn.classList.contains('mdr-item')) closeMobileDrawer();
     var tabName=tabBtn.getAttribute('data-tab');
+    if(tabName==='cotizar'&&tabBtn.classList.contains('cn-tab')){ openQuotePanel(); return; }
     showTab(tabName);
     return;
   }
