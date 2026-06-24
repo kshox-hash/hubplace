@@ -17,30 +17,35 @@ export function reservasTabHtml(): string {
         </div>
       </div>
 
-      <!-- Calendar + stats side by side -->
-      <div class="rdash-body">
-        <div class="rdash-cal-col">
-          <div class="month-cal-grid" id="monthCal"></div>
-        </div>
-        <div class="rdash-info-col">
-          <div class="rdash-stats-col">
-            <div class="rds-item">
-              <span class="rds-val" id="rstatDays">—</span>
-              <span class="rds-lbl">días disp.</span>
-            </div>
-            <div class="rds-item">
-              <span class="rds-val" id="rstatSlots">—</span>
-              <span class="rds-lbl">turnos mes</span>
-            </div>
-            <div class="rds-item">
-              <span class="rds-val rds-next" id="rstatNext">—</span>
-              <span class="rds-lbl">próximo</span>
-            </div>
+      <!-- Card: calendar + stats side by side -->
+      <div class="rdash-card">
+        <div class="rdash-body">
+          <div class="rdash-cal-col">
+            <div class="month-cal-grid" id="monthCal"></div>
           </div>
-          <div class="slots-area" id="slotsArea" style="display:none">
-            <div class="slots-date-lbl" id="slotsDateLbl"></div>
-            <div class="slots-grid" id="slotsGrid"></div>
-            <button class="slots-close" type="button" id="slotsClose">✕ Cerrar</button>
+          <div class="rdash-info-col">
+            <div class="rdash-stats-col">
+              <div class="rds-item">
+                <span class="rds-icon">📅</span>
+                <span class="rds-val" id="rstatDays">—</span>
+                <span class="rds-lbl">Días disp.</span>
+              </div>
+              <div class="rds-item">
+                <span class="rds-icon">🕐</span>
+                <span class="rds-val" id="rstatSlots">—</span>
+                <span class="rds-lbl">Turnos</span>
+              </div>
+              <div class="rds-item">
+                <span class="rds-icon">⚡</span>
+                <span class="rds-val rds-next" id="rstatNext">—</span>
+                <span class="rds-lbl">Próximo</span>
+              </div>
+            </div>
+            <div class="slots-area" id="slotsArea" style="display:none">
+              <div class="slots-date-lbl" id="slotsDateLbl"></div>
+              <div class="slots-grid" id="slotsGrid"></div>
+              <button class="slots-close" type="button" id="slotsClose">✕ Cerrar</button>
+            </div>
           </div>
         </div>
       </div>

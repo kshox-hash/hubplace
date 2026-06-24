@@ -533,8 +533,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .rdash-mnav-btn svg{width:16px;height:16px;stroke-width:2;stroke:var(--soft)}
 .rdash-mnav-btn:disabled{opacity:.25;cursor:default}
 
+/* Card wrapper */
+.rdash-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;margin-bottom:20px
+}
 /* Calendar — home-style colored square cells */
-.rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start;margin-bottom:20px}
+.rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:14px;align-items:start}
 .rdash-cal-col{}
 .rdash-info-col{display:flex;flex-direction:column;gap:10px}
 .month-cal-grid{width:100%}
@@ -586,22 +591,23 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 
 /* Stats column */
 .rdash-stats-col{
-  background:#F6F6F6;border-radius:14px;
+  background:var(--bg);border-radius:14px;overflow:hidden;
   display:flex;flex-direction:column
 }
 .rds-item{
   display:flex;flex-direction:column;
-  align-items:center;gap:3px;
-  padding:10px 6px;border-bottom:1px solid #EBEBEB
+  align-items:center;gap:2px;
+  padding:11px 6px;border-bottom:1px solid var(--border)
 }
 .rds-item:last-child{border-bottom:none}
-.rds-val{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.05em;line-height:1}
-.rds-next{font-size:11px;font-weight:700}
-.rds-lbl{font-size:9px;color:var(--dim);font-weight:500;letter-spacing:.01em;text-align:center}
+.rds-icon{font-size:14px;line-height:1;margin-bottom:2px}
+.rds-val{font-size:17px;font-weight:800;color:var(--primary);letter-spacing:-.05em;line-height:1}
+.rds-next{font-size:11px;font-weight:700;color:var(--primary)}
+.rds-lbl{font-size:8px;font-weight:600;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;text-align:center}
 
 /* Slots area */
 .slots-area{
-  background:var(--panel);border:1px solid var(--border);border-radius:16px;
+  background:var(--bg);border:1px solid var(--border);border-radius:14px;
   padding:12px 14px
 }
 .slots-date-lbl{font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px}
