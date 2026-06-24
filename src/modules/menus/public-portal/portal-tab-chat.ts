@@ -51,16 +51,32 @@ export function chatTabHtml(d: ChatData): string {
       <div class="hm-cover-overlay"></div>
       <div class="hm-cover-content">
         <div class="hm-cover-name">${d.name}</div>
-        ${d.desc ? `<div class="hm-cover-desc">${d.desc}</div>` : ''}
       </div>
     </div>
 
-    <!-- stubs para JS (stats data) -->
+    <!-- PROFILE SUMMARY -->
+    <div class="hm-profile-summary">
+      ${d.desc ? `<div class="hm-profile-desc">${d.desc}</div>` : ''}
+      <div class="hm-profile-stats">
+        <span class="hm-pstat-item">
+          <span class="hm-pstat-val" id="hmStatSvcs">—</span>
+          <span class="hm-pstat-lbl"> servicios</span>
+        </span>
+        <span class="hm-pstat-dot"></span>
+        <span class="hm-pstat-item">
+          <span class="hm-pstat-val">★ <span id="hmStatRating">—</span></span>
+        </span>
+        <span class="hm-pstat-dot"></span>
+        <span class="hm-pstat-item">
+          <span class="hm-pstat-val" id="hmStatReviews">0</span>
+          <span class="hm-pstat-lbl"> reseñas</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- stubs ocultos compat -->
     <div style="display:none">
-      <span id="hmStatSvcs"></span>
-      <span id="hmStatRating"></span>
       <span id="hmStatNext"></span>
-      <span id="hmStatReviews"></span>
     </div>
 
     <!-- MAIN -->

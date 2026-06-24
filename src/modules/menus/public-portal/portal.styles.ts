@@ -418,6 +418,15 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
   text-shadow:0 1px 4px rgba(0,0,0,.3)
 }
 
+/* ── PROFILE SUMMARY ─────────────────────────────────────────────────────── */
+.hm-profile-summary{padding:14px 20px 0;flex-shrink:0}
+.hm-profile-desc{font-size:13px;color:var(--soft);line-height:1.5;margin-bottom:10px}
+.hm-profile-stats{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hm-pstat-item{display:flex;align-items:center}
+.hm-pstat-val{font-size:13px;font-weight:700;color:var(--text)}
+.hm-pstat-lbl{font-size:12.5px;color:var(--dim)}
+.hm-pstat-dot{width:3px;height:3px;border-radius:50%;background:var(--dim);flex-shrink:0}
+
 /* ── HOME TAB ─────────────────────────────────────────────────────────────── */
 .home-welcome-msg{
   background:var(--bg);border-radius:16px;
@@ -1472,6 +1481,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
   .hm-cover{height:188px}
   .hm-cover-content{bottom:20px;left:28px;right:28px}
   .hm-cover-name{font-size:26px}
+  .hm-profile-summary{padding:16px 28px 0}
   .hm-welcome-desk{display:none}
   .hm-card-brand{padding:20px 22px 18px}
   .hm-card-brand .hm-title-name{font-size:30px}
