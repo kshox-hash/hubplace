@@ -691,8 +691,11 @@ function renderSvcHomeList(id,svcs){
     var dot=SVC_DOTS[i%SVC_DOTS.length];
     var price=s.price!=null&&Number(s.price)>0?fmtPrice(Number(s.price)):'Consultar';
     var cat=escH(s.category||s.type||'Servicio');
+    var thumb=Array.isArray(s.photos)&&s.photos.length>0
+      ?'<img class="hm-svc-thumb" src="'+escH(s.photos[0])+'" alt="" loading="lazy">'
+      :'<span class="hm-svc-thumb hm-svc-thumb-dot" style="background:'+dot+'"></span>';
     html+='<div class="hm-svc-row" data-hm-svc="'+i+'">'
-      +'<span class="hm-svc-dot" style="background:'+dot+'"></span>'
+      +thumb
       +'<div class="hm-svc-row-body">'
       +'<div class="hm-svc-row-name">'+escH(s.name)+'</div>'
       +'<div class="hm-svc-row-cat">'+cat+'</div>'
