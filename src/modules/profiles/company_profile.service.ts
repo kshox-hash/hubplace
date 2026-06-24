@@ -48,6 +48,7 @@ const upsert = async (
     instagram_url: input.instagram_url?.trim() || null,
     whatsapp_number: input.whatsapp_number?.replace(/\D/g, "") || null,
     business_hours: input.business_hours?.trim() || null,
+    cover_image: input.cover_image ?? null,
   };
 
   return companyProfileRepository.upsert(sanitizedInput);
