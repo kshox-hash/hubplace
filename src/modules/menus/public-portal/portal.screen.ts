@@ -111,11 +111,6 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
 
 <!-- SIDEBAR -->
 <nav class="icon-rail">
-  <!-- Brand -->
-  <div class="ir-brand">
-    <img src="/assets/linkplace.png" alt="linkplace" class="ir-brand-img">
-  </div>
-
   <!-- Nav items -->
   <div class="ir-nav">
     <button class="ir-btn active" data-tab="chat" type="button">${S_HOME}<span class="ir-lbl">Inicio</span></button>
@@ -153,17 +148,6 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
     <div id="prRating" class="pr-rating" style="display:none"></div>
     <div class="pr-online-row">
       <span class="pr-online-chip">En línea</span>
-    </div>
-    <div class="pr-stats-row">
-      <div class="pr-stat-item">
-        <div class="pr-stat-val" id="prStatSvcs">—</div>
-        <div class="pr-stat-lbl">Servicios</div>
-      </div>
-      <div class="pr-stat-div"></div>
-      <div class="pr-stat-item">
-        <div class="pr-stat-val">${productCount > 0 ? productCount : "—"}</div>
-        <div class="pr-stat-lbl">Productos</div>
-      </div>
     </div>
     <div class="pr-actions">
       ${waHref ? `<a class="pr-action-btn" href="${waHref}" target="_blank" rel="noopener" title="WhatsApp">${S_WA}</a>` : ""}
