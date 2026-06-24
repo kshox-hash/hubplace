@@ -331,7 +331,7 @@ document.addEventListener('click',function(e){
   if(tabBtn&&(tabBtn.classList.contains('bn-item')||tabBtn.classList.contains('ir-btn')||tabBtn.classList.contains('cn-tab')||tabBtn.classList.contains('mdr-item'))){
     if(tabBtn.classList.contains('mdr-item')) closeMobileDrawer();
     var tabName=tabBtn.getAttribute('data-tab');
-    if(tabName==='cotizar'&&tabBtn.classList.contains('cn-tab')){ openQuotePanel(); return; }
+    if(tabName==='cotizar'&&window.innerWidth>640){ openQuotePanel(); return; }
     showTab(tabName);
     return;
   }
@@ -838,58 +838,40 @@ function renderReservasDash(){
     next.onclick=function(){dashMonthOffset++;dashSelectedDate=null;renderReservasDash();};
   }
 
-  if(dashSelectedDate) showDaySlots(dashSelectedDate,todayStr);
-  else hideSlots();
+  hideSlots();
 }
 
 function renderMonthCal(today,todayStr,tYear,tMonth){
   var el=document.getElementById('monthCal');
   if(!el) return;
 
-  var DAY_HDRS=['Lu','Ma','Mi','Ju','Vi','Sa','Do'];
   var firstDay=new Date(tYear,tMonth,1);
   var daysInMonth=new Date(tYear,tMonth+1,0).getDate();
-  // Monday-start: 0=Mon…6=Sun
-  var startOffset=(firstDay.getDay()+6)%7;
+  var startDow=firstDay.getDay(); // 0=Sun, same as renderCalWidget
 
-  var html='<div class="mc-hdr-row">';
-  DAY_HDRS.forEach(function(h){html+='<div class="mc-hdr-cell">'+h+'</div>';});
-  html+='</div><div class="mc-body">';
+  var dayNames=DAYS_SHORT.map(function(d){return '<div class="cal-day-name">'+d+'</div>';}).join('');
 
-  // Empty leading cells
-  for(var e=0;e<startOffset;e++) html+='<div class="mc-cell mc-empty"></div>';
+  var cells='';
+  for(var i=0;i<startDow;i++) cells+='<div class="cal-cell cal-empty"></div>';
 
   for(var d=1;d<=daysInMonth;d++){
     var dStr=tYear+'-'+pad2(tMonth+1)+'-'+pad2(d);
-    var isPast=dStr<todayStr;
+    var dayDate=new Date(tYear,tMonth,d);
+    var isPast=dayDate<new Date(today.getFullYear(),today.getMonth(),today.getDate());
     var isToday=dStr===todayStr;
     var hasSlots=!!(calSlots[dStr]&&calSlots[dStr].length);
-    var isSelected=dStr===dashSelectedDate;
 
-    var cls='mc-cell mc-day';
-    if(isSelected)      cls+=' mc-sel';
-    else if(isToday&&hasSlots) cls+=' mc-today mc-avail';
-    else if(isToday)    cls+=' mc-today';
-    else if(isPast)     cls+=' mc-past';
-    else if(hasSlots)   cls+=' mc-avail';
+    var cls='cal-cell';
+    if(isToday)       cls+=' cal-today';
+    else if(isPast)   cls+=' cal-past';
+    else if(hasSlots) cls+=' cal-avail';
+    else              cls+=' cal-taken';
 
-    html+='<div class="'+cls+'" data-date="'+dStr+'">'
-      +'<div class="mc-ring"><span class="mc-num">'+d+'</span></div>'
-      +(hasSlots&&!isPast?'<div class="mc-dot"></div>':'')
-      +'</div>';
+    cells+='<div class="'+cls+'" data-cal-date="'+dStr+'">'+d+'</div>';
   }
-  html+='</div>';
-  el.innerHTML=html;
 
-  el.querySelectorAll('.mc-avail,.mc-today.mc-avail').forEach(function(cell){
-    cell.addEventListener('click',function(){
-      var dateStr=cell.getAttribute('data-date');
-      if(!dateStr) return;
-      dashSelectedDate=dateStr;
-      renderMonthCal(today,todayStr,tYear,tMonth);
-      showDaySlots(dateStr,todayStr);
-    });
-  });
+  el.innerHTML='<div class="cal-grid">'+dayNames+cells+'</div>';
+  setupCalTooltips(el);
 }
 
 function showDaySlots(dateStr,todayStr){
