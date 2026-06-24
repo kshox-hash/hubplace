@@ -47,9 +47,12 @@ export function chatTabHtml(d: ChatData): string {
   <div id="panel-chat" class="panel active hm-panel">
 
     <!-- COVER BANNER -->
-    <div class="hm-cover" style="background:${coverBg}"></div>
-    <div class="hm-cover-meta">
-      <div class="hm-cover-av">${d.initials}</div>
+    <div class="hm-cover" style="background:${coverBg}">
+      <div class="hm-cover-overlay"></div>
+      <div class="hm-cover-content">
+        <div class="hm-cover-name">${d.name}</div>
+        ${d.desc ? `<div class="hm-cover-desc">${d.desc}</div>` : ''}
+      </div>
     </div>
 
     <!-- stubs para JS (stats data) -->
@@ -65,12 +68,6 @@ export function chatTabHtml(d: ChatData): string {
 
       <!-- COLUMNA IZQUIERDA — servicios (angosta) -->
       <div class="hm-left-col">
-
-        <!-- TÍTULO -->
-        <div class="hm-card hm-card-brand hm-title-block">
-          <div class="hm-title-name">${d.name}</div>
-          <div class="hm-title-sub">${d.desc ?? "Reservá tu turno de forma rápida y sencilla"}</div>
-        </div>
 
         <!-- Servicios recientes + Opiniones 60/40 -->
         <div class="hm-svc-rv-wrap">

@@ -395,19 +395,27 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 
 /* ── COVER BANNER ────────────────────────────────────────────────────────── */
 .hm-cover{
-  width:100%;height:148px;flex-shrink:0;
-  border-radius:0 0 28px 28px
+  width:100%;height:160px;flex-shrink:0;
+  border-radius:0 0 28px 28px;
+  position:relative;overflow:hidden
 }
-.hm-cover-meta{
-  padding:0 22px;margin-top:-26px;flex-shrink:0;
-  position:relative;z-index:1
+.hm-cover-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.55) 0%,rgba(0,0,0,.08) 55%,transparent 100%);
+  border-radius:inherit
 }
-.hm-cover-av{
-  width:54px;height:54px;border-radius:16px;
-  background:linear-gradient(135deg,var(--primary),#93C5FD);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:800;color:#fff;letter-spacing:-.03em;user-select:none;
-  border:3px solid #fff
+.hm-cover-content{
+  position:absolute;bottom:16px;left:20px;right:20px;z-index:1
+}
+.hm-cover-name{
+  font-size:20px;font-weight:900;color:#fff;
+  line-height:1.2;letter-spacing:-.02em;
+  text-shadow:0 1px 6px rgba(0,0,0,.35)
+}
+.hm-cover-desc{
+  font-size:12px;color:rgba(255,255,255,.85);
+  margin-top:3px;line-height:1.4;
+  text-shadow:0 1px 4px rgba(0,0,0,.3)
 }
 
 /* ── HOME TAB ─────────────────────────────────────────────────────────────── */
@@ -1461,9 +1469,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
     display:flex!important;flex-direction:column;overflow:hidden!important;
     padding:0;gap:0
   }
-  .hm-cover{height:168px}
-  .hm-cover-meta{margin-top:-30px;padding:0 28px}
-  .hm-cover-av{width:62px;height:62px;font-size:20px}
+  .hm-cover{height:188px}
+  .hm-cover-content{bottom:20px;left:28px;right:28px}
+  .hm-cover-name{font-size:26px}
   .hm-welcome-desk{display:none}
   .hm-card-brand{padding:20px 22px 18px}
   .hm-card-brand .hm-title-name{font-size:30px}
