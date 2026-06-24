@@ -422,7 +422,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .hm-profile-summary{padding:14px 20px 10px;flex-shrink:0}
 .hm-profile-desc{
   font-size:13px;color:var(--soft);line-height:1.5;
-  background:var(--panel);border-radius:14px;
+  background:var(--bg);border-radius:14px;
   padding:10px 14px;margin-bottom:8px
 }
 .hm-pstats{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
