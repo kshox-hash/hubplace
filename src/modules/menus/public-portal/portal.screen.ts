@@ -115,7 +115,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
   <!-- Nav items -->
   <div class="ir-nav">
     <button class="ir-btn active" data-tab="chat" type="button">${S_HOME}<span class="ir-lbl">Inicio</span></button>
-    <button class="ir-btn" data-tab="reservas" type="button">${S_CAL}<span class="ir-lbl">Reservas</span></button>
+    <button class="ir-btn" data-tab="reservas" type="button">${S_CAL}<span class="ir-lbl">Agenda</span></button>
     <button class="ir-btn" data-tab="nosotros" type="button">${S_PROD}<span class="ir-lbl">Productos</span></button>
     <button class="ir-btn" data-tab="cotizar" type="button">${S_COT}<span class="ir-lbl">Cotizar</span></button>
     <button class="ir-btn" data-tab="resenas" type="button">${S_STAR}<span class="ir-lbl">Reseñas</span></button>
@@ -168,7 +168,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
 <main class="content-wrap">
   <nav class="content-nav">
     <button class="cn-tab active" data-tab="chat" type="button">${S_HOME} Inicio</button>
-    <button class="cn-tab" data-tab="reservas" type="button">${S_CAL} Reservas</button>
+    <button class="cn-tab" data-tab="reservas" type="button">${S_CAL} Agenda</button>
     <button class="cn-tab" data-tab="nosotros" type="button">${S_PROD} Productos</button>
     <button class="cn-tab" data-tab="cotizar" type="button">${S_COT} Cotizar</button>
     <button class="cn-tab" data-tab="resenas" type="button">${S_STAR} Reseñas</button>
@@ -211,7 +211,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
   </div>
   <nav class="mdr-nav">
     <button class="mdr-item active" data-tab="chat" type="button">${S_HOME}<span>Inicio</span></button>
-    <button class="mdr-item" data-tab="reservas" type="button">${S_CAL}<span>Reservas</span></button>
+    <button class="mdr-item" data-tab="reservas" type="button">${S_CAL}<span>Agenda</span></button>
     <button class="mdr-item" data-tab="nosotros" type="button">${S_PROD}<span>Productos</span></button>
     <button class="mdr-item" data-tab="cotizar" type="button">${S_COT}<span>Cotizar</span></button>
     <button class="mdr-item" data-tab="resenas" type="button">${S_STAR}<span>Reseñas</span></button>

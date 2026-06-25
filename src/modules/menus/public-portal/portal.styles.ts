@@ -901,7 +901,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
   color:var(--primary);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;
   margin-bottom:18px
 }
-.bk-sec-title{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.bk-sec-title{font-size:11.5px;font-weight:600;color:var(--dim);letter-spacing:.04em;margin-bottom:10px}
 .bk-svc-item{
   display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:13px;
   background:var(--panel);margin-bottom:8px;

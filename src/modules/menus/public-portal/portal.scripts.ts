@@ -149,7 +149,7 @@ function openBookingFromService(svc){
 
 function renderBkDateStep(){
   bk.step='date';
-  setBkHeader(bk.svc?escH(bk.svc.name):'Elegí una fecha',true);
+  setBkHeader(bk.svc?escH(bk.svc.name):'Selecciona una fecha',true);
   var body=document.getElementById('bkBody'); if(!body) return;
   if(!calLoaded){
     body.innerHTML='<div class="bk-scroll"><div class="cal-loading"><div class="spinner"></div>Cargando calendario…</div></div>';
@@ -220,7 +220,7 @@ function renderBkDateStep(){
 
 function renderBkProviderStep(){
   bk.step='provider';
-  setBkHeader('Elegí un profesional',true);
+  setBkHeader('Selecciona un profesional',true);
   var body=document.getElementById('bkBody'); if(!body) return;
   var label=fmtDateLabel(bk.date);
   var calIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
@@ -241,7 +241,7 @@ function renderBkProviderStep(){
     +'<div class="bk-svc-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>'
     +'</div>';
   body.innerHTML='<div class="bk-scroll">'+dateBadge+svcBadge
-    +'<div class="bk-sec-title">Seleccioná el profesional</div>'
+    +'<div class="bk-sec-title">Selecciona un profesional</div>'
     +rows+anyRow+'</div>';
 }
 
@@ -250,7 +250,7 @@ function openBookingPanel(){ showTab('reservas'); }
 
 function renderBkSvcStep(){
   bk.step='svc';
-  var label=bk.date?fmtDateLabel(bk.date):'Elegí un servicio';
+  var label=bk.date?fmtDateLabel(bk.date):'Selecciona un servicio';
   setBkHeader(label,false);
   var body=document.getElementById('bkBody'); if(!body) return;
   if(!svcsLoaded){
@@ -281,7 +281,7 @@ function renderBkSvcStep(){
     +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'
     +escH(fmtDateLabel(bk.date))+'</div>'):'';
   body.innerHTML='<div class="bk-scroll">'+dateBadge
-    +'<div class="bk-sec-title">Elegí un servicio</div>'+rows+'</div>';
+    +'<div class="bk-sec-title">Selecciona un servicio</div>'+rows+'</div>';
 }
 
 function renderBkTimeStep(){
@@ -305,7 +305,7 @@ function renderBkTimeStep(){
     return '<button class="bk-time-chip" type="button" data-bk-time="'+escH(t)+'">'+escH(t)+'</button>';
   }).join('');
   body.innerHTML='<div class="bk-scroll">'+badge
-    +'<div class="bk-sec-title">Elegí un horario</div>'
+    +'<div class="bk-sec-title">Selecciona un horario</div>'
     +'<div class="bk-times-grid">'+chips+'</div></div>';
 }
 
@@ -1929,7 +1929,7 @@ function renderReviewForm(err){
 }
 
 function submitReview(){
-  if(!rvRating){ renderReviewForm('Elegí una calificación.'); return; }
+  if(!rvRating){ renderReviewForm('Selecciona una calificación.'); return; }
   var commentEl=document.getElementById('rvComment');
   var comment=commentEl?(commentEl.value||'').trim():'';
   var btn=document.getElementById('rvSubmit');
