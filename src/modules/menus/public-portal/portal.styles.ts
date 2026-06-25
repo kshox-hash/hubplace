@@ -434,6 +434,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
   display:flex;align-items:center;gap:6px;font-size:12px;color:var(--soft);
 }
 .hm-profile-hours svg{width:12px;height:12px;flex-shrink:0;opacity:.7}
+.hm-social-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.hm-social-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;
+  text-decoration:none;white-space:nowrap;
+}
+.hm-social-wa{background:#25D36620;color:#128C7E}
+.hm-social-ig{background:#E1306C18;color:#C13584}
+.hm-social-ph{background:#3B76ED18;color:#3B76ED}
+.hm-social-btn svg{width:14px;height:14px;flex-shrink:0}
 .hm-pstats{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .hm-pstat{
   display:flex;align-items:center;gap:5px;
