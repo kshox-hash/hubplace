@@ -523,8 +523,9 @@ document.addEventListener('click',function(e){
   if(t.closest('#closeDayDetail')){   closePanel('dayDetailPanel');   return; }
   if(t.closest('#closeSvcDetail')){   closePanel('svcDetailPanel');   return; }
   if(t.closest('#closeProdDetail')){  closePanel('prodDetailPanel');  return; }
+  if(t.closest('#closeGal')){         closePanel('galPanel');         return; }
   if(t.closest('#openReviewBtn')){ openReviewPanel(); return; }
-  if(t.closest('#slideOverlay')){ closeMobileDrawer(); closePanel('bookingPanel'); closePanel('reviewPanel'); closePanel('dayDetailPanel'); closePanel('svcDetailPanel'); closePanel('prodDetailPanel'); return; }
+  if(t.closest('#slideOverlay')){ closeMobileDrawer(); closePanel('bookingPanel'); closePanel('reviewPanel'); closePanel('dayDetailPanel'); closePanel('svcDetailPanel'); closePanel('prodDetailPanel'); closePanel('galPanel'); return; }
 
   var prdCard=t.closest('[data-prod-id]');
   if(prdCard){
@@ -1614,6 +1615,41 @@ function renderQPSuccess(name){
     var b=document.getElementById('cotizarBody');if(b)b.innerHTML='';
     QCart={};
   });
+}
+
+// ── Gallery lightbox ──────────────────────────────────────────────────────────
+var galItems=[];
+var galCurrentIdx=0;
+
+function openGalPanel(idx){
+  var items=document.querySelectorAll('.gal-item');
+  galItems=Array.from(items);
+  galCurrentIdx=idx;
+  renderGalPanel();
+  openPanel('galPanel');
+}
+
+function renderGalPanel(){
+  var item=galItems[galCurrentIdx];
+  if(!item) return;
+  var url=item.getAttribute('data-gal-url')||'';
+  var desc=item.getAttribute('data-gal-desc')||'';
+  var counter=document.getElementById('galPanelCounter');
+  if(counter) counter.textContent=(galCurrentIdx+1)+' / '+galItems.length;
+  var body=document.getElementById('galPanelBody');
+  if(!body) return;
+  body.innerHTML='<div style="padding:16px 20px">'
+    +'<img src="'+escH(url)+'" alt="" style="width:100%;border-radius:12px;display:block;background:var(--bg)">'
+    +(desc?'<p style="margin:12px 0 0;font-size:14px;color:var(--soft);line-height:1.6">'+escH(desc)+'</p>':'')
+    +'<div style="display:flex;gap:8px;margin-top:16px">'
+    +(galCurrentIdx>0?'<button class="btn-outline" id="galPrev" type="button" style="flex:1">← Anterior</button>':'')
+    +(galCurrentIdx<galItems.length-1?'<button class="btn-outline" id="galNext" type="button" style="flex:1">Siguiente →</button>':'')
+    +'</div>'
+    +'</div>';
+  var prev=document.getElementById('galPrev');
+  var next=document.getElementById('galNext');
+  if(prev) prev.addEventListener('click',function(){galCurrentIdx--;renderGalPanel();});
+  if(next) next.addEventListener('click',function(){galCurrentIdx++;renderGalPanel();});
 }
 
 // ── Reviews ───────────────────────────────────────────────────────────────────

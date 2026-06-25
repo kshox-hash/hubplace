@@ -43,9 +43,12 @@ function buildProductCard(product: Product): string {
 </div>`;
 }
 
-export function nosotrosTabHtml(products: Product[], total: number): string {
+type GalleryPhoto = { id: string; url: string; description: string | null };
+
+export function nosotrosTabHtml(products: Product[], total: number, galleryPhotos: GalleryPhoto[]): string {
   const hasProducts = products && products.length > 0;
   const hasMore = total > products.length;
+  const hasGallery = galleryPhotos && galleryPhotos.length > 0;
 
   return `<div id="panel-nosotros" class="panel">
   <div class="pscroll">
@@ -64,6 +67,19 @@ export function nosotrosTabHtml(products: Product[], total: number): string {
     <div id="prd-empty-search" class="prd-no-results" style="display:none">Sin resultados para tu búsqueda.</div>
     ${hasMore ? `<div id="prdLoadMoreWrap" style="padding:16px;text-align:center"><button class="btn-outline" id="prdLoadMoreBtn" onclick="loadMorePrd()">Cargar más</button></div>` : ""}
     ` : `<div class="prod-empty">Sin productos publicados aún.<br/><span style="font-size:12px">Agrega tus productos desde el panel de administración.</span></div>`}
+
+    ${hasGallery ? `
+    <div class="sec-hdr" style="margin-top:28px">
+      <div>
+        <div class="sec-title">Galería</div>
+        <div class="sec-sub">${galleryPhotos.length} foto${galleryPhotos.length !== 1 ? "s" : ""}</div>
+      </div>
+    </div>
+    <div class="gal-grid">
+      ${galleryPhotos.map((p, i) => `<div class="gal-item" data-gal-idx="${i}" data-gal-url="${escapeHtml(p.url)}" data-gal-desc="${escapeHtml(p.description || "")}" onclick="openGalPanel(${i})">
+        <img src="${escapeHtml(p.url)}" alt="" loading="lazy">
+      </div>`).join("")}
+    </div>` : ""}
   </div>
 </div>`;
 }

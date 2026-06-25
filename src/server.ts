@@ -38,6 +38,8 @@ import { initCalendarBookingPriceColumn } from "./modules/appointments/appointme
 import { initCalendarServicesTable } from "./modules/appointments/calendar-services.repository";
 import { initReviewsGoogleColumns } from "./modules/stadistics/reviews.repository";
 import calendarServicesRoutes from "./modules/appointments/calendar-services.routes";
+import galleryRouter from "./modules/gallery/gallery.router";
+import { initGalleryTable } from "./modules/gallery/gallery.repository";
 import DB from "./db/db_configuration";
 
 // ─── Proceso ────────────────────────────────────────────────────────────────
@@ -148,6 +150,7 @@ app.use("/api", statisticsRouter);
 app.use("/api", quotesExtendedRouter);
 app.use("/api", clientsRouter);
 app.use("/api", blocksRouter);
+app.use(galleryRouter);
 app.use(errorMiddleware);
 
 // ─── Arranque ─────────────────────────────────────────────────────────────────
@@ -159,6 +162,7 @@ const server = app.listen(PORT, async () => {
     initCalendarBookingPriceColumn().catch((e) => console.error("[init] calendar_booking_price:", e)),
     initCalendarServicesTable().catch((e) => console.error("[init] calendar_services:", e)),
     initReviewsGoogleColumns().catch((e) => console.error("[init] reviews_google:", e)),
+    initGalleryTable().catch((e) => console.error("[init] gallery:", e)),
   ]);
 });
 

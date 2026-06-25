@@ -25,6 +25,7 @@ export type PortalViewData = {
   coverImage?: string | null;
   enabledModules: MenuModuleItem[];
   products: { id: string|number; name: string; price: number; description?: string|null; color?: string|null; photos?: string[] }[];
+  galleryPhotos: { id: string; url: string; description: string|null }[];
   portalUser?: { name?: string; email?: string; picture?: string } | null;
 };
 
@@ -62,7 +63,7 @@ export function renderPortalHtml(data: PortalViewData): string {
     description, welcomeMessage,
     instagramUrl, whatsappNumber, businessHours,
     coverImage,
-    enabledModules, products,
+    enabledModules, products, galleryPhotos,
     portalUser,
   } = data;
 
@@ -177,7 +178,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
 
   ${chatTabHtml({ name: s.name, slug: s.slug, desc: s.desc, welcome: s.welcome, enabledModules, phone: s.phone, ig: s.ig, wa: s.wa, hours: s.hours, locationLine, waHref, initials, productCount, portalUser, coverImage: coverImage ?? null })}
   ${reservasTabHtml()}
-  ${nosotrosTabHtml(products, productCount)}
+  ${nosotrosTabHtml(products, productCount, galleryPhotos)}
   ${serviciosTabHtml()}
   ${resenasTabHtml()}
 </main>
@@ -290,6 +291,18 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
     </button>
   </div>
   <div class="sp-body" id="pdpBody"></div>
+</div>
+
+<div class="slide-panel" id="galPanel">
+  <div class="sp-hdr">
+    <div style="display:flex;align-items:center;gap:8px;min-width:0">
+      <span class="sp-title" id="galPanelCounter"></span>
+    </div>
+    <button class="sp-close" id="closeGal" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="sp-body" id="galPanelBody"></div>
 </div>
 
 <script>${portalScripts(publicSlug, businessName, userId, enabledModules, products.length, productCount, { phone: s.phone, address: s.address, city: s.city, description: s.desc, welcomeMessage: welcomeMessage ?? null, businessHours: s.hours, instagramUrl: s.ig, whatsappNumber: s.wa }, initials)}</script>

@@ -469,6 +469,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .prd-price{font-size:14px;font-weight:700;color:var(--primary);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums}
 .prd-no-results{text-align:center;color:var(--dim);padding:24px 16px;font-size:13px}
 
+/* Gallery */
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;border-radius:12px;overflow:hidden}
+.gal-item{aspect-ratio:1;overflow:hidden;cursor:pointer;background:var(--bg);position:relative}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .18s}
+.gal-item:active img{opacity:.75}
+
 /* Inbox panel */
 .inbox-card{background:var(--panel);border-radius:26px;overflow:hidden}
 .inbox-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;}

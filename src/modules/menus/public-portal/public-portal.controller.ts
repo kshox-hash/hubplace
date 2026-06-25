@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getSlugByValueService } from "../../slug/slug.service";
 import { quoteHtml } from "../../quotes/quote-html";
 import { getActiveServicesByUserId, getActiveServicesPaginated } from "../../appointments/calendar-services.repository";
+import { getGalleryPhotosByUserId } from "../../gallery/gallery.repository";
 import { companyProfileRepository } from "../../profiles/company_profile_repository";
 import { findEnabledModulesByUserId } from "../user-modules.repository";
 import { renderPortalHtml } from "./portal.screen";
@@ -123,10 +124,11 @@ export const publicPortalController = {
         return res.status(404).send("Negocio no encontrado");
       }
 
-      const [productsResult, profile, enabledModules] = await Promise.all([
+      const [productsResult, profile, enabledModules, galleryPhotos] = await Promise.all([
         getActiveServicesPaginated(slug.user_id, 20, 0),
         companyProfileRepository.getByUserId(slug.user_id),
         findEnabledModulesByUserId(slug.user_id),
+        getGalleryPhotosByUserId(slug.user_id),
       ]);
 
       const products = productsResult.rows;
@@ -154,6 +156,11 @@ export const publicPortalController = {
           description: p.description ?? null,
           color:       String(p.color || "#63ACF1"),
           photos:      Array.isArray(p.photos) ? p.photos.map(String) : [],
+        })),
+        galleryPhotos: galleryPhotos.map(p => ({
+          id:          p.id,
+          url:         p.url,
+          description: p.description ?? null,
         })),
         portalUser: portalUser ?? null,
       });
