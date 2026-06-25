@@ -46,6 +46,7 @@ export async function getCalendarSettingsByUserId(userId: string) {
     SELECT *
     FROM calendar_availability
     WHERE user_id = $1
+      AND provider_id IS NULL
       AND is_active = true
     ORDER BY weekday ASC, start_time ASC
     `,
@@ -121,7 +122,7 @@ export async function saveCalendarSettings(input: SaveCalendarSettingsInput) {
     await client.query(
       `
       DELETE FROM calendar_availability
-      WHERE user_id = $1
+      WHERE user_id = $1 AND provider_id IS NULL
       `,
       [input.userId]
     );
@@ -299,4 +300,45 @@ export async function getPaymentsForExport(userId: string, year?: string): Promi
     params
   );
   return result.rows;
+}
+
+export async function getProviderAvailability(userId: string, providerId: string) {
+  const result = await pool.query(
+    `SELECT weekday, start_time, end_time, slot_minutes
+     FROM calendar_availability
+     WHERE user_id = $1 AND provider_id = $2 AND is_active = true
+     ORDER BY weekday ASC`,
+    [userId, providerId]
+  );
+  return result.rows;
+}
+
+export async function saveProviderAvailability(input: {
+  userId: string;
+  providerId: string;
+  activeWeekdays: number[];
+  openingTime: string;
+  closingTime: string;
+  slotDurationMinutes: number;
+}) {
+  return DB.withTransaction(async (client) => {
+    await client.query(
+      `DELETE FROM calendar_availability WHERE user_id = $1 AND provider_id = $2`,
+      [input.userId, input.providerId]
+    );
+    for (const weekday of input.activeWeekdays) {
+      await client.query(
+        `INSERT INTO calendar_availability (user_id, provider_id, weekday, start_time, end_time, slot_minutes, is_active, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, true, NOW(), NOW())`,
+        [input.userId, input.providerId, weekday, input.openingTime, input.closingTime, input.slotDurationMinutes]
+      );
+    }
+  });
+}
+
+export async function clearProviderAvailability(userId: string, providerId: string) {
+  await pool.query(
+    `DELETE FROM calendar_availability WHERE user_id = $1 AND provider_id = $2`,
+    [userId, providerId]
+  );
 }
