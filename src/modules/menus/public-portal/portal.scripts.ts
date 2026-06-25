@@ -175,7 +175,7 @@ function renderBkDateStep(){
     var cls='cal-cell';
     if(isToday)       cls+=' cal-today';
     else if(isPast)   cls+=' cal-past';
-    else if(hasSlots) cls+=' cal-avail';
+    else if(hasSlots) cls+=(calSlots[dStr].length>calMaxSlots*0.5?' cal-avail-good':' cal-avail-few');
     else              cls+=' cal-taken';
     cells+='<div class="'+cls+'" data-bk-date="'+dStr+'">'+d+'</div>';
   }
@@ -190,12 +190,13 @@ function renderBkDateStep(){
     +'</div>'
     +'<div class="cal-grid" style="margin-bottom:14px">'+dayNames+cells+'</div>'
     +'<div class="cal-legend">'
-    +'<span class="cal-leg-item"><span class="cal-leg-dot" style="background:var(--primary)"></span>Disponible</span>'
+    +'<span class="cal-leg-item"><span class="cal-leg-dot" style="background:#16A34A"></span>Disponible</span>'
+    +'<span class="cal-leg-item"><span class="cal-leg-dot" style="background:#EA580C"></span>Pocas horas</span>'
     +'<span class="cal-leg-item"><span class="cal-leg-dot" style="background:var(--border)"></span>Sin turnos</span>'
     +'</div>'
     +'</div>';
   body.querySelectorAll('.cal-cell[data-bk-date]').forEach(function(cell){
-    if(!cell.classList.contains('cal-avail')&&!cell.classList.contains('cal-today')) return;
+    if(!cell.classList.contains('cal-avail-good')&&!cell.classList.contains('cal-avail-few')&&!cell.classList.contains('cal-today')) return;
     cell.style.cursor='pointer';
     cell.addEventListener('click',function(){
       var dateStr=cell.getAttribute('data-bk-date');
@@ -952,6 +953,7 @@ function loadMorePrd(){
 
 // ── Calendar widget ───────────────────────────────────────────────────────────
 var calSlots={};      // { 'YYYY-MM-DD': ['09:00',...] }
+var calMaxSlots=1;    // máximo de slots en cualquier día — para calcular "pocas horas"
 var calLoaded=false;
 var calYear=new Date().getFullYear();
 var calMonth=new Date().getMonth(); // 0-based
@@ -968,6 +970,9 @@ function loadCalendar(){
         data.slots.forEach(function(s){
           if(s.date&&s.times&&s.times.length) calSlots[s.date]=s.times;
         });
+        var mx=1;
+        Object.keys(calSlots).forEach(function(d){if(calSlots[d].length>mx) mx=calSlots[d].length;});
+        calMaxSlots=mx;
       }
       renderAllCals();
       renderUpcomingSlots();
@@ -1055,7 +1060,7 @@ function renderMonthCal(today,todayStr,tYear,tMonth){
     var cls='cal-cell';
     if(isToday)       cls+=' cal-today';
     else if(isPast)   cls+=' cal-past';
-    else if(hasSlots) cls+=' cal-avail';
+    else if(hasSlots) cls+=(calSlots[dStr].length>calMaxSlots*0.5?' cal-avail-good':' cal-avail-few');
     else              cls+=' cal-taken';
 
     cells+='<div class="'+cls+'" data-cal-date="'+dStr+'">'+d+'</div>';
@@ -1157,7 +1162,7 @@ function renderCalWidget(id){
     } else if(isPast){
       cls+=' cal-past';
     } else if(hasSlots){
-      cls+=' cal-avail';
+      cls+=(calSlots[dateStr].length>calMaxSlots*0.5?' cal-avail-good':' cal-avail-few');
       extra=' data-cal-date="'+dateStr+'"';
     } else {
       cls+=' cal-taken';
