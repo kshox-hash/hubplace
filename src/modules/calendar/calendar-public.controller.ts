@@ -19,14 +19,15 @@ import {
   createPaymentRecord,
   updatePaymentWithPreference,
   getPlatformFeePct,
-  confirmFreeBooking,
   getBusinessNameByUserId,
+  hasPendingPaymentForCustomer,
+  cancelPendingBookingById,
+  cancelPendingBookingByToken,
 } from "./calendar-public.repository";
+
+const MIN_PAYMENT_AMOUNT = 3000;
 import { getServiceById } from "../appointments/calendar-services.repository";
 import { sendBookingPaymentLinkEmail } from "./booking/services/bookingPaymentLinkEmailService";
-import { sendBookingPaidEmail } from "./booking/services/bookingPaidEmailService";
-import { sendBusinessBookingPaidEmail } from "./booking/services/businessBookingPaidEmailService";
-import { notificationService } from "../notifications/notification.service";
 
 export const calendarPublicController = {
 
@@ -131,7 +132,7 @@ export const calendarPublicController = {
 
       const serviceId = String(body.serviceId || "").trim() || null;
 
-      // Resolve service data
+      // Resolver datos del servicio
       let servicePrice: number | null = null;
       let serviceName: string | null = null;
       let serviceColor: string | null = null;
@@ -142,6 +143,24 @@ export const calendarPublicController = {
           serviceName  = svc.name;
           serviceColor = svc.color;
         }
+      }
+
+      // Validar monto mínimo antes de crear la reserva
+      const paymentAmount = Number(servicePrice ?? 0);
+      if (paymentAmount < MIN_PAYMENT_AMOUNT) {
+        return res.status(400).json({
+          ok: false,
+          message: `El monto mínimo para reservar es $${MIN_PAYMENT_AMOUNT.toLocaleString("es-CL")}. Contacta al negocio para más información.`,
+        });
+      }
+
+      // Bloquear si el cliente ya tiene una reserva pendiente de pago
+      const alreadyPending = await hasPendingPaymentForCustomer(profile.user_id, customerEmail);
+      if (alreadyPending) {
+        return res.status(400).json({
+          ok: false,
+          message: "Ya tienes una reserva pendiente de pago. Completa el pago para poder reservar nuevamente.",
+        });
       }
 
       const confirmationToken     = createBookingConfirmationToken();
@@ -164,7 +183,7 @@ export const calendarPublicController = {
         servicePrice,
       });
 
-      // Crear preferencia de pago o confirmar gratis
+      // Crear preferencia de pago en MercadoPago
       let checkoutUrl: string | null = null;
       const businessName = await getBusinessNameByUserId(profile.user_id);
       const bookingDateLabel = new Date(bookingDate).toLocaleDateString("es-CL", {
@@ -172,50 +191,17 @@ export const calendarPublicController = {
       });
       try {
         const accessToken = await getMpAccessToken(profile.user_id);
-        const amount = Number(booking.payment_amount ?? 0);
-        if (amount === 0) {
-          // Reserva gratuita — confirmar inmediatamente y notificar a cliente y negocio
-          await confirmFreeBooking(booking.id);
-          statsService.increment(profile.user_id, "booking_paid").catch(() => {});
-          notificationService.bookingCreated({
-            userId: profile.user_id,
-            bookingId: booking.id,
-            customerName,
-            startText: `${bookingDateLabel} a las ${startTime}`,
-            serviceName,
-          }).catch(() => {});
-          sendBookingPaidEmail({
-            to: customerEmail,
-            customerName,
-            businessName,
-            bookingDate: bookingDateLabel,
-            bookingTime: startTime,
-          }).catch((err) => console.error("[calendar] Error enviando email de confirmación:", err));
-          const businessEmail = process.env.BUSINESS_NOTIFICATION_EMAIL;
-          if (businessEmail) {
-            sendBusinessBookingPaidEmail({
-              to: businessEmail,
-              businessName,
-              customerName,
-              customerEmail,
-              customerPhone,
-              bookingDate: bookingDateLabel,
-              bookingTime: startTime,
-              amount: 0,
-            }).catch((err) => console.error("[calendar] Error enviando email al negocio:", err));
-          }
-        } else if (accessToken) {
-          // Reserva con precio — iniciar flujo de pago MP
+        if (accessToken) {
           const feePct = await getPlatformFeePct(profile.user_id);
-          const marketplaceFee = Math.round(amount * feePct / 100);
-          const payment = await createPaymentRecord(profile.user_id, booking.id, amount);
+          const marketplaceFee = Math.round(paymentAmount * feePct / 100);
+          const payment = await createPaymentRecord(profile.user_id, booking.id, paymentAmount);
           const bookingDateStr = new Date(bookingDate).toLocaleDateString("es-CL");
           const preference = await createPreference({
             accessToken,
             bookingId: booking.id,
             title: `Reserva ${businessName}`,
             description: `${bookingDateStr} a las ${startTime} - ${customerName}`,
-            amount,
+            amount: paymentAmount,
             customerEmail,
             customerName,
             businessName,
@@ -224,6 +210,7 @@ export const calendarPublicController = {
           if (preference.checkoutUrl) {
             await updatePaymentWithPreference(payment.id, preference.checkoutUrl, preference.preferenceId ?? "");
             checkoutUrl = preference.checkoutUrl;
+            const cancelUrl = `${process.env.PUBLIC_BASE_URL}/api/bookings/cancel/${booking.confirmation_token}`;
             sendBookingPaymentLinkEmail({
               to: customerEmail,
               customerName,
@@ -231,10 +218,10 @@ export const calendarPublicController = {
               bookingDate: bookingDateLabel,
               bookingTime: startTime,
               checkoutUrl,
+              cancelUrl,
             }).catch((err) => console.error("[calendar] Error enviando email de pago:", err));
           }
         }
-        // Si amount > 0 pero no hay accessToken: reserva queda pending_payment sin confirmar
       } catch (err) {
         console.error("[calendar] Error en flujo post-reserva:", err);
       }
@@ -349,6 +336,53 @@ export const calendarPublicController = {
         ok: false,
         message: "No se pudo crear el pago.",
       });
+    }
+  },
+
+  async cancelBooking(req: Request, res: Response): Promise<Response | void> {
+    try {
+      const publicSlug = String(req.params["publicSlug"] || "").trim();
+      const bookingId  = String(req.params["bookingId"]  || "").trim();
+      if (!publicSlug || !bookingId) return res.status(400).json({ ok: false, message: "Parámetros inválidos." });
+      const profile = await getSlugByValueService(publicSlug);
+      if (!profile) return res.status(404).json({ ok: false, message: "Negocio no encontrado." });
+      const { cancelled, alreadyPaid } = await cancelPendingBookingById(bookingId, profile.user_id);
+      if (alreadyPaid) return res.status(400).json({ ok: false, message: "Esta reserva ya está confirmada y no puede cancelarse." });
+      if (!cancelled)  return res.status(400).json({ ok: false, message: "Esta reserva ya expiró o no existe." });
+      return res.json({ ok: true, message: "Reserva cancelada correctamente." });
+    } catch (error) {
+      console.error("[calendar] Error cancelando reserva:", error);
+      return res.status(500).json({ ok: false, message: "No se pudo cancelar la reserva." });
+    }
+  },
+
+  async cancelBookingByToken(req: Request, res: Response): Promise<Response | void> {
+    try {
+      const token = String(req.params["token"] || "").trim();
+      if (!token) return res.status(400).send("<p>Token inválido.</p>");
+      const { cancelled, alreadyPaid } = await cancelPendingBookingByToken(token);
+      if (alreadyPaid) {
+        return res.send(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Reserva pagada</title></head>
+          <body style="font-family:Arial,sans-serif;max-width:480px;margin:60px auto;padding:24px;text-align:center">
+            <h2 style="color:#0a1628">Esta reserva ya está confirmada</h2>
+            <p style="color:#4a6580">El pago fue procesado correctamente. No es posible cancelarla.</p>
+          </body></html>`);
+      }
+      if (!cancelled) {
+        return res.send(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Reserva expirada</title></head>
+          <body style="font-family:Arial,sans-serif;max-width:480px;margin:60px auto;padding:24px;text-align:center">
+            <h2 style="color:#0a1628">Reserva ya expirada</h2>
+            <p style="color:#4a6580">El tiempo de pago venció y el horario quedó liberado automáticamente.</p>
+          </body></html>`);
+      }
+      return res.send(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Reserva cancelada</title></head>
+        <body style="font-family:Arial,sans-serif;max-width:480px;margin:60px auto;padding:24px;text-align:center">
+          <h2 style="color:#0a1628">Reserva cancelada</h2>
+          <p style="color:#4a6580">Tu reserva fue cancelada correctamente. El horario quedó disponible nuevamente.</p>
+        </body></html>`);
+    } catch (error) {
+      console.error("[calendar] Error cancelando reserva por token:", error);
+      return res.status(500).send("<p>Ocurrió un error al cancelar la reserva.</p>");
     }
   },
 };

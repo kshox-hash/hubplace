@@ -113,6 +113,55 @@ export async function getBusinessNameByUserId(userId: string): Promise<string> {
   return result.rows[0]?.business_name ?? "Negocio";
 }
 
+export async function cancelPendingBookingByToken(token: string): Promise<{ cancelled: boolean; alreadyPaid: boolean }> {
+  const pool = DB.getPool();
+  const check = await pool.query(
+    `SELECT status, expires_at FROM calendar_bookings WHERE confirmation_token = $1 LIMIT 1`,
+    [token]
+  );
+  const row = check.rows[0];
+  if (!row) return { cancelled: false, alreadyPaid: false };
+  if (row.status === "confirmed") return { cancelled: false, alreadyPaid: true };
+  const result = await pool.query(
+    `DELETE FROM calendar_bookings
+     WHERE confirmation_token = $1 AND status = 'pending_payment' AND expires_at > NOW()`,
+    [token]
+  );
+  return { cancelled: (result.rowCount ?? 0) > 0, alreadyPaid: false };
+}
+
+export async function cancelPendingBookingById(bookingId: string, userId: string): Promise<{ cancelled: boolean; alreadyPaid: boolean }> {
+  const pool = DB.getPool();
+  const check = await pool.query(
+    `SELECT status FROM calendar_bookings WHERE id = $1 AND user_id = $2 LIMIT 1`,
+    [bookingId, userId]
+  );
+  const row = check.rows[0];
+  if (!row) return { cancelled: false, alreadyPaid: false };
+  if (row.status === "confirmed") return { cancelled: false, alreadyPaid: true };
+  const result = await pool.query(
+    `DELETE FROM calendar_bookings
+     WHERE id = $1 AND user_id = $2 AND status = 'pending_payment' AND expires_at > NOW()`,
+    [bookingId, userId]
+  );
+  return { cancelled: (result.rowCount ?? 0) > 0, alreadyPaid: false };
+}
+
+export async function hasPendingPaymentForCustomer(
+  userId: string,
+  customerEmail: string
+): Promise<boolean> {
+  const pool = DB.getPool();
+  const result = await pool.query(
+    `SELECT id FROM calendar_bookings
+     WHERE user_id = $1 AND client_email = $2
+       AND status = 'pending_payment' AND expires_at > NOW()
+     LIMIT 1`,
+    [userId, customerEmail]
+  );
+  return (result.rowCount ?? 0) > 0;
+}
+
 export async function confirmFreeBooking(bookingId: string): Promise<void> {
   const pool = DB.getPool();
   await pool.query(

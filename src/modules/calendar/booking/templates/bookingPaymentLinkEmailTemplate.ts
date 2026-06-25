@@ -4,6 +4,7 @@ export function renderBookingPaymentLinkEmailTemplate(input: {
   bookingDate: string;
   bookingTime: string;
   checkoutUrl: string;
+  cancelUrl?: string;
 }): string {
   return `<!doctype html>
 <html lang="es">
@@ -35,9 +36,14 @@ export function renderBookingPaymentLinkEmailTemplate(input: {
       </a>
 
       <p style="margin:20px 0 0;font-size:12px;color:#8fa8c0;text-align:center;line-height:1.5;">
-        Si no realizaste esta reserva o ya la pagaste, ignora este correo.<br>
         El link expira en 45 minutos.
       </p>
+      ${input.cancelUrl ? `
+      <p style="margin:16px 0 0;text-align:center;">
+        <a href="${input.cancelUrl}" style="font-size:12px;color:#8fa8c0;text-decoration:underline;">
+          Cancelar reserva
+        </a>
+      </p>` : ''}
     </div>
   </div>
 </body>

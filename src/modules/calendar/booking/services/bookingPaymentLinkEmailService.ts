@@ -8,6 +8,7 @@ export type SendBookingPaymentLinkEmailInput = {
   bookingDate: string;
   bookingTime: string;
   checkoutUrl: string;
+  cancelUrl?: string;
 };
 
 export async function sendBookingPaymentLinkEmail(

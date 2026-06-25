@@ -355,7 +355,7 @@ function submitBooking(){
   })
   .then(function(r){return r.json();})
   .then(function(d){
-    if(d.ok||d.id||d.booking_id||d.bookingId) renderBkSuccess(d.checkoutUrl||null);
+    if(d.ok||d.id||d.booking_id||d.bookingId) renderBkSuccess(d.checkoutUrl||null,d.booking&&d.booking.id?d.booking.id:null);
     else{
       if(errEl) errEl.textContent=d.message||'Error al confirmar. Intentá de nuevo.';
       if(btn){btn.textContent='Confirmar reserva';btn.disabled=false;}
@@ -367,7 +367,7 @@ function submitBooking(){
   });
 }
 
-function renderBkSuccess(checkoutUrl){
+function renderBkSuccess(checkoutUrl,bookingId){
   bk.step='success';
   setBkHeader('¡Confirmado!',false);
   var body=document.getElementById('bkBody'); if(!body) return;
@@ -381,12 +381,32 @@ function renderBkSuccess(checkoutUrl){
     +'<div class="bk-success-title">¡Reserva confirmada!</div>'
     +'<div class="bk-success-sub">'+subMsg+'</div>'
     +'<button class="btn-primary" type="button" id="bkDone" style="width:100%;margin-top:28px">Listo</button>'
+    +(bookingId?'<button type="button" id="bkCancel" style="width:100%;margin-top:10px;background:none;border:none;cursor:pointer;font-size:13px;color:var(--soft);padding:8px 0">Cancelar reserva</button>':'')
     +'</div>';
   var done=document.getElementById('bkDone');
   if(done) done.addEventListener('click',function(){
     closePanel('bookingPanel');
     bk.svc=null;bk.date=null;bk.time=null;bk.provider=null;bk.entry=null;
   });
+  var cancelBtn=document.getElementById('bkCancel');
+  if(cancelBtn&&bookingId){
+    cancelBtn.addEventListener('click',function(){
+      cancelBtn.textContent='Cancelando…';
+      cancelBtn.disabled=true;
+      fetch('/api/public/'+SLUG+'/bookings/'+bookingId,{method:'DELETE'})
+        .then(function(r){return r.json();})
+        .then(function(d){
+          if(d.ok){
+            closePanel('bookingPanel');
+            bk.svc=null;bk.date=null;bk.time=null;bk.provider=null;bk.entry=null;
+          } else {
+            cancelBtn.textContent=d.message||'No se pudo cancelar.';
+            cancelBtn.disabled=false;
+          }
+        })
+        .catch(function(){cancelBtn.textContent='Error al cancelar.';cancelBtn.disabled=false;});
+    });
+  }
 }
 
 function fmtDateLabel(dateStr){

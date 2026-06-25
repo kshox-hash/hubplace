@@ -159,6 +159,14 @@ export async function createCalendarBooking(input: {
   serviceName?: string | null;
   serviceColor?: string | null;
 }) {
+  // Limpiar reservas expiradas para este slot antes de insertar
+  await pool.query(
+    `DELETE FROM calendar_bookings
+     WHERE user_id = $1 AND booking_date = $2 AND start_time = $3
+       AND status = 'pending_payment' AND expires_at <= NOW()`,
+    [input.userId, input.bookingDate, input.startTime]
+  );
+
   const result = await pool.query<CalendarBookingRow>(
     `
     INSERT INTO calendar_bookings (

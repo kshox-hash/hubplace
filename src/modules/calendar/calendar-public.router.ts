@@ -40,6 +40,15 @@ router.post(
   calendarPublicController.createPayment
 );
 
+// Cancelar reserva pendiente (desde el portal, vía fetch DELETE)
+router.delete(
+  "/api/public/:publicSlug/bookings/:bookingId",
+  calendarPublicController.cancelBooking
+);
+
+// Cancelar reserva por token (desde el link del email)
+router.get("/api/bookings/cancel/:token", calendarPublicController.cancelBookingByToken);
+
 // Confirmación de reserva por token (email)
 router.get("/api/bookings/confirm/:token", async (req, res) => {
   try {
