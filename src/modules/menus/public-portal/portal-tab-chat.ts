@@ -56,6 +56,7 @@ export function chatTabHtml(d: ChatData): string {
 
     <!-- PROFILE SUMMARY -->
     <div class="hm-profile-summary">
+      <div class="hm-profile-card">
       ${d.desc ? `<div class="hm-profile-desc">${d.desc}</div>` : ''}
       <div class="hm-pstats">
         <div class="hm-pstat hm-pstat-svc">
@@ -70,6 +71,7 @@ export function chatTabHtml(d: ChatData): string {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
           <span id="hmStatReviews">0</span> <span class="hm-pstat-lbl">reseñas</span>
         </div>
+      </div>
       </div>
     </div>
 
