@@ -178,7 +178,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
   ${chatTabHtml({ name: s.name, slug: s.slug, desc: s.desc, welcome: s.welcome, enabledModules, phone: s.phone, ig: s.ig, wa: s.wa, hours: s.hours, locationLine, waHref, initials, productCount, portalUser, coverImage: coverImage ?? null })}
   ${reservasTabHtml()}
   ${nosotrosTabHtml(products)}
-  ${serviciosTabHtml({ slug: s.slug, productCount })}
+  ${serviciosTabHtml()}
   ${resenasTabHtml()}
 </main>
 </div>
@@ -251,15 +251,6 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
   <div class="sp-body" id="bkBody"></div>
 </div>
 
-<div class="slide-panel" id="quotePanel">
-  <div class="sp-hdr">
-    <span class="sp-title">Cotizador</span>
-    <button class="sp-close" id="closeQuote" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
-  <div class="sp-body" id="quotePanelBody"></div>
-</div>
 
 <div class="slide-panel" id="reviewPanel">
   <div class="sp-hdr">

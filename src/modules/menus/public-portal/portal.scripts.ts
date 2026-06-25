@@ -74,6 +74,7 @@ function showTab(t){
   setActive(t);
   if(t==='reservas'){ensureServices();loadCalendar();}
   if(t==='resenas') ensureReviews();
+  if(t==='cotizar'){var b=document.getElementById('cotizarBody');if(b&&!b.innerHTML.trim())renderQPStep1();}
 }
 
 // ── slide panels ──────────────────────────────────────────────────────────────
@@ -89,7 +90,11 @@ function closePanel(id){
   if(el) el.classList.remove('open');
   if(ov) ov.classList.remove('open');
 }
-function openQuotePanel(){renderQPStep1();openPanel('quotePanel');}
+function openQuotePanel(){
+  showTab('cotizar');
+  var b=document.getElementById('cotizarBody');
+  if(b&&!b.innerHTML.trim()) renderQPStep1();
+}
 
 // ── Booking flow state ────────────────────────────────────────────────────────
 var bk={date:null,svc:null,time:null,step:null,provider:null,entry:null};
@@ -430,7 +435,6 @@ document.addEventListener('click',function(e){
   if(tabBtn&&(tabBtn.classList.contains('bn-item')||tabBtn.classList.contains('ir-btn')||tabBtn.classList.contains('cn-tab')||tabBtn.classList.contains('mdr-item'))){
     if(tabBtn.classList.contains('mdr-item')) closeMobileDrawer();
     var tabName=tabBtn.getAttribute('data-tab');
-    if(tabName==='cotizar'&&window.innerWidth>640){ openQuotePanel(); return; }
     showTab(tabName);
     return;
   }
@@ -519,13 +523,12 @@ document.addEventListener('click',function(e){
     return;
   }
 
-  if(t.closest('#closeQuote')){       closePanel('quotePanel');       return; }
   if(t.closest('#closeReview')){      closePanel('reviewPanel');      return; }
   if(t.closest('#closeDayDetail')){   closePanel('dayDetailPanel');   return; }
   if(t.closest('#closeSvcDetail')){   closePanel('svcDetailPanel');   return; }
   if(t.closest('#closeProdDetail')){  closePanel('prodDetailPanel');  return; }
   if(t.closest('#openReviewBtn')){ openReviewPanel(); return; }
-  if(t.closest('#slideOverlay')){ closeMobileDrawer(); closePanel('bookingPanel'); closePanel('quotePanel'); closePanel('reviewPanel'); closePanel('dayDetailPanel'); closePanel('svcDetailPanel'); closePanel('prodDetailPanel'); return; }
+  if(t.closest('#slideOverlay')){ closeMobileDrawer(); closePanel('bookingPanel'); closePanel('reviewPanel'); closePanel('dayDetailPanel'); closePanel('svcDetailPanel'); closePanel('prodDetailPanel'); return; }
 
   var prdCard=t.closest('[data-prod-id]');
   if(prdCard){
@@ -1445,10 +1448,10 @@ function setupCalTooltips(el){
 
 function pad2(n){return n<10?'0'+n:String(n);}
 
-// ── Quote panel ───────────────────────────────────────────────────────────────
+// ── Quote tab ─────────────────────────────────────────────────────────────────
 function renderQPStep1(){
   QCart={};
-  var body=document.getElementById('quotePanelBody');if(!body)return;
+  var body=document.getElementById('cotizarBody');if(!body)return;
   if(!PRODUCTS.length){
     body.innerHTML='<div style="text-align:center;color:var(--dim);padding:48px 20px;font-size:14px">No hay productos disponibles.</div>';return;
   }
@@ -1499,7 +1502,7 @@ function qpRefreshBar(){
   else bar.style.display='none';
 }
 function renderQPStep2(){
-  var body=document.getElementById('quotePanelBody');if(!body)return;
+  var body=document.getElementById('cotizarBody');if(!body)return;
   var rows='',total=0;
   PRODUCTS.forEach(function(p){var q=QCart[p.id]||0;if(!q)return;var sub=p.price*q;total+=sub;
     rows+='<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border-inner);font-size:13.5px">'
@@ -1539,7 +1542,7 @@ function renderQPStep2(){
   setTimeout(function(){var el=document.getElementById('qpName');if(el)el.focus();},180);
 }
 function renderQPSuccess(name){
-  var body=document.getElementById('quotePanelBody');if(!body)return;
+  var body=document.getElementById('cotizarBody');if(!body)return;
   body.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:60px 24px">'
     +'<div style="width:60px;height:60px;border-radius:18px;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:14px">✅</div>'
     +'<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">¡Cotización enviada!</div>'
@@ -1547,7 +1550,11 @@ function renderQPSuccess(name){
     +'<button class="btn-primary" id="qpDoneBtn" type="button" style="margin-top:28px">Volver al inicio</button>'
     +'</div>';
   var doneBtn=document.getElementById('qpDoneBtn');
-  if(doneBtn) doneBtn.addEventListener('click',function(){closePanel('quotePanel');showTab('chat');});
+  if(doneBtn) doneBtn.addEventListener('click',function(){
+    showTab('chat');
+    var b=document.getElementById('cotizarBody');if(b)b.innerHTML='';
+    QCart={};
+  });
 }
 
 // ── Reviews ───────────────────────────────────────────────────────────────────
