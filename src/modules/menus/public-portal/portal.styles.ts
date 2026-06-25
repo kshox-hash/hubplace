@@ -593,21 +593,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 /* Calendar — home-style colored square cells */
 .rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start;margin-bottom:22px}
 .rdash-info-col{display:flex;flex-direction:column;gap:10px}
-@media(max-width:640px){
-  .rdash-body{grid-template-columns:1fr}
-  .rdash-stats-col{
-    flex-direction:row;
-    background:var(--panel);
-    border-radius:16px;
-  }
-  .rds-item{
-    flex:1;border-bottom:none;
-    border-right:1px solid var(--border);
-    padding:14px 6px;
-  }
-  .rds-item:last-child{border-right:none}
-  .rds-val{font-size:15px}
-}
+@media(max-width:640px){.rdash-body{grid-template-columns:1fr}}
 .month-cal-grid{width:100%}
 .mc-hdr-row{
   display:grid;grid-template-columns:repeat(7,1fr);
@@ -670,6 +656,21 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);
 .rds-val{font-size:17px;font-weight:800;color:var(--primary);letter-spacing:-.05em;line-height:1}
 .rds-next{font-size:11px;font-weight:700;color:var(--primary)}
 .rds-lbl{font-size:8px;font-weight:600;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;text-align:center}
+@media(max-width:640px){
+  .rdash-stats-col{
+    flex-direction:row;
+    background:var(--panel);
+    border-radius:16px;
+  }
+  .rds-item{
+    flex:1;
+    border-bottom:none;
+    border-right:1px solid var(--border);
+    padding:14px 6px;
+  }
+  .rds-item:last-child{border-right:none}
+  .rds-val{font-size:15px}
+}
 
 /* Slots area */
 .slots-area{
