@@ -2,6 +2,47 @@ import DB from "../../db/db_configuration";
 
 const pool = DB.getPool();
 
+// Migra el constraint único de calendar_availability para incluir provider_id,
+// permitiendo que cada profesional tenga su propio horario por día.
+export async function migrateCalendarAvailabilityConstraint(): Promise<void> {
+  await pool.query(`
+    DO $$
+    BEGIN
+      -- Eliminar constraint antiguo que solo cubre (user_id, weekday)
+      IF EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conname = 'calendar_availability_unique'
+          AND conrelid = 'calendar_availability'::regclass
+      ) THEN
+        ALTER TABLE calendar_availability DROP CONSTRAINT calendar_availability_unique;
+      END IF;
+
+      -- Índice parcial para filas globales (provider_id IS NULL)
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_indexes
+        WHERE tablename = 'calendar_availability'
+          AND indexname = 'cal_avail_global_unique'
+      ) THEN
+        CREATE UNIQUE INDEX cal_avail_global_unique
+          ON calendar_availability (user_id, weekday)
+          WHERE provider_id IS NULL;
+      END IF;
+
+      -- Índice parcial para filas de profesional específico
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_indexes
+        WHERE tablename = 'calendar_availability'
+          AND indexname = 'cal_avail_provider_unique'
+      ) THEN
+        CREATE UNIQUE INDEX cal_avail_provider_unique
+          ON calendar_availability (user_id, weekday, provider_id)
+          WHERE provider_id IS NOT NULL;
+      END IF;
+    END
+    $$;
+  `);
+}
+
 export async function initCalendarBookingPriceColumn(): Promise<void> {
   await pool.query(`
     ALTER TABLE calendar_settings
