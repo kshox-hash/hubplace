@@ -5,8 +5,8 @@ export async function listQuoteServices(userId: string) {
     `SELECT id::text, name, description, COALESCE(unit, 'unidad') AS unit,
             price, is_active, is_quote_only, created_at
      FROM calendar_services
-     WHERE user_id = $1
-     ORDER BY is_quote_only DESC, sort_order ASC, name ASC`,
+     WHERE user_id = $1 AND is_quote_only = TRUE
+     ORDER BY sort_order ASC, name ASC`,
     [userId]
   );
   return res.rows;
