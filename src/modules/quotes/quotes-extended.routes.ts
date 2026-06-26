@@ -1,13 +1,16 @@
 import { Router } from "express";
+import multer from "multer";
 import { authMiddleware } from "../../middlewares/auth_middleware";
 import { quoteServicesController } from "./quote-services/quote-services.controller";
 import { quoteHistoryController } from "./quote-history/quote-history.controller";
 import { quoteSendController } from "./quote-send.controller";
 
 const router = Router();
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 // ── Send ──────────────────────────────────────────────────────────────────────
-router.post("/quotes/send", authMiddleware, quoteSendController.send);
+router.post("/quotes/send",        authMiddleware, quoteSendController.send);
+router.post("/quotes/upload-logo", authMiddleware, upload.single("photo"), quoteSendController.uploadLogo);
 
 // ── Quote services (catálogo para cotizaciones manuales) ──────────────────────
 router.get   ("/quote-services",             authMiddleware, quoteServicesController.list);

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import fs from "fs";
+import cloudinary from "../../config/cloudinary.config";
 import { generateQuotePdf } from "./quote.service";
 import { sendQuoteEmail } from "./quote-email.service";
 import { getSlugByUserIdService } from "../slug/slug.service";
@@ -25,9 +26,43 @@ type SendQuoteBody = {
   extraFields?: Record<string, any>;
   quoteStyle?: string;
   quoteAccentColor?: string;
+  quoteLogoUrl?: string;
 };
 
 export const quoteSendController = {
+
+  async uploadLogo(req: Request, res: Response): Promise<Response> {
+    try {
+      const userId = String(req.user?.userId ?? "").trim();
+      if (!userId) return res.status(401).json({ ok: false, message: "No autorizado" });
+
+      const file = (req as any).file as Express.Multer.File | undefined;
+      if (!file) return res.status(400).json({ ok: false, message: "No se recibió ninguna imagen." });
+
+      const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: `quote-logos/${userId}`,
+            transformation: [
+              { width: 800, height: 400, crop: "limit" },
+              { quality: "auto:good", fetch_format: "auto" },
+            ],
+          },
+          (err, res) => {
+            if (err || !res) return reject(err ?? new Error("Upload failed"));
+            resolve(res);
+          },
+        );
+        stream.end(file.buffer);
+      });
+
+      return res.json({ ok: true, url: result.secure_url });
+    } catch (err) {
+      console.error("[quoteSend] uploadLogo:", err);
+      return res.status(500).json({ ok: false, message: "Error subiendo imagen." });
+    }
+  },
+
   async send(req: Request<{}, {}, SendQuoteBody>, res: Response): Promise<Response> {
     try {
       const userId = req.user?.userId;
@@ -41,6 +76,7 @@ export const quoteSendController = {
         extraFields = {},
         quoteStyle,
         quoteAccentColor,
+        quoteLogoUrl,
       } = req.body;
 
       if (!client?.name?.trim() || !client?.email?.trim()) {
@@ -50,7 +86,6 @@ export const quoteSendController = {
         return res.status(400).json({ ok: false, message: "Se requiere al menos un producto." });
       }
 
-      // Cargar datos del negocio en paralelo
       const [slug, profile] = await Promise.all([
         getSlugByUserIdService(userId).catch(() => null),
         companyProfileService.getByUserId(userId).catch(() => null),
@@ -70,7 +105,7 @@ export const quoteSendController = {
         const unitPrice = Number(p.price || 0);
         const quantity  = Math.max(1, Number(p.quantity || 1));
         return {
-          name:      p.title || "Servicio",
+          name:        p.title || "Servicio",
           description: p.description || "",
           quantity,
           unitPrice,
@@ -78,23 +113,21 @@ export const quoteSendController = {
         };
       });
 
-      const total = lines.reduce((acc, l) => acc + l.subtotal, 0);
-
-      const docTitle =
-        templateType === "eventos" ? "Propuesta" : "Cotización";
+      const total    = lines.reduce((acc, l) => acc + l.subtotal, 0);
+      const docTitle = templateType === "eventos" ? "Propuesta" : "Cotización";
 
       const { fileName, filePath } = await generateQuotePdf({
         token:              `custom-${userId}-${Date.now()}`,
         brand:              brandName,
-        brandRut:           profile?.rut         || undefined,
+        brandRut:           profile?.rut        || undefined,
         brandAddress,
-        brandPhone:         profile?.phone        || undefined,
-        brandCoverImageUrl: profile?.cover_image  || undefined,
-        brandAccentColor:   quoteAccentColor      || profile?.brand_color || undefined,
+        brandPhone:         profile?.phone       || undefined,
+        brandCoverImageUrl: quoteLogoUrl         || profile?.cover_image || undefined,
+        brandAccentColor:   quoteAccentColor     || profile?.brand_color || undefined,
         quoteStyle,
         title:              docTitle,
-        subtitle:           profile?.description  || "",
-        templateType: templateType as any,
+        subtitle:           profile?.description || "",
+        templateType:       templateType as any,
         customer: {
           name:  client.name,
           email: client.email,
@@ -120,7 +153,6 @@ export const quoteSendController = {
         fs.unlink(filePath, () => {});
       }
 
-      // Guardar en historial (no bloquea la respuesta)
       saveQuoteHistory({
         userId,
         templateType,
