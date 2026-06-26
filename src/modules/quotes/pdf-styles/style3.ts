@@ -30,6 +30,9 @@ export function generateStyle3(
       const rawAccent = input.brandAccentColor?.trim() ?? "";
       const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#1A1A1A";
 
+      const _lum = (hex: string) => { const r = parseInt(hex.slice(1,3),16); const g = parseInt(hex.slice(3,5),16); const b = parseInt(hex.slice(5,7),16); return (0.299*r+0.587*g+0.114*b)/255; };
+      const hdrTxt = _lum(accent) > 0.55 ? "#1A1A1A" : "#FFFFFF";
+
       const ink    = "#1A1A1A";
       const inkSub = "#4B5563";
       const inkDim = "#9CA3AF";
@@ -55,20 +58,20 @@ export function generateStyle3(
       }
 
       // Company name + contact in header (left)
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(16)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(16)
          .text(brand, M, 16, { width: CW * 0.65, lineBreak: false });
       let hy = 38;
       const hdInfo = [input.brandAddress, input.brandPhone ? `Tel: ${input.brandPhone}` : null, input.brandRut ? `RUT: ${input.brandRut}` : null].filter(Boolean) as string[];
       if (hdInfo.length > 0) {
-        doc.fillColor(white).font("Helvetica").fontSize(8)
+        doc.fillColor(hdrTxt).font("Helvetica").fontSize(8)
            .text(hdInfo.join("  ·  "), M, hy, { width: CW * 0.65 });
         hy += 14;
       }
 
       // N° + Date in header (right)
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(8.5)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8.5)
          .text(`N° ${qNumber}`, PW - M - 130, 16, { width: 130, align: "right" });
-      doc.fillColor(white).font("Helvetica").fontSize(8)
+      doc.fillColor(hdrTxt).font("Helvetica").fontSize(8)
          .text(issueDate, PW - M - 130, 30, { width: 130, align: "right" });
 
       let y = HDR_H;
@@ -90,7 +93,7 @@ export function generateStyle3(
       // Panel headers
       doc.rect(M, y, PANEL_W, 20).fill(accent);
       doc.rect(PANEL2X, y, PANEL_W, 20).fill(accent);
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(8)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8)
          .text("INFORMACIÓN DEL CLIENTE", M + 8, y + 7, { width: PANEL_W - 10 })
          .text("DATOS DEL PROVEEDOR", PANEL2X + 8, y + 7, { width: PANEL_W - 10 });
       y += 20;
@@ -139,7 +142,7 @@ export function generateStyle3(
 
       const drawHead = (sy: number) => {
         doc.rect(M, sy, CW, TH).fill(accent);
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(7.5)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(7.5)
            .text("CANT.",         qX + 2,   sy + 7, { width: qW - 4,      align: "center" })
            .text("DESCRIPCIÓN",   dX + cP,  sy + 7, { width: dW - cP * 2 })
            .text("PRECIO UNIT.",  pX + cP,  sy + 7, { width: pW - cP * 2, align: "right" })
@@ -151,9 +154,9 @@ export function generateStyle3(
         if (cy + need <= PH - 52) return cy;
         doc.addPage();
         doc.rect(0, 0, PW, 36).fill(accent);
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(11)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(11)
            .text(brand, M, 11, { width: CW * 0.5 });
-        doc.fillColor(white).font("Helvetica").fontSize(8)
+        doc.fillColor(hdrTxt).font("Helvetica").fontSize(8)
            .text(`${qNumber}  ·  ${issueDate}`, M, 11, { width: CW, align: "right" });
         let ny = 50;
         if (withH) ny = drawHead(ny);
@@ -226,7 +229,7 @@ export function generateStyle3(
         doc.strokeColor(border).lineWidth(0.4).rect(TX, y, TW, TRH).stroke();
         doc.strokeColor(border).lineWidth(0.3)
            .moveTo(TX + TLW, y).lineTo(TX + TLW, y + TRH).stroke();
-        const clr = isBold ? white : ink;
+        const clr = isBold ? hdrTxt : ink;
         doc.fillColor(clr).font(isBold ? "Helvetica-Bold" : "Helvetica").fontSize(isBold ? 10 : 8.5)
            .text(lbl as string, TX + 8, y + (TRH - (isBold ? 12 : 10)) / 2, { width: TLW - 10 })
            .text(val as string, TX + TLW + 5, y + (TRH - (isBold ? 12 : 10)) / 2, { width: TVW - 8, align: "right" });
@@ -241,7 +244,7 @@ export function generateStyle3(
 
       doc.rect(M, y, DEST_W, 18).fill(accent);
       doc.rect(AUTH_X, y, DEST_W, 18).fill(accent);
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(8)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8)
          .text("DESTINACIÓN", M + 8, y + 5, { width: DEST_W - 10 })
          .text("AUTORIZACIÓN", AUTH_X + 8, y + 5, { width: DEST_W - 10 });
       y += 18;
@@ -267,7 +270,7 @@ export function generateStyle3(
       // ── FORMA DE PAGO ─────────────────────────────────────────────────────────
       y = ensureSpace(y, 50);
       doc.rect(M, y, CW, 18).fill(accent);
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(8)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8)
          .text("FORMA DE PAGO", M + 8, y + 5, { width: CW - 10 });
       y += 18;
 
@@ -283,7 +286,7 @@ export function generateStyle3(
       // ── Footer ────────────────────────────────────────────────────────────────
       y = ensureSpace(y, 32);
       doc.rect(0, y, PW, 26).fill(accent);
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(8.5)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8.5)
          .text("Cotización válida por 30 días desde la fecha de emisión.", 0, y + 8, { width: PW, align: "center" });
       y += 30;
 

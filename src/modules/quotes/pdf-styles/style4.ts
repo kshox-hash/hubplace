@@ -30,6 +30,9 @@ export function generateStyle4(
       const rawAccent = input.brandAccentColor?.trim() ?? "";
       const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#1A1A1A";
 
+      const _lum = (hex: string) => { const r = parseInt(hex.slice(1,3),16); const g = parseInt(hex.slice(3,5),16); const b = parseInt(hex.slice(5,7),16); return (0.299*r+0.587*g+0.114*b)/255; };
+      const hdrTxt = _lum(accent) > 0.55 ? "#1A1A1A" : "#FFFFFF";
+
       const ink    = "#111827";
       const inkSub = "#4B5563";
       const inkDim = "#9CA3AF";
@@ -54,14 +57,14 @@ export function generateStyle4(
         } catch { /* skip */ }
       }
 
-      // "COTIZACIÓN" large white title (centered)
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(26)
+      // "COTIZACIÓN" large title (centered)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(26)
          .text("COTIZACIÓN", 0, (HDR_H - 32) / 2, { width: PW, align: "center" });
 
       // Date + Folio (top-right of header)
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(8)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8)
          .text(`N° ${qNumber}`, PW - M - 120, 18, { width: 120, align: "right" });
-      doc.fillColor(white).font("Helvetica").fontSize(8)
+      doc.fillColor(hdrTxt).font("Helvetica").fontSize(8)
          .text(issueDate, PW - M - 120, 32, { width: 120, align: "right" });
 
       let y = HDR_H + 16;
@@ -118,7 +121,7 @@ export function generateStyle4(
 
       const drawHead = (sy: number) => {
         doc.rect(M, sy, CW, TH).fill(accent);
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(8)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8)
            .text("CANT.",        qX + 2,  sy + 8, { width: qW - 4,      align: "center" })
            .text("DESCRIPCIÓN",  dX + cP, sy + 8, { width: dW - cP * 2 })
            .text("PRECIO UNIT.", pX + cP, sy + 8, { width: pW - cP * 2, align: "right" })
@@ -130,9 +133,9 @@ export function generateStyle4(
         if (cy + need <= PH - 52) return cy;
         doc.addPage();
         doc.rect(0, 0, PW, 36).fill(accent);
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(11)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(11)
            .text(brand, M, 11, { width: CW * 0.5 });
-        doc.fillColor(white).font("Helvetica").fontSize(8)
+        doc.fillColor(hdrTxt).font("Helvetica").fontSize(8)
            .text(`${qNumber}  ·  ${issueDate}`, M, 11, { width: CW, align: "right" });
         let ny = 48;
         if (withH) ny = drawHead(ny);
@@ -220,8 +223,8 @@ export function generateStyle4(
         const bx = M + i * (BOX_W + 9);
         doc.rect(bx, y, BOX_W, BOX_H).fill(b.accent ? accent : rowAlt);
         doc.strokeColor(border).lineWidth(0.5).rect(bx, y, BOX_W, BOX_H).stroke();
-        const clr = b.accent ? white : ink;
-        doc.fillColor(b.accent ? white : inkDim).font("Helvetica-Bold").fontSize(7.5)
+        const clr = b.accent ? hdrTxt : ink;
+        doc.fillColor(b.accent ? hdrTxt : inkDim).font("Helvetica-Bold").fontSize(7.5)
            .text(b.label, bx + 8, y + 8, { width: BOX_W - 14, align: "center" });
         doc.fillColor(clr).font("Helvetica-Bold").fontSize(13)
            .text(b.value, bx + 4, y + 22, { width: BOX_W - 8, align: "center" });
@@ -253,7 +256,7 @@ export function generateStyle4(
       if (consText || true) {
         y = ensureSpace(y, 60);
         doc.rect(M, y, CW, 18).fill(accent);
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(8)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8)
            .text("CONSIDERACIONES", M + 8, y + 5, { width: CW - 14 });
         y += 18;
         const consContent = consText || "Sin consideraciones adicionales.";

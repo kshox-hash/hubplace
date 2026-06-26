@@ -30,6 +30,9 @@ export function generateStyle2(
       const rawAccent = input.brandAccentColor?.trim() ?? "";
       const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#1A1A1A";
 
+      const _lum = (hex: string) => { const r = parseInt(hex.slice(1,3),16); const g = parseInt(hex.slice(3,5),16); const b = parseInt(hex.slice(5,7),16); return (0.299*r+0.587*g+0.114*b)/255; };
+      const hdrTxt = _lum(accent) > 0.55 ? "#1A1A1A" : "#FFFFFF";
+
       const ink    = "#1A1A1A";
       const inkSub = "#4B5563";
       const inkDim = "#9CA3AF";
@@ -52,7 +55,7 @@ export function generateStyle2(
       } else {
         doc.rect(M, yL, MONO_W, MONO_H).fill(accent);
         const initial = (brand[0] || "M").toUpperCase();
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(42)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(42)
            .text(initial, M, yL + 20, { width: MONO_W, align: "center" });
       }
       yL += MONO_H + 10;
@@ -119,14 +122,9 @@ export function generateStyle2(
       const COL_W = Math.floor(CW / 2) - 8;
       const COL2X = M + COL_W + 16;
 
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(7.5)
-         .text("EMPRESA EMISORA", M, y, { width: COL_W });
-
-      // (reuse COL2X for client col header)
-      const prevFill = accent; // already using accent above
       doc.rect(M, y, COL_W, 18).fill(accent);
       doc.rect(COL2X, y, COL_W, 18).fill(accent);
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(7.5)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(7.5)
          .text("EMPRESA EMISORA", M + 8, y + 6, { width: COL_W - 10 })
          .text("CLIENTE / DESTINATARIO", COL2X + 8, y + 6, { width: COL_W - 10 });
       y += 18;
@@ -166,7 +164,7 @@ export function generateStyle2(
 
       const drawHead = (sy: number) => {
         doc.rect(M, sy, CW, TH).fill(accent);
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(7.5)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(7.5)
            .text("CANT",        cntX + 2,       sy + 8, { width: cntW - 4,        align: "center" })
            .text("DESCRIPCIÓN", dscX2 + cPad,   sy + 8, { width: dscW - cPad * 2 })
            .text("PRECIO UNIT", prcX2 + cPad,   sy + 8, { width: prcW - cPad * 2, align: "right" })
@@ -269,7 +267,7 @@ export function generateStyle2(
            .moveTo(TOT_X + TOT_LW, y).lineTo(TOT_X + TOT_LW, y + ROW_H).stroke();
 
         const fnt = isBold ? "Helvetica-Bold" : "Helvetica";
-        const clr = isBold ? white : ink;
+        const clr = isBold ? hdrTxt : ink;
         doc.fillColor(clr).font(fnt).fontSize(isBold ? 10 : 8.5)
            .text(lbl, TOT_X + 8, y + (ROW_H - (isBold ? 12 : 10)) / 2, { width: TOT_LW - 10 })
            .text(val, TOT_X + TOT_LW + 5, y + (ROW_H - (isBold ? 12 : 10)) / 2, { width: TOT_VW - 8, align: "right" });

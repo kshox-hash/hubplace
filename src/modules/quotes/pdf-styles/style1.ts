@@ -31,13 +31,15 @@ export function generateStyle1(
       const rawAccent = input.brandAccentColor?.trim() ?? "";
       const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#1A1A1A";
 
+      const _lum = (hex: string) => { const r = parseInt(hex.slice(1,3),16); const g = parseInt(hex.slice(3,5),16); const b = parseInt(hex.slice(5,7),16); return (0.299*r+0.587*g+0.114*b)/255; };
+      const hdrTxt = _lum(accent) > 0.55 ? "#1A1A1A" : "#FFFFFF";
+
       const ink    = "#1A1A1A";
       const inkSub = "#4B5563";
       const inkDim = "#9CA3AF";
       const border = "#C8CDD4";
       const rowAlt = "#F4F6F8";
       const white  = "#FFFFFF";
-      const hdrTxt = "#FFFFFF";
 
       const strH = (text: string, font: string, size: number, w: number): number => {
         doc.font(font).fontSize(size);
@@ -63,7 +65,7 @@ export function generateStyle1(
       const drawItemHead = (sy: number): number => {
         doc.rect(M, sy, CW, TH).fill(accent);
         doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(8)
-           .text("CANTIDAD",     qtyX + cPad, sy + 8, { width: qtyW - cPad * 2, align: "center" })
+           .text("CANT.",         qtyX + cPad, sy + 8, { width: qtyW - cPad * 2, align: "center" })
            .text("DESCRIPCIÓN",  dscX + cPad, sy + 8, { width: dscW - cPad })
            .text("PRECIO UNIT.", prcX + cPad, sy + 8, { width: prcW - cPad * 2, align: "right" })
            .text("MONTO",        mntX + cPad, sy + 8, { width: mntW - cPad * 2, align: "right" });
@@ -363,7 +365,7 @@ export function generateStyle1(
       doc.rect(TOT_X, y, TOT_W, TOTAL_ROW_H).fill(accent);
       doc.strokeColor(border).lineWidth(0.3)
          .moveTo(TOT_X + TOT_LBL_W, y).lineTo(TOT_X + TOT_LBL_W, y + TOTAL_ROW_H).stroke();
-      doc.fillColor(white).font("Helvetica-Bold").fontSize(10)
+      doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(10)
          .text("TOTAL", TOT_X + 8, y + 8, { width: TOT_LBL_W - 10 })
          .text(formatCurrencyCLP(input.total), TOT_X + TOT_LBL_W + 5, y + 8, { width: TOT_VAL_W - 8, align: "right" });
       y += TOTAL_ROW_H + 22;

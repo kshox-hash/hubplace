@@ -28,15 +28,18 @@ export function generateStyle5(
       const rawAccent = input.brandAccentColor?.trim() ?? "";
       const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#1A1A1A";
 
+      const _lum = (hex: string) => { const r = parseInt(hex.slice(1,3),16); const g = parseInt(hex.slice(3,5),16); const b = parseInt(hex.slice(5,7),16); return (0.299*r+0.587*g+0.114*b)/255; };
+      const hdrTxt    = _lum(accent) > 0.55 ? "#1A1A1A" : "#FFFFFF";
+      const hdrTxtSub = _lum(accent) > 0.55 ? "#4B5563" : "#D1D5DB";
+
       const sidebarBg  = accent;
-      const sideAccent = "#9CA3AF";  // visible-on-dark gray for sidebar details
+      const sideAccent = "#9CA3AF";  // used only for thin divider lines in sidebar
       const white      = "#FFFFFF";
       const ink        = "#111827";
       const inkSub     = "#4B5563";
       const inkDim     = "#9CA3AF";
       const border     = "#E5E7EB";
       const rowAlt     = "#F3F4F6";
-      const sideText   = "#D1D5DB";  // muted white for sidebar text
 
       // ── Sidebar constants ────────────────────────────────────────────────────
       const SB_W  = 130;  // sidebar width
@@ -65,19 +68,19 @@ export function generateStyle5(
             // fallback to initials
             doc.rect(lx, sy, LOGO_SZ, LOGO_SZ).fill(sideAccent);
             const init = (brand[0] || "M").toUpperCase();
-            doc.fillColor(white).font("Helvetica-Bold").fontSize(30)
+            doc.fillColor(ink).font("Helvetica-Bold").fontSize(30)
                .text(init, lx, sy + 16, { width: LOGO_SZ, align: "center" });
           }
         } else {
           doc.rect(lx, sy, LOGO_SZ, LOGO_SZ).fill(sideAccent);
           const init = (brand[0] || "M").toUpperCase();
-          doc.fillColor(white).font("Helvetica-Bold").fontSize(30)
+          doc.fillColor(ink).font("Helvetica-Bold").fontSize(30)
              .text(init, lx, sy + 16, { width: LOGO_SZ, align: "center" });
         }
         sy += LOGO_SZ + 14;
 
         // Brand name
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(10)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(10)
            .text(brand, SB_P, sy, { width: SB_IW, align: "center" });
         sy += doc.heightOfString(brand, { width: SB_IW }) + 10;
 
@@ -92,10 +95,10 @@ export function generateStyle5(
         if (input.brandRut)     infoItems.push(["RUT",       input.brandRut]);
 
         infoItems.forEach(([lbl, val]) => {
-          doc.fillColor(sideAccent).font("Helvetica-Bold").fontSize(6.5)
+          doc.fillColor(hdrTxtSub).font("Helvetica-Bold").fontSize(6.5)
              .text(lbl, SB_P, sy, { width: SB_IW });
           sy += 9;
-          doc.fillColor(sideText).font("Helvetica").fontSize(8)
+          doc.fillColor(hdrTxt).font("Helvetica").fontSize(8)
              .text(val, SB_P, sy, { width: SB_IW });
           sy += doc.heightOfString(val, { width: SB_IW }) + 8;
         });
@@ -105,13 +108,13 @@ export function generateStyle5(
         sy += 12;
 
         // Quote number at bottom of info section
-        doc.fillColor(sideAccent).font("Helvetica-Bold").fontSize(6.5)
+        doc.fillColor(hdrTxtSub).font("Helvetica-Bold").fontSize(6.5)
            .text("N° DOCUMENTO", SB_P, sy, { width: SB_IW });
         sy += 9;
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(10)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(10)
            .text(qNumber, SB_P, sy, { width: SB_IW, align: "center" });
         sy += 18;
-        doc.fillColor(sideText).font("Helvetica").fontSize(7.5)
+        doc.fillColor(hdrTxtSub).font("Helvetica").fontSize(7.5)
            .text(issueDate, SB_P, sy, { width: SB_IW, align: "center" });
       };
 
@@ -175,7 +178,7 @@ export function generateStyle5(
 
       const drawHead = (sy: number) => {
         doc.rect(CON_X, sy, CON_W, TH).fill(accent);
-        doc.fillColor(white).font("Helvetica-Bold").fontSize(7.5)
+        doc.fillColor(hdrTxt).font("Helvetica-Bold").fontSize(7.5)
            .text("CANT",        qX + 2,  sy + 7, { width: qW - 4,      align: "center" })
            .text("DESCRIPCIÓN", dX + cP, sy + 7, { width: dW - cP * 2 })
            .text("PRECIO",      pX + cP, sy + 7, { width: pW - cP * 2, align: "right" })
@@ -257,7 +260,7 @@ export function generateStyle5(
         doc.strokeColor(border).lineWidth(0.4).rect(TX, y, TW, TRH).stroke();
         doc.strokeColor(border).lineWidth(0.3)
            .moveTo(TX + TLW, y).lineTo(TX + TLW, y + TRH).stroke();
-        const clr = isBold ? white : ink;
+        const clr = isBold ? hdrTxt : ink;
         doc.fillColor(clr).font(isBold ? "Helvetica-Bold" : "Helvetica").fontSize(isBold ? 10 : 8.5)
            .text(lbl as string, TX + 8, y + (TRH - (isBold ? 12 : 10)) / 2, { width: TLW - 10 })
            .text(val as string, TX + TLW + 5, y + (TRH - (isBold ? 12 : 10)) / 2, { width: TVW - 8, align: "right" });
