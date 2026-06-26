@@ -26,16 +26,17 @@ export function generateStyle5(
       const cust      = input.customer ?? { name: "", email: "", phone: "", notes: "" };
 
       const rawAccent = input.brandAccentColor?.trim() ?? "";
-      const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#0F4C81";
+      const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#1A1A1A";
 
-      const sidebarBg = "#1E293B";
-      const white     = "#FFFFFF";
-      const ink       = "#111827";
-      const inkSub    = "#4B5563";
-      const inkDim    = "#9CA3AF";
-      const border    = "#E5E7EB";
-      const rowAlt    = "#F3F4F6";
-      const sideText  = "#CBD5E1";  // muted white for sidebar
+      const sidebarBg  = "#1A1A1A";
+      const sideAccent = "#6B7280";  // visible-on-dark gray for sidebar details
+      const white      = "#FFFFFF";
+      const ink        = "#111827";
+      const inkSub     = "#4B5563";
+      const inkDim     = "#9CA3AF";
+      const border     = "#E5E7EB";
+      const rowAlt     = "#F3F4F6";
+      const sideText   = "#D1D5DB";  // muted white for sidebar text
 
       // ── Sidebar constants ────────────────────────────────────────────────────
       const SB_W  = 130;  // sidebar width
@@ -80,8 +81,8 @@ export function generateStyle5(
            .text(brand, SB_P, sy, { width: SB_IW, align: "center" });
         sy += doc.heightOfString(brand, { width: SB_IW }) + 10;
 
-        // Thin accent divider
-        doc.rect(SB_P, sy, SB_IW, 1).fill(accent);
+        // Thin divider
+        doc.rect(SB_P, sy, SB_IW, 1).fill(sideAccent);
         sy += 12;
 
         // Contact info
@@ -91,7 +92,7 @@ export function generateStyle5(
         if (input.brandRut)     infoItems.push(["RUT",       input.brandRut]);
 
         infoItems.forEach(([lbl, val]) => {
-          doc.fillColor(accent).font("Helvetica-Bold").fontSize(6.5)
+          doc.fillColor(sideAccent).font("Helvetica-Bold").fontSize(6.5)
              .text(lbl, SB_P, sy, { width: SB_IW });
           sy += 9;
           doc.fillColor(sideText).font("Helvetica").fontSize(8)
@@ -100,11 +101,11 @@ export function generateStyle5(
         });
 
         // Divider before quote number
-        doc.rect(SB_P, sy, SB_IW, 1).fill(accent);
+        doc.rect(SB_P, sy, SB_IW, 1).fill(sideAccent);
         sy += 12;
 
         // Quote number at bottom of info section
-        doc.fillColor(accent).font("Helvetica-Bold").fontSize(6.5)
+        doc.fillColor(sideAccent).font("Helvetica-Bold").fontSize(6.5)
            .text("N° DOCUMENTO", SB_P, sy, { width: SB_IW });
         sy += 9;
         doc.fillColor(white).font("Helvetica-Bold").fontSize(10)

@@ -28,7 +28,7 @@ export function generateStyle2(
       const cust      = input.customer ?? { name: "", email: "", phone: "", notes: "" };
 
       const rawAccent = input.brandAccentColor?.trim() ?? "";
-      const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#1A3A5C";
+      const accent    = /^#[0-9A-Fa-f]{6}$/.test(rawAccent) ? rawAccent : "#1A1A1A";
 
       const ink    = "#1A1A1A";
       const inkSub = "#4B5563";
