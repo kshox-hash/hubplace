@@ -24,7 +24,8 @@ export type PortalViewData = {
   coverImage?: string | null;
   enabledModules: MenuModuleItem[];
   products: { id: string|number; name: string; price: number; description?: string|null; color?: string|null; photos?: string[] }[];
-  galleryPhotos: { id: string; url: string; description: string|null }[];
+  galleryFolders: { id: string; name: string; description: string|null; photos: { id: string; url: string; description: string|null }[] }[];
+  orphanPhotos: { id: string; url: string; description: string|null }[];
   portalUser?: { name?: string; email?: string; picture?: string } | null;
 };
 
@@ -62,7 +63,7 @@ export function renderPortalHtml(data: PortalViewData): string {
     description,
     instagramUrl, whatsappNumber, businessHours,
     coverImage,
-    enabledModules, products, galleryPhotos,
+    enabledModules, products, galleryFolders, orphanPhotos,
     portalUser,
   } = data;
 
@@ -84,11 +85,14 @@ export function renderPortalHtml(data: PortalViewData): string {
   const locationLine = [s.address, s.city].filter(Boolean).join(", ");
   const waHref = s.wa ? `https://wa.me/${s.wa.replace(/\D/g, "")}` : null;
 
+  const igUrl  = s.ig ? `https://www.instagram.com/${s.ig}` : null;
+  const igUser = s.ig ? `@${s.ig}` : null;
+
   const infoRows = [
     s.phone      ? prRow(S_PHONE, "Teléfono", s.phone, "Activo") : "",
     s.hours      ? prRow(S_CLOCK, "Horario", s.hours) : "",
     locationLine ? prRow(S_MAP, "Ubicación", locationLine) : "",
-    s.ig         ? prRow(S_IG, "Instagram", `<a href="${s.ig}" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-size:13px">Ver perfil</a>`) : "",
+    igUrl        ? prRow(S_IG, "Instagram", `<a href="${igUrl}" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-size:13px">${igUser}</a>`) : "",
   ].filter(Boolean).join("");
 
   return `<!doctype html>
@@ -151,7 +155,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
     <div class="pr-actions">
       ${waHref ? `<a class="pr-action-btn" href="${waHref}" target="_blank" rel="noopener" title="WhatsApp">${S_WA}</a>` : ""}
       ${s.phone ? `<a class="pr-action-btn" href="tel:${s.phone}" title="Llamar">${S_PHONE}</a>` : ""}
-      ${s.ig ? `<a class="pr-action-btn" href="${s.ig}" target="_blank" rel="noopener" title="Instagram">${S_IG}</a>` : ""}
+      ${igUrl ? `<a class="pr-action-btn" href="${igUrl}" target="_blank" rel="noopener" title="Instagram">${S_IG}</a>` : ""}
     </div>
   </div>
   <div class="pr-avail-section" id="prAvailSection" style="display:none">
@@ -174,9 +178,9 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
     <span class="cn-status">En línea</span>
   </nav>
 
-  ${chatTabHtml({ name: s.name, slug: s.slug, desc: s.desc, enabledModules, phone: s.phone, ig: s.ig, wa: s.wa, hours: s.hours, locationLine, waHref, initials, productCount, portalUser, coverImage: coverImage ?? null })}
+  ${chatTabHtml({ name: s.name, slug: s.slug, desc: s.desc, enabledModules, phone: s.phone, ig: s.ig, wa: s.wa, hours: s.hours, locationLine, waHref, initials, productCount, portalUser, coverImage: coverImage ?? null, galleryFolders: galleryFolders.slice(0, 4).map(f => ({ id: f.id, name: f.name, coverUrl: f.photos[0]?.url ?? null })) })}
   ${reservasTabHtml()}
-  ${nosotrosTabHtml(products, productCount, galleryPhotos)}
+  ${nosotrosTabHtml(products, productCount, galleryFolders, orphanPhotos)}
   ${serviciosTabHtml()}
   ${resenasTabHtml()}
 </main>
@@ -303,7 +307,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--prima
   <div class="sp-body" id="galPanelBody"></div>
 </div>
 
-<script>${portalScripts(publicSlug, businessName, userId, enabledModules, products.length, productCount, { phone: s.phone, address: s.address, city: s.city, description: s.desc, businessHours: s.hours, instagramUrl: s.ig, whatsappNumber: s.wa }, initials)}</script>
+<script>${portalScripts(publicSlug, businessName, userId, enabledModules, products.length, productCount, { phone: s.phone, address: s.address, city: s.city, description: s.desc, businessHours: s.hours, instagramUrl: igUrl, whatsappNumber: s.wa }, initials)}</script>
 </body>
 </html>`;
 }

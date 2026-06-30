@@ -15,6 +15,7 @@ type ChatData = {
   productCount: number;
   portalUser?: { name?: string; email?: string; picture?: string } | null;
   coverImage?: string | null;
+  galleryFolders?: { id: string; name: string; coverUrl: string | null }[];
 };
 
 const S_CAL   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
@@ -139,6 +140,23 @@ export function chatTabHtml(d: ChatData): string {
 
         </div><!-- /hm-svc-rv-wrap -->
 
+        ${d.galleryFolders && d.galleryFolders.length > 0 ? `
+        <div class="hm-card">
+          <div class="hm-card-hdr">
+            <div class="hm-card-title-row">
+              <span class="hm-card-title-icon" style="color:#0EA5E9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
+              <span class="hm-card-title">Proyectos</span>
+            </div>
+            <button class="sec-link" type="button" data-action="nosotros">Ver galería →</button>
+          </div>
+          <div class="hm-gallery-strip">
+            ${d.galleryFolders.slice(0, 4).map(f => `
+            <button class="hm-gal-card" type="button" data-action="nosotros">
+              ${f.coverUrl ? `<img src="${f.coverUrl}" alt="" loading="lazy">` : `<div class="hm-gal-card-empty"></div>`}
+              <div class="hm-gal-card-name">${f.name}</div>
+            </button>`).join("")}
+          </div>
+        </div>` : ""}
 
       </div>
 

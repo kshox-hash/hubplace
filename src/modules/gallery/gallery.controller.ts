@@ -6,18 +6,28 @@ import {
   getGalleryPhotosByUserId,
   updateGalleryPhotoDescription,
   deleteGalleryPhoto,
+  createFolder,
+  listFolders,
+  updateFolder,
+  deleteFolder,
+  listFoldersWithPhotos,
 } from "./gallery.repository";
 
 export const galleryController = {
 
+  // ── Photos ──────────────────────────────────────────────────────────────────
+
   async upload(req: Request, res: Response) {
     try {
-      const userId = String(req.user?.userId ?? "").trim();
-      const file   = (req as any).file as Express.Multer.File | undefined;
+      const userId   = String(req.user?.userId ?? "").trim();
+      const file     = (req as any).file as Express.Multer.File | undefined;
       if (!file) return res.status(400).json({ ok: false, message: "No se recibió ninguna imagen." });
 
       const description = req.body?.description
         ? String(req.body.description).trim() || null
+        : null;
+      const folderId = req.body?.folderId
+        ? String(req.body.folderId).trim() || null
         : null;
 
       const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
@@ -25,7 +35,7 @@ export const galleryController = {
           {
             folder: `gallery/${userId}`,
             transformation: [
-              { width: 800, height: 800, crop: "limit" },
+              { width: 1200, height: 1200, crop: "limit" },
               { quality: "auto:good", fetch_format: "auto" },
             ],
           },
@@ -37,7 +47,7 @@ export const galleryController = {
         stream.end(file.buffer);
       });
 
-      const photo = await addGalleryPhoto(userId, uploadResult.secure_url, description);
+      const photo = await addGalleryPhoto(userId, uploadResult.secure_url, description, folderId);
       return res.json({ ok: true, photo });
     } catch (err) {
       console.error("[gallery] upload:", err);
@@ -100,6 +110,95 @@ export const galleryController = {
       return res.json({ ok: true, photos });
     } catch (err) {
       console.error("[gallery] listPublic:", err);
+      return res.status(500).json({ ok: false, message: "Error al obtener la galería." });
+    }
+  },
+
+  // ── Folders ─────────────────────────────────────────────────────────────────
+
+  async createFolder(req: Request, res: Response) {
+    try {
+      const userId      = String(req.user?.userId ?? "").trim();
+      const name        = String(req.body?.name || "").trim();
+      const description = req.body?.description
+        ? String(req.body.description).trim() || null
+        : null;
+
+      if (!name) return res.status(400).json({ ok: false, message: "El nombre es obligatorio." });
+
+      const folder = await createFolder(userId, name, description);
+      return res.status(201).json({ ok: true, folder });
+    } catch (err) {
+      console.error("[gallery] createFolder:", err);
+      return res.status(500).json({ ok: false, message: "Error al crear la carpeta." });
+    }
+  },
+
+  async listFolders(req: Request, res: Response) {
+    try {
+      const userId = String(req.user?.userId ?? "").trim();
+      const folders = await listFolders(userId);
+      return res.json({ ok: true, folders });
+    } catch (err) {
+      console.error("[gallery] listFolders:", err);
+      return res.status(500).json({ ok: false, message: "Error al obtener las carpetas." });
+    }
+  },
+
+  async listFoldersWithPhotos(req: Request, res: Response) {
+    try {
+      const userId = String(req.user?.userId ?? "").trim();
+      const result = await listFoldersWithPhotos(userId);
+      return res.json({ ok: true, ...result });
+    } catch (err) {
+      console.error("[gallery] listFoldersWithPhotos:", err);
+      return res.status(500).json({ ok: false, message: "Error al obtener la galería." });
+    }
+  },
+
+  async updateFolder(req: Request, res: Response) {
+    try {
+      const userId      = String(req.user?.userId ?? "").trim();
+      const id          = String(req.params["id"] || "").trim();
+      const name        = String(req.body?.name || "").trim();
+      const description = req.body?.description
+        ? String(req.body.description).trim() || null
+        : null;
+
+      if (!name) return res.status(400).json({ ok: false, message: "El nombre es obligatorio." });
+
+      const folder = await updateFolder(id, userId, name, description);
+      if (!folder) return res.status(404).json({ ok: false, message: "Carpeta no encontrada." });
+      return res.json({ ok: true, folder });
+    } catch (err) {
+      console.error("[gallery] updateFolder:", err);
+      return res.status(500).json({ ok: false, message: "Error al actualizar la carpeta." });
+    }
+  },
+
+  async deleteFolder(req: Request, res: Response) {
+    try {
+      const userId = String(req.user?.userId ?? "").trim();
+      const id     = String(req.params["id"] || "").trim();
+
+      const deleted = await deleteFolder(id, userId);
+      if (!deleted) return res.status(404).json({ ok: false, message: "Carpeta no encontrada." });
+      return res.json({ ok: true });
+    } catch (err) {
+      console.error("[gallery] deleteFolder:", err);
+      return res.status(500).json({ ok: false, message: "Error al eliminar la carpeta." });
+    }
+  },
+
+  async listFoldersPublic(req: Request, res: Response) {
+    try {
+      const publicSlug = String(req.params["publicSlug"] || "").trim();
+      const slug = await getSlugByValueService(publicSlug);
+      if (!slug) return res.status(404).json({ ok: false, message: "Negocio no encontrado." });
+      const result = await listFoldersWithPhotos(slug.user_id);
+      return res.json({ ok: true, ...result });
+    } catch (err) {
+      console.error("[gallery] listFoldersPublic:", err);
       return res.status(500).json({ ok: false, message: "Error al obtener la galería." });
     }
   },

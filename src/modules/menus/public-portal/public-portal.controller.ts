@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { getSlugByValueService } from "../../slug/slug.service";
 import { quoteHtml } from "../../quotes/quote-html";
 import { getActiveServicesByUserId, getActiveServicesPaginated } from "../../appointments/calendar-services.repository";
-import { getGalleryPhotosByUserId } from "../../gallery/gallery.repository";
+import { listFoldersWithPhotos } from "../../gallery/gallery.repository";
 import { companyProfileRepository } from "../../profiles/company_profile_repository";
 import { findEnabledModulesByUserId } from "../user-modules.repository";
 import { renderPortalHtml } from "./portal.screen";
@@ -124,11 +124,11 @@ export const publicPortalController = {
         return res.status(404).send("Negocio no encontrado");
       }
 
-      const [productsResult, profile, enabledModules, galleryPhotos] = await Promise.all([
+      const [productsResult, profile, enabledModules, galleryData] = await Promise.all([
         getActiveServicesPaginated(slug.user_id, 20, 0),
         companyProfileRepository.getByUserId(slug.user_id),
         findEnabledModulesByUserId(slug.user_id),
-        getGalleryPhotosByUserId(slug.user_id),
+        listFoldersWithPhotos(slug.user_id),
       ]);
 
       const products = productsResult.rows;
@@ -156,10 +156,16 @@ export const publicPortalController = {
           color:       String(p.color || "#63ACF1"),
           photos:      Array.isArray(p.photos) ? p.photos.map(String) : [],
         })),
-        galleryPhotos: galleryPhotos.map(p => ({
+        galleryFolders: galleryData.folders.map(({ folder, photos }) => ({
+          id:          folder.id,
+          name:        folder.name,
+          description: folder.description,
+          photos:      photos.map(p => ({ id: p.id, url: p.url, description: p.description })),
+        })),
+        orphanPhotos: galleryData.orphanPhotos.map(p => ({
           id:          p.id,
           url:         p.url,
-          description: p.description ?? null,
+          description: p.description,
         })),
         portalUser: portalUser ?? null,
       });

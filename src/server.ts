@@ -39,7 +39,7 @@ import { initCalendarServicesTable } from "./modules/appointments/calendar-servi
 import { initReviewsGoogleColumns } from "./modules/stadistics/reviews.repository";
 import calendarServicesRoutes from "./modules/appointments/calendar-services.routes";
 import galleryRouter from "./modules/gallery/gallery.router";
-import { initGalleryTable } from "./modules/gallery/gallery.repository";
+import { initGalleryTable, initGalleryFoldersTable } from "./modules/gallery/gallery.repository";
 import DB from "./db/db_configuration";
 
 // ─── Proceso ────────────────────────────────────────────────────────────────
@@ -169,6 +169,7 @@ const server = app.listen(PORT, async () => {
     initCalendarServicesTable().catch((e) => console.error("[init] calendar_services:", e)),
     initReviewsGoogleColumns().catch((e) => console.error("[init] reviews_google:", e)),
     initGalleryTable().catch((e) => console.error("[init] gallery:", e)),
+    initGalleryFoldersTable().catch((e) => console.error("[init] gallery_folders:", e)),
   ]);
 });
 

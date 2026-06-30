@@ -1516,6 +1516,38 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .sdp-hero-price{font-size:30px;font-weight:800;color:var(--primary);letter-spacing:-.05em}
 .sdp-desc{font-size:13.5px;color:var(--soft);line-height:1.6;margin:0;padding-bottom:6px}
 
+/* ── GALLERY TEASER (home tab) ───────────────────────────────────────── */
+.hm-gallery-strip{display:flex;gap:8px;padding:14px 22px 18px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.hm-gallery-strip::-webkit-scrollbar{display:none}
+.hm-gal-card{
+  flex-shrink:0;width:96px;border-radius:12px;overflow:hidden;
+  background:var(--panel);border:none;cursor:pointer;
+  text-align:left;padding:0;
+  transition:transform .15s;-webkit-tap-highlight-color:transparent
+}
+.hm-gal-card:active{transform:scale(.96)}
+.hm-gal-card img,.hm-gal-card-empty{width:100%;height:68px;object-fit:cover;display:block}
+.hm-gal-card-empty{background:var(--bg)}
+.hm-gal-card-name{padding:5px 7px 7px;font-size:10.5px;font-weight:600;color:var(--text);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+/* ── GALLERY FOLDERS (nosotros tab) ─────────────────────────────────── */
+.gal-folder-list{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.gal-folder-card{border-radius:14px;overflow:hidden;background:var(--panel);border:1px solid var(--border-inner)}
+.gal-folder-header{display:flex;align-items:center;width:100%;background:none;border:none;padding:0;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
+.gal-folder-cover{width:80px;height:64px;object-fit:cover;flex-shrink:0}
+.gal-folder-cover-empty{width:80px;height:64px;background:var(--bg);flex-shrink:0;display:block}
+.gal-folder-info{flex:1;min-width:0;padding:10px 12px}
+.gal-folder-name{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gal-folder-desc{font-size:11.5px;color:var(--soft);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;margin-bottom:3px}
+.gal-folder-meta{font-size:10.5px;color:var(--dim)}
+.gal-folder-chevron{width:16px;height:16px;flex-shrink:0;margin-right:12px;color:var(--dim);transition:transform .2s}
+.gal-folder-card.open .gal-folder-chevron{transform:rotate(180deg)}
+.gal-folder-body{border-top:1px solid var(--border-inner)}
+.gal-folder-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:3px}
+.gal-folder-photo{aspect-ratio:1;overflow:hidden;cursor:pointer}
+.gal-folder-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .15s}
+.gal-folder-photo:active img{opacity:.75}
+
 /* keepcompat */
 .hm-card-foot{padding:0 16px 14px;flex-shrink:0}
 .hm-foot-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px;border-radius:11px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;background:var(--bg);color:var(--soft);transition:background .15s,color .15s}

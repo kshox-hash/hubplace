@@ -24,6 +24,14 @@ const getByPublicSlug = async (
   return companyProfileRepository.getByPublicSlug(slug);
 };
 
+function extractInstagramUsername(value?: string | null): string | null {
+  const v = value?.trim();
+  if (!v) return null;
+  const m = v.match(/instagram\.com\/([^/?#\s]+)/i);
+  if (m) return m[1];
+  return v.replace(/^@/, "");
+}
+
 const upsert = async (
   input: CompanyProfileInput,
 ): Promise<CompanyProfile> => {
@@ -45,7 +53,7 @@ const upsert = async (
     brand_color: input.brand_color ?? null,
     description: input.description?.trim() || null,
     welcome_message: input.welcome_message?.trim() || null,
-    instagram_url: input.instagram_url?.trim() || null,
+    instagram_url: extractInstagramUsername(input.instagram_url) || null,
     whatsapp_number: input.whatsapp_number?.replace(/\D/g, "") || null,
     business_hours: input.business_hours?.trim() || null,
     cover_image: input.cover_image ?? null,
