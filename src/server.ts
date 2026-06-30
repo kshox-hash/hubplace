@@ -12,6 +12,7 @@ import adminRouter from "./modules/admin/admin.router";
 import clientsRouter from "./modules/clients/clients.router";
 import blocksRouter from "./modules/blocks/blocks.router";
 import { startReminderCron } from "./modules/reminders/reminder.cron";
+import { startCleanupCron } from "./modules/appointments/cleanup.cron";
 import { PORT, CORS_ORIGINS } from "./config/env";
 import { GENERATED_PDFS_DIR } from "./modules/quotes/quote.service";
 
@@ -162,6 +163,7 @@ app.use(errorMiddleware);
 const server = app.listen(PORT, async () => {
   console.log(`[server] Escuchando en puerto ${PORT}`);
   startReminderCron();
+  startCleanupCron();
   await Promise.all([
     initQuoteHistoryTable().catch((e) => console.error("[init] quote_history:", e)),
     initCalendarBookingPriceColumn().catch((e) => console.error("[init] calendar_booking_price:", e)),

@@ -7,6 +7,7 @@ import {
   getCalendarSettings,
 } from "./appointments.repository";
 import { getActiveProvidersByUserId } from "./calendar-providers.repository";
+import { getBlocks, CalendarBlock } from "../blocks/blocks.repository";
 
 function toDateString(date: Date): string {
   return date.toISOString().slice(0, 10);
@@ -42,6 +43,43 @@ function getChileWeekday(date: Date): number {
   return jsDay === 0 ? 7 : jsDay;
 }
 
+// calendar_blocks stores full timestamps (start_at / end_at).
+// These helpers extract date and HH:MM consistently, whether pg
+// returns a Date object or an ISO string.
+function blockDateStr(ts: unknown): string {
+  if (ts instanceof Date) return ts.toISOString().slice(0, 10);
+  return String(ts || "").slice(0, 10);
+}
+
+function blockTimeMin(ts: unknown): number {
+  let hhmm: string;
+  if (ts instanceof Date) {
+    hhmm = ts.toISOString().slice(11, 16);
+  } else {
+    hhmm = String(ts || "").slice(11, 16);
+  }
+  return timeToMinutes(hhmm);
+}
+
+function slotOverlapsCalendarBlock(
+  block: CalendarBlock,
+  dateStr: string,
+  slotStart: number,
+  slotEnd: number
+): boolean {
+  const bStartDate = blockDateStr(block.start_at);
+  const bEndDate   = blockDateStr(block.end_at);
+
+  // Block must touch this date
+  if (bStartDate > dateStr || bEndDate < dateStr) return false;
+
+  // Clamp block to midnight boundaries of this day
+  const blockStart = bStartDate < dateStr ? 0          : blockTimeMin(block.start_at);
+  const blockEnd   = bEndDate   > dateStr ? 24 * 60    : blockTimeMin(block.end_at);
+
+  return slotStart < blockEnd && slotEnd > blockStart;
+}
+
 export async function buildCalendarSlots(userId: string, providerId?: string | null) {
   const settings = await getCalendarSettings(userId);
 
@@ -60,8 +98,11 @@ export async function buildCalendarSlots(userId: string, providerId?: string | n
   const from = toDateString(today);
   const to = toDateString(endDate);
 
-  const bookings = await getCalendarBookings(userId, from, to, providerId);
-  const blockedDates = await getCalendarBlockedDates(userId, from, to);
+  const [bookings, blockedDates, calendarBlocks] = await Promise.all([
+    getCalendarBookings(userId, from, to, providerId),
+    getCalendarBlockedDates(userId, from, to),
+    getBlocks(userId),
+  ]);
 
   const slots: Array<{ date: string; times: string[] }> = [];
 
@@ -113,7 +154,11 @@ export async function buildCalendarSlots(userId: string, providerId?: string | n
           return current < blockEnd && current + duration > blockStart;
         });
 
-        if (!isBooked && !isBlocked) {
+        const isBlockedByRange = calendarBlocks.some((block) =>
+          slotOverlapsCalendarBlock(block, dateStr, current, current + duration)
+        );
+
+        if (!isBooked && !isBlocked && !isBlockedByRange) {
           times.push(startTime);
         }
 

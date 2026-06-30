@@ -236,3 +236,26 @@ export async function getPortalStats(userId: string): Promise<PortalStats> {
     visits_last_month: Number(row.visits_last_month),
   };
 }
+
+export type PendingStats = {
+  total: number;
+  expiringSoon: number;
+};
+
+export async function getPendingBookingsStats(userId: string): Promise<PendingStats> {
+  const pool = DB.getPool();
+  const { rows } = await pool.query(
+    `SELECT
+       COUNT(*)::int                                                                AS total,
+       COUNT(*) FILTER (WHERE expires_at <= NOW() + INTERVAL '15 minutes')::int   AS expiring_soon
+     FROM calendar_bookings
+     WHERE user_id = $1
+       AND status = 'pending_payment'
+       AND expires_at > NOW()`,
+    [userId]
+  );
+  return {
+    total:        Number(rows[0]?.total        ?? 0),
+    expiringSoon: Number(rows[0]?.expiring_soon ?? 0),
+  };
+}
