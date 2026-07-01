@@ -61,13 +61,13 @@ function buildFolderCard(folder: GalleryFolder): string {
   const photosHtml = count > 0
     ? `<div class="gal-folder-photos">
         ${folder.photos.map((p, i) => `<div class="gal-folder-photo" data-gal-idx="${i}" data-gal-url="${escapeHtml(p.url)}" data-gal-desc="${escapeHtml(p.description || "")}">
-          <img src="${escapeHtml(p.url)}" alt="" loading="lazy">
+          <img src="${escapeHtml(p.url)}" alt="">
         </div>`).join("")}
        </div>`
     : `<div style="padding:14px 16px;font-size:12px;color:var(--dim)">Sin fotos aún</div>`;
 
   return `<div class="gal-folder-card" id="folder-card-${fid}">
-  <button class="gal-folder-header" type="button" onclick="toggleFolder('${fid}')" aria-expanded="false">
+  <button class="gal-folder-header" type="button" data-folder-id="${fid}" aria-expanded="false">
     ${cover
       ? `<img class="gal-folder-cover" src="${cover}" alt="" loading="lazy">`
       : `<div class="gal-folder-cover-empty"></div>`}
@@ -148,16 +148,5 @@ export function nosotrosTabHtml(
     </div>` : ""}
   </div>
 </div>
-<script>
-function toggleFolder(id) {
-  var card = document.getElementById('folder-card-' + id);
-  var body = document.getElementById('folder-body-' + id);
-  var btn  = card ? card.querySelector('.gal-folder-header') : null;
-  if (!body) return;
-  var open = body.style.display !== 'none';
-  body.style.display = open ? 'none' : 'block';
-  if (card) card.classList.toggle('open', !open);
-  if (btn)  btn.setAttribute('aria-expanded', String(!open));
-}
-</script>`;
+`;
 }

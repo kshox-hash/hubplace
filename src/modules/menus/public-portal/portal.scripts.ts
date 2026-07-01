@@ -546,6 +546,20 @@ document.addEventListener('click',function(e){
   if(t.closest('#openReviewBtn')){ openReviewPanel(); return; }
   if(t.closest('#slideOverlay')){ closeMobileDrawer(); closePanel('bookingPanel'); closePanel('reviewPanel'); closePanel('dayDetailPanel'); closePanel('svcDetailPanel'); closePanel('prodDetailPanel'); closePanel('galPanel'); return; }
 
+  var folderBtn=t.closest('[data-folder-id]');
+  if(folderBtn){
+    var fid=folderBtn.getAttribute('data-folder-id')||'';
+    var fcard=document.getElementById('folder-card-'+fid);
+    var fbody=document.getElementById('folder-body-'+fid);
+    if(fbody){
+      var isOpen=fbody.style.display!=='none';
+      fbody.style.display=isOpen?'none':'block';
+      if(fcard) fcard.classList.toggle('open',!isOpen);
+      folderBtn.setAttribute('aria-expanded',String(!isOpen));
+    }
+    return;
+  }
+
   var prdCard=t.closest('[data-prod-id]');
   if(prdCard){
     var jsonStr=prdCard.getAttribute('data-prod-json');
