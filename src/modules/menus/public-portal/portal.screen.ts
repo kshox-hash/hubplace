@@ -100,14 +100,15 @@ export function renderPortalHtml(data: PortalViewData): string {
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<meta name="theme-color" content="#EEF2F7"/>
+<meta name="color-scheme" content="light"/>
+<meta name="theme-color" content="#EAEAED"/>
 <title>${s.name}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 ${portalStyles()}
-${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}1A;--primary-glow:${safeColor}38}` : ""}
+${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}12;--primary-glow:${safeColor}2E;--nav-act:${safeColor};--nav-act-bg:${safeColor}14}` : ""}
 </style>
 </head>
 <body>
