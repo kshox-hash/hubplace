@@ -1536,23 +1536,19 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-gal-card-empty{background:var(--bg)}
 .hm-gal-card-name{padding:5px 7px 7px;font-size:10.5px;font-weight:600;color:var(--text);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
-/* ── GALLERY FOLDERS (nosotros tab) ─────────────────────────────────── */
-.gal-folder-list{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
-.gal-folder-card{border-radius:14px;overflow:hidden;background:var(--panel);border:1px solid var(--border-inner)}
-.gal-folder-header{display:flex;align-items:center;width:100%;background:none;border:none;padding:0;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
-.gal-folder-cover{width:80px;height:64px;object-fit:cover;flex-shrink:0}
-.gal-folder-cover-empty{width:80px;height:64px;background:var(--bg);flex-shrink:0;display:block}
-.gal-folder-info{flex:1;min-width:0;padding:10px 12px}
-.gal-folder-name{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gal-folder-desc{font-size:11.5px;color:var(--soft);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;margin-bottom:3px}
-.gal-folder-meta{font-size:10.5px;color:var(--dim)}
-.gal-folder-chevron{width:16px;height:16px;flex-shrink:0;margin-right:12px;color:var(--dim);transition:transform .2s}
-.gal-folder-card.open .gal-folder-chevron{transform:rotate(180deg)}
-.gal-folder-body{border-top:1px solid var(--border-inner)}
-.gal-folder-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:3px}
-.gal-folder-photo{aspect-ratio:1;overflow:hidden;cursor:pointer}
-.gal-folder-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .15s}
-.gal-folder-photo:active img{opacity:.75}
+/* ── GALLERY PROJECT CARDS (nosotros tab) ────────────────────────────── */
+.gal-proj-list{display:flex;flex-direction:column;gap:12px;margin-bottom:8px}
+.gal-proj-card{border-radius:16px;overflow:hidden;background:var(--panel);border:1px solid var(--border-inner);cursor:pointer;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
+.gal-proj-card:active{opacity:.82}
+.gal-proj-cover{width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--bg)}
+.gal-proj-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-proj-cover-empty{display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.gal-proj-cover-empty svg{width:28px;height:28px;opacity:.4}
+.gal-proj-foot{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.gal-proj-info{flex:1;min-width:0}
+.gal-proj-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.02em}
+.gal-proj-sub{font-size:11.5px;color:var(--dim);margin-top:3px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gal-proj-arr svg{width:16px;height:16px;stroke:var(--dim)}
 
 /* keepcompat */
 .hm-card-foot{padding:0 16px 14px;flex-shrink:0}

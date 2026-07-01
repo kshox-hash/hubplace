@@ -58,29 +58,26 @@ function buildFolderCard(folder: GalleryFolder): string {
   const cover = folder.photos[0]?.url ? escapeHtml(folder.photos[0].url) : null;
   const fid   = escapeHtml(folder.id);
 
-  const photosHtml = count > 0
-    ? `<div class="gal-folder-photos">
-        ${folder.photos.map((p, i) => `<div class="gal-folder-photo" data-gal-idx="${i}" data-gal-url="${escapeHtml(p.url)}" data-gal-desc="${escapeHtml(p.description || "")}">
-          <img src="${escapeHtml(p.url)}" alt="">
-        </div>`).join("")}
-       </div>`
-    : `<div style="padding:14px 16px;font-size:12px;color:var(--dim)">Sin fotos aún</div>`;
+  // Hidden data container — stores photo URLs/descs for the JS carousel
+  const photosData = folder.photos.map((p, i) =>
+    `<div data-gal-idx="${i}" data-gal-url="${escapeHtml(p.url)}" data-gal-desc="${escapeHtml(p.description || "")}"></div>`
+  ).join("");
 
-  return `<div class="gal-folder-card" id="folder-card-${fid}">
-  <button class="gal-folder-header" type="button" data-folder-id="${fid}" aria-expanded="false">
-    ${cover
-      ? `<img class="gal-folder-cover" src="${cover}" alt="" loading="lazy">`
-      : `<div class="gal-folder-cover-empty"></div>`}
-    <div class="gal-folder-info">
-      <div class="gal-folder-name">${name}</div>
-      ${desc ? `<div class="gal-folder-desc">${desc}</div>` : ""}
-      <div class="gal-folder-meta">${count} foto${count !== 1 ? "s" : ""}</div>
+  const cameraIco = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="7" width="20" height="15" rx="2"/><circle cx="12" cy="14" r="3"/><path d="M16 7l-1.5-3h-5L8 7"/></svg>`;
+  const arrowIco  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+
+  return `<div class="gal-proj-card" data-folder-id="${fid}">
+  ${cover
+    ? `<div class="gal-proj-cover"><img src="${cover}" alt="" loading="lazy"></div>`
+    : `<div class="gal-proj-cover gal-proj-cover-empty">${cameraIco}</div>`}
+  <div class="gal-proj-foot">
+    <div class="gal-proj-info">
+      <div class="gal-proj-name">${name}</div>
+      <div class="gal-proj-sub">${desc ? `${desc} · ` : ""}${count} foto${count !== 1 ? "s" : ""}</div>
     </div>
-    <svg class="gal-folder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-  </button>
-  <div class="gal-folder-body" id="folder-body-${fid}" style="display:none">
-    ${photosHtml}
+    ${count > 0 ? `<div class="gal-proj-arr">${arrowIco}</div>` : ""}
   </div>
+  <div id="folder-body-${fid}" data-folder-name="${name}" style="display:none">${photosData}</div>
 </div>`;
 }
 
@@ -126,7 +123,7 @@ export function nosotrosTabHtml(
     </div>
 
     ${hasFolders ? `
-    <div class="gal-folder-list">
+    <div class="gal-proj-list">
       ${galleryFolders.map(f => buildFolderCard(f)).join("")}
     </div>` : ""}
 
