@@ -150,7 +150,7 @@ export class ReviewsRepository {
    * el promedio + 1 reseña reciente.
    */
   async getAllPaginated(userId: string, limit: number = 20, offset: number = 0, portalEmail?: string, rating?: number) {
-    const ratingClause = rating && rating >= 1 && rating <= 5 ? ` AND r.rating = ${Math.floor(rating)}` : '';
+    const ratingClause = rating && rating >= 1 && rating <= 5 ? ` AND rating = ${Math.floor(rating)}` : '';
     const [dataResult, countResult] = await Promise.all([
       this.pool.query(
         `SELECT r.id, r.rating, r.comment, r.client_name,

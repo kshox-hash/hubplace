@@ -2070,7 +2070,7 @@ function renderReviewsTab(data){
   var avg=parseFloat(summary.average||'0');
   var total=parseInt(summary.total||'0',10);
 
-  if(!total){
+  if(!total && !rvRatingFilter && !reviews.length){
     el.innerHTML='<div class="bk-empty" style="margin-top:8px">Aún no hay reseñas.<br>¡Los clientes podrán dejarte su opinión pronto!</div>';
     return;
   }
