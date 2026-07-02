@@ -1501,11 +1501,12 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
   height:160px;width:auto;min-width:120px;max-width:240px;
   border-radius:12px;object-fit:cover;flex-shrink:0;
 }
-.pdp-photo-single{width:100%;aspect-ratio:4/3;overflow:hidden}
-.pdp-photo-single img{width:100%;height:100%;object-fit:cover;display:block}
+.pdp-photo-single{width:100%;background:#000;display:flex;align-items:center;justify-content:center;min-height:200px;max-height:62vh;overflow:hidden}
+.pdp-photo-single img{width:100%;max-height:62vh;object-fit:contain;display:block}
 .pdp-no-photo{width:100%;height:160px}
-.pdp-gallery{width:100%;aspect-ratio:4/3;overflow:hidden;position:relative}
-.pdp-gallery-main{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
+.pdp-gallery{width:100%;background:#000;display:flex;align-items:center;justify-content:center;min-height:200px;max-height:62vh;overflow:hidden;position:relative}
+.pdp-gallery-img{display:none}
+.pdp-gallery-main{width:100%;max-height:62vh;object-fit:contain;display:block;transition:opacity .2s}
 .pdp-thumbs{
   display:flex;gap:6px;padding:8px 16px;overflow-x:auto;
   scrollbar-width:none;-webkit-overflow-scrolling:touch
