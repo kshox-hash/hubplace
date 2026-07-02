@@ -1506,6 +1506,10 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .pdp-dots{display:flex;justify-content:center;gap:5px;padding:7px 0 2px}
 .pdp-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:background .2s;flex-shrink:0}
 .pdp-dot.act{background:var(--primary)}
+#galPanelBody{display:flex;flex-direction:column}
+.gal-lb-wrap{display:flex;flex-direction:column;flex:1;min-height:0}
+#galPanelBody .pdp-gallery{flex:1;min-height:0;aspect-ratio:unset}
+.gal-lb-desc{padding:14px 20px 10px;font-size:13.5px;color:var(--soft);line-height:1.5;text-align:center;min-height:20px}
 .sdp-hero{
   padding:20px 20px 16px;
   border-bottom:1px solid var(--border-inner)
