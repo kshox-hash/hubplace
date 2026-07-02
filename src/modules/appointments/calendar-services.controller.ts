@@ -116,8 +116,8 @@ export const calendarServicesController = {
           {
             folder: `services/${userId}`,
             transformation: [
-              { width: 800, height: 600, crop: "limit" },
-              { quality: "auto:good", fetch_format: "auto" },
+              { width: 800, height: 600, crop: "fill", gravity: "auto" },
+              { quality: 80, fetch_format: "auto" },
             ],
           },
           (err, result) => {

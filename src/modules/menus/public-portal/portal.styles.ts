@@ -1596,6 +1596,13 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
   .hm-svc-rv-wrap{
     flex-direction:column;gap:12px
   }
+  .gal-proj-list{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    overflow-x:visible;gap:12px;
+    margin:0;padding:0 0 4px
+  }
+  .gal-proj-card{width:100%}
+  .gal-grid{grid-template-columns:repeat(4,1fr)}
 }
 `;
 }
