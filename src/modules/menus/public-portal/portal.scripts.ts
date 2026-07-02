@@ -23,6 +23,7 @@ var svcsTotal=0;
 var QCart={};
 var reviewsLoaded=false;
 var rvPage=1;
+var rvRatingFilter=0;
 var prdOffset=${productsRenderedCount};
 var prdTotal=${productCount};
 var qpProds=[];
@@ -573,6 +574,24 @@ document.addEventListener('click',function(e){
   if(t.closest('#openReviewBtn')){ openReviewPanel(); return; }
   var likeBtn=t.closest('.rv-like-btn');
   if(likeBtn){ toggleReviewLike(likeBtn); return; }
+  var editBtn=t.closest('[data-rv-edit]');
+  if(editBtn){ openEditForm(editBtn.getAttribute('data-rv-edit')); return; }
+  var delBtn=t.closest('[data-rv-del]');
+  if(delBtn){ deleteOwnReview(delBtn.getAttribute('data-rv-del')); return; }
+  var cancelBtn=t.closest('[data-rv-cancel]');
+  if(cancelBtn){ openEditForm(cancelBtn.getAttribute('data-rv-cancel')); return; }
+  var saveBtn=t.closest('[data-rv-save]');
+  if(saveBtn){ saveEditReview(saveBtn.getAttribute('data-rv-save')); return; }
+  var editStar=t.closest('.rv-edit-star');
+  if(editStar){
+    var formId=editStar.getAttribute('data-form');
+    var starVal=parseInt(editStar.getAttribute('data-star')||'0',10);
+    var starsEl=document.getElementById('rv-edit-stars-'+formId);
+    if(starsEl) starsEl.querySelectorAll('.rv-edit-star').forEach(function(s){
+      s.classList.toggle('sel',parseInt(s.getAttribute('data-star')||'0',10)<=starVal);
+    });
+    return;
+  }
   if(t.closest('#slideOverlay')){ closeMobileDrawer(); closePanel('bookingPanel'); closePanel('reviewPanel'); closePanel('dayDetailPanel'); closePanel('svcDetailPanel'); closePanel('prodDetailPanel'); closePanel('galPanel'); return; }
 
   var folderBtn=t.closest('[data-folder-id]');
@@ -1769,7 +1788,8 @@ function ensureReviews(){
   if(reviewsLoaded) return;
   reviewsLoaded=true;
   rvPage=1;
-  fetch('/api/public/reviews/'+USER_ID)
+  var url='/api/public/reviews/'+USER_ID+(rvRatingFilter?'?rating='+rvRatingFilter:'');
+  fetch(url)
     .then(function(r){return r.json();})
     .then(function(data){
       rvTotal=parseInt((data&&data.summary&&data.summary.total)||'0',10)||0;
@@ -1940,6 +1960,22 @@ function buildRvCard(r){
   var adminReply=r.admin_reply
     ?'<div class="rv-reply"><span class="rv-reply-lbl">Respuesta del negocio</span><p class="rv-reply-text">'+escH(r.admin_reply)+'</p></div>'
     :'';
+  var ownActions=(r.is_own===true||r.is_own===1)
+    ?'<div class="rv-own-actions">'
+      +'<button class="rv-own-btn edit" data-rv-edit="'+r.id+'" data-rv-rating="'+r.rating+'" data-rv-comment="'+escH(r.comment||'')+'" type="button">Editar</button>'
+      +'<button class="rv-own-btn del" data-rv-del="'+r.id+'" type="button">Eliminar</button>'
+      +'</div>'
+      +'<div class="rv-edit-form" id="rv-edit-form-'+r.id+'">'
+        +'<div class="rv-edit-stars" id="rv-edit-stars-'+r.id+'">'
+          +[1,2,3,4,5].map(function(s){return '<span class="rv-edit-star'+(s<=r.rating?' sel':'')+'" data-star="'+s+'" data-form="'+r.id+'">★</span>';}).join('')
+        +'</div>'
+        +'<textarea class="rv-edit-ta" id="rv-edit-ta-'+r.id+'" maxlength="500" placeholder="Tu comentario (opcional)">'+escH(r.comment||'')+'</textarea>'
+        +'<div class="rv-edit-actions">'
+          +'<button class="rv-edit-cancel" data-rv-cancel="'+r.id+'" type="button">Cancelar</button>'
+          +'<button class="rv-edit-save" data-rv-save="'+r.id+'" type="button">Guardar</button>'
+        +'</div>'
+      +'</div>'
+    :'';
   return '<div class="rv-card" data-rv-id="'+r.id+'">'
     +'<div class="rv-card-top">'
     +(avatarHtml?'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'+avatarHtml
@@ -1953,6 +1989,7 @@ function buildRvCard(r){
     +(r.comment?'<div class="rv-comment">'+escH(r.comment)+'</div>':'')
     +adminReply
     +'<div class="rv-actions"><div class="rv-like-wrap">'+likeBtn+facepile+'</div></div>'
+    +ownActions
     +'</div>';
 }
 
@@ -1985,10 +2022,51 @@ function toggleReviewLike(btn){
     .finally(function(){ btn.disabled=false; });
 }
 
+function openEditForm(rvId){
+  var form=document.getElementById('rv-edit-form-'+rvId);
+  if(form) form.classList.toggle('open');
+}
+
+function saveEditReview(rvId){
+  var starsEl=document.getElementById('rv-edit-stars-'+rvId);
+  var ta=document.getElementById('rv-edit-ta-'+rvId);
+  var rating=0;
+  if(starsEl) starsEl.querySelectorAll('.rv-edit-star.sel').forEach(function(s){ rating=parseInt(s.getAttribute('data-star')||'0',10); });
+  if(!rating){alert('Selecciona una calificación.');return;}
+  var comment=ta?(ta.value||'').trim():'';
+  var saveBtn=document.querySelector('[data-rv-save="'+rvId+'"]');
+  if(saveBtn){saveBtn.textContent='Guardando…';saveBtn.disabled=true;}
+  fetch('/api/public/'+SLUG+'/reviews/'+rvId,{
+    method:'PATCH',credentials:'include',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({rating:rating,comment:comment||null})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.ok){reviewsLoaded=false;ensureReviews();}
+    else if(saveBtn){saveBtn.textContent='Guardar';saveBtn.disabled=false;}
+  })
+  .catch(function(){if(saveBtn){saveBtn.textContent='Guardar';saveBtn.disabled=false;}});
+}
+
+function deleteOwnReview(rvId){
+  if(!confirm('¿Eliminar tu reseña? Esta acción no se puede deshacer.')) return;
+  fetch('/api/public/'+SLUG+'/reviews/'+rvId,{method:'DELETE',credentials:'include'})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.ok){
+        var card=document.querySelector('.rv-card[data-rv-id="'+rvId+'"]');
+        if(card) card.remove();
+      }
+    })
+    .catch(function(){});
+}
+
 function renderReviewsTab(data){
   var el=document.getElementById('reviewsContent'); if(!el) return;
   var summary=(data&&data.summary)||{};
   var reviews=(data&&data.reviews)||[];
+  var pagination=(data&&data.pagination)||{};
   var avg=parseFloat(summary.average||'0');
   var total=parseInt(summary.total||'0',10);
 
@@ -2017,13 +2095,28 @@ function renderReviewsTab(data){
     +'<div class="rv-bars">'+bars+'</div>'
     +'</div>';
 
+  var starChips=[0,5,4,3,2,1].map(function(s){
+    var lbl=s===0?'Todas':s+'★';
+    var act=rvRatingFilter===s;
+    return '<button class="rv-star-chip'+(act?' act':'')+'" data-rv-star="'+s+'" type="button">'+lbl+'</button>';
+  }).join('');
+
   var cards=reviews.map(buildRvCard).join('');
-  var hasMore=total>reviews.length;
+  var hasMore=pagination.hasNextPage||false;
   var loadMoreBtn=hasMore?'<button class="rv-load-more" type="button" id="rvLoadMore">Ver más reseñas</button>':'';
 
-  el.innerHTML=summaryHtml
+  el.innerHTML=(total?'<div class="rv-star-filters">'+starChips+'</div>':'')+summaryHtml
     +(cards?'<div class="sec-hdr" style="margin-top:20px"><span class="sec-title">Últimas reseñas</span><span class="sec-sub" style="margin-top:2px">Opiniones de nuestros clientes</span></div>'
       +'<div id="rvCardsList">'+cards+'</div>'+loadMoreBtn:'');
+
+  el.querySelectorAll('.rv-star-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      var s=parseInt(chip.getAttribute('data-rv-star')||'0',10);
+      rvRatingFilter=(rvRatingFilter===s?0:s);
+      reviewsLoaded=false;
+      ensureReviews();
+    });
+  });
 
   var btn=document.getElementById('rvLoadMore');
   if(btn) btn.addEventListener('click',loadMoreReviews);
@@ -2033,7 +2126,8 @@ function loadMoreReviews(){
   var btn=document.getElementById('rvLoadMore');
   if(btn){btn.textContent='Cargando…';btn.disabled=true;}
   rvPage++;
-  fetch('/api/public/reviews/'+USER_ID+'?page='+rvPage)
+  var url='/api/public/reviews/'+USER_ID+'?page='+rvPage+(rvRatingFilter?'&rating='+rvRatingFilter:'');
+  fetch(url)
     .then(function(r){return r.json();})
     .then(function(data){
       var reviews=(data&&data.reviews)||[];

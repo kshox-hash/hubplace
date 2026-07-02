@@ -149,7 +149,8 @@ export class ReviewsRepository {
    * con paginación, distinto del dashboard que solo necesita
    * el promedio + 1 reseña reciente.
    */
-  async getAllPaginated(userId: string, limit: number = 20, offset: number = 0, portalEmail?: string) {
+  async getAllPaginated(userId: string, limit: number = 20, offset: number = 0, portalEmail?: string, rating?: number) {
+    const ratingClause = rating && rating >= 1 && rating <= 5 ? ` AND r.rating = ${Math.floor(rating)}` : '';
     const [dataResult, countResult] = await Promise.all([
       this.pool.query(
         `SELECT r.id, r.rating, r.comment, r.client_name,
@@ -157,19 +158,20 @@ export class ReviewsRepository {
                 r.admin_reply, r.admin_replied_at, r.created_at,
                 COUNT(rl.id)::int AS likes_count,
                 ${portalEmail ? `MAX(CASE WHEN rl2.portal_email = $4 THEN 1 ELSE 0 END)::boolean AS user_liked` : `false AS user_liked`},
+                ${portalEmail ? `bool_or(r.google_email = $4) AS is_own` : `false AS is_own`},
                 (SELECT COALESCE(json_agg(json_build_object('avatar',lk.portal_avatar,'name',lk.portal_name) ORDER BY lk.created_at ASC),'[]'::json)
                  FROM (SELECT portal_avatar,portal_name,created_at FROM review_likes WHERE review_id=r.id ORDER BY created_at ASC LIMIT 3) lk
                 ) AS top_likers
          FROM reviews r
          LEFT JOIN review_likes rl ON rl.review_id = r.id
          ${portalEmail ? `LEFT JOIN review_likes rl2 ON rl2.review_id = r.id AND rl2.portal_email = $4` : ''}
-         WHERE r.user_id = $1
+         WHERE r.user_id = $1${ratingClause}
          GROUP BY r.id
          ORDER BY r.created_at DESC LIMIT $2 OFFSET $3`,
         portalEmail ? [userId, limit, offset, portalEmail] : [userId, limit, offset]
       ),
       this.pool.query(
-        `SELECT COUNT(*) AS total FROM reviews WHERE user_id = $1`,
+        `SELECT COUNT(*) AS total FROM reviews WHERE user_id = $1${ratingClause}`,
         [userId]
       ),
     ]);
@@ -208,11 +210,35 @@ export class ReviewsRepository {
     return { liked: existing.rows.length === 0, likes: countRes.rows[0].cnt, likers: likersRes.rows };
   }
 
+  async getById(reviewId: number, userId: string): Promise<{ id: number; google_email: string | null; google_name: string | null; comment: string | null } | null> {
+    const res = await this.pool.query(
+      `SELECT id, google_email, google_name, comment FROM reviews WHERE id = $1 AND user_id = $2`,
+      [reviewId, userId]
+    );
+    return res.rows[0] ?? null;
+  }
+
   async setAdminReply(reviewId: number, reply: string, userId: string): Promise<void> {
     await this.pool.query(
       `UPDATE reviews SET admin_reply = $1, admin_replied_at = NOW() WHERE id = $2 AND user_id = $3`,
       [reply || null, reviewId, userId]
     );
+  }
+
+  async updateOwnReview(reviewId: number, portalEmail: string, rating: number, comment: string | null): Promise<boolean> {
+    const res = await this.pool.query(
+      `UPDATE reviews SET rating = $1, comment = $2 WHERE id = $3 AND google_email = $4`,
+      [rating, comment, reviewId, portalEmail]
+    );
+    return (res.rowCount ?? 0) > 0;
+  }
+
+  async deleteOwnReview(reviewId: number, portalEmail: string): Promise<boolean> {
+    const res = await this.pool.query(
+      `DELETE FROM reviews WHERE id = $1 AND google_email = $2`,
+      [reviewId, portalEmail]
+    );
+    return (res.rowCount ?? 0) > 0;
   }
 
   /**

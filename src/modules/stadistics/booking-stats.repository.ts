@@ -152,6 +152,7 @@ export type ReviewsStats = {
     client_name: string | null;
     created_at: string;
     admin_reply: string | null;
+    likes_count: number;
   }>;
 };
 
@@ -164,9 +165,10 @@ export async function getReviewsStats(userId: string): Promise<ReviewsStats> {
       [userId]
     ),
     pool.query(
-      `SELECT id, rating, comment, client_name, admin_reply, created_at
-       FROM reviews WHERE user_id = $1
-       ORDER BY created_at DESC LIMIT 2`,
+      `SELECT r.id, r.rating, r.comment, r.client_name, r.admin_reply, r.created_at,
+              (SELECT COUNT(*)::int FROM review_likes WHERE review_id = r.id) AS likes_count
+       FROM reviews r WHERE r.user_id = $1
+       ORDER BY r.created_at DESC LIMIT 2`,
       [userId]
     ),
   ]);
@@ -180,6 +182,7 @@ export async function getReviewsStats(userId: string): Promise<ReviewsStats> {
       comment:     r.comment,
       client_name: r.client_name,
       admin_reply: r.admin_reply ?? null,
+      likes_count: Number(r.likes_count || 0),
       created_at:  String(r.created_at),
     })),
   };

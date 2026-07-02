@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { StatisticsService } from "./stadistics.service";
 import { ReviewsService } from "./reviews.service";
+import { sendReviewReplyEmail } from "./review-reply-email.service";
 import {
   getRevenueStats,
   getBusiestSlots,
@@ -92,7 +93,8 @@ export const statisticsController = {
       if (isForbidden(req)) return res.status(403).json({ ok: false, message: "Forbidden" });
       const page = req.query.page ? Number(req.query.page) : 1;
       const pageSize = req.query.pageSize ? Number(req.query.pageSize) : 20;
-      const data = await reviewsService.getAll(uid(req), page, pageSize);
+      const rating = req.query.rating ? Number(req.query.rating) : undefined;
+      const data = await reviewsService.getAll(uid(req), page, pageSize, undefined, rating);
       return res.status(200).json(data);
     } catch (error: any) {
       return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
@@ -145,11 +147,12 @@ export const statisticsController = {
     try {
       const userId = String(req.params["userId"]);
       const page = Math.max(1, parseInt(String(req.query["page"] || "1"), 10) || 1);
+      const rating = req.query["rating"] ? Number(req.query["rating"]) : undefined;
       const portalUser = (req as any).portalUser as { email?: string } | undefined;
       const portalEmail = portalUser?.email;
       const [summary, recent] = await Promise.all([
-        page === 1 ? reviewsService.getSummary(userId) : Promise.resolve(null),
-        reviewsService.getAll(userId, page, 10, portalEmail),
+        page === 1 && !rating ? reviewsService.getSummary(userId) : Promise.resolve(null),
+        reviewsService.getAll(userId, page, 10, portalEmail, rating),
       ]);
       return res.json({ ok: true, summary, reviews: recent.data, pagination: recent.pagination });
     } catch (error: any) {
@@ -176,7 +179,18 @@ export const statisticsController = {
       const reviewId = parseInt(String(req.params["reviewId"]), 10);
       if (!reviewId) return res.status(400).json({ ok: false, message: "reviewId inválido" });
       const reply = typeof req.body.reply === "string" ? req.body.reply.trim() : "";
-      await reviewsService.setAdminReply(reviewId, reply, uid(req));
+      const [review] = await Promise.all([
+        reviewsService.getById(reviewId, uid(req)),
+        reviewsService.setAdminReply(reviewId, reply, uid(req)),
+      ]);
+      if (review?.google_email && reply) {
+        sendReviewReplyEmail({
+          to: review.google_email,
+          reviewerName: review.google_name,
+          comment: review.comment,
+          reply,
+        }).catch(() => {});
+      }
       return res.json({ ok: true });
     } catch (error: any) {
       return res.status(500).json({ ok: false, message: error?.message || "Error interno" });

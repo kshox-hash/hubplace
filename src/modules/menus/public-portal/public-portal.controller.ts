@@ -9,6 +9,7 @@ import { renderPortalHtml } from "./portal.screen";
 import { StatisticsService } from "../../stadistics/stadistics.service";
 import { isBot, shouldCountVisit } from "../../stadistics/visit-tracker";
 import { ReviewsRepository } from "../../stadistics/reviews.repository";
+import { notificationService } from "../../notifications/notification.service";
 
 const statsService  = new StatisticsService();
 const reviewsRepo   = new ReviewsRepository();
@@ -210,10 +211,52 @@ export const publicPortalController = {
         portalUser?.picture ?? null,
       );
 
+      notificationService.create({
+        userId: String(slug.user_id),
+        type: "system",
+        priority: "normal",
+        title: "Nueva reseña",
+        message: `${portalUser?.name ?? "Un cliente"} dejó una reseña de ${r} estrella${r !== 1 ? "s" : ""}.`,
+        entityId: null,
+        entityType: "review",
+        action: "open_reviews",
+      }).catch(() => {});
+
       return res.json({ ok: true });
     } catch (e: any) {
       console.error("[submitReview]", e);
       return res.status(500).json({ ok: false, message: "Error al guardar la reseña." });
+    }
+  },
+
+  async editOwnReview(req: Request, res: Response): Promise<Response> {
+    try {
+      const portalUser = (req as any).portalUser as { email?: string } | undefined;
+      if (!portalUser?.email) return res.status(401).json({ ok: false, message: "Sesión requerida" });
+      const reviewId = parseInt(String(req.params["reviewId"]), 10);
+      if (!reviewId) return res.status(400).json({ ok: false, message: "reviewId inválido" });
+      const rating = Number(req.body?.rating);
+      if (!rating || rating < 1 || rating > 5) return res.status(400).json({ ok: false, message: "Calificación inválida." });
+      const comment = typeof req.body?.comment === "string" ? req.body.comment.trim() || null : null;
+      const updated = await reviewsRepo.updateOwnReview(reviewId, portalUser.email, rating, comment);
+      if (!updated) return res.status(403).json({ ok: false, message: "No puedes editar esta reseña." });
+      return res.json({ ok: true });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, message: "Error al editar la reseña." });
+    }
+  },
+
+  async deleteOwnReview(req: Request, res: Response): Promise<Response> {
+    try {
+      const portalUser = (req as any).portalUser as { email?: string } | undefined;
+      if (!portalUser?.email) return res.status(401).json({ ok: false, message: "Sesión requerida" });
+      const reviewId = parseInt(String(req.params["reviewId"]), 10);
+      if (!reviewId) return res.status(400).json({ ok: false, message: "reviewId inválido" });
+      const deleted = await reviewsRepo.deleteOwnReview(reviewId, portalUser.email);
+      if (!deleted) return res.status(403).json({ ok: false, message: "No puedes eliminar esta reseña." });
+      return res.json({ ok: true });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, message: "Error al eliminar la reseña." });
     }
   },
 };

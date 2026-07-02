@@ -60,11 +60,11 @@ export class ReviewsService {
    *   }
    * }
    */
-  async getAll(userId: string, page: number = 1, pageSize: number = 20, portalEmail?: string) {
+  async getAll(userId: string, page: number = 1, pageSize: number = 20, portalEmail?: string, rating?: number) {
     const safePage = Math.max(page, 1);
     const safePageSize = Math.min(Math.max(pageSize, 1), 100);
     const offset = (safePage - 1) * safePageSize;
-    const { rows, total } = await this.repo.getAllPaginated(userId, safePageSize, offset, portalEmail);
+    const { rows, total } = await this.repo.getAllPaginated(userId, safePageSize, offset, portalEmail, rating);
     return {
       data: rows,
       pagination: {
@@ -79,6 +79,10 @@ export class ReviewsService {
 
   async toggleLike(reviewId: number, portalEmail: string, portalName?: string, portalAvatar?: string) {
     return this.repo.toggleLike(reviewId, portalEmail, portalName, portalAvatar);
+  }
+
+  async getById(reviewId: number, userId: string) {
+    return this.repo.getById(reviewId, userId);
   }
 
   async setAdminReply(reviewId: number, reply: string, userId: string) {

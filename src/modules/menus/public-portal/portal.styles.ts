@@ -854,6 +854,23 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .rv-av{width:22px;height:22px;border-radius:50%;border:2px solid #fff;margin-left:-7px;object-fit:cover;background:var(--primary);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .rv-av:first-child{margin-left:0}
 .rv-av-more{background:#e5e7eb;color:var(--soft);font-weight:600}
+.rv-star-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.rv-star-chip{padding:5px 12px;border-radius:20px;background:var(--bg);border:1.5px solid var(--border);font-size:12.5px;font-weight:600;color:var(--soft);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.rv-star-chip.act{background:var(--primary);border-color:var(--primary);color:#fff}
+.rv-own-actions{display:flex;gap:10px;margin-top:6px}
+.rv-own-btn{background:none;border:none;cursor:pointer;font-size:11.5px;font-weight:600;padding:2px 0;-webkit-tap-highlight-color:transparent;transition:color .15s}
+.rv-own-btn.edit{color:var(--primary)}
+.rv-own-btn.del{color:var(--red,#ef4444)}
+.rv-edit-form{margin-top:10px;background:var(--bg);border-radius:10px;padding:12px;display:none}
+.rv-edit-form.open{display:block}
+.rv-edit-stars{display:flex;gap:4px;margin-bottom:8px}
+.rv-edit-star{font-size:20px;cursor:pointer;color:var(--dim);transition:color .1s}
+.rv-edit-star.sel{color:#FACC15}
+.rv-edit-ta{width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;resize:vertical;min-height:72px;font-family:inherit}
+.rv-edit-ta:focus{outline:none;border-color:var(--primary)}
+.rv-edit-actions{display:flex;gap:8px;margin-top:8px;justify-content:flex-end}
+.rv-edit-cancel{padding:7px 14px;border-radius:8px;background:var(--bg);border:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--soft);cursor:pointer}
+.rv-edit-save{padding:7px 14px;border-radius:8px;background:var(--primary);border:none;font-size:13px;font-weight:600;color:#fff;cursor:pointer}
 .rv-load-more{display:block;width:100%;margin-top:14px;padding:11px;border-radius:10px;background:var(--bg);font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;text-align:center;transition:background .15s}
 .rv-load-more:hover{background:var(--bg)}
 .rv-load-more:disabled{opacity:.5;cursor:default}
