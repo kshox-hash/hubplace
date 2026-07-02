@@ -22,6 +22,8 @@ export type PortalViewData = {
   whatsappNumber?: string | null;
   businessHours?: string | null;
   coverImage?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   enabledModules: MenuModuleItem[];
   products: { id: string|number; name: string; price: number; description?: string|null; color?: string|null; photos?: string[] }[];
   galleryFolders: { id: string; name: string; description: string|null; photos: { id: string; url: string; description: string|null }[] }[];
@@ -62,7 +64,7 @@ export function renderPortalHtml(data: PortalViewData): string {
     phone, address, city, brandColor,
     description,
     instagramUrl, whatsappNumber, businessHours,
-    coverImage,
+    coverImage, latitude, longitude,
     enabledModules, products, galleryFolders, orphanPhotos,
     portalUser,
   } = data;
@@ -179,7 +181,7 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}12;--prima
     <span class="cn-status">En línea</span>
   </nav>
 
-  ${chatTabHtml({ name: s.name, slug: s.slug, desc: s.desc, enabledModules, phone: s.phone, ig: s.ig, wa: s.wa, hours: s.hours, locationLine, waHref, initials, productCount, portalUser, coverImage: coverImage ?? null, galleryFolders: galleryFolders.slice(0, 4).map(f => ({ id: f.id, name: f.name, coverUrl: f.photos[0]?.url ?? null })), orphanPhotos: orphanPhotos.slice(0, 5).map(p => ({ url: p.url })) })}
+  ${chatTabHtml({ name: s.name, slug: s.slug, desc: s.desc, enabledModules, phone: s.phone, ig: s.ig, wa: s.wa, hours: s.hours, locationLine, waHref, initials, productCount, portalUser, coverImage: coverImage ?? null, lat: latitude ?? null, lon: longitude ?? null, galleryFolders: galleryFolders.slice(0, 4).map(f => ({ id: f.id, name: f.name, coverUrl: f.photos[0]?.url ?? null })), orphanPhotos: orphanPhotos.slice(0, 5).map(p => ({ url: p.url })) })}
   ${reservasTabHtml()}
   ${nosotrosTabHtml(products, productCount, galleryFolders, orphanPhotos.slice(0, 20), orphanPhotos.length, publicSlug)}
   ${serviciosTabHtml()}

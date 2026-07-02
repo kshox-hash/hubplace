@@ -3,6 +3,7 @@ import {
   CompanyProfile,
   CompanyProfileInput,
 } from "./company-profile.type";
+import { geocodeAddress } from "./geocoding.service";
 
 const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
   if (!userId || !userId.trim()) {
@@ -59,7 +60,27 @@ const upsert = async (
     cover_image: input.cover_image ?? null,
   };
 
-  return companyProfileRepository.upsert(sanitizedInput);
+  const [prev, saved] = await Promise.all([
+    companyProfileRepository.getByUserId(sanitizedInput.user_id),
+    companyProfileRepository.upsert(sanitizedInput),
+  ]);
+
+  const addressChanged =
+    (sanitizedInput.address ?? '') !== (prev?.address ?? '') ||
+    (sanitizedInput.city ?? '') !== (prev?.city ?? '');
+
+  if (addressChanged) {
+    const query = [sanitizedInput.address, sanitizedInput.city].filter(Boolean).join(', ');
+    if (query) {
+      geocodeAddress(query).then((coords) => {
+        if (coords) {
+          companyProfileRepository.updateCoordinates(sanitizedInput.user_id, coords.lat, coords.lon).catch(() => {});
+        }
+      }).catch(() => {});
+    }
+  }
+
+  return saved;
 };
 
 export const companyProfileService = {

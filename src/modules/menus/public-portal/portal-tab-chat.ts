@@ -16,6 +16,8 @@ type ChatData = {
   productCount: number;
   portalUser?: { name?: string; email?: string; picture?: string } | null;
   coverImage?: string | null;
+  lat?: number | null;
+  lon?: number | null;
   galleryFolders?: { id: string; name: string; coverUrl: string | null }[];
   orphanPhotos?: { url: string }[];
 };
@@ -174,25 +176,37 @@ export function chatTabHtml(d: ChatData): string {
           </div>
         </div>` : ""}
 
-        ${d.locationLine ? `
+        ${d.locationLine ? (() => {
+          const hasCoords = d.lat != null && d.lon != null;
+          const lat = d.lat as number;
+          const lon = d.lon as number;
+          const delta = 0.006;
+          const osmEmbed = hasCoords
+            ? `https://www.openstreetmap.org/export/embed.html?bbox=${lon-delta},${lat-delta},${lon+delta},${lat+delta}&layer=mapnik&marker=${lat},${lon}`
+            : '';
+          const osmLink = hasCoords
+            ? `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`
+            : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.locationLine)}`;
+          return `
         <div class="hm-card">
           <div class="hm-card-hdr">
             <div class="hm-card-title-row">
               <span class="hm-card-title-icon" style="color:#10B981"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
               <span class="hm-card-title">Ubicación</span>
             </div>
-            <a class="sec-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.locationLine)}" target="_blank" rel="noopener">Ver en mapa →</a>
+            <a class="sec-link" href="${osmLink}" target="_blank" rel="noopener">Ver en mapa →</a>
           </div>
           <div style="padding:0 14px 14px">
-            <div style="border-radius:10px;overflow:hidden;height:190px;background:var(--bg)">
-              <iframe src="https://maps.google.com/maps?q=${encodeURIComponent(d.locationLine)}&output=embed&z=15" width="100%" height="190" style="border:0;display:block" loading="lazy" title="Mapa de ubicación"></iframe>
-            </div>
-            <div style="margin-top:8px;display:flex;gap:5px;align-items:flex-start;font-size:12.5px;color:var(--text-sub)">
+            ${hasCoords ? `<div style="border-radius:10px;overflow:hidden;height:190px;background:var(--bg)">
+              <iframe src="${osmEmbed}" width="100%" height="190" style="border:0;display:block" loading="lazy" title="Mapa de ubicación"></iframe>
+            </div>` : ''}
+            <div style="margin-top:${hasCoords ? '8' : '0'}px;display:flex;gap:5px;align-items:flex-start;font-size:12.5px;color:var(--text-sub)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:13px;height:13px;flex-shrink:0;margin-top:1px"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
               <span>${d.locationLine}</span>
             </div>
           </div>
-        </div>` : ""}
+        </div>`;
+        })() : ""}
 
       </div>
 
