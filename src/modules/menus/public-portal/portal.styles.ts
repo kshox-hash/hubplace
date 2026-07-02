@@ -18,8 +18,8 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
   --rail:#FFFFFF;
   --rail-icon:#AEAEBA;
   --rail-icon-act:var(--primary);
-  --border:#E0E0E6;
-  --border-inner:#F2F2F5;
+  --border:#D5CFC5;
+  --border-inner:#E2DBD0;
   --text:#111116;
   --soft:#38383F;
   --dim:#78788C;
@@ -724,21 +724,23 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .rdash-sec-hdr{margin:0 0 10px}
 .rdash-sec-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.04em}
 .rdash-sec-sub{font-size:11px;color:var(--dim);margin-top:2px}
-.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.svc-grid{display:flex;flex-direction:column}
 .svc-grid-item{
-  border-radius:10px;
-  cursor:pointer;overflow:hidden;
-  transition:opacity .15s;-webkit-tap-highlight-color:transparent;
-  display:flex;flex-direction:column
+  cursor:pointer;
+  transition:background .15s;-webkit-tap-highlight-color:transparent;
+  display:flex;flex-direction:row;align-items:center;
+  gap:13px;padding:12px 20px;
+  border-bottom:1px solid var(--border-inner)
 }
-.svc-grid-item:hover{opacity:.82}
-.svc-grid-thumb{width:100%;aspect-ratio:1;overflow:hidden;flex-shrink:0}
+.svc-grid-item:last-child{border-bottom:none}
+.svc-grid-item:hover{background:rgba(0,0,0,.03)}
+.svc-grid-thumb{width:42px;height:42px;flex-shrink:0;overflow:hidden;border-radius:10px}
 .svc-grid-img{width:100%;height:100%;object-fit:cover;display:block}
-.svc-grid-dot{width:100%;aspect-ratio:1;opacity:.88}
-.svc-grid-info{padding:5px 7px 7px;display:flex;flex-direction:column;gap:1px}
-.svc-grid-name{font-size:10px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1.25}
-.svc-grid-dur{font-size:8px;color:var(--dim)}
-.svc-grid-price{font-size:10px;font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums;margin-top:1px}
+.svc-grid-dot{width:100%;height:100%;opacity:.9}
+.svc-grid-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.svc-grid-name{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.svc-grid-dur{font-size:11px;color:var(--dim)}
+.svc-grid-price{font-size:12.5px;font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums}
 
 /* Loader */
 .loader-row{display:flex;align-items:center;gap:10px;padding:32px 0;color:var(--dim);font-size:13.5px;justify-content:center}
@@ -831,16 +833,17 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .rv-bar-fill{height:100%;background:var(--amber);border-radius:99px;transition:width .4s}
 .rv-bar-count{font-size:12px;color:var(--dim);width:18px;flex-shrink:0}
 .rv-card{
-  background:var(--panel);border-radius:var(--r);
-  padding:16px 20px;margin-bottom:10px
+  padding:16px 20px;
+  border-bottom:1px solid var(--border-inner)
 }
+.rv-card:last-child{border-bottom:none}
 .rv-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .rv-card-stars{font-size:14px;letter-spacing:1px}
 .rv-card-meta{font-size:12px}
 .rv-name{font-weight:600;color:var(--text)}
 .rv-date{color:var(--dim)}
 .rv-comment{font-size:14px;color:var(--soft);line-height:1.55}
-.rv-reply{margin-top:10px;padding:10px 12px;background:var(--bg);border-radius:10px;border-left:3px solid var(--primary)}
+.rv-reply{margin-top:10px;padding:10px 12px;background:rgba(0,0,0,.05);border-radius:10px;border-left:3px solid var(--primary)}
 .rv-reply-lbl{font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px}
 .rv-reply-text{font-size:13.5px;color:var(--soft);line-height:1.55;margin:0}
 .rv-actions{display:flex;align-items:center;gap:10px;margin-top:10px}
@@ -1250,8 +1253,8 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-card-reviews .hm-card-title-icon svg,
 .hm-card-avail .hm-card-title-icon svg{stroke:var(--dim)}
 /* Separadores de filas */
-.hm-svc-row{border-bottom-color:#F0F0F0}
-.hm-svc-row:hover{background:#F7F7F7}
+.hm-svc-row{border-bottom-color:var(--border-inner)}
+.hm-svc-row:hover{background:rgba(0,0,0,.03)}
 .hm-svc-cot-row{border-top-color:#F0F0F0}
 .hm-avail-row{border-bottom-color:#F0F0F0}
 .hm-avail-row:hover{background:#F7F7F7}
