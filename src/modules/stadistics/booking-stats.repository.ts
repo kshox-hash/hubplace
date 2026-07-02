@@ -146,10 +146,12 @@ export type ReviewsStats = {
   average: number;
   total: number;
   recent: Array<{
+    id: number;
     rating: number;
     comment: string | null;
     client_name: string | null;
     created_at: string;
+    admin_reply: string | null;
   }>;
 };
 
@@ -162,7 +164,7 @@ export async function getReviewsStats(userId: string): Promise<ReviewsStats> {
       [userId]
     ),
     pool.query(
-      `SELECT rating, comment, client_name, created_at
+      `SELECT id, rating, comment, client_name, admin_reply, created_at
        FROM reviews WHERE user_id = $1
        ORDER BY created_at DESC LIMIT 2`,
       [userId]
@@ -173,9 +175,11 @@ export async function getReviewsStats(userId: string): Promise<ReviewsStats> {
     average: row.average ? Number(row.average) : 0,
     total:   Number(row.total),
     recent:  recentRes.rows.map((r) => ({
+      id:          Number(r.id),
       rating:      Number(r.rating),
       comment:     r.comment,
       client_name: r.client_name,
+      admin_reply: r.admin_reply ?? null,
       created_at:  String(r.created_at),
     })),
   };
