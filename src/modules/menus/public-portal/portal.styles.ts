@@ -13,7 +13,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 
 /* ── TOKENS ──────────────────────────────────────────────────────────── */
 :root{
-  --bg:#EAEAED;
+  --bg:#F5F0E8;
   --panel:#FFFFFF;
   --rail:#FFFFFF;
   --rail-icon:#AEAEBA;
@@ -419,14 +419,12 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 
 /* ── PROFILE SUMMARY ─────────────────────────────────────────────────────── */
 .hm-profile-summary{
-  padding:14px 16px 0;flex-shrink:0
-}
-.hm-profile-card{
-  background:#fff;border-radius:var(--r);
-  padding:14px 16px;display:flex;flex-direction:column;gap:10px
+  padding:16px 20px 14px;flex-shrink:0;
+  display:flex;flex-direction:column;gap:10px;
+  border-bottom:1px solid var(--border-inner)
 }
 .hm-profile-desc{
-  font-size:13px;color:var(--soft);line-height:1.55
+  font-size:13.5px;color:var(--soft);line-height:1.6
 }
 .hm-profile-hours{
   display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim);
@@ -435,11 +433,11 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-social-row{display:flex;gap:7px;flex-wrap:wrap}
 .hm-social-btn{
   display:inline-flex;align-items:center;gap:5px;
-  padding:5px 11px;border-radius:6px;font-size:11.5px;font-weight:600;
+  padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;
   text-decoration:none;white-space:nowrap;
-  color:var(--soft);background:#fff;transition:background .15s,color .15s
+  color:var(--soft);background:rgba(0,0,0,.06);transition:background .15s,color .15s
 }
-.hm-social-btn:hover{background:var(--panel)}
+.hm-social-btn:hover{background:rgba(0,0,0,.1)}
 .hm-social-wa{color:#15803D;background:rgba(22,163,74,.05)}
 .hm-social-ig{color:#be185d;background:rgba(219,39,119,.04)}
 .hm-social-ph{color:var(--primary);background:var(--primary-dim)}
