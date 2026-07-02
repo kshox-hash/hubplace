@@ -1510,7 +1510,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .gal-lb-wrap{position:relative;display:flex;flex-direction:column;flex:1;min-height:0}
 .gal-lb-close{position:absolute;top:12px;right:12px;z-index:10;width:34px;height:34px;background:rgba(0,0,0,.45);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;flex-shrink:0}
 .gal-lb-close svg{width:13px;height:13px;stroke:#fff;stroke-width:2.4;display:block}
-#galPanelBody .pdp-gallery{flex:1;min-height:0;aspect-ratio:unset;background:var(--bg)}
+#galPanelBody .pdp-gallery{flex:1;min-height:0;aspect-ratio:unset;background:#000}
 .gal-lb-desc{padding:14px 20px 22px;font-size:13.5px;color:var(--soft);line-height:1.6;flex-shrink:0;word-break:break-word;overflow-wrap:break-word}
 .sdp-hero{
   padding:20px 20px 16px;
