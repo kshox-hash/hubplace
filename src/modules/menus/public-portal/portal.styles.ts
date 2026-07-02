@@ -1509,7 +1509,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 #galPanelBody{display:flex;flex-direction:column}
 .gal-lb-wrap{display:flex;flex-direction:column;flex:1;min-height:0}
 #galPanelBody .pdp-gallery{flex:1;min-height:0;aspect-ratio:unset}
-.gal-lb-desc{padding:14px 20px 20px;font-size:13.5px;color:var(--soft);line-height:1.6;overflow-y:auto;max-height:120px}
+.gal-lb-desc{padding:13px 20px 14px;font-size:13.5px;color:var(--soft);line-height:1.6;flex-shrink:0;overflow-y:auto;max-height:110px;word-break:break-word;overflow-wrap:break-word;border-bottom:1px solid var(--border-inner)}
 .sdp-hero{
   padding:20px 20px 16px;
   border-bottom:1px solid var(--border-inner)

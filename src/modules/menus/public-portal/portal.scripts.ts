@@ -1718,7 +1718,9 @@ function openGalPanel(idx){
 function renderGalPanel(){
   var body=document.getElementById('galPanelBody');
   if(!body||!galItems.length) return;
-  var html='<div class="gal-lb-wrap"><div class="pdp-gallery" id="galLbScroll">';
+  var html='<div class="gal-lb-wrap">';
+  if(galFolderDesc) html+='<div class="gal-lb-desc">'+escH(galFolderDesc)+'</div>';
+  html+='<div class="pdp-gallery" id="galLbScroll">';
   galItems.forEach(function(item){
     html+='<img class="pdp-gallery-img" src="'+escH(item.getAttribute('data-gal-url')||'')+'" alt="" loading="lazy">';
   });
@@ -1728,7 +1730,6 @@ function renderGalPanel(){
     galItems.forEach(function(_,i){ html+='<span class="pdp-dot'+(i===galCurrentIdx?' act':'')+'"></span>'; });
     html+='</div>';
   }
-  if(galFolderDesc) html+='<div class="gal-lb-desc">'+escH(galFolderDesc)+'</div>';
   html+='</div>';
   body.innerHTML=html;
   var counter=document.getElementById('galPanelCounter');
