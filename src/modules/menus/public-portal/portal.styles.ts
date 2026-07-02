@@ -1198,6 +1198,8 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-section{border-top:1px solid var(--border-inner);padding-bottom:6px}
 .hm-section:first-child{border-top:none}
 .hm-section-cal{background:#E4E4EE}
+.hm-left-col>.hm-section:nth-child(odd){background:#F0F0F7}
+.hm-left-col>.hm-section:nth-child(even){background:#E4E4EE}
 .hm-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:26px 20px 16px}
 .hm-sec-title{font-size:14.5px;font-weight:700;color:var(--text);letter-spacing:-.02em}
 
