@@ -1712,13 +1712,13 @@ function renderGalPanel(){
   }
   var body=document.getElementById('galPanelBody');
   if(!body) return;
-  body.innerHTML='<div style="padding:16px 20px">'
-    +'<img src="'+escH(url)+'" alt="" style="width:100%;border-radius:12px;display:block;background:var(--bg)">'
-    +(desc?'<p style="margin:12px 0 0;font-size:14px;color:var(--soft);line-height:1.6">'+escH(desc)+'</p>':'')
-    +'<div style="display:flex;gap:8px;margin-top:16px">'
+  body.innerHTML='<div style="background:#000;display:flex;align-items:center;justify-content:center;min-height:260px;max-height:65vh;overflow:hidden">'
+    +'<img src="'+escH(url)+'" alt="" style="width:100%;height:100%;max-height:65vh;object-fit:contain;display:block">'
+    +'</div>'
+    +(desc?'<div style="padding:12px 20px 0"><p style="margin:0;font-size:14px;color:var(--soft);line-height:1.6">'+escH(desc)+'</p></div>':'')
+    +'<div style="display:flex;gap:8px;padding:16px 20px">'
     +(galCurrentIdx>0?'<button class="btn-outline" id="galPrev" type="button" style="flex:1">← Anterior</button>':'')
     +(galCurrentIdx<galItems.length-1?'<button class="btn-outline" id="galNext" type="button" style="flex:1">Siguiente →</button>':'')
-    +'</div>'
     +'</div>';
   var prev=document.getElementById('galPrev');
   var next=document.getElementById('galNext');
