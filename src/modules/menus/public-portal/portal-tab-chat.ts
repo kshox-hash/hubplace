@@ -197,9 +197,9 @@ export function chatTabHtml(d: ChatData): string {
             <a class="sec-link" href="${osmLink}" target="_blank" rel="noopener">Ver en mapa →</a>
           </div>
           <div style="padding:0 14px 14px">
-            ${hasCoords ? `<div style="border-radius:10px;overflow:hidden;height:190px;background:var(--bg)">
-              <iframe src="${osmEmbed}" width="100%" height="190" style="border:0;display:block" loading="lazy" title="Mapa de ubicación"></iframe>
-            </div>` : ''}
+            ${hasCoords ? `<a href="${osmLink}" target="_blank" rel="noopener" style="display:block;border-radius:10px;overflow:hidden;height:190px;background:var(--bg);text-decoration:none">
+              <iframe src="${osmEmbed}" width="100%" height="190" style="border:0;display:block;pointer-events:none" loading="lazy" title="Mapa de ubicación"></iframe>
+            </a>` : ''}
             <div style="margin-top:${hasCoords ? '8' : '0'}px;display:flex;gap:5px;align-items:flex-start;font-size:12.5px;color:var(--text-sub)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:13px;height:13px;flex-shrink:0;margin-top:1px"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
               <span>${d.locationLine}</span>
