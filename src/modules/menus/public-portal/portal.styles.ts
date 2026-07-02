@@ -13,13 +13,13 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 
 /* ── TOKENS ──────────────────────────────────────────────────────────── */
 :root{
-  --bg:#F5F0E8;
+  --bg:#EDEDF3;
   --panel:#FFFFFF;
   --rail:#FFFFFF;
   --rail-icon:#AEAEBA;
   --rail-icon-act:var(--primary);
-  --border:#D5CFC5;
-  --border-inner:#E2DBD0;
+  --border:#D4D4DC;
+  --border-inner:#E1E1EA;
   --text:#111116;
   --soft:#38383F;
   --dim:#78788C;
@@ -85,7 +85,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
   transform:translateY(6px)
 }
 .panel.active{opacity:1;pointer-events:auto;transform:translateY(0)}
-.pscroll{padding:24px 22px 40px}
+.pscroll{padding:0 0 40px}
 
 /* BOTTOM NAV — hidden, replaced by hamburger drawer */
 .bottom-nav{display:none}
@@ -389,7 +389,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 
 /* ── SHARED COMPONENTS ───────────────────────────────────────────────── */
 
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 14px;margin-bottom:0}
 .sec-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.04em}
 .sec-link{font-size:12px;font-weight:600;color:var(--primary);text-decoration:none;cursor:pointer;background:none;border:none;font-family:inherit;transition:opacity .15s}
 .sec-link:hover{opacity:.7}
@@ -460,12 +460,12 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .home-actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
 
 /* ── PRODUCT LIST ─────────────────────────────────────────────────────────── */
-.prd-search-wrap{position:relative;margin-bottom:14px;background:var(--panel);border-radius:12px;box-shadow:var(--shadow-s)}
+.prd-search-wrap{position:relative;margin:0 20px 14px;background:var(--panel);border-radius:12px;box-shadow:var(--shadow-s)}
 .prd-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--soft);pointer-events:none}
 .prd-search{width:100%;padding:10px 14px 10px 38px;border-radius:12px;border:none;outline:none;background:transparent;color:var(--text);font-size:14px;-webkit-appearance:none;appearance:none}
 .prd-search:focus{background:transparent}
 .prd-search::placeholder{color:var(--soft)}
-.prd-list{display:flex;flex-direction:column;gap:8px}
+.prd-list{display:flex;flex-direction:column;gap:0}
 .prd-card{
   display:flex;align-items:center;gap:12px;padding:13px 20px;
   border-bottom:1px solid var(--border-inner);
@@ -528,7 +528,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .prod-item-desc{font-size:11.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prod-item-code{display:inline-block;font-size:9.5px;font-weight:700;color:var(--soft);background:var(--bg);border-radius:5px;padding:1px 5px;margin-top:3px;letter-spacing:.04em}
 .prod-item-price{font-size:13px;font-weight:700;color:var(--primary);flex-shrink:0;white-space:nowrap;font-variant-numeric:tabular-nums}
-.prod-empty{text-align:center;color:var(--dim);padding:32px 16px;font-size:13.5px;line-height:1.6}
+.prod-empty{text-align:center;color:var(--dim);padding:32px 20px;font-size:13.5px;line-height:1.6}
 
 /* ── COTIZAR CTA CARD ────────────────────────────────────────────────── */
 .cot-card{
@@ -600,7 +600,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .rdash-mnav-btn:disabled{opacity:.25;cursor:default}
 
 /* Panel intro */
-.rsv-intro{margin-bottom:20px}
+.rsv-intro{padding:20px 20px 16px;margin-bottom:0;border-bottom:1px solid var(--border-inner)}
 .rsv-intro-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.04em;line-height:1.1;margin-bottom:5px}
 .rsv-intro-sub{font-size:13px;color:var(--dim);line-height:1.5}
 
@@ -613,7 +613,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
   margin-bottom:10px
 }
 /* Calendar — home-style colored square cells */
-.rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start;margin-bottom:22px}
+.rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start;padding:16px 20px 20px;margin-bottom:0;border-bottom:1px solid var(--border-inner)}
 .rdash-info-col{display:flex;flex-direction:column;gap:10px}
 @media(max-width:640px){
   .rdash-body{grid-template-columns:1fr}
@@ -671,7 +671,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 
 /* Stats column */
 .rdash-stats-col{
-  background:var(--bg);border-radius:14px;overflow:hidden;
+  background:rgba(0,0,0,.05);border-radius:14px;overflow:hidden;
   display:flex;flex-direction:column;
 }
 .rds-item{
@@ -721,7 +721,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 }
 
 /* Service grid — 4-col brick tiles */
-.rdash-sec-hdr{margin:0 0 10px}
+.rdash-sec-hdr{padding:16px 20px 10px;margin:0}
 .rdash-sec-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.04em}
 .rdash-sec-sub{font-size:11px;color:var(--dim);margin-top:2px}
 .svc-grid{display:flex;flex-direction:column}
@@ -1197,6 +1197,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-welcome-desk{display:none}
 .hm-section{border-top:1px solid var(--border-inner)}
 .hm-section:first-child{border-top:none}
+.hm-section-cal{background:#E4E4EE}
 .hm-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 14px}
 .hm-sec-title{font-size:14.5px;font-weight:700;color:var(--text);letter-spacing:-.02em}
 
@@ -1575,7 +1576,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-gal-card-name{padding:6px 8px 8px;font-size:11px;font-weight:600;color:var(--text);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
 /* ── GALLERY PROJECT CARDS (nosotros tab) ────────────────────────────── */
-.gal-proj-list{display:flex;flex-direction:row;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -16px;padding:0 16px 4px;margin-bottom:8px}
+.gal-proj-list{display:flex;flex-direction:row;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0;padding:0 20px 4px;margin-bottom:8px}
 .gal-proj-list::-webkit-scrollbar{display:none}
 .gal-proj-card{flex-shrink:0;width:min(220px,calc(100vw - 80px));scroll-snap-align:start;border-radius:16px;overflow:hidden;cursor:pointer;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
 .gal-proj-card:active{opacity:.82}

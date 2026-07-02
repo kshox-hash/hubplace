@@ -161,7 +161,7 @@ export function chatTabHtml(d: ChatData): string {
       <div class="hm-right-col">
 
         ${hasBooking ? `
-        <div class="hm-section">
+        <div class="hm-section hm-section-cal">
           <div class="hm-sec-hdr">
             <span class="hm-sec-title">Disponibilidad</span>
             <button class="sec-link" type="button" data-action="reservas">Reservar →</button>
