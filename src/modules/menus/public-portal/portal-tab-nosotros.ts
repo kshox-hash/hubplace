@@ -97,50 +97,58 @@ export function nosotrosTabHtml(
 
   return `<div id="panel-nosotros" class="panel">
   <div class="pscroll">
-    <div class="sec-hdr">
-      <div>
-        <div class="sec-title">Productos &amp; Servicios</div>
-        <div class="sec-sub">${hasProducts ? `${total} disponible${total !== 1 ? "s" : ""}` : "Sin productos aún"}</div>
+
+    <!-- Productos brick -->
+    <div class="tab-brick">
+      <div class="sec-hdr">
+        <div>
+          <div class="sec-title">Productos &amp; Servicios</div>
+          <div class="sec-sub">${hasProducts ? `${total} disponible${total !== 1 ? "s" : ""}` : "Sin productos aún"}</div>
+        </div>
       </div>
-    </div>
-    ${hasProducts ? `
-    <div class="prd-search-wrap">
-      <svg class="prd-search-icon" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.8"/><path d="M14 14l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      <input id="prd-search" class="prd-search" type="text" placeholder="Buscar servicio..." oninput="filterPrd(this.value)">
-    </div>
-    <div id="prd-list" class="prd-list">${products.map(p => buildProductCard(p)).join("")}</div>
-    <div id="prd-empty-search" class="prd-no-results" style="display:none">Sin resultados para tu búsqueda.</div>
-    ${hasMore ? `<div id="prdLoadMoreWrap" style="padding:16px;text-align:center"><button class="btn-outline" id="prdLoadMoreBtn" onclick="loadMorePrd()">Cargar más</button></div>` : ""}
-    ` : `<div class="prod-empty">Sin productos publicados aún.<br/><span style="font-size:12px">Agrega tus productos desde el panel de administración.</span></div>`}
-
-    <div class="sec-hdr" style="margin-top:28px">
-      <div>
-        <div class="sec-title">Galería de proyectos</div>
-        <div class="sec-sub">${hasAnyGallery ? `${totalPhotos} foto${totalPhotos !== 1 ? "s" : ""} · ${galleryFolders.length} proyecto${galleryFolders.length !== 1 ? "s" : ""}` : "Portafolio de trabajos"}</div>
+      ${hasProducts ? `
+      <div class="prd-search-wrap">
+        <svg class="prd-search-icon" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.8"/><path d="M14 14l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="prd-search" class="prd-search" type="text" placeholder="Buscar servicio..." oninput="filterPrd(this.value)">
       </div>
+      <div id="prd-list" class="prd-list">${products.map(p => buildProductCard(p)).join("")}</div>
+      <div id="prd-empty-search" class="prd-no-results" style="display:none">Sin resultados para tu búsqueda.</div>
+      ${hasMore ? `<div id="prdLoadMoreWrap" style="padding:16px;text-align:center"><button class="btn-outline" id="prdLoadMoreBtn" onclick="loadMorePrd()">Cargar más</button></div>` : ""}
+      ` : `<div class="prod-empty">Sin productos publicados aún.<br/><span style="font-size:12px">Agrega tus productos desde el panel de administración.</span></div>`}
     </div>
 
-    ${hasFolders ? `
-    <div class="gal-proj-list">
-      ${galleryFolders.map(f => buildFolderCard(f)).join("")}
-    </div>` : ""}
+    <!-- Galería brick -->
+    <div class="tab-brick">
+      <div class="sec-hdr">
+        <div>
+          <div class="sec-title">Galería de proyectos</div>
+          <div class="sec-sub">${hasAnyGallery ? `${totalPhotos} foto${totalPhotos !== 1 ? "s" : ""} · ${galleryFolders.length} proyecto${galleryFolders.length !== 1 ? "s" : ""}` : "Portafolio de trabajos"}</div>
+        </div>
+      </div>
 
-    ${hasOrphans ? `
-    <div class="sec-hdr" style="margin-top:20px">
-      <div class="sec-title" style="font-size:13px">Otras fotos</div>
-    </div>
-    <div class="gal-grid" id="orphan-grid">
-      ${orphanPhotos.map((p, i) => `<div class="gal-item" data-gal-idx="${i}" data-gal-url="${escapeHtml(p.url)}" data-gal-desc="${escapeHtml(p.description || "")}"><img src="${escapeHtml(p.url)}" alt="" loading="lazy"></div>`).join("")}
-    </div>
-    ${orphanTotal > orphanPhotos.length ? `<div id="orphanSentinel" data-slug="${escapeHtml(slug)}" data-total="${orphanTotal}" data-loaded="${orphanPhotos.length}" style="height:4px;margin-top:8px"></div>` : ""}
-    ` : ""}
+      ${hasFolders ? `
+      <div class="gal-proj-list">
+        ${galleryFolders.map(f => buildFolderCard(f)).join("")}
+      </div>` : ""}
 
-    ${!hasAnyGallery ? `
-    <div class="gal-empty">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-      <div class="gal-empty-title">Próximamente</div>
-      <div class="gal-empty-sub">Las fotos de los trabajos se mostrarán aquí</div>
-    </div>` : ""}
+      ${hasOrphans ? `
+      <div class="sec-hdr" style="padding-top:8px">
+        <div class="sec-title" style="font-size:13px">Otras fotos</div>
+      </div>
+      <div class="gal-grid" id="orphan-grid">
+        ${orphanPhotos.map((p, i) => `<div class="gal-item" data-gal-idx="${i}" data-gal-url="${escapeHtml(p.url)}" data-gal-desc="${escapeHtml(p.description || "")}"><img src="${escapeHtml(p.url)}" alt="" loading="lazy"></div>`).join("")}
+      </div>
+      ${orphanTotal > orphanPhotos.length ? `<div id="orphanSentinel" data-slug="${escapeHtml(slug)}" data-total="${orphanTotal}" data-loaded="${orphanPhotos.length}" style="height:4px;margin-top:8px"></div>` : ""}
+      ` : ""}
+
+      ${!hasAnyGallery ? `
+      <div class="gal-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <div class="gal-empty-title">Próximamente</div>
+        <div class="gal-empty-sub">Las fotos de los trabajos se mostrarán aquí</div>
+      </div>` : ""}
+    </div>
+
   </div>
 </div>
 `;

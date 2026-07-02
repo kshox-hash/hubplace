@@ -4,13 +4,13 @@ export function reservasTabHtml(): string {
     <div class="pscroll">
 
       <!-- Intro -->
-      <div class="rsv-intro">
+      <div class="tab-brick rsv-intro">
         <div class="rsv-intro-title">Reserva tu hora</div>
         <div class="rsv-intro-sub">Elige el servicio, selecciona el día disponible y confirma el horario que prefieras.</div>
       </div>
 
-      <!-- Calendar (card) + stats (separado) -->
-      <div class="rdash-body">
+      <!-- Calendar + stats -->
+      <div class="tab-brick rdash-body">
 
         <div class="rdash-cal-col">
           <div class="rdash-card-hdr">
@@ -50,15 +50,17 @@ export function reservasTabHtml(): string {
       </div>
 
       <!-- Services -->
-      <div class="rdash-sec-hdr">
-        <div>
-          <div class="rdash-sec-title">Servicios disponibles</div>
-          <div class="rdash-sec-sub">Selecciona el servicio que deseas reservar</div>
+      <div class="tab-brick">
+        <div class="rdash-sec-hdr">
+          <div>
+            <div class="rdash-sec-title">Servicios disponibles</div>
+            <div class="rdash-sec-sub">Selecciona el servicio que deseas reservar</div>
+          </div>
         </div>
-      </div>
-      <div class="svc-grid" id="svcGrid">
-        <div class="svc-empty" style="grid-column:1/-1">
-          <div class="spinner" style="margin:0 auto 10px"></div>Cargando servicios…
+        <div class="svc-grid" id="svcGrid">
+          <div class="svc-empty" style="grid-column:1/-1">
+            <div class="spinner" style="margin:0 auto 10px"></div>Cargando servicios…
+          </div>
         </div>
       </div>
 

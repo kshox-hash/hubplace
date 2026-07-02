@@ -86,6 +86,10 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 }
 .panel.active{opacity:1;pointer-events:auto;transform:translateY(0)}
 .pscroll{padding:0 0 40px}
+.tab-brick{border-top:1px solid var(--border-inner);padding-bottom:6px}
+.tab-brick:first-child{border-top:none}
+.pscroll>.tab-brick:nth-child(odd){background:#F0F0F7}
+.pscroll>.tab-brick:nth-child(even){background:#E4E4EE}
 
 /* BOTTOM NAV — hidden, replaced by hamburger drawer */
 .bottom-nav{display:none}
@@ -600,7 +604,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .rdash-mnav-btn:disabled{opacity:.25;cursor:default}
 
 /* Panel intro */
-.rsv-intro{padding:20px 20px 16px;margin-bottom:0;border-bottom:1px solid var(--border-inner)}
+.rsv-intro{padding:20px 20px 16px;margin-bottom:0}
 .rsv-intro-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.04em;line-height:1.1;margin-bottom:5px}
 .rsv-intro-sub{font-size:13px;color:var(--dim);line-height:1.5}
 
@@ -613,7 +617,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
   margin-bottom:10px
 }
 /* Calendar — home-style colored square cells */
-.rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start;padding:16px 20px 20px;margin-bottom:0;border-bottom:1px solid var(--border-inner)}
+.rdash-body{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start;padding:16px 20px 20px;margin-bottom:0}
 .rdash-info-col{display:flex;flex-direction:column;gap:10px}
 @media(max-width:640px){
   .rdash-body{grid-template-columns:1fr}
