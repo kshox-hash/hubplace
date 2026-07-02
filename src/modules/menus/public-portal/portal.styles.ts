@@ -419,7 +419,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 
 /* ── PROFILE SUMMARY ─────────────────────────────────────────────────────── */
 .hm-profile-summary{
-  padding:16px 20px 14px;flex-shrink:0;
+  padding:24px 20px 20px;flex-shrink:0;
   display:flex;flex-direction:column;gap:10px;
   border-bottom:1px solid var(--border-inner)
 }
@@ -1170,7 +1170,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 /* ── STATS ────────────────────────────────────────────────────────────── */
 .hm-stats{
   display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
-  padding:10px 16px 8px;flex-shrink:0
+  padding:16px 16px 18px;flex-shrink:0
 }
 .hm-stat{
   background:#fff;border-radius:var(--r);
@@ -1195,10 +1195,10 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-left-col{display:flex;flex-direction:column;gap:0}
 .hm-right-col{display:flex;flex-direction:column;gap:0;order:-1}
 .hm-welcome-desk{display:none}
-.hm-section{border-top:1px solid var(--border-inner)}
+.hm-section{border-top:1px solid var(--border-inner);padding-bottom:6px}
 .hm-section:first-child{border-top:none}
 .hm-section-cal{background:#E4E4EE}
-.hm-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 14px}
+.hm-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:26px 20px 16px}
 .hm-sec-title{font-size:14.5px;font-weight:700;color:var(--text);letter-spacing:-.02em}
 
 /* ── TITLE BLOCK ──────────────────────────────────────────────────────── */
@@ -1270,7 +1270,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-svc-list-home{overflow-y:auto}
 .hm-svc-row{
   display:flex;align-items:center;gap:11px;
-  padding:10px 22px;cursor:pointer;
+  padding:14px 22px;cursor:pointer;
   border-bottom:1px solid var(--border-inner);
   transition:background .12s;-webkit-tap-highlight-color:transparent
 }
@@ -1562,7 +1562,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .sdp-desc{font-size:13.5px;color:var(--soft);line-height:1.6;margin:0;padding-bottom:6px}
 
 /* ── GALLERY TEASER (home tab) ───────────────────────────────────────── */
-.hm-gallery-strip{display:flex;gap:8px;padding:14px 22px 18px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.hm-gallery-strip{display:flex;gap:8px;padding:12px 20px 22px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .hm-gallery-strip::-webkit-scrollbar{display:none}
 .hm-gal-card{
   flex-shrink:0;width:155px;border-radius:14px;overflow:hidden;
