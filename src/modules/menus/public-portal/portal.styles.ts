@@ -1158,7 +1158,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-stat-spark{flex-shrink:0;opacity:.85}
 
 /* ── LAYOUT ───────────────────────────────────────────────────────────── */
-.hm-panel{display:flex;flex-direction:column;overflow-y:auto;background:#fff;scrollbar-width:none}
+.hm-panel{display:flex;flex-direction:column;overflow-y:auto;background:var(--bg);scrollbar-width:none}
 .hm-panel::-webkit-scrollbar{display:none}
 .hm-main{display:flex;flex-direction:column;gap:20px;padding:24px 20px 40px}
 .hm-left-col{display:flex;flex-direction:column;gap:14px}
