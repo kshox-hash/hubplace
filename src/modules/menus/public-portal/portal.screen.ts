@@ -297,14 +297,6 @@ ${safeColor ? `:root{--primary:${safeColor};--primary-dim:${safeColor}12;--prima
 </div>
 
 <div class="slide-panel" id="galPanel">
-  <div class="sp-hdr">
-    <div style="display:flex;align-items:center;gap:8px;min-width:0">
-      <span class="sp-title" id="galPanelCounter"></span>
-    </div>
-    <button class="sp-close" id="closeGal" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
   <div class="sp-body" id="galPanelBody"></div>
 </div>
 
