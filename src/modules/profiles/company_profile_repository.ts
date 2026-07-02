@@ -25,8 +25,6 @@ const getByUserId = async (userId: string): Promise<CompanyProfile | null> => {
       whatsapp_number,
       business_hours,
       cover_image,
-      latitude,
-      longitude,
       created_at,
       updated_at
     FROM business_profiles
@@ -62,8 +60,6 @@ const getByPublicSlug = async (
       whatsapp_number,
       business_hours,
       cover_image,
-      latitude,
-      longitude,
       created_at,
       updated_at
     FROM business_profiles
@@ -134,8 +130,6 @@ const upsert = async (
       whatsapp_number,
       business_hours,
       cover_image,
-      latitude,
-      longitude,
       created_at,
       updated_at
   `;
@@ -173,18 +167,9 @@ const updateCoverImage = async (userId: string, url: string): Promise<void> => {
   );
 };
 
-const updateCoordinates = async (userId: string, lat: number, lon: number): Promise<void> => {
-  const pool = DB.getPool();
-  await pool.query(
-    `UPDATE business_profiles SET latitude = $1, longitude = $2, updated_at = NOW() WHERE user_id = $3`,
-    [lat, lon, userId],
-  );
-};
-
 export const companyProfileRepository = {
   getByUserId,
   getByPublicSlug,
   upsert,
   updateCoverImage,
-  updateCoordinates,
 };

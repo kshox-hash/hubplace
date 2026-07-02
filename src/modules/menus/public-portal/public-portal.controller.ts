@@ -152,8 +152,6 @@ export const publicPortalController = {
         whatsappNumber: profile?.whatsapp_number ?? null,
         businessHours:  profile?.business_hours  ?? null,
         coverImage:     profile?.cover_image     ?? null,
-        latitude:       profile?.latitude        ?? null,
-        longitude:      profile?.longitude       ?? null,
         enabledModules,
         products: products.map((p: any) => ({
           id:          String(p.id),

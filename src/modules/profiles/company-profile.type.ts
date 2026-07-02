@@ -15,8 +15,6 @@ export type CompanyProfile = {
   whatsapp_number: string | null;
   business_hours: string | null;
   cover_image: string | null;
-  latitude: number | null;
-  longitude: number | null;
   created_at: Date;
   updated_at: Date;
 };

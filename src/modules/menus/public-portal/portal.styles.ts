@@ -1192,7 +1192,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-panel::-webkit-scrollbar{display:none}
 .hm-main{display:flex;flex-direction:column;gap:20px;padding:24px 20px 40px}
 .hm-left-col{display:flex;flex-direction:column;gap:14px}
-.hm-right-col{display:flex;flex-direction:column;gap:14px}
+.hm-right-col{display:flex;flex-direction:column;gap:14px;order:-1}
 .hm-svc-rv-wrap{display:flex;flex-direction:column;gap:14px}
 .hm-welcome-desk{display:none}
 
@@ -1473,13 +1473,13 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-cal-inner .cal-hdr{flex-shrink:0;margin-bottom:6px!important}
 .hm-cal-inner .cal-grid{flex:1;min-height:0;align-content:stretch!important;grid-auto-rows:1fr!important}
 .hm-cal-inner .cal-cell{
-  aspect-ratio:unset!important;height:auto!important;min-height:28px;
-  font-size:12px!important;border-radius:9px!important
+  aspect-ratio:unset!important;height:auto!important;min-height:44px;
+  font-size:13px!important;border-radius:10px!important
 }
 .hm-cal-inner .cal-cell.cal-avail-good::after{content:none!important}
 .hm-cal-inner .cal-cell.cal-avail-few::after{content:none!important}
 .hm-cal-inner .cal-cell.cal-taken::after{content:none!important}
-.hm-cal-inner .cal-day-name{padding:2px 0 5px!important;font-size:8.5px!important}
+.hm-cal-inner .cal-day-name{padding:4px 0 7px!important;font-size:10px!important}
 .hm-cal-inner .cal-legend{display:none!important}
 
 /* ── DAY DETAIL PANEL ────────────────────────────────────────────────── */
@@ -1560,15 +1560,15 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-gallery-strip{display:flex;gap:8px;padding:14px 22px 18px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .hm-gallery-strip::-webkit-scrollbar{display:none}
 .hm-gal-card{
-  flex-shrink:0;width:96px;border-radius:12px;overflow:hidden;
+  flex-shrink:0;width:140px;border-radius:14px;overflow:hidden;
   background:var(--panel);border:none;cursor:pointer;
   text-align:left;padding:0;
   transition:transform .15s;-webkit-tap-highlight-color:transparent
 }
 .hm-gal-card:active{transform:scale(.96)}
-.hm-gal-card img,.hm-gal-card-empty{width:100%;height:68px;object-fit:cover;display:block}
+.hm-gal-card img,.hm-gal-card-empty{width:100%;height:110px;object-fit:cover;display:block}
 .hm-gal-card-empty{background:var(--bg)}
-.hm-gal-card-name{padding:5px 7px 7px;font-size:10.5px;font-weight:600;color:var(--text);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.hm-gal-card-name{padding:6px 8px 8px;font-size:11px;font-weight:600;color:var(--text);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
 /* ── GALLERY PROJECT CARDS (nosotros tab) ────────────────────────────── */
 .gal-proj-list{display:flex;flex-direction:row;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -16px;padding:0 16px 4px;margin-bottom:8px}
@@ -1615,7 +1615,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
   /* derecha 40%: calendario */
   .hm-right-col{
     flex:4;flex-shrink:0;display:flex;flex-direction:column;
-    gap:12px;overflow:hidden;min-height:0
+    gap:12px;overflow:hidden;min-height:0;order:0
   }
   .hm-card-cal{flex:1}
   .hm-card-cal .hm-cal-inner{overflow:visible}
