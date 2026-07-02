@@ -1721,7 +1721,6 @@ function renderGalPanel(){
   var closeSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
   var html='<div class="gal-lb-wrap">';
   html+='<button class="gal-lb-close" id="closeGal" type="button">'+closeSvg+'</button>';
-  if(galFolderDesc) html+='<div class="gal-lb-desc">'+escH(galFolderDesc)+'</div>';
   html+='<div class="pdp-gallery" id="galLbScroll">';
   galItems.forEach(function(item){
     html+='<img class="pdp-gallery-img" src="'+escH(item.getAttribute('data-gal-url')||'')+'" alt="" loading="lazy">';
@@ -1732,6 +1731,7 @@ function renderGalPanel(){
     galItems.forEach(function(_,i){ html+='<span class="pdp-dot'+(i===galCurrentIdx?' act':'')+'"></span>'; });
     html+='</div>';
   }
+  if(galFolderDesc) html+='<div class="gal-lb-desc">'+escH(galFolderDesc)+'</div>';
   html+='</div>';
   body.innerHTML=html;
   var counter=document.getElementById('galPanelCounter');
