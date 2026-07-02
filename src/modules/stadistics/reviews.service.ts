@@ -77,8 +77,8 @@ export class ReviewsService {
     };
   }
 
-  async toggleLike(reviewId: number, portalEmail: string) {
-    return this.repo.toggleLike(reviewId, portalEmail);
+  async toggleLike(reviewId: number, portalEmail: string, portalName?: string, portalAvatar?: string) {
+    return this.repo.toggleLike(reviewId, portalEmail, portalName, portalAvatar);
   }
 
   async setAdminReply(reviewId: number, reply: string, userId: string) {

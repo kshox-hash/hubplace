@@ -1905,6 +1905,24 @@ function updateProfileRating(data){
     +'<span class="pr-rating-count">('+total+' reseña'+(total!==1?'s':'')+')</span>';
 }
 
+function buildFacepile(likers,totalLikes){
+  if(!totalLikes) return '';
+  var shown=(likers||[]).slice(0,3);
+  var extra=totalLikes-shown.length;
+  var html='<div class="rv-av-stack">';
+  shown.forEach(function(l){
+    if(l&&l.avatar){
+      html+='<img class="rv-av" src="'+escH(l.avatar)+'" alt="'+escH(l.name||'')+'" loading="lazy" referrerpolicy="no-referrer">';
+    } else {
+      var init=l&&l.name?escH(l.name.charAt(0).toUpperCase()):'?';
+      html+='<div class="rv-av">'+init+'</div>';
+    }
+  });
+  if(extra>0) html+='<div class="rv-av rv-av-more">+'+extra+'</div>';
+  html+='</div>';
+  return html;
+}
+
 function buildRvCard(r){
   var stars='';
   for(var i=1;i<=5;i++) stars+='<span style="color:'+(i<=(r.rating||0)?'#FACC15':'var(--dim)')+'">★</span>';
@@ -1916,8 +1934,9 @@ function buildRvCard(r){
     :'';
   var likes=parseInt(r.likes_count||'0',10)||0;
   var liked=r.user_liked===true||r.user_liked==='true'||r.user_liked===1;
-  var heartSvg='<svg viewBox="0 0 24 24" width="14" height="14" '+(liked?'fill="var(--primary)" stroke="var(--primary)"':'fill="none" stroke="currentColor"')+' stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-  var likeBtn='<button class="rv-like-btn'+(liked?' liked':'')+'\" data-rv-id="'+r.id+'" type="button">'+heartSvg+'<span class="rv-like-count">'+likes+'</span></button>';
+  var heartSvg='<svg viewBox="0 0 24 24" width="15" height="15" '+(liked?'fill="var(--primary)" stroke="var(--primary)"':'fill="none" stroke="currentColor"')+' stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  var likeBtn='<button class="rv-like-btn'+(liked?' liked':'')+'\" data-rv-id="'+r.id+'" type="button">'+heartSvg+'</button>';
+  var facepile=buildFacepile(r.top_likers,likes);
   var adminReply=r.admin_reply
     ?'<div class="rv-reply"><span class="rv-reply-lbl">Respuesta del negocio</span><p class="rv-reply-text">'+escH(r.admin_reply)+'</p></div>'
     :'';
@@ -1933,7 +1952,7 @@ function buildRvCard(r){
     +'</div>'
     +(r.comment?'<div class="rv-comment">'+escH(r.comment)+'</div>':'')
     +adminReply
-    +'<div class="rv-actions">'+likeBtn+'</div>'
+    +'<div class="rv-actions"><div class="rv-like-wrap">'+likeBtn+facepile+'</div></div>'
     +'</div>';
 }
 
@@ -1941,20 +1960,26 @@ function toggleReviewLike(btn){
   var rvId=btn.getAttribute('data-rv-id');
   if(!rvId) return;
   btn.disabled=true;
-  fetch('/api/public/'+SLUG+'/reviews/'+rvId+'/like',{method:'POST'})
+  fetch('/api/public/'+SLUG+'/reviews/'+rvId+'/like',{method:'POST',credentials:'include'})
     .then(function(r){return r.json();})
     .then(function(d){
       if(!d.ok) return;
       var liked=d.liked;
       var likes=parseInt(d.likes||'0',10)||0;
       btn.classList.toggle('liked',liked);
-      var heartPath='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z';
-      var fill=liked?'var(--primary)':'none';
-      var stroke=liked?'var(--primary)':'currentColor';
       var svg=btn.querySelector('svg');
-      if(svg){svg.setAttribute('fill',fill);svg.setAttribute('stroke',stroke);}
-      var cnt=btn.querySelector('.rv-like-count');
-      if(cnt) cnt.textContent=String(likes);
+      if(svg){
+        svg.setAttribute('fill',liked?'var(--primary)':'none');
+        svg.setAttribute('stroke',liked?'var(--primary)':'currentColor');
+      }
+      var wrap=btn.closest('.rv-like-wrap');
+      if(wrap){
+        var old=wrap.querySelector('.rv-av-stack');
+        if(old) old.remove();
+        var tmp=document.createElement('div');
+        tmp.innerHTML=buildFacepile(d.likers||[],likes);
+        if(tmp.firstChild) wrap.appendChild(tmp.firstChild);
+      }
     })
     .catch(function(){})
     .finally(function(){ btn.disabled=false; });

@@ -159,11 +159,11 @@ export const statisticsController = {
 
   async likeReview(req: Request, res: Response): Promise<Response> {
     try {
-      const portalUser = (req as any).portalUser as { email?: string } | undefined;
+      const portalUser = (req as any).portalUser as { email?: string; name?: string; picture?: string } | undefined;
       if (!portalUser?.email) return res.status(401).json({ ok: false, message: "Sesión requerida" });
       const reviewId = parseInt(String(req.params["reviewId"]), 10);
       if (!reviewId) return res.status(400).json({ ok: false, message: "reviewId inválido" });
-      const result = await reviewsService.toggleLike(reviewId, portalUser.email);
+      const result = await reviewsService.toggleLike(reviewId, portalUser.email, portalUser.name, portalUser.picture);
       return res.json({ ok: true, ...result });
     } catch (error: any) {
       return res.status(500).json({ ok: false, message: error?.message || "Error interno" });

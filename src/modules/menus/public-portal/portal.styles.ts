@@ -846,10 +846,14 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .rv-reply-lbl{font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px}
 .rv-reply-text{font-size:13.5px;color:var(--soft);line-height:1.55;margin:0}
 .rv-actions{display:flex;align-items:center;gap:10px;margin-top:10px}
-.rv-like-btn{display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;padding:4px 0;color:var(--dim);font-size:12.5px;-webkit-tap-highlight-color:transparent;transition:color .15s}
+.rv-like-wrap{display:flex;align-items:center;gap:8px}
+.rv-like-btn{display:flex;align-items:center;background:none;border:none;cursor:pointer;padding:4px 2px;color:var(--dim);-webkit-tap-highlight-color:transparent;transition:color .15s}
 .rv-like-btn.liked{color:var(--primary)}
 .rv-like-btn svg{display:block;flex-shrink:0}
-.rv-like-count{font-size:12.5px;font-weight:600}
+.rv-av-stack{display:flex;align-items:center}
+.rv-av{width:22px;height:22px;border-radius:50%;border:2px solid #fff;margin-left:-7px;object-fit:cover;background:var(--primary);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.rv-av:first-child{margin-left:0}
+.rv-av-more{background:#e5e7eb;color:var(--soft);font-weight:600}
 .rv-load-more{display:block;width:100%;margin-top:14px;padding:11px;border-radius:10px;background:var(--bg);font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;text-align:center;transition:background .15s}
 .rv-load-more:hover{background:var(--bg)}
 .rv-load-more:disabled{opacity:.5;cursor:default}

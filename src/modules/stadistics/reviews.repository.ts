@@ -29,9 +29,16 @@ export async function initReviewsGoogleColumns(): Promise<void> {
       id           SERIAL PRIMARY KEY,
       review_id    INTEGER     NOT NULL REFERENCES reviews(id) ON DELETE CASCADE,
       portal_email TEXT        NOT NULL,
+      portal_name  TEXT,
+      portal_avatar TEXT,
       created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       UNIQUE(review_id, portal_email)
     )
+  `);
+  await pool.query(`
+    ALTER TABLE review_likes
+      ADD COLUMN IF NOT EXISTS portal_name   TEXT,
+      ADD COLUMN IF NOT EXISTS portal_avatar TEXT
   `);
 }
 
@@ -149,7 +156,10 @@ export class ReviewsRepository {
                 r.google_name, r.google_email, r.google_avatar_url,
                 r.admin_reply, r.admin_replied_at, r.created_at,
                 COUNT(rl.id)::int AS likes_count,
-                ${portalEmail ? `MAX(CASE WHEN rl2.portal_email = $4 THEN 1 ELSE 0 END)::boolean AS user_liked` : `false AS user_liked`}
+                ${portalEmail ? `MAX(CASE WHEN rl2.portal_email = $4 THEN 1 ELSE 0 END)::boolean AS user_liked` : `false AS user_liked`},
+                (SELECT COALESCE(json_agg(json_build_object('avatar',lk.portal_avatar,'name',lk.portal_name) ORDER BY lk.created_at ASC),'[]'::json)
+                 FROM (SELECT portal_avatar,portal_name,created_at FROM review_likes WHERE review_id=r.id ORDER BY created_at ASC LIMIT 3) lk
+                ) AS top_likers
          FROM reviews r
          LEFT JOIN review_likes rl ON rl.review_id = r.id
          ${portalEmail ? `LEFT JOIN review_likes rl2 ON rl2.review_id = r.id AND rl2.portal_email = $4` : ''}
@@ -170,7 +180,12 @@ export class ReviewsRepository {
     };
   }
 
-  async toggleLike(reviewId: number, portalEmail: string): Promise<{ liked: boolean; likes: number }> {
+  async toggleLike(
+    reviewId: number,
+    portalEmail: string,
+    portalName?: string,
+    portalAvatar?: string,
+  ): Promise<{ liked: boolean; likes: number; likers: Array<{ avatar: string | null; name: string | null }> }> {
     const existing = await this.pool.query(
       `SELECT id FROM review_likes WHERE review_id = $1 AND portal_email = $2`,
       [reviewId, portalEmail]
@@ -178,10 +193,19 @@ export class ReviewsRepository {
     if (existing.rows.length > 0) {
       await this.pool.query(`DELETE FROM review_likes WHERE review_id = $1 AND portal_email = $2`, [reviewId, portalEmail]);
     } else {
-      await this.pool.query(`INSERT INTO review_likes (review_id, portal_email) VALUES ($1, $2)`, [reviewId, portalEmail]);
+      await this.pool.query(
+        `INSERT INTO review_likes (review_id, portal_email, portal_name, portal_avatar) VALUES ($1, $2, $3, $4)`,
+        [reviewId, portalEmail, portalName ?? null, portalAvatar ?? null]
+      );
     }
-    const countRes = await this.pool.query(`SELECT COUNT(*)::int AS cnt FROM review_likes WHERE review_id = $1`, [reviewId]);
-    return { liked: existing.rows.length === 0, likes: countRes.rows[0].cnt };
+    const [countRes, likersRes] = await Promise.all([
+      this.pool.query(`SELECT COUNT(*)::int AS cnt FROM review_likes WHERE review_id = $1`, [reviewId]),
+      this.pool.query(
+        `SELECT portal_avatar AS avatar, portal_name AS name FROM review_likes WHERE review_id = $1 ORDER BY created_at ASC LIMIT 3`,
+        [reviewId]
+      ),
+    ]);
+    return { liked: existing.rows.length === 0, likes: countRes.rows[0].cnt, likers: likersRes.rows };
   }
 
   async setAdminReply(reviewId: number, reply: string, userId: string): Promise<void> {
