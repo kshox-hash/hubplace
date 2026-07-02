@@ -64,20 +64,17 @@ function buildFolderCard(folder: GalleryFolder): string {
   ).join("");
 
   const cameraIco = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="7" width="20" height="15" rx="2"/><circle cx="12" cy="14" r="3"/><path d="M16 7l-1.5-3h-5L8 7"/></svg>`;
-  const arrowIco  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>`;
 
-  return `<div class="gal-proj-card" data-folder-id="${fid}">
-  ${cover
-    ? `<div class="gal-proj-cover"><img src="${cover}" alt="" loading="lazy"></div>`
-    : `<div class="gal-proj-cover gal-proj-cover-empty">${cameraIco}</div>`}
-  <div class="gal-proj-foot">
-    <div class="gal-proj-info">
+  const overlayHtml = `<div class="gal-proj-overlay">
       <div class="gal-proj-name">${name}</div>
       ${desc ? `<div class="gal-proj-desc">${desc}</div>` : ""}
       <div class="gal-proj-sub">${count} foto${count !== 1 ? "s" : ""}</div>
-    </div>
-    ${count > 0 ? `<div class="gal-proj-arr">${arrowIco}</div>` : ""}
-  </div>
+    </div>`;
+
+  return `<div class="gal-proj-card" data-folder-id="${fid}">
+  ${cover
+    ? `<div class="gal-proj-cover"><img src="${cover}" alt="" loading="lazy">${overlayHtml}</div>`
+    : `<div class="gal-proj-cover gal-proj-cover-empty">${cameraIco}${overlayHtml}</div>`}
   <div id="folder-body-${fid}" data-folder-name="${name}" style="display:none">${photosData}</div>
 </div>`;
 }

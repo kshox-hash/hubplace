@@ -1539,18 +1539,16 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 /* ── GALLERY PROJECT CARDS (nosotros tab) ────────────────────────────── */
 .gal-proj-list{display:flex;flex-direction:row;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -16px;padding:0 16px 4px;margin-bottom:8px}
 .gal-proj-list::-webkit-scrollbar{display:none}
-.gal-proj-card{flex-shrink:0;width:min(220px,calc(100vw - 80px));scroll-snap-align:start;border-radius:16px;overflow:hidden;background:var(--panel);cursor:pointer;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
+.gal-proj-card{flex-shrink:0;width:min(220px,calc(100vw - 80px));scroll-snap-align:start;border-radius:16px;overflow:hidden;cursor:pointer;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
 .gal-proj-card:active{opacity:.82}
-.gal-proj-cover{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--bg)}
+.gal-proj-cover{width:100%;aspect-ratio:4/3;position:relative;overflow:hidden;background:#1a1a1a}
 .gal-proj-cover img{width:100%;height:100%;object-fit:cover;display:block}
-.gal-proj-cover-empty{display:flex;align-items:center;justify-content:center;color:var(--dim)}
-.gal-proj-cover-empty svg{width:28px;height:28px;opacity:.4}
-.gal-proj-foot{display:flex;align-items:center;gap:12px;padding:12px 16px}
-.gal-proj-info{flex:1;min-width:0}
-.gal-proj-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.02em}
-.gal-proj-desc{font-size:11.5px;color:var(--soft);margin-top:3px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.gal-proj-sub{font-size:11px;color:var(--dim);margin-top:3px}
-.gal-proj-arr svg{width:16px;height:16px;stroke:var(--dim)}
+.gal-proj-cover-empty{display:flex;align-items:center;justify-content:center}
+.gal-proj-cover-empty svg{width:28px;height:28px;opacity:.35;color:#fff}
+.gal-proj-overlay{position:absolute;bottom:0;left:0;right:0;padding:28px 12px 11px;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,0) 100%)}
+.gal-proj-name{font-size:13.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.02em}
+.gal-proj-desc{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.gal-proj-sub{font-size:10.5px;color:rgba(255,255,255,.55);margin-top:2px}
 
 /* keepcompat */
 .hm-card-foot{padding:0 16px 14px;flex-shrink:0}
