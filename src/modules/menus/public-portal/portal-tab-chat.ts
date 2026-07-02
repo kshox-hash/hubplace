@@ -93,62 +93,48 @@ export function chatTabHtml(d: ChatData): string {
     <!-- MAIN -->
     <div class="hm-main">
 
-      <!-- COLUMNA IZQUIERDA — servicios (angosta) -->
+      <!-- COLUMNA IZQUIERDA -->
       <div class="hm-left-col">
 
-        <!-- Servicios recientes + Opiniones 60/40 -->
-        <div class="hm-svc-rv-wrap">
-
-          <div class="hm-card hm-card-svc">
-            <div class="hm-card-hdr">
-              <div class="hm-card-title-row">
-                <span class="hm-card-title-icon" style="color:#7C3AED">${S_SVC}</span>
-                <span class="hm-card-title">Servicios recientes</span>
-              </div>
-              <button class="sec-link" type="button" data-action="reservas">Ver todos →</button>
-            </div>
-            <div id="homeServiceGrid" class="hm-svc-list-home">
-              <div class="inbox-empty" style="padding:16px;text-align:center">
-                <div class="spinner" style="margin:0 auto 8px"></div>Cargando…
-              </div>
+        <div class="hm-section">
+          <div class="hm-sec-hdr">
+            <span class="hm-sec-title">Servicios</span>
+            <button class="sec-link" type="button" data-action="reservas">Ver todos →</button>
+          </div>
+          <div id="homeServiceGrid" class="hm-svc-list-home">
+            <div class="inbox-empty" style="padding:16px;text-align:center">
+              <div class="spinner" style="margin:0 auto 8px"></div>Cargando…
             </div>
           </div>
+        </div>
 
-          <div class="hm-card hm-card-reviews">
-            <div class="hm-card-hdr">
-              <div class="hm-card-title-row">
-                <span class="hm-card-title-icon" style="color:#FACC15">${S_STAR}</span>
-                <span class="hm-card-title">Opiniones</span>
-              </div>
-              <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
+        <div class="hm-section">
+          <div class="hm-sec-hdr">
+            <span class="hm-sec-title">Opiniones</span>
+            <button class="sec-link" type="button" data-action="resenas">Ver todas →</button>
+          </div>
+          <div class="hm-reviews-panel" id="hmReviewsPanel">
+            <div class="hm-reviews-left">
+              <div class="hm-reviews-avg" id="hmStatRatingBig">—</div>
+              <div class="hm-reviews-stars" style="color:#FACC15">★★★★★</div>
+              <div class="hm-reviews-count">(<span id="hmStatReviewsBig">0</span> reseñas)</div>
             </div>
-            <div class="hm-reviews-panel" id="hmReviewsPanel">
-              <div class="hm-reviews-left">
-                <div class="hm-reviews-avg" id="hmStatRatingBig">—</div>
-                <div class="hm-reviews-stars" style="color:#FACC15">★★★★★</div>
-                <div class="hm-reviews-count">(<span id="hmStatReviewsBig">0</span> reseñas)</div>
-              </div>
-              <div class="hm-reviews-chat-icon" style="color:#3B76ED">${S_CHAT}</div>
-              <div class="hm-reviews-bars" id="hmReviewBars">
-                ${[5,4,3,2,1].map(s=>`
-                <div class="rv-bar-row">
-                  <span class="rv-bar-star">${s}★</span>
-                  <div class="rv-bar-track"><div class="rv-bar-fill" style="width:0%"></div></div>
-                  <span class="rv-bar-count">0</span>
-                </div>`).join("")}
-              </div>
+            <div class="hm-reviews-chat-icon" style="color:#3B76ED">${S_CHAT}</div>
+            <div class="hm-reviews-bars" id="hmReviewBars">
+              ${[5,4,3,2,1].map(s=>`
+              <div class="rv-bar-row">
+                <span class="rv-bar-star">${s}★</span>
+                <div class="rv-bar-track"><div class="rv-bar-fill" style="width:0%"></div></div>
+                <span class="rv-bar-count">0</span>
+              </div>`).join("")}
             </div>
           </div>
-
-        </div><!-- /hm-svc-rv-wrap -->
+        </div>
 
         ${d.galleryFolders && d.galleryFolders.length > 0 ? `
-        <div class="hm-card">
-          <div class="hm-card-hdr">
-            <div class="hm-card-title-row">
-              <span class="hm-card-title-icon" style="color:#0EA5E9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
-              <span class="hm-card-title">Proyectos</span>
-            </div>
+        <div class="hm-section">
+          <div class="hm-sec-hdr">
+            <span class="hm-sec-title">Proyectos</span>
             <button class="sec-link" type="button" data-action="nosotros">Ver galería →</button>
           </div>
           <div class="hm-gallery-strip">
@@ -161,33 +147,25 @@ export function chatTabHtml(d: ChatData): string {
         </div>` : ""}
 
         ${d.orphanPhotos && d.orphanPhotos.length > 0 ? `
-        <div class="hm-card">
-          <div class="hm-card-hdr">
-            <div class="hm-card-title-row">
-              <span class="hm-card-title-icon" style="color:#0EA5E9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
-              <span class="hm-card-title">Fotos</span>
-            </div>
+        <div class="hm-section">
+          <div class="hm-sec-hdr">
+            <span class="hm-sec-title">Fotos</span>
             <button class="sec-link" type="button" data-action="nosotros">Ver galería →</button>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 14px 14px">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 20px 20px">
             ${d.orphanPhotos.slice(0, 6).map(p => `<button type="button" data-action="nosotros" style="aspect-ratio:1;overflow:hidden;border:none;padding:0;cursor:pointer;background:var(--bg);border-radius:10px"><img src="${escapeHtml(p.url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></button>`).join("")}
           </div>
         </div>` : ""}
 
-
       </div>
 
-      <!-- COLUMNA DERECHA — calendario (ancha, llena altura) -->
+      <!-- COLUMNA DERECHA — calendario -->
       <div class="hm-right-col">
 
-        <!-- Calendario -->
         ${hasBooking ? `
-        <div class="hm-card hm-card-cal">
-          <div class="hm-card-hdr">
-            <div class="hm-card-title-row">
-              <span class="hm-card-title-icon" style="color:var(--primary)">${S_CAL}</span>
-              <span class="hm-card-title">Disponibilidad</span>
-            </div>
+        <div class="hm-section">
+          <div class="hm-sec-hdr">
+            <span class="hm-sec-title">Disponibilidad</span>
             <button class="sec-link" type="button" data-action="reservas">Reservar →</button>
           </div>
           <div class="cal-widget hm-cal-inner" id="calHome">

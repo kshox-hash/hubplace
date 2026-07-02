@@ -1190,11 +1190,14 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 /* ── LAYOUT ───────────────────────────────────────────────────────────── */
 .hm-panel{display:flex;flex-direction:column;overflow-y:auto;background:var(--bg);scrollbar-width:none}
 .hm-panel::-webkit-scrollbar{display:none}
-.hm-main{display:flex;flex-direction:column;gap:20px;padding:24px 20px 40px}
-.hm-left-col{display:flex;flex-direction:column;gap:14px}
-.hm-right-col{display:flex;flex-direction:column;gap:14px;order:-1}
-.hm-svc-rv-wrap{display:flex;flex-direction:column;gap:14px}
+.hm-main{display:flex;flex-direction:column;gap:0;padding:0 0 40px}
+.hm-left-col{display:flex;flex-direction:column;gap:0}
+.hm-right-col{display:flex;flex-direction:column;gap:0;order:-1}
 .hm-welcome-desk{display:none}
+.hm-section{border-top:1px solid var(--border-inner)}
+.hm-section:first-child{border-top:none}
+.hm-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 14px}
+.hm-sec-title{font-size:14.5px;font-weight:700;color:var(--text);letter-spacing:-.02em}
 
 /* ── TITLE BLOCK ──────────────────────────────────────────────────────── */
 .hm-title-block{
@@ -1560,13 +1563,13 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .hm-gallery-strip{display:flex;gap:8px;padding:14px 22px 18px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .hm-gallery-strip::-webkit-scrollbar{display:none}
 .hm-gal-card{
-  flex-shrink:0;width:140px;border-radius:14px;overflow:hidden;
+  flex-shrink:0;width:155px;border-radius:14px;overflow:hidden;
   background:var(--panel);border:none;cursor:pointer;
   text-align:left;padding:0;
   transition:transform .15s;-webkit-tap-highlight-color:transparent
 }
 .hm-gal-card:active{transform:scale(.96)}
-.hm-gal-card img,.hm-gal-card-empty{width:100%;height:110px;object-fit:cover;display:block}
+.hm-gal-card img,.hm-gal-card-empty{width:100%;height:220px;object-fit:cover;display:block}
 .hm-gal-card-empty{background:var(--bg)}
 .hm-gal-card-name{padding:6px 8px 8px;font-size:11px;font-weight:600;color:var(--text);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
@@ -1607,16 +1610,17 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
     padding:14px 28px 24px 28px;
     gap:16px;overflow:hidden;min-height:0
   }
-  /* izquierda 60%: título + servicios/opiniones + cta */
   .hm-left-col{
     flex:6;display:flex;flex-direction:column;
-    gap:12px;overflow-y:auto;min-height:0
+    gap:0;overflow-y:auto;min-height:0
   }
-  /* derecha 40%: calendario */
   .hm-right-col{
     flex:4;flex-shrink:0;display:flex;flex-direction:column;
-    gap:12px;overflow:hidden;min-height:0;order:0
+    gap:0;overflow:hidden;min-height:0;order:0
   }
+  .hm-section{border-top:1px solid var(--border-inner)}
+  .hm-section:first-child{border-top:none}
+  .hm-sec-hdr{padding:16px 4px 12px}
   .hm-card-cal{flex:1}
   .hm-card-cal .hm-cal-inner{overflow:visible}
   /* wrapper servicios + opiniones — apilados verticalmente con ancho completo */
