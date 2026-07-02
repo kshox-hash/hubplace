@@ -130,7 +130,7 @@ export function chatTabHtml(d: ChatData): string {
         </div>
 
         ${d.galleryFolders && d.galleryFolders.length > 0 ? `
-        <div class="hm-section">
+        <div class="hm-section hm-section-cal">
           <div class="hm-sec-hdr">
             <span class="hm-sec-title">Proyectos</span>
             <button class="sec-link" type="button" data-action="nosotros">Ver galería →</button>
