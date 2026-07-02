@@ -1593,5 +1593,18 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
   .gal-proj-card{width:100%}
   .gal-grid{grid-template-columns:repeat(4,1fr)}
 }
+
+/* ── PORTAL FOOTER ───────────────────────────────────────────────────── */
+.hm-footer{
+  margin-top:4px;padding:22px 22px 36px;
+  border-top:1px solid var(--border-inner);
+  display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center
+}
+.hm-footer-contact{display:flex;flex-wrap:wrap;justify-content:center;gap:5px 16px}
+.hm-footer-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--dim);text-decoration:none}
+.hm-footer-item svg{width:11px;height:11px;flex-shrink:0;stroke:var(--dim)}
+.hm-footer-brand{font-size:11.5px;color:var(--dim);margin-top:2px}
+.hm-footer-brand b{color:var(--soft);font-weight:700}
+.hm-footer-copy{font-size:10.5px;color:var(--dim);opacity:.55}
 `;
 }
