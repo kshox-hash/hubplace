@@ -1712,8 +1712,8 @@ function renderGalPanel(){
   }
   var body=document.getElementById('galPanelBody');
   if(!body) return;
-  body.innerHTML='<div style="background:#000;display:flex;align-items:center;justify-content:center;min-height:260px;max-height:65vh;overflow:hidden">'
-    +'<img src="'+escH(url)+'" alt="" style="width:100%;height:100%;max-height:65vh;object-fit:contain;display:block">'
+  body.innerHTML='<div style="background:#000;width:100%;aspect-ratio:4/3;overflow:hidden">'
+    +'<img src="'+escH(url)+'" alt="" style="width:100%;height:100%;object-fit:contain;display:block">'
     +'</div>'
     +(desc?'<div style="padding:12px 20px 0"><p style="margin:0;font-size:14px;color:var(--soft);line-height:1.6">'+escH(desc)+'</p></div>':'')
     +'<div style="display:flex;gap:8px;padding:16px 20px">'
