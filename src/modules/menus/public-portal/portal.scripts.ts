@@ -84,6 +84,7 @@ function openGalleryFolder(fid){
     return;
   }
   galPanelTitle=fbody.getAttribute('data-folder-name')||'';
+  galFolderDesc=fbody.getAttribute('data-folder-desc')||'';
   galItems=fitems;
   galCurrentIdx=0;
   renderGalPanel();
@@ -585,6 +586,7 @@ document.addEventListener('click',function(e){
       return;
     }
     galPanelTitle=fbody.getAttribute('data-folder-name')||'';
+    galFolderDesc=fbody.getAttribute('data-folder-desc')||'';
     galItems=fitems;
     galCurrentIdx=0;
     renderGalPanel();
@@ -1701,12 +1703,14 @@ function renderQPSuccess(name){
 var galItems=[];
 var galCurrentIdx=0;
 var galPanelTitle='';
+var galFolderDesc='';
 
 function openGalPanel(idx){
   var items=document.querySelectorAll('.gal-item');
   galItems=Array.from(items);
   galCurrentIdx=idx;
   galPanelTitle='';
+  galFolderDesc='';
   renderGalPanel();
   openPanel('galPanel');
 }
@@ -1724,8 +1728,7 @@ function renderGalPanel(){
     galItems.forEach(function(_,i){ html+='<span class="pdp-dot'+(i===galCurrentIdx?' act':'')+'"></span>'; });
     html+='</div>';
   }
-  var firstDesc=galItems[galCurrentIdx]?galItems[galCurrentIdx].getAttribute('data-gal-desc')||'':'';
-  html+='<div class="gal-lb-desc" id="galLbDesc">'+escH(firstDesc)+'</div>';
+  if(galFolderDesc) html+='<div class="gal-lb-desc">'+escH(galFolderDesc)+'</div>';
   html+='</div>';
   body.innerHTML=html;
   var counter=document.getElementById('galPanelCounter');
@@ -1735,17 +1738,12 @@ function renderGalPanel(){
   if(scroll){
     setTimeout(function(){ scroll.scrollLeft=galCurrentIdx*scroll.offsetWidth; },0);
     var dots=Array.from(body.querySelectorAll('.pdp-dot'));
-    var descEl=document.getElementById('galLbDesc');
     scroll.addEventListener('scroll',function(){
       var idx=Math.round(scroll.scrollLeft/scroll.offsetWidth);
       if(idx===galCurrentIdx) return;
       galCurrentIdx=idx;
       if(counter) counter.textContent=prefix+(idx+1)+' / '+galItems.length;
       dots.forEach(function(d,i){ d.classList.toggle('act',i===idx); });
-      if(descEl){
-        var desc=galItems[idx]?galItems[idx].getAttribute('data-gal-desc')||'':'';
-        descEl.textContent=desc;
-      }
     },{passive:true});
   }
 }

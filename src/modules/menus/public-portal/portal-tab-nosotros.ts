@@ -75,7 +75,7 @@ function buildFolderCard(folder: GalleryFolder): string {
   ${cover
     ? `<div class="gal-proj-cover"><img src="${cover}" alt="" loading="lazy">${overlayHtml}</div>`
     : `<div class="gal-proj-cover gal-proj-cover-empty">${cameraIco}${overlayHtml}</div>`}
-  <div id="folder-body-${fid}" data-folder-name="${name}" style="display:none">${photosData}</div>
+  <div id="folder-body-${fid}" data-folder-name="${name}" data-folder-desc="${desc || ''}" style="display:none">${photosData}</div>
 </div>`;
 }
 

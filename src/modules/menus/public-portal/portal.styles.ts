@@ -1509,7 +1509,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 #galPanelBody{display:flex;flex-direction:column}
 .gal-lb-wrap{display:flex;flex-direction:column;flex:1;min-height:0}
 #galPanelBody .pdp-gallery{flex:1;min-height:0;aspect-ratio:unset}
-.gal-lb-desc{padding:14px 20px 10px;font-size:13.5px;color:var(--soft);line-height:1.5;text-align:center;min-height:20px}
+.gal-lb-desc{padding:14px 20px 20px;font-size:13.5px;color:var(--soft);line-height:1.6;overflow-y:auto;max-height:120px}
 .sdp-hero{
   padding:20px 20px 16px;
   border-bottom:1px solid var(--border-inner)
@@ -1545,10 +1545,10 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .gal-proj-cover img{width:100%;height:100%;object-fit:cover;display:block}
 .gal-proj-cover-empty{display:flex;align-items:center;justify-content:center}
 .gal-proj-cover-empty svg{width:28px;height:28px;opacity:.35;color:#fff}
-.gal-proj-overlay{position:absolute;bottom:0;left:0;right:0;padding:28px 12px 11px;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,0) 100%)}
-.gal-proj-name{font-size:13.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.02em}
-.gal-proj-desc{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.gal-proj-sub{font-size:10.5px;color:rgba(255,255,255,.55);margin-top:2px}
+.gal-proj-overlay{position:absolute;bottom:0;left:0;right:0;padding:36px 12px 11px;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.1) 80%,rgba(0,0,0,0) 100%)}
+.gal-proj-name{font-size:13.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.02em;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.gal-proj-desc{font-size:11px;color:rgba(255,255,255,.82);margin-top:2px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.gal-proj-sub{font-size:10.5px;color:rgba(255,255,255,.6);margin-top:2px}
 
 /* keepcompat */
 .hm-card-foot{padding:0 16px 14px;flex-shrink:0}
