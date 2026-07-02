@@ -73,7 +73,8 @@ function buildFolderCard(folder: GalleryFolder): string {
   <div class="gal-proj-foot">
     <div class="gal-proj-info">
       <div class="gal-proj-name">${name}</div>
-      <div class="gal-proj-sub">${desc ? `${desc} · ` : ""}${count} foto${count !== 1 ? "s" : ""}</div>
+      ${desc ? `<div class="gal-proj-desc">${desc}</div>` : ""}
+      <div class="gal-proj-sub">${count} foto${count !== 1 ? "s" : ""}</div>
     </div>
     ${count > 0 ? `<div class="gal-proj-arr">${arrowIco}</div>` : ""}
   </div>

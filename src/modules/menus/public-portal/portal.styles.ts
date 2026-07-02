@@ -78,7 +78,8 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .portal-main{display:contents}
 .panel{
   position:absolute;inset:0;overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:none;
+  background:var(--bg);
   opacity:0;pointer-events:none;
   transition:opacity .22s cubic-bezier(.4,0,.2,1),transform .22s cubic-bezier(.4,0,.2,1);
   transform:translateY(6px)
@@ -477,7 +478,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .prd-thumb-dot{display:flex;align-items:center;justify-content:center;opacity:.85}
 .prd-info{flex:1;min-width:0}
 .prd-name{font-size:14px;font-weight:600;color:var(--text);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prd-desc{font-size:12px;color:var(--soft);margin-top:2px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.prd-desc{font-size:12px;color:var(--soft);margin-top:2px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .prd-price{font-size:14px;font-weight:700;color:var(--primary);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums}
 .prd-no-results{text-align:center;color:var(--dim);padding:24px 16px;font-size:13px}
 
@@ -774,7 +775,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 }
 .sp-close:hover{background:var(--bg)}
 .sp-close svg{width:14px;height:14px;stroke:var(--soft);stroke-width:2.2}
-.sp-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.sp-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:none}
 .booking-iframe-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column}
 .booking-iframe-wrap iframe{flex:1;border:none;width:100%;height:100%;background:var(--bg)}
 
@@ -1543,7 +1544,8 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .gal-proj-foot{display:flex;align-items:center;gap:12px;padding:12px 16px}
 .gal-proj-info{flex:1;min-width:0}
 .gal-proj-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.02em}
-.gal-proj-sub{font-size:11.5px;color:var(--dim);margin-top:3px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gal-proj-desc{font-size:11.5px;color:var(--soft);margin-top:3px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.gal-proj-sub{font-size:11px;color:var(--dim);margin-top:3px}
 .gal-proj-arr svg{width:16px;height:16px;stroke:var(--dim)}
 
 /* keepcompat */
