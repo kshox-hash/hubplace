@@ -718,11 +718,14 @@ function openSvcDetailPanel(svc,color){
   // Galería de fotos si existen
   var photos=Array.isArray(svc.photos)&&svc.photos.length>0?svc.photos:[];
   var photosHtml='';
-  if(photos.length>0){
-    photosHtml='<div class="sdp-photos">';
-    photos.forEach(function(url){
-      photosHtml+='<img class="sdp-photo" src="'+escH(url)+'" alt="" loading="lazy">';
-    });
+  if(photos.length===1){
+    photosHtml='<div class="pdp-photo-single"><img src="'+escH(photos[0])+'" alt="" loading="lazy"></div>';
+  } else if(photos.length>1){
+    photosHtml='<div class="pdp-gallery" id="sdpGalScroll">';
+    photos.forEach(function(url){ photosHtml+='<img class="pdp-gallery-img" src="'+escH(url)+'" alt="" loading="lazy">'; });
+    photosHtml+='</div>';
+    photosHtml+='<div class="pdp-dots">';
+    photos.forEach(function(_,i){ photosHtml+='<span class="pdp-dot'+(i===0?' act':'')+'"></span>'; });
     photosHtml+='</div>';
   }
 
@@ -764,6 +767,14 @@ function openSvcDetailPanel(svc,color){
     +'</div>';
 
   body.innerHTML=html;
+  if(photos.length>1){
+    var gs=body.querySelector('#sdpGalScroll');
+    var dots=Array.from(body.querySelectorAll('.pdp-dot'));
+    if(gs) gs.addEventListener('scroll',function(){
+      var idx=Math.round(gs.scrollLeft/gs.offsetWidth);
+      dots.forEach(function(d,i){d.classList.toggle('act',i===idx);});
+    },{passive:true});
+  }
   var bookBtn=body.querySelector('#sdpBookBtn');
   if(bookBtn) bookBtn.addEventListener('click',function(){ openBookingFromService(svc); });
   openPanel('svcDetailPanel');
