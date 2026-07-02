@@ -94,7 +94,8 @@ export const statisticsController = {
       const page = req.query.page ? Number(req.query.page) : 1;
       const pageSize = req.query.pageSize ? Number(req.query.pageSize) : 20;
       const rating = req.query.rating ? Number(req.query.rating) : undefined;
-      const data = await reviewsService.getAll(uid(req), page, pageSize, undefined, rating);
+      const unanswered = req.query.unanswered === 'true' ? true : undefined;
+      const data = await reviewsService.getAll(uid(req), page, pageSize, undefined, rating, unanswered);
       return res.status(200).json(data);
     } catch (error: any) {
       return res.status(500).json({ ok: false, message: error?.message || "Error interno" });

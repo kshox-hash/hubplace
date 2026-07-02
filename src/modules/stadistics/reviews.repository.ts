@@ -149,8 +149,9 @@ export class ReviewsRepository {
    * con paginación, distinto del dashboard que solo necesita
    * el promedio + 1 reseña reciente.
    */
-  async getAllPaginated(userId: string, limit: number = 20, offset: number = 0, portalEmail?: string, rating?: number) {
+  async getAllPaginated(userId: string, limit: number = 20, offset: number = 0, portalEmail?: string, rating?: number, unanswered?: boolean) {
     const ratingClause = rating && rating >= 1 && rating <= 5 ? ` AND rating = ${Math.floor(rating)}` : '';
+    const unansweredClause = unanswered ? ` AND admin_reply IS NULL` : '';
     const [dataResult, countResult] = await Promise.all([
       this.pool.query(
         `SELECT r.id, r.rating, r.comment, r.client_name,
@@ -165,13 +166,13 @@ export class ReviewsRepository {
          FROM reviews r
          LEFT JOIN review_likes rl ON rl.review_id = r.id
          ${portalEmail ? `LEFT JOIN review_likes rl2 ON rl2.review_id = r.id AND rl2.portal_email = $4` : ''}
-         WHERE r.user_id = $1${ratingClause}
+         WHERE r.user_id = $1${ratingClause}${unansweredClause}
          GROUP BY r.id
          ORDER BY r.created_at DESC LIMIT $2 OFFSET $3`,
         portalEmail ? [userId, limit, offset, portalEmail] : [userId, limit, offset]
       ),
       this.pool.query(
-        `SELECT COUNT(*) AS total FROM reviews WHERE user_id = $1${ratingClause}`,
+        `SELECT COUNT(*) AS total FROM reviews WHERE user_id = $1${ratingClause}${unansweredClause}`,
         [userId]
       ),
     ]);
