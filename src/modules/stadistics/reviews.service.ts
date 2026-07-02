@@ -89,7 +89,4 @@ export class ReviewsService {
     return this.repo.setAdminReply(reviewId, reply, userId);
   }
 
-  async delete(reviewId: string, userId: string) {
-    return this.repo.delete(reviewId, userId);
-  }
 }

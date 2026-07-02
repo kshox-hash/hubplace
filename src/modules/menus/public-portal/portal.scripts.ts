@@ -2105,9 +2105,12 @@ function renderReviewsTab(data){
   var hasMore=pagination.hasNextPage||false;
   var loadMoreBtn=hasMore?'<button class="rv-load-more" type="button" id="rvLoadMore">Ver más reseñas</button>':'';
 
+  var noResults=(!cards&&rvRatingFilter)
+    ?'<div class="bk-empty" style="margin-top:16px">No hay reseñas de '+rvRatingFilter+'★ todavía.</div>'
+    :'';
   el.innerHTML=(total?'<div class="rv-star-filters">'+starChips+'</div>':'')+summaryHtml
     +(cards?'<div class="sec-hdr" style="margin-top:20px"><span class="sec-title">Últimas reseñas</span><span class="sec-sub" style="margin-top:2px">Opiniones de nuestros clientes</span></div>'
-      +'<div id="rvCardsList">'+cards+'</div>'+loadMoreBtn:'');
+      +'<div id="rvCardsList">'+cards+'</div>'+loadMoreBtn:noResults);
 
   el.querySelectorAll('.rv-star-chip').forEach(function(chip){
     chip.addEventListener('click',function(){

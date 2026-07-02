@@ -101,17 +101,6 @@ export const statisticsController = {
     }
   },
 
-  async deleteReview(req: Request, res: Response): Promise<Response> {
-    try {
-      if (isForbidden(req)) return res.status(403).json({ ok: false, message: "Forbidden" });
-      const reviewId = req.params["reviewId"] as string;
-      await reviewsService.delete(reviewId, uid(req));
-      return res.status(200).json({ ok: true });
-    } catch (error: any) {
-      return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
-    }
-  },
-
   async getBusinessStats(req: Request, res: Response): Promise<Response> {
     try {
       if (isForbidden(req)) return res.status(403).json({ ok: false, message: "Forbidden" });
@@ -151,7 +140,7 @@ export const statisticsController = {
       const portalUser = (req as any).portalUser as { email?: string } | undefined;
       const portalEmail = portalUser?.email;
       const [summary, recent] = await Promise.all([
-        page === 1 && !rating ? reviewsService.getSummary(userId) : Promise.resolve(null),
+        page === 1 ? reviewsService.getSummary(userId) : Promise.resolve(null),
         reviewsService.getAll(userId, page, 10, portalEmail, rating),
       ]);
       return res.json({ ok: true, summary, reviews: recent.data, pagination: recent.pagination });

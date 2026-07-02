@@ -241,15 +241,4 @@ export class ReviewsRepository {
     return (res.rowCount ?? 0) > 0;
   }
 
-  /**
-   * Borra una reseña (ej. moderación).
-   * Se exige userId también para que un usuario no pueda
-   * borrar reseñas de otro usuario por error.
-   */
-  async delete(reviewId: string, userId: string) {
-    await this.pool.query(
-      `DELETE FROM reviews WHERE id = $1 AND user_id = $2`,
-      [reviewId, userId]
-    );
-  }
 }
