@@ -20,7 +20,18 @@ export async function initReviewsGoogleColumns(): Promise<void> {
     ALTER TABLE reviews
       ADD COLUMN IF NOT EXISTS google_name       TEXT,
       ADD COLUMN IF NOT EXISTS google_email      TEXT,
-      ADD COLUMN IF NOT EXISTS google_avatar_url TEXT
+      ADD COLUMN IF NOT EXISTS google_avatar_url TEXT,
+      ADD COLUMN IF NOT EXISTS admin_reply       TEXT,
+      ADD COLUMN IF NOT EXISTS admin_replied_at  TIMESTAMPTZ
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS review_likes (
+      id           SERIAL PRIMARY KEY,
+      review_id    INTEGER     NOT NULL REFERENCES reviews(id) ON DELETE CASCADE,
+      portal_email TEXT        NOT NULL,
+      created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE(review_id, portal_email)
+    )
   `);
 }
 
@@ -111,7 +122,8 @@ export class ReviewsRepository {
   async getRecent(userId: string, limit: number = 5) {
     const result = await this.pool.query(
       `SELECT id, rating, comment, client_name,
-              google_name, google_email, google_avatar_url, created_at
+              google_name, google_email, google_avatar_url,
+              admin_reply, admin_replied_at, created_at
        FROM reviews WHERE user_id = $1
        ORDER BY created_at DESC LIMIT $2`,
       [userId, limit]
@@ -130,14 +142,21 @@ export class ReviewsRepository {
    * con paginación, distinto del dashboard que solo necesita
    * el promedio + 1 reseña reciente.
    */
-  async getAllPaginated(userId: string, limit: number = 20, offset: number = 0) {
+  async getAllPaginated(userId: string, limit: number = 20, offset: number = 0, portalEmail?: string) {
     const [dataResult, countResult] = await Promise.all([
       this.pool.query(
-        `SELECT id, rating, comment, client_name,
-                google_name, google_email, google_avatar_url, created_at
-         FROM reviews WHERE user_id = $1
-         ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
-        [userId, limit, offset]
+        `SELECT r.id, r.rating, r.comment, r.client_name,
+                r.google_name, r.google_email, r.google_avatar_url,
+                r.admin_reply, r.admin_replied_at, r.created_at,
+                COUNT(rl.id)::int AS likes_count,
+                ${portalEmail ? `MAX(CASE WHEN rl2.portal_email = $4 THEN 1 ELSE 0 END)::boolean AS user_liked` : `false AS user_liked`}
+         FROM reviews r
+         LEFT JOIN review_likes rl ON rl.review_id = r.id
+         ${portalEmail ? `LEFT JOIN review_likes rl2 ON rl2.review_id = r.id AND rl2.portal_email = $4` : ''}
+         WHERE r.user_id = $1
+         GROUP BY r.id
+         ORDER BY r.created_at DESC LIMIT $2 OFFSET $3`,
+        portalEmail ? [userId, limit, offset, portalEmail] : [userId, limit, offset]
       ),
       this.pool.query(
         `SELECT COUNT(*) AS total FROM reviews WHERE user_id = $1`,
@@ -149,6 +168,27 @@ export class ReviewsRepository {
       rows: dataResult.rows,
       total: Number(countResult.rows[0].total),
     };
+  }
+
+  async toggleLike(reviewId: number, portalEmail: string): Promise<{ liked: boolean; likes: number }> {
+    const existing = await this.pool.query(
+      `SELECT id FROM review_likes WHERE review_id = $1 AND portal_email = $2`,
+      [reviewId, portalEmail]
+    );
+    if (existing.rows.length > 0) {
+      await this.pool.query(`DELETE FROM review_likes WHERE review_id = $1 AND portal_email = $2`, [reviewId, portalEmail]);
+    } else {
+      await this.pool.query(`INSERT INTO review_likes (review_id, portal_email) VALUES ($1, $2)`, [reviewId, portalEmail]);
+    }
+    const countRes = await this.pool.query(`SELECT COUNT(*)::int AS cnt FROM review_likes WHERE review_id = $1`, [reviewId]);
+    return { liked: existing.rows.length === 0, likes: countRes.rows[0].cnt };
+  }
+
+  async setAdminReply(reviewId: number, reply: string, userId: string): Promise<void> {
+    await this.pool.query(
+      `UPDATE reviews SET admin_reply = $1, admin_replied_at = NOW() WHERE id = $2 AND user_id = $3`,
+      [reply || null, reviewId, userId]
+    );
   }
 
   /**

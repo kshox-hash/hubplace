@@ -60,16 +60,11 @@ export class ReviewsService {
    *   }
    * }
    */
-  async getAll(userId: string, page: number = 1, pageSize: number = 20) {
-    // Evita páginas inválidas (negativas, 0, etc.)
+  async getAll(userId: string, page: number = 1, pageSize: number = 20, portalEmail?: string) {
     const safePage = Math.max(page, 1);
-    // Evita pageSize gigante (ej. alguien pidiendo 10000 por página)
     const safePageSize = Math.min(Math.max(pageSize, 1), 100);
-
     const offset = (safePage - 1) * safePageSize;
-
-    const { rows, total } = await this.repo.getAllPaginated(userId, safePageSize, offset);
-
+    const { rows, total } = await this.repo.getAllPaginated(userId, safePageSize, offset, portalEmail);
     return {
       data: rows,
       pagination: {
@@ -82,9 +77,14 @@ export class ReviewsService {
     };
   }
 
-  /**
-   * Borra una reseña.
-   */
+  async toggleLike(reviewId: number, portalEmail: string) {
+    return this.repo.toggleLike(reviewId, portalEmail);
+  }
+
+  async setAdminReply(reviewId: number, reply: string, userId: string) {
+    return this.repo.setAdminReply(reviewId, reply, userId);
+  }
+
   async delete(reviewId: string, userId: string) {
     return this.repo.delete(reviewId, userId);
   }

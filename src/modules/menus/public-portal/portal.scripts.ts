@@ -571,6 +571,8 @@ document.addEventListener('click',function(e){
   if(t.closest('#closeProdDetail')){  closePanel('prodDetailPanel');  return; }
   if(t.closest('#closeGal')){         closePanel('galPanel');         return; }
   if(t.closest('#openReviewBtn')){ openReviewPanel(); return; }
+  var likeBtn=t.closest('.rv-like-btn');
+  if(likeBtn){ toggleReviewLike(likeBtn); return; }
   if(t.closest('#slideOverlay')){ closeMobileDrawer(); closePanel('bookingPanel'); closePanel('reviewPanel'); closePanel('dayDetailPanel'); closePanel('svcDetailPanel'); closePanel('prodDetailPanel'); closePanel('galPanel'); return; }
 
   var folderBtn=t.closest('[data-folder-id]');
@@ -1912,7 +1914,14 @@ function buildRvCard(r){
   var avatarHtml=r.google_avatar_url
     ?'<img src="'+escH(r.google_avatar_url)+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0" referrerpolicy="no-referrer">'
     :'';
-  return '<div class="rv-card">'
+  var likes=parseInt(r.likes_count||'0',10)||0;
+  var liked=r.user_liked===true||r.user_liked==='true'||r.user_liked===1;
+  var heartSvg='<svg viewBox="0 0 24 24" width="14" height="14" '+(liked?'fill="var(--primary)" stroke="var(--primary)"':'fill="none" stroke="currentColor"')+' stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  var likeBtn='<button class="rv-like-btn'+(liked?' liked':'')+'\" data-rv-id="'+r.id+'" type="button">'+heartSvg+'<span class="rv-like-count">'+likes+'</span></button>';
+  var adminReply=r.admin_reply
+    ?'<div class="rv-reply"><span class="rv-reply-lbl">Respuesta del negocio</span><p class="rv-reply-text">'+escH(r.admin_reply)+'</p></div>'
+    :'';
+  return '<div class="rv-card" data-rv-id="'+r.id+'">'
     +'<div class="rv-card-top">'
     +(avatarHtml?'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'+avatarHtml
       +'<div><div class="rv-card-stars" style="margin-bottom:1px">'+stars+'</div>'
@@ -1923,7 +1932,32 @@ function buildRvCard(r){
       +(date?'<span class="rv-date"> · '+escH(date)+'</span>':'')+'</div>')
     +'</div>'
     +(r.comment?'<div class="rv-comment">'+escH(r.comment)+'</div>':'')
+    +adminReply
+    +'<div class="rv-actions">'+likeBtn+'</div>'
     +'</div>';
+}
+
+function toggleReviewLike(btn){
+  var rvId=btn.getAttribute('data-rv-id');
+  if(!rvId) return;
+  btn.disabled=true;
+  fetch('/api/public/'+SLUG+'/reviews/'+rvId+'/like',{method:'POST'})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d.ok) return;
+      var liked=d.liked;
+      var likes=parseInt(d.likes||'0',10)||0;
+      btn.classList.toggle('liked',liked);
+      var heartPath='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z';
+      var fill=liked?'var(--primary)':'none';
+      var stroke=liked?'var(--primary)':'currentColor';
+      var svg=btn.querySelector('svg');
+      if(svg){svg.setAttribute('fill',fill);svg.setAttribute('stroke',stroke);}
+      var cnt=btn.querySelector('.rv-like-count');
+      if(cnt) cnt.textContent=String(likes);
+    })
+    .catch(function(){})
+    .finally(function(){ btn.disabled=false; });
 }
 
 function renderReviewsTab(data){

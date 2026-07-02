@@ -145,11 +145,39 @@ export const statisticsController = {
     try {
       const userId = String(req.params["userId"]);
       const page = Math.max(1, parseInt(String(req.query["page"] || "1"), 10) || 1);
+      const portalUser = (req as any).portalUser as { email?: string } | undefined;
+      const portalEmail = portalUser?.email;
       const [summary, recent] = await Promise.all([
         page === 1 ? reviewsService.getSummary(userId) : Promise.resolve(null),
-        reviewsService.getAll(userId, page, 10),
+        reviewsService.getAll(userId, page, 10, portalEmail),
       ]);
       return res.json({ ok: true, summary, reviews: recent.data, pagination: recent.pagination });
+    } catch (error: any) {
+      return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
+    }
+  },
+
+  async likeReview(req: Request, res: Response): Promise<Response> {
+    try {
+      const portalUser = (req as any).portalUser as { email?: string } | undefined;
+      if (!portalUser?.email) return res.status(401).json({ ok: false, message: "Sesión requerida" });
+      const reviewId = parseInt(String(req.params["reviewId"]), 10);
+      if (!reviewId) return res.status(400).json({ ok: false, message: "reviewId inválido" });
+      const result = await reviewsService.toggleLike(reviewId, portalUser.email);
+      return res.json({ ok: true, ...result });
+    } catch (error: any) {
+      return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
+    }
+  },
+
+  async replyToReview(req: Request, res: Response): Promise<Response> {
+    try {
+      if (isForbidden(req)) return res.status(403).json({ ok: false, message: "Forbidden" });
+      const reviewId = parseInt(String(req.params["reviewId"]), 10);
+      if (!reviewId) return res.status(400).json({ ok: false, message: "reviewId inválido" });
+      const reply = typeof req.body.reply === "string" ? req.body.reply.trim() : "";
+      await reviewsService.setAdminReply(reviewId, reply, uid(req));
+      return res.json({ ok: true });
     } catch (error: any) {
       return res.status(500).json({ ok: false, message: error?.message || "Error interno" });
     }

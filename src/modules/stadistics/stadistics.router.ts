@@ -22,6 +22,7 @@ router.get("/stats/:userId/reviews/summary", statisticsController.getReviewsSumm
 router.post("/stats/:userId/reviews", statisticsController.createReview);
 router.get("/stats/:userId/reviews", statisticsController.getAllReviews);
 router.delete("/stats/:userId/reviews/:reviewId", statisticsController.deleteReview);
+router.patch("/stats/:userId/reviews/:reviewId/reply", statisticsController.replyToReview);
 
 export default router;
  
