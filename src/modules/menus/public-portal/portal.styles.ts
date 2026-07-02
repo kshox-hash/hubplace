@@ -467,11 +467,12 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .prd-search::placeholder{color:var(--soft)}
 .prd-list{display:flex;flex-direction:column;gap:8px}
 .prd-card{
-  background:var(--panel);border-radius:var(--r);
-  display:flex;align-items:center;gap:12px;padding:12px 14px;
-  transition:background .18s
+  display:flex;align-items:center;gap:12px;padding:13px 20px;
+  border-bottom:1px solid var(--border-inner);
+  transition:background .15s
 }
-.prd-card:hover{background:var(--primary-dim)}
+.prd-list .prd-card:last-child{border-bottom:none}
+.prd-card:hover{background:rgba(0,0,0,.03)}
 .prd-thumb{width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0}
 .prd-thumb-dot{display:flex;align-items:center;justify-content:center;opacity:.85}
 .prd-info{flex:1;min-width:0}
@@ -485,7 +486,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .gal-item{aspect-ratio:1;overflow:hidden;cursor:pointer;background:var(--panel);position:relative}
 .gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .18s}
 .gal-item:active img{opacity:.75}
-.gal-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;background:var(--panel);border-radius:16px;gap:8px}
+.gal-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:8px}
 .gal-empty svg{width:36px;height:36px;color:var(--dim);opacity:.5}
 .gal-empty-title{font-size:14px;font-weight:600;color:var(--soft);letter-spacing:-.02em}
 .gal-empty-sub{font-size:12px;color:var(--dim);text-align:center;line-height:1.5}
@@ -605,8 +606,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 
 /* Card — solo el calendario */
 .rdash-card{
-  background:var(--panel);border-radius:var(--r);
-  padding:14px
+  padding:0
 }
 .rdash-card-hdr{
   display:flex;align-items:center;justify-content:space-between;
@@ -726,12 +726,12 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 .rdash-sec-sub{font-size:11px;color:var(--dim);margin-top:2px}
 .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .svc-grid-item{
-  background:var(--panel);border-radius:10px;
+  border-radius:10px;
   cursor:pointer;overflow:hidden;
-  transition:background .18s;-webkit-tap-highlight-color:transparent;
+  transition:opacity .15s;-webkit-tap-highlight-color:transparent;
   display:flex;flex-direction:column
 }
-.svc-grid-item:hover{background:var(--primary-dim)}
+.svc-grid-item:hover{opacity:.82}
 .svc-grid-thumb{width:100%;aspect-ratio:1;overflow:hidden;flex-shrink:0}
 .svc-grid-img{width:100%;height:100%;object-fit:cover;display:block}
 .svc-grid-dot{width:100%;aspect-ratio:1;opacity:.88}

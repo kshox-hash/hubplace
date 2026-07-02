@@ -12,7 +12,7 @@ export function reservasTabHtml(): string {
       <!-- Calendar (card) + stats (separado) -->
       <div class="rdash-body">
 
-        <div class="rdash-card rdash-cal-col">
+        <div class="rdash-cal-col">
           <div class="rdash-card-hdr">
             <button class="rdash-mnav-btn" id="rdashPrev" type="button" aria-label="Mes anterior">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="15 18 9 12 15 6"/></svg>
