@@ -1191,7 +1191,7 @@ body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(-
 
 /* ── CARDS ────────────────────────────────────────────────────────────── */
 .hm-card{
-  background:#fff;border-radius:var(--r);
+  background:#fff;border-radius:var(--r);box-shadow:var(--shadow-s);
   display:flex;flex-direction:column;overflow:hidden
 }
 .hm-card:hover{}

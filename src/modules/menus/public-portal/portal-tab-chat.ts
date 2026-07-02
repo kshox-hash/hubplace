@@ -169,8 +169,8 @@ export function chatTabHtml(d: ChatData): string {
             </div>
             <button class="sec-link" type="button" data-action="nosotros">Ver galería →</button>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;border-radius:0 0 14px 14px;overflow:hidden">
-            ${d.orphanPhotos.slice(0, 5).map(p => `<button type="button" data-action="nosotros" style="aspect-ratio:1;overflow:hidden;border:none;padding:0;cursor:pointer;background:var(--bg)"><img src="${escapeHtml(p.url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></button>`).join("")}
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:0 14px 14px">
+            ${d.orphanPhotos.slice(0, 5).map(p => `<button type="button" data-action="nosotros" style="aspect-ratio:1;overflow:hidden;border:none;padding:0;cursor:pointer;background:var(--bg);border-radius:8px"><img src="${escapeHtml(p.url)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></button>`).join("")}
           </div>
         </div>` : ""}
 
